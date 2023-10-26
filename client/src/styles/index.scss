@@ -1,0 +1,67 @@
+@import "@mixin_variable.scss";
+
+* {
+    box-sizing: border-box;
+    font-family:
+        -apple-system,
+        Segoe UI,
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+}
+
+body {
+
+    margin: 0px;
+    padding: 0px;
+    background-color: $color_white;
+}
+
+a {
+    text-decoration: none;
+}
+
+.heading-4 {
+    font-size: 25px;
+    font-weight: 500;
+    color: $color_gray-500;
+    padding: 10px 20px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #a7a7a7;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #979797;
+    border-radius: 0px;
+}
+.text-danger {
+    color: $color_danger !important;
+}
+
+
+.display_none{
+    display:none !important;
+}
+.display_block{
+    display:block !important;
+}
+
+
+@import "component";
+@import "pages";
+@import "pageHome";
+@import "pageNews";
+@import "pagePlan";
+@import "layout";
+@import "table";
+@import "pageProfile";
+@import "firstLogin";
+@import "@media/@mediaComponentLogin.scss";
+

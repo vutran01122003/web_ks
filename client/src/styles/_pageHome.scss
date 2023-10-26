@@ -1,0 +1,141 @@
+$avatar_size: 185px;
+
+
+
+.pageHome {
+	padding: 10px;
+	height: fit-content;
+	background-color: $color_bgr;
+	display: grid;
+	flex-direction: 1.3fr 1.7fr;
+	gap: 10px;
+	min-height: calc(100vh - 60px);
+
+	.container__top {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+	}
+}
+
+.content {
+	// width: 100%;
+	border-top: 1px solid $line_color;
+	// padding: 20px 30px 0px 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+}
+
+.container__chart,
+.container__info {
+	background-color: $color_white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 3px rgb(194, 193, 193);
+}
+
+
+//LayoutInfo
+.container__info {
+	.content {
+
+		.info__avatar {
+			position: relative;
+
+			&-upload {
+				position: absolute;
+				z-index: 100;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+
+				#input__file {
+					display: none;
+				}
+
+				.label__input {
+					opacity: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: $avatar_size;
+					height: $avatar_size;
+					font-size: 40px;
+					border-radius: 100%;
+					color: $line_color;
+
+					// opacity: 0;
+					// display: none;
+					&:hover {
+						cursor: pointer;
+						background-color: #000;
+						opacity: .4;
+						// background-color: $color_gray-500;
+
+					}
+				}
+			}
+
+			&-image {
+				border-radius: 100%;
+				width: $avatar_size;
+				height: $avatar_size;
+			}
+		}
+
+		.info__text {
+			.line {
+				height: 35px;
+				display: flex;
+				align-items: center;
+				gap: 0px 5px;
+
+				p {
+
+					font-weight: 700;
+					color: $color_gray-500;
+				}
+			}
+		}
+	}
+}
+
+//LayoutChart
+.container__chart {
+	.content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 50px;
+
+		.chart__graph {
+			width: 240px;
+			height: 240px;
+			border-radius: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.chart__sub {
+			.subchart__item {
+				display: flex;
+				gap: 10px;
+				margin: 20px 0px;
+
+				.sub {
+					font-weight: 500;
+				}
+			}
+		}
+	}
+}
+
+.container__center {
+	background-color: $color_white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 3px rgb(194, 193, 193);
+}	

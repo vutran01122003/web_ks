@@ -1,0 +1,66 @@
+@url=http://localhost:4000
+
+###
+GET {{url}}
+
+###
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "studentId": "21013481",
+    "password": "1111"
+}
+
+###
+POST {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageName": "Hoạt động xã hội", 
+    "tables": [
+        {
+            "tableName": "Nghiên cứu khoa học",
+            "description": "Description 1",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        },
+        {
+            "tableName": "Hoạt động tình nguyện",
+            "description": "Description 3",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        }
+    ] 
+}
+###
+POST {{url}}/api/row
+Content-Type: application/json
+
+{   
+    "page": "6539da65395099f799f4d312",
+    "user": "6537f6c1adc22ad3e1829e21",
+    "table": "6539da65395099f799f4d313",
+    "content": ["content 1", "content 2", "content 3", "content 4", "content 5"]
+}
+###
+POST {{url}}/api/register 
+Content-Type: application/json
+
+{
+    "studentId": "2100123",
+    "fullName": "nguyen123",
+    "birthday": "19-05-2003",
+    "major": "CNTT",
+    "password": "1111",
+    "email": "n4g2u12312",
+    "phone": "0943608225"
+}
+###
+GET {{url}}/api/page/page%201
+
+###
+GET {{url}}/api/access_token
+
+###
+GET {{url}}/api/refresh_token
