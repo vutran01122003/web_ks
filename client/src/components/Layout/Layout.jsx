@@ -8,7 +8,7 @@ function Layout({auth}) {
                 <LayoutSideBar auth={auth}/>
                 <div className='main__body'>
                     <main>
-                        <TopHeader />
+                        <TopHeader auth={auth} />
                         <div className='main'>
                             <Outlet />
                         </div>

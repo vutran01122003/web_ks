@@ -6,6 +6,7 @@ import { BsFillCaretRightFill } from 'react-icons/bs'
 import {TbTargetArrow} from 'react-icons/tb';
 import { MdLightbulbOutline, MdOutlineCreate} from 'react-icons/md';
 import Logo_IUH from '../../assets/logo_iuh.png'
+import Logo_IUH_color_w from '../../assets/logo_iuh_color_w.png'
 import {getDataApi} from '../../utils/fetchData';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../../redux/selector';
@@ -15,6 +16,8 @@ import { getPages } from '../../redux/actions/pageAction';
 const LayoutSideBar = ({auth}) => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
+
+    const determineAuth = auth?.user?.roles.includes("0004") || auth?.user?.roles.includes("0003");
 
     const ARRAY_LIST_MENU = [
         {
@@ -240,10 +243,10 @@ const LayoutSideBar = ({auth}) => {
     })
 
     return (
-        <div className='container__menu'>
+        <div className={`container__menu  ${determineAuth ? "background_admin" : ""}`}>
             <div className='img__logo'>
                 <a href="/">
-                    <img src={Logo_IUH} alt="logo_iuh" />
+                    <img src={determineAuth ? Logo_IUH_color_w :Logo_IUH} alt="logo_iuh" />
                 </a>
             </div>
             <div className="wrap__menu">

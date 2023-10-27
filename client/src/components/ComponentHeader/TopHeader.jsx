@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import ComponentInput from '../ComponentForm/ComponentInput';
 import ControlBoxAccount from './ComponentControl/ControlBoxAccount';
 
-const TopHeader = () => {
+const TopHeader = ({ auth }) => {
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
 
     let refBoxAccount = useRef();
@@ -19,6 +19,8 @@ const TopHeader = () => {
         document.addEventListener("mousedown", hanlder);
         return () => document.removeEventListener("mousedown", hanlder);
     });
+
+    const determineAuth = auth?.user?.roles.includes("0004") || auth?.user?.roles.includes("0003")
 
     return (
         <div className='container__header'>
@@ -33,6 +35,14 @@ const TopHeader = () => {
                         />
                     </div>
                     <div className="box__control">
+
+                        {determineAuth ? <div>
+                            <div className='border__text--role'>
+                                ADMIN
+                            </div>
+                        </div> : ""}
+
+
                         <div className="btn__noti">
                             <Link to="/notification">
                                 <IoNotificationsSharp />

@@ -10,6 +10,7 @@ const ComponentModal = ({ isDone, setIsDone, stateModal, setStateModal, tableId,
     const dispatch = useDispatch();
     const auth = useSelector(authSelector);
     const [row, setRow] = useState(null);
+    const refButton = useRef();
 
 	useEffect(() => {
 		let hanlder = (e) => {
@@ -23,9 +24,11 @@ const ComponentModal = ({ isDone, setIsDone, stateModal, setStateModal, tableId,
         setRow({...row, [e.target.name]: e.target.value});
     }
 
+
     const handleSubmitForm = (e) => {
         setStateModal(false);
-        setIsDone(true);
+        // setIsDone(true);
+        refButton.current.click();
     }
 
     const handleAddRow = (e) => {
@@ -72,13 +75,13 @@ const ComponentModal = ({ isDone, setIsDone, stateModal, setStateModal, tableId,
                                     className="input__modal"
                                     type={item.typeInput} // thead sẽ truyền type vào đây => hết
                                     disabled={item.disabled}
-                                    value={!isDone ? item.value : ""}
+                                    value={item.value}
                                     name={index}
                                     onChange={handleChangeRow}
                                     classNameInputItem={item.classNameInputItem}
                                     labelTypeFile={item.labelTypeFile}
                                 />
-                            ) : <></>
+                            ) : null
                         ))
                    }
 				</div>
@@ -91,7 +94,7 @@ const ComponentModal = ({ isDone, setIsDone, stateModal, setStateModal, tableId,
 					}}
 				>
 					<button type="submit" onClick={handleSubmitForm} >Thêm</button>
-					<button type="reset">Reset</button>
+					<button ref={refButton} type="reset">Reset</button>
 				</div>
 			</form>
 		</div>

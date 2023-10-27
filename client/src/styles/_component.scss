@@ -186,6 +186,14 @@
                 }
             }
         }
+
+        .border__text--role{
+            padding: 5px 8px;
+            border: 2px solid red;
+            color: red;
+            border-radius: 10px;
+            font-weight: 500;
+        }
     }
 }
 
@@ -301,6 +309,18 @@
         }
     }
 }
+.background_admin{
+    background-color: #313A46;
+    .item_menu_a{
+        background-color: #313A46 !important;
+        color: #ffffff !important;
+    }
+    .item_menu_a.active {
+        background-color: #525a64 !important;
+        // color: $color_black;
+    }
+}
+
 
 .component__input {
     > label {

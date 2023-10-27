@@ -7,7 +7,8 @@ function PageRender() {
 	const location = useLocation()
 	const pathName = location.pathname;
 	const [PageComponent, setPageComponent] = useState(null);
-    
+    const [notFound, setNotFound] = useState(false);
+	
 	const pageName = id
 		? `${page?.replace(/\w/, page?.charAt(0).toUpperCase())}/[id]`
 		: page?.replace(/\w/, page?.charAt(0).toUpperCase())
@@ -17,28 +18,35 @@ function PageRender() {
             import(/* @vite-ignore */ '../../pages/DynamicPage')
 			.then((module) => {
                 setPageComponent(module);
+				setNotFound(false);
 			})
 			.catch((e) => {
                 setPageComponent(null);
+				setNotFound(true);
 			});
         } else {
             import(/* @vite-ignore */ `../../pages/${pageName}`)
 			.then((module) => {
                 setPageComponent(module);
+				setNotFound(false);
 			})
 			.catch((e) => {
                 setPageComponent(null);
+				setNotFound(true);
 			});
         }		
 	}, [page, id, setPageComponent]);
 
-	if(PageComponent) {
+	if(PageComponent && !notFound) {
         const Component = PageComponent.default;
         return <Component/>;
-    } else {
+    } 
+
+	if(notFound && !PageComponent) {
         return <NotFound />;
     }
 
+	return null;
 }
 
 export default PageRender
