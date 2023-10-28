@@ -1,100 +1,107 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { IoCloseOutline } from 'react-icons/io5'
 import ComponentInput from '../ComponentForm/ComponentInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { addRow } from '../../redux/actions/pageAction'
 import { authSelector } from '../../redux/selector'
+import ComponentProofFile from '../ComponentForm/ComponentProofFile'
+import GLOBALTYPES from '../../redux/actions/globalTypes'
 
-const ComponentModal = ({ isDone, setIsDone, stateModal, setStateModal, tableId, title, thead, page }) => {
-    let refBoxModal = useRef();
+const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page }) => {
     const dispatch = useDispatch();
     const auth = useSelector(authSelector);
-    const [row, setRow] = useState(null);
-    const refButton = useRef();
-
-	useEffect(() => {
-		let hanlder = (e) => {
-			if (!refBoxModal.current.contains(e.target)) setStateModal(false)
-		}
-		document.addEventListener('mousedown', hanlder)
-		return () => document.removeEventListener('mousedown', hanlder)
-	})
-
+    const [row, setRow] = useState({});
+    const [files, setFiles] = useState([]);
+    
     const handleChangeRow = (e) => {
         setRow({...row, [e.target.name]: e.target.value});
     }
 
-
-    const handleSubmitForm = (e) => {
-        setStateModal(false);
-        // setIsDone(true);
-        refButton.current.click();
-    }
-
     const handleAddRow = (e) => {
         e.preventDefault();
-        const data = [];
+
+        if(thead.some((item) => {
+            return Object.keys(row).includes(item.textHeading) === false;
+        }) && files.length === 0) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: "Thông tin chưa đầy đủ"
+                }
+            })
+            return;
+        } 
+
+        const formData = new FormData();
+
+        formData.set('user', auth?.user._id);
+        formData.set('page', page.pageId);
+        formData.set('table', tableId);
+        formData.set('path', page.pathName);
 
         for(let key in row) {
-            data.push(row[key]);
+            formData.append('content', row[key]);
         }
 
+        files.forEach((file) => {
+            formData.append('files', file, file.name);
+        })
+
+        setStateModal(false);
         dispatch(addRow({
-            user: auth?.user._id,
-            page: page.pageId,
-            table: tableId,
-            content: data,
-            pathName: page.pathName
+            formData
         }))
     }
 
-	if (stateModal) {
-		window.body.style.overflow = 'hidden'
-	} else {
-		window.body.style.overflow = 'auto'
-	}
+    const handleCloseModal = (e) => {
+        if(e.currentTarget === e.target) {
+            setStateModal(false);     
+        }
+    }
 
 	return (
-		<div className={`wrap__modal ${stateModal ? 'active__modal' : 'unactive__modal'}`}>
-			<form className={`modal`} ref={refBoxModal} onSubmit={handleAddRow}>
+		<div 
+            className={`wrap__modal ${stateModal ? 'active__modal' : 'unactive__modal'}`}
+            onClick={handleCloseModal}
+        >
+			<form className={`modal`} >
 				<div className="head__modal">
 					<div className="head__modal__title ">{title}</div>
 					<button type="button" className="btn__close" onClick={() => setStateModal(false)}>
 						<IoCloseOutline />
 					</button>
 				</div>
+
 				<div className="body__modal">       
                    {   
                         thead &&
-                        thead.map((item, index) => (
+                        thead.map((item) => (
                             item.isShow ? (
+                                item.typeInput === 'file' ? 
+                                <ComponentProofFile 
+                                    files={files} 
+                                    setFiles={setFiles}
+                                    key={tableId + item.textHeading}
+                                /> :
                                 <ComponentInput
-                                    key={index}
+                                    key={tableId + item.textHeading}
                                     label={item.textHeading}
                                     placeholder={item.textHeading}
                                     className="input__modal"
-                                    type={item.typeInput} // thead sẽ truyền type vào đây => hết
+                                    type={item.typeInput} 
                                     disabled={item.disabled}
                                     value={item.value}
-                                    name={index}
+                                    name={item.textHeading}
                                     onChange={handleChangeRow}
                                     classNameInputItem={item.classNameInputItem}
-                                    labelTypeFile={item.labelTypeFile}
                                 />
                             ) : null
                         ))
                    }
 				</div>
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'end',
-						gap: '10px',
-						padding: '10px 20px',
-					}}
-				>
-					<button type="submit" onClick={handleSubmitForm} >Thêm</button>
-					<button ref={refButton} type="reset">Reset</button>
+
+				<div className='button_add_row'>
+					<button type="button" onClick={handleAddRow} >Thêm</button>
 				</div>
 			</form>
 		</div>

@@ -4,8 +4,8 @@ export const getDataApi = async (uri) => {
     return res;
 };
 
-export const postDataApi = async (uri, data) => {
-    const res = await instance.post(`/api${uri}`, data);
+export const postDataApi = async (uri, data, headers) => {
+    const res = await instance.post(`/api${uri}`, data, {headers});
     return res;
 };
 

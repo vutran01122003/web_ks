@@ -9,14 +9,14 @@ const DynamicPage = () => {
 
     useEffect(() => {
         if(page?.tables) {
-            const arr = page.tables.map((table, index) => {
+            const arr = page.tables.map((table) => {
                 const TABLE = {};
                 TABLE.tableId = table._id;
                 TABLE.title = table.tableName;
                 TABLE.thead = table.rowTitleList.map((rowTitle) => {
                     return {
                         textHeading: rowTitle,
-                        typeInput: 'text', // đây là lúc set => nó sẽ vào thằng Table.thead
+                        typeInput: 'text', 
 					    isShow: true,
                     }
                 })
@@ -26,10 +26,7 @@ const DynamicPage = () => {
                     {
                         textHeading: "Minh Chứng",
                         typeInput: 'file',
-                        id:"minhchung",
                         isShow: true,
-                        classNameInputItem:"display_none",
-                        labelTypeFile:"Nhấn vào để tải file minh chứng"
                     }, {
                         textHeading: "Trạng Thái",
                         typeInput: 'text',
@@ -51,11 +48,11 @@ const DynamicPage = () => {
 
 	return (
 		<div className="container__plan">
-			{tables.map((table, index) => {
+			{tables.map((table) => {
 				return (
 					<LayoutTable
-						key={index}
-						table={table} // Table.thead sẽ nằm trong table
+						key={table.tableId}
+						table={table} 
                         page={page}
 					></LayoutTable>
 				)

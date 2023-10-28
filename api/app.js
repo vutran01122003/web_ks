@@ -36,21 +36,10 @@ app.use(morgan(morganType));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 // Router
 app.use('/api', require('./router/page'));
 app.use('/api', require('./router/access'));
 app.use('/api', require('./router/table'));
-
-app.get('/setcookie', (req, res) => {
-    res.cookie('testCookie', 'magic content');
-    res.send('set the cookie');
-});
-
-app.get('/readCookie', (req, res) => {
-    res.send('your cookies: ' + inspect(req.cookies['testCookie']));
-    console.log(req.cookies);
-});
 
 // Catch NotFound
 app.use((req, res, next) => {

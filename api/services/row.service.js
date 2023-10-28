@@ -1,25 +1,27 @@
 const Page = require('../models/page.model');
 const Row = require('../models/row.model');
 
-class rowService {
-    static addRow = async (data) => {
+class RowService {
+    static addRow = async ({ data }) => {
         try {
             const { user, table, page, content } = data;
-            console.log(content);
             let rowList = await Row.findOne({ user, table, page });
+            let rowItemId = null;
+
             if (!rowList) {
-                rowList = await Row.create({
+                rowList = await Row({
                     user,
                     table,
-                    page,
-                    content: [
-                        {
-                            rowValue: content
-                        }
-                    ]
+                    page
                 });
 
-                // await Row.findByIdAndUpdate(rowList._id, { $push: { content: content } });
+                rowList.content.push({
+                    rowValue: content
+                });
+
+                rowItemId = rowList.content[rowList.content.length - 1]._id;
+
+                await rowList.save();
 
                 await Page.findOneAndUpdate(
                     { _id: page, 'tables._id': table },
@@ -45,13 +47,32 @@ class rowService {
                     },
                     { new: true }
                 ).lean();
+
+                rowItemId = rowList.content[rowList.content.length - 1]._id;
             }
-            return rowList;
+            return {
+                rowList,
+                rowItemId
+            };
         } catch (error) {
-            console.log(error);
+            throw error;
+        }
+    };
+
+    static addProofImages = async ({ uploadedImages, rowListId, rowItemId, data }) => {
+        try {
+            await Row.findOneAndUpdate(
+                { _id: rowListId, 'content._id': rowItemId },
+                {
+                    $set: {
+                        'content.$.proofImageList': uploadedImages.results
+                    }
+                }
+            );
+        } catch (error) {
             throw error;
         }
     };
 }
 
-module.exports = rowService;
+module.exports = RowService;

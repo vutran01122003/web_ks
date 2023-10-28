@@ -17,7 +17,7 @@ POST {{url}}/api/page
 Content-Type: application/json
 
 {
-    "pageName": "Hoạt động xã hội", 
+    "pageName": "Hoạt động ABC", 
     "tables": [
         {
             "tableName": "Nghiên cứu khoa học",
@@ -27,6 +27,18 @@ Content-Type: application/json
         },
         {
             "tableName": "Hoạt động tình nguyện",
+            "description": "Description 3",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        },
+        {
+            "tableName": "Hoạt động Học Tập",
+            "description": "Description 3",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        },
+        {
+            "tableName": "Hoạt động Vui Chơi",
             "description": "Description 3",
             "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
             "rowValueList": []

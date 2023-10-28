@@ -1,4 +1,4 @@
-import React, { useRef} from 'react'
+import React from 'react'
 
 const ComponentInput = ({
     children,
@@ -15,37 +15,13 @@ const ComponentInput = ({
     onChange,
     name,
     readonly,
-    labelTypeFile
 }) => {
-
-
-    const fileInputRef = useRef(null);
-
-    const handleButtonClick = () => {
-        fileInputRef.current.click();
-    };
-
     return (
         <div className="component__input">
             <label htmlFor={id}>{label}</label>
             <div className={classNameWrap}>
-                <div className={`line__input ${className}`}>
-                    {
-                        type === "file" ?
-                            <button
-                                type='button'
-                                id={id}
-                                className="btn__addFile"
-                                onClick={handleButtonClick}
-                            >
-                                    {labelTypeFile}
-                        
-                            </button>
-                            :
-                            <></>
-                    }
+                <div className={`line__input ${className}`}>      
                     <input
-                        ref={fileInputRef}
                         type={type}
                         placeholder={placeholder}
                         value={value}
@@ -59,7 +35,7 @@ const ComponentInput = ({
 
                     <div className="icon__before">
                         {iconBefore}
-                    </div>
+                    </div>               
                 </div>
 
                 {children}

@@ -12,10 +12,6 @@ const PageSchema = new Schema(
             unique: true,
             required: true
         },
-        pageType: {
-            type: String,
-            required: true
-        },
         tables: [TableSchema]
     },
     {

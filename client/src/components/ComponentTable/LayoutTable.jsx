@@ -15,11 +15,9 @@ const MainItem = ({ row }) => {
 
 const LayoutTable = ({ table, page }) => {
 	const [useStateModal, setUseStateModal] = useState(false);
-    const [isDone, setIsDone] = useState(false);
 
     const handleOpenModal = () => {
         setUseStateModal(true)
-        setIsDone(false);
     }
 
 	return (
@@ -27,17 +25,20 @@ const LayoutTable = ({ table, page }) => {
 			<header>
 				<div className="heading-4">{table?.title}</div>
 				<div className="modal">
-					<button onClick={handleOpenModal}>open</button>
-					<ComponentModal
-						stateModal={useStateModal}
-						setStateModal={setUseStateModal}
-						title={table?.title}
-						thead={table?.thead} // trong thead sẽ chứa type của input
-                        tableId={table?.tableId}
-                        page={page}
-                        isDone={isDone}
-                        setIsDone={setIsDone}
-					/>
+					<button className="modal_btn_open" onClick={handleOpenModal}>Thêm hoạt động</button>
+					<>
+                        {
+                            useStateModal 
+                            &&  <ComponentModal
+                                    stateModal={useStateModal}
+                                    setStateModal={setUseStateModal}
+                                    title={table?.title}
+                                    thead={table?.thead}
+                                    tableId={table?.tableId}
+                                    page={page}
+                                />
+                        }
+                    </>
 				</div>
 			</header>
 

@@ -25,9 +25,14 @@ const RowSchema = new Schema(
                         enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối'],
                         default: 'Chờ Duyệt'
                     },
-                    proof: {
-                        type: String,
-                        default: 'unauthenticated'
+                    proofImageList: {
+                        type: [
+                            {
+                                proofImageId: String,
+                                url: String
+                            }
+                        ],
+                        default: []
                     },
                     rowValue: [String]
                 }

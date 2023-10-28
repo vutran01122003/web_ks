@@ -12,6 +12,7 @@ class PageService {
 
             return createdPage;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };
