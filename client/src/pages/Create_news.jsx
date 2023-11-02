@@ -1,8 +1,7 @@
 import { useState } from "react";
 
 function CreateNews() {
-    // const [a, setA] = useState('');
-    return <>Create news</>;
+    return <div>Create news</div>;
 }
 
 export default CreateNews;

@@ -1,20 +1,39 @@
 import React, { useState } from 'react'
-import ComponentModal from '../ComponentModal/ComponentModal'
+import ComponentModal from '../ComponentModal/TableModal'
+import PreviewImagesModal from '../ComponentModal/PreviewImagesModal';
 
-const MainItem = ({ row }) => {
+const MainItem = ({ row, handleOpenPreviewImagesModal }) => {
+
 	return (
 		<tr className="table__line__item">
-			{row.map((item, index) => (
-				<td className="line__item" key={index}>
-					{item}
-				</td>
-			))}
+			{row.map((item, index) => {
+                if(item.label) {
+                    return (
+                        <td 
+                            onClick={() => {handleOpenPreviewImagesModal({proofData: item.proofImages})}}
+                            className="preview_proof_images line__item" 
+                            key={index}
+                        >
+                            {item.label}
+                        </td>
+                    )
+                }
+
+				return <td className="line__item" key={index}>{item}</td>
+        })}
 		</tr>
 	)
 }
 
-const LayoutTable = ({ table, page }) => {
+const LayoutTable = ({ table, page, pendingTable }) => {
 	const [useStateModal, setUseStateModal] = useState(false);
+    const [openPreviewModal, setOpenPreviewModal] = useState(false);
+    const [proofImagesData, setProofImagesData] = useState(null);
+
+    const handleOpenPreviewImagesModal = ({proofData}) => {
+        setProofImagesData(proofData);
+        setOpenPreviewModal(true);
+    }
 
     const handleOpenModal = () => {
         setUseStateModal(true)
@@ -24,22 +43,25 @@ const LayoutTable = ({ table, page }) => {
 		<div className="container__table">
 			<header>
 				<div className="heading-4">{table?.title}</div>
-				<div className="modal">
-					<button className="modal_btn_open" onClick={handleOpenModal}>Thêm hoạt động</button>
-					<>
-                        {
-                            useStateModal 
-                            &&  <ComponentModal
-                                    stateModal={useStateModal}
-                                    setStateModal={setUseStateModal}
-                                    title={table?.title}
-                                    thead={table?.thead}
-                                    tableId={table?.tableId}
-                                    page={page}
-                                />
-                        }
-                    </>
-				</div>
+				{
+                    !pendingTable && 
+                    <div className="modal">
+                        <button className="modal_btn_open" onClick={handleOpenModal}>Thêm hoạt động</button>
+                        <>
+                            {
+                                useStateModal && 
+                                <ComponentModal
+                                        stateModal={useStateModal}
+                                        setStateModal={setUseStateModal}
+                                        title={table?.title}
+                                        thead={table?.thead}
+                                        tableId={table?.tableId}
+                                        page={page}
+                                    />
+                            }
+                        </>
+				    </div>
+                }
 			</header>
 
 			<table className="table">
@@ -60,12 +82,21 @@ const LayoutTable = ({ table, page }) => {
                     table?.tbody && 
                     <tbody className="table__items">
                         {table.tbody.map((row, index) => (
-                            <MainItem row={row} key={index} />
+                            <MainItem 
+                                handleOpenPreviewImagesModal={handleOpenPreviewImagesModal} 
+                                row={row} 
+                                key={index} 
+                            />
                         ))}
 				    </tbody>
-                }
-				
+                }		
 			</table>
+            {
+                openPreviewModal && 
+                <PreviewImagesModal 
+                    proofImagesData={proofImagesData}
+                    setOpenPreviewModal={setOpenPreviewModal}
+                />}
 		</div>
 	)
 }

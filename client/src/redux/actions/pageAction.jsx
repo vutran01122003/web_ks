@@ -1,6 +1,5 @@
 import { getDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
-import axios from 'axios';
 
 export const addRow = ({formData}) => async (dispatch) => {
     try {
@@ -12,7 +11,6 @@ export const addRow = ({formData}) => async (dispatch) => {
         })
 
         const res = await postDataApi('/row', formData);
-        console.log(res);
         const newPage = await getDataApi(formData.get('path'));
 
         dispatch({
@@ -29,7 +27,6 @@ export const addRow = ({formData}) => async (dispatch) => {
             }
         })
     } catch (error) {
-        console.log(error);
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {

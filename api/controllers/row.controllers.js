@@ -1,3 +1,5 @@
+const Page = require('../models/page.model');
+const Row = require('../models/row.model');
 const RowService = require('../services/row.service');
 const UploadService = require('../services/upload.service');
 
@@ -12,7 +14,7 @@ class RowControllers {
                 rowListId: rowList._id
             });
 
-            const addProofImages = await RowService.addProofImages({
+            await RowService.addProofImages({
                 data: req.body,
                 uploadedImages,
                 rowListId: rowList._id,
@@ -22,10 +24,36 @@ class RowControllers {
             res.status(200).json({
                 status: 'Thêm Thông Tin Thành Công',
                 data: rowList
-                // uploadedImages
             });
         } catch (error) {
-            console.log(error);
+            next(error);
+        }
+    };
+
+    getPeddingRows = async (req, res, next) => {
+        try {
+            const peddingRow = await RowService.getPeddingRows();
+            res.status(200).json({
+                code: peddingRow.code,
+                msg: peddingRow.msg,
+                data: peddingRow.data
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    updateRowStatus = async (req, res, next) => {
+        try {
+            const { rowListId, rowItemId, status } = req.body;
+
+            const updatedRow = await RowService.updateRowStatus({ rowListId, rowItemId, status });
+
+            res.status(200).json({
+                code: updatedRow.code,
+                msg: updatedRow.msg
+            });
+        } catch (error) {
             next(error);
         }
     };

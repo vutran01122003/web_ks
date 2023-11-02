@@ -56,7 +56,6 @@
 
 
     .pageHome {
-
         .container__top {
             grid-template-columns: 1fr;
 
@@ -72,14 +71,6 @@
 
             .container__chart {
                 padding: 0;
-            }
-        }
-
-        .container__center {
-            .container__table {
-                .table {
-                    font-size: 10px;
-                }
             }
         }
     }

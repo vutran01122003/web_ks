@@ -59,7 +59,7 @@ class RowService {
         }
     };
 
-    static addProofImages = async ({ uploadedImages, rowListId, rowItemId, data }) => {
+    static addProofImages = async ({ uploadedImages, rowListId, rowItemId }) => {
         try {
             await Row.findOneAndUpdate(
                 { _id: rowListId, 'content._id': rowItemId },
@@ -69,6 +69,91 @@ class RowService {
                     }
                 }
             );
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getPeddingRows = async () => {
+        try {
+            const peddingRows = await Row.aggregate([
+                {
+                    $unwind: '$content'
+                },
+                {
+                    $match: {
+                        'content.status': 'Chờ Duyệt'
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        page: { $first: '$page' },
+                        user: { $first: '$user' },
+                        table: { $first: '$table' },
+                        content: { $push: '$content' }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'pages',
+                        localField: 'page',
+                        foreignField: '_id',
+                        as: 'page'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'user',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        user: 1,
+                        table: 1,
+                        'page.pageName': 1,
+                        'page.tables._id': 1,
+                        'page.tables.tableName': 1,
+                        'page.tables.rowTitleList': 1,
+                        content: 1
+                    }
+                }
+            ]);
+            return {
+                code: 200,
+                status: 'success',
+                msg: 'Lấy dữ liệu chưa duyệt thành công',
+                data: peddingRows
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static updateRowStatus = async ({ rowListId, rowItemId, status }) => {
+        try {
+            console.log({ rowListId, rowItemId, status });
+            const updatedRow = await Row.findOneAndUpdate(
+                { _id: rowListId, 'content._id': rowItemId },
+                {
+                    'content.$.status': status ? 'Đã Duyệt' : 'Từ Chối'
+                },
+                {
+                    new: true
+                }
+            );
+
+            console.log(updatedRow);
+
+            return {
+                code: 200,
+                msg: `Bạn đã ${status ? 'duyệt' : 'từ chối'} chỉ tiêu`,
+                data: updatedRow
+            };
         } catch (error) {
             throw error;
         }

@@ -21,7 +21,7 @@ const Login = () => {
 		<div className="container__login">
 			<div className="flex__layout">
 				<div className="box__form">
-					<div className={`footer__form ${sizeWidth <= 900 ? 'set__size__header' : undefined}`}>
+					<div className={`footer__form ${sizeWidth <= 900 ? 'set__size__header' : ''}`}>
 						<div>
 							<img src={LogoIUH} atl="logo_iuh" className="img_logo_header" />
 							<div className="text_name_sl">Đại học Công Nghiệp TP.HCM</div>

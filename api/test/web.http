@@ -17,28 +17,28 @@ POST {{url}}/api/page
 Content-Type: application/json
 
 {
-    "pageName": "Hoạt động ABC", 
+    "pageName": "Hoạt động Tuyen Sinh", 
     "tables": [
         {
-            "tableName": "Nghiên cứu khoa học",
+            "tableName": "Nghiên cứu tuyen sinh",
             "description": "Description 1",
             "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
             "rowValueList": []
         },
         {
-            "tableName": "Hoạt động tình nguyện",
+            "tableName": "Hoạt động sinh tuyen",
             "description": "Description 3",
             "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
             "rowValueList": []
         },
         {
-            "tableName": "Hoạt động Học Tập",
+            "tableName": "Hoạt động tuyen tuyen",
             "description": "Description 3",
             "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
             "rowValueList": []
         },
         {
-            "tableName": "Hoạt động Vui Chơi",
+            "tableName": "Hoạt động sinh sinh",
             "description": "Description 3",
             "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
             "rowValueList": []
@@ -55,6 +55,11 @@ Content-Type: application/json
     "table": "6539da65395099f799f4d313",
     "content": ["content 1", "content 2", "content 3", "content 4", "content 5"]
 }
+
+###
+GET {{url}}/api/row
+Content-Type: application/json
+
 ###
 POST {{url}}/api/register 
 Content-Type: application/json

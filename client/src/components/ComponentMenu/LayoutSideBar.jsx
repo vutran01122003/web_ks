@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import { BiBookBookmark, BiHomeSmile, BiMessageSquareDetail} from 'react-icons/bi';
 import { HiOutlineNewspaper } from 'react-icons/hi'
-import { BsFillCaretRightFill } from 'react-icons/bs'
+import { BsFillCaretRightFill, BsTags } from 'react-icons/bs'
 import {TbTargetArrow} from 'react-icons/tb';
 import { MdLightbulbOutline, MdOutlineCreate} from 'react-icons/md';
+import { CgBrowser } from 'react-icons/cg';
 import Logo_IUH from '../../assets/logo_iuh.png'
 import Logo_IUH_color_w from '../../assets/logo_iuh_color_w.png'
 import {getDataApi} from '../../utils/fetchData';
@@ -31,13 +32,29 @@ const LayoutSideBar = ({auth}) => {
         {
             id: 1,
             roles: ["0004"],
-            name_menu: "Thêm Chỉ Tiêu",
+            name_menu: "Thêm Nhóm Chỉ Tiêu",
             icon_before: <TbTargetArrow />,
-            to_link: "/create",
+            to_link: "/create_goals",
             submenu: false,
         },
         {
             id: 2,
+            roles: ["0004"],
+            name_menu: "Thêm Loại Tin Tức",
+            icon_before: <BsTags />,
+            to_link: "/create_news",
+            submenu: false,
+        },
+        {
+            id: 3,
+            roles: ["0004"],
+            name_menu: "Quản Lý Trang",
+            icon_before: <CgBrowser />,
+            to_link: "/create",
+            submenu: false,
+        },
+        {
+            id: 4,
             roles: ["0003"],
             name_menu: "Tạo Tin Tức",
             icon_before: <MdOutlineCreate />,
@@ -45,7 +62,7 @@ const LayoutSideBar = ({auth}) => {
             submenu: false,
         },
         {
-            id: 3,
+            id: 5,
             name_menu: "Tin Tức",
             allow: true,
             icon_before: <HiOutlineNewspaper />,
@@ -53,14 +70,7 @@ const LayoutSideBar = ({auth}) => {
             submenu: false
         },
         {
-            id: 4,
-            name_menu: "Cộng Đồng",
-            allow: true,
-            icon_before: <BiMessageSquareDetail />,
-            to_link: "/messenger",
-        },
-        {
-            id: 5,
+            id: 6,
             name_menu: "Chỉ Tiêu",
             roles: ["0002"],
             icon_before: <BiBookBookmark />,
@@ -68,7 +78,7 @@ const LayoutSideBar = ({auth}) => {
             sub_menu_item: []
         },
         {
-            id: 6,
+            id: 7,
             roles: ["0002"],
             name_menu: "Ngoại Khoá",
             icon_before: <MdLightbulbOutline />,
@@ -109,7 +119,7 @@ const LayoutSideBar = ({auth}) => {
     ];
     
     if(page.pages) {
-        ARRAY_LIST_MENU[5].sub_menu_item = page.pages.map((page) => {
+        ARRAY_LIST_MENU[6].sub_menu_item = page.pages.map((page) => {
             return {
                 id: page._id,
                 sub_name_menu: page.pageName,

@@ -6,6 +6,11 @@ const [DOC, COL] = ['user', 'users'];
 
 const UserSchema = new Schema(
     {
+        avatar: {
+            type: String,
+            default:
+                'https://res.cloudinary.com/dzm0nupxy/image/upload/v1698825146/kstn_db/avatar/avatar_default/av6xdxf126i9o8upv0gb.png'
+        },
         studentId: {
             type: String,
             required: true

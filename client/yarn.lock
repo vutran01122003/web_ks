@@ -3184,6 +3184,11 @@
   dependencies:
     "svg.js" "^2.6.5"
 
+"swiper@^11.0.3":
+  "integrity" "sha512-MyV9ooQsriAe2EibeamqewLjgCfSvl2xoyratl6S3ln5BXDL4BzlO6mxcbLMCzQL6Z60b/u0AS/nKrepL0+TAg=="
+  "resolved" "https://registry.npmjs.org/swiper/-/swiper-11.0.3.tgz"
+  "version" "11.0.3"
+
 "terser@^5.4.0":
   "integrity" "sha512-hHZVLgRA2z4NWcN6aS5rQDc+7Dcy58HOf2zbYwmFcQ+ua3h6eEFf5lIDKTzbWwlazPyOZsFQO8V80/IjVNExEw=="
   "resolved" "https://registry.npmjs.org/terser/-/terser-5.22.0.tgz"

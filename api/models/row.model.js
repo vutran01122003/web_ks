@@ -8,10 +8,7 @@ const RowSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'page'
         },
-        table: {
-            type: Schema.Types.ObjectId,
-            ref: 'page.tables'
-        },
+        table: Schema.Types.ObjectId,
         user: {
             type: Schema.Types.ObjectId,
             ref: 'user'

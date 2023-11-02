@@ -42,7 +42,6 @@
 			margin: 0 auto;
 			text-align: center;
 
-
 			&:not(:last-child) {
 				border-bottom: 1px solid $line_color;
 			}
@@ -51,8 +50,6 @@
 
 		.table__line__header {
 			border-bottom: 1px solid $line_color;
-
-
 
 			.header__item {
 				padding: 10px;
@@ -76,6 +73,14 @@
 					width: 100%;
 					color: $color_gray-500;
 				}
+
+                .preview_proof_images {
+                    color: #006fee;
+                    cursor: pointer;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
 			}
 		}
 	}

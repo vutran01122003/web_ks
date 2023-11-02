@@ -34,7 +34,7 @@ class PageService {
                     populate: {
                         path: 'rowValueList',
                         model: 'row',
-                        select: 'content',
+                        select: 'content proofImageList',
                         match: { user: userId }
                     }
                 })

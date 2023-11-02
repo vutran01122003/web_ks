@@ -36,7 +36,10 @@ const DynamicPage = () => {
 
                 if(table?.rowValueList?.length > 0) {
                     TABLE.tbody = table.rowValueList[0].content.map((rowValueItem) => {
-                        return [...rowValueItem.rowValue, `Minh Chứng`, `${rowValueItem.status}`];
+                        return [...rowValueItem.rowValue, {
+                            label: `Xem Minh Chứng`,
+                            proofImages: rowValueItem.proofImageList
+                        }, `${rowValueItem.status}`];
                     })
                 } 
                

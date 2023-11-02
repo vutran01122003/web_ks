@@ -12,6 +12,7 @@ import Alert from './components/ComponentToast/Alert';
 import FirstLogin from './components/ComponentFirstLogin/FirstLogin';
 import NotFound from './pages/NotFound';
 import { getPage } from './redux/actions/pageAction';
+import { getPeddingRows } from './redux/actions/rowAction';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -24,6 +25,12 @@ const App = () => {
         dispatch(verifyAccessToken());
         dispatch(getPage({pathName}));
     }, [dispatch]);
+
+    useEffect(() => {
+        if(auth?.user) {
+          dispatch(getPeddingRows())
+        }
+    }, [auth?.user])
 
 
   return (
