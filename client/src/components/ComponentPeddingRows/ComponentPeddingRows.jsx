@@ -59,9 +59,13 @@ function ComponentPeddingRows({penddingRows}) {
         if(penddingRows?.content?.length > 0) {
             TABLE.tbody = penddingRows.content.map((rowValueItem) => {
                 return [...rowValueItem.rowValue, {
-                    label: `Xem Minh Chứng`,
+                    proofNameLabel: 'Xem Minh Chứng',
                     proofImages: rowValueItem.proofImageList
-                }, `${rowValueItem.status}`];
+                }, {
+                    statusLabel: rowValueItem.status,
+                    statusValue: rowValueItem.status === "Chờ Duyệt" ? null : 
+                    (rowValueItem.status === "Đã Duyệt" ? true : false)
+                }];
             })
         } 
            
@@ -92,17 +96,17 @@ function ComponentPeddingRows({penddingRows}) {
                         <div className='student_info_wrapper'>
                             <div className='student_info'>
                                 <span className='student_info_label'>ID:{' '}</span> 
-                                <span className='student_info_id'>{penddingRows.user[0].studentId}</span>
+                                <span className='student_info_id'>{penddingRows?.user[0].studentId}</span>
                             </div>
         
                             <div className='student_info'>
                                 <span className='student_info_label'>Tên:{' '}</span> 
-                                <span className='student_info_name'>{penddingRows.user[0].fullName}</span>
+                                <span className='student_info_name'>{penddingRows?.user[0].fullName}</span>
                             </div>
         
                             <div className='student_info'>
                                 <span className='student_info_label'>Ngành:{' '}</span>
-                                <span className='student_info_faculty'>{penddingRows.user[0].major}</span>
+                                <span className='student_info_faculty'>{penddingRows?.user[0].major}</span>
                             </div>
                         </div>
 

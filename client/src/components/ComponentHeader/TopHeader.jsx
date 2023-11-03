@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Avatar_default from "../../assets/avatar_default.jpg";
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { BsDot } from 'react-icons/bs';
 import { ImSearch } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 import ComponentInput from '../ComponentForm/ComponentInput';
 import ControlBoxAccount from './ComponentControl/ControlBoxAccount';
+import Avatar from '../ComponentAvatar/ComponentAvatar';
 
 const TopHeader = ({ auth }) => {
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
@@ -53,7 +53,7 @@ const TopHeader = ({ auth }) => {
                         </div>
                         <div className="border__account" ref={refBoxAccount}>
                             <div className="btn_dropdown" onClick={() => setDropBoxAccount(!dropBoxAccount)}>
-                                <img src={Avatar_default} />
+                                <Avatar url={auth?.user.avatar} size="small"/>
                             </div>
                             <div
                                 className={`box__drop--account ${dropBoxAccount ? "active_drop_box" : "unactive_drop_box"}`}

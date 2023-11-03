@@ -81,6 +81,22 @@
                         text-decoration: underline;
                     }
                 }
+
+                .row_status {
+                    font-weight: 600;
+                }
+                
+                .wating_status {
+                    color: rgb(243 174 44);
+                }
+
+                .accept_status {
+                    color: green;
+                }
+
+                .deny_status {
+                    color: red;
+                }
 			}
 		}
 	}

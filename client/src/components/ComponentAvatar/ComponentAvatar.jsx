@@ -1,4 +1,4 @@
-import avatar from '../../assets/avatar_default.jpg';
+import avatar from '../../assets/images/avatar_default.jpg';
 
 function Avatar({ url, size }) {
 

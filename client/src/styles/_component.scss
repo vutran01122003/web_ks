@@ -96,24 +96,10 @@
                 }
 
                 .border__account {
-                    width: 40px;
-                    height: 40px;
-                    border: 2px solid #aaaaaa;
-                    border-radius: 100%;
-                    padding: 1px;
-                    position: relative;
-
                     .btn_dropdown {
                         width: 100%;
                         height: 100%;
                         cursor: pointer;
-
-                        img {
-                            width: 100%;
-                            height: 100%;
-                            border-radius: 100%;
-                            user-select: none;
-                        }
                     }
 
                     .box__drop--account {
@@ -633,11 +619,11 @@
     z-index: 999999;
 
     .carousel_wrapper {
-        width: 40vw;
+        width: 500px;
+        max-width: 100%;
         height: 70vh;
         user-select: none;
-        background-color: #000;
-        border: 1px solid #000;
+        background-color: rgba(0, 0, 0, 0.1);
         box-shadow: 0 0 5px gray;
         border-radius: 10px;
 

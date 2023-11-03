@@ -1,0 +1,95 @@
+.pages_management_container {
+    ul {
+        list-style-type: none;
+    }
+
+    .menu_item {
+        background: rgb(230 253 230);
+        padding: 20px 10px;
+        align-items: center;
+        font-weight: 700;
+        margin-top: 20px;
+        border: 1px solid rgb(210, 209, 209);
+        border-radius: 8px;
+
+        .menu_item_name {
+            display: inline-block;
+            font-size: large;
+            min-width: 200px;
+        }
+
+        .required_role {
+            display: inline-block;
+            margin-left: 20px;
+            border-radius: 10px;
+            min-width: 200px;
+            padding: 4px 6px;
+            color: #fff;
+            font-size: small;
+            font-weight: 500;
+            background: #559ef2;
+            text-align: center;
+        }
+    }
+
+    .sub_menu_ul {
+        margin-top: 20px;
+        border: 1px solid rgb(210, 209, 209);
+        border-radius: 8px;
+        overflow: hidden;
+
+        .sub_menu_item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgb(242 255 222);
+            padding: 15px;
+            font-weight: 500;
+            border-bottom: 1px solid rgb(210, 209, 209);
+            
+            button {
+                color: white;
+                font-weight: 600;
+                border: none;
+                outline: none;
+                border-radius: 8px;
+                box-shadow: 0 0 1px gray;
+                min-width: 120px;
+                padding: 10px 14px;
+                transition: 0.1s linear;
+                cursor: pointer;
+    
+                &:active {
+                    transform: scale(0.9);
+                }
+            }
+
+            .add_table_btn {
+                background: green;
+            }
+
+            .remove_table_btn {
+                background: orange;
+            }
+
+            .remove_page_btn {
+                background: red;
+            }
+
+            .watch_table_btn {
+                background: #0ca379;
+            }
+    
+            .sub_menu_item_btn_wrapper {
+                display: flex;
+                gap: 20px;
+            }
+    
+            .sub_menu_item_name {
+                display: inline-block;
+                min-width: 200px;
+            }
+            
+        }
+    }
+}

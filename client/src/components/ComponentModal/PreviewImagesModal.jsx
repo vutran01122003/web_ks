@@ -15,7 +15,7 @@ function PreviewImagesModal({proofImagesData, setOpenPreviewModal}) {
     return ( 
         <div 
             className="previewImagesModal"
-            onClick={handleHidePreviewImagesModal}
+            onMouseUp={handleHidePreviewImagesModal}
         >
             <div className='carousel_wrapper'>
                 <Swiper

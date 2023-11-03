@@ -147,8 +147,6 @@ class RowService {
                 }
             );
 
-            console.log(updatedRow);
-
             return {
                 code: 200,
                 msg: `Bạn đã ${status ? 'duyệt' : 'từ chối'} chỉ tiêu`,

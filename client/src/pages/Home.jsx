@@ -38,7 +38,7 @@ const Home = ({ auth }) => {
                     <>
                         {
                             row?.peddingRows.map((penddingRows) => 
-                            <ComponentPeddingRows key={penddingRows.table} penddingRows={penddingRows}/> )
+                            <ComponentPeddingRows key={penddingRows?.table} penddingRows={penddingRows}/> )
                         }
                     </>
                 }

@@ -14,7 +14,6 @@
 }
 
 body {
-
     margin: 0px;
     padding: 0px;
     background-color: $color_white;
@@ -46,10 +45,10 @@ a {
     color: $color_danger !important;
 }
 
-
 .display_none{
     display:none !important;
 }
+
 .display_block{
     display:block !important;
 }
@@ -65,5 +64,7 @@ a {
 @import "pageProfile";
 @import "firstLogin";
 @import "scrollbar";
+@import "notFound";
+@import "pagesManagement";
 @import "@media/@mediaComponentLogin.scss";
 

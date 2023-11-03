@@ -7,14 +7,23 @@ const MainItem = ({ row, handleOpenPreviewImagesModal }) => {
 	return (
 		<tr className="table__line__item">
 			{row.map((item, index) => {
-                if(item.label) {
+                if(item?.proofNameLabel) {
                     return (
                         <td 
-                            onClick={() => {handleOpenPreviewImagesModal({proofData: item.proofImages})}}
+                            onClick={() => {handleOpenPreviewImagesModal({proofData: item?.proofImages})}}
                             className="preview_proof_images line__item" 
                             key={index}
                         >
-                            {item.label}
+                            {item?.proofNameLabel}
+                        </td>
+                    )
+                } else if (item?.statusLabel) {
+                    return (
+                        <td 
+                            className={`line__item row_status ${item?.statusValue === null ? 'wating_status' : (item?.statusValue ? 'accept_status' : 'deny_status')}`}
+                            key={index}
+                        >
+                            {item?.statusLabel}
                         </td>
                     )
                 }

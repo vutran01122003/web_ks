@@ -62,7 +62,7 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
 	return (
 		<div 
             className={`wrap__modal ${stateModal ? 'active__modal' : 'unactive__modal'}`}
-            onClick={handleCloseModal}
+            onMouseUp={handleCloseModal}
         >
 			<form className={`modal`} >
 				<div className="head__modal">

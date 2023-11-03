@@ -1,5 +1,4 @@
 import React from 'react';
-import avatar from '../../assets/avatar_default.jpg';
 import ComponentAvatar from '../ComponentAvatar/ComponentAvatar';
 const LineItem = ({ info, text }) => {
 	return (

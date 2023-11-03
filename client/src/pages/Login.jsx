@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react'
-import LogoIUH from '../assets/logo_iuh.png'
-import ImageIntro from '../assets/image_loading_intro.png'
+import React, { useContext} from 'react'
+import LogoIUH from '../assets/images/logo_iuh.png'
+import ImageIntro from '../assets/images/image_loading_intro.png'
 import FormLogin from '../components/FormLogin/FormLogin'
 
 import { ContextFromWindowResize } from '../components/ComponentWindow/RenderGetSizeWindow'

@@ -1,6 +1,7 @@
 import { useParams, useLocation } from 'react-router-dom'
 import NotFound from '../../pages/NotFound'
 import { useEffect, useState} from 'react'
+import { useSelector } from 'react-redux'
 
 function PageRender() {
 	const { page, id } = useParams()
@@ -8,7 +9,9 @@ function PageRender() {
 	const pathName = location.pathname;
 	const [PageComponent, setPageComponent] = useState(null);
     const [notFound, setNotFound] = useState(false);
-	
+    const privatePages = ['create_goals', 'create_news', ];
+
+    const auth = useSelector(state => state.auth);
 	const pageName = id
 		? `${page?.replace(/\w/, page?.charAt(0).toUpperCase())}/[id]`
 		: page?.replace(/\w/, page?.charAt(0).toUpperCase())
@@ -25,17 +28,25 @@ function PageRender() {
 				setNotFound(true);
 			});
         } else {
-            import(/* @vite-ignore */ `../../pages/${pageName}`)
-			.then((module) => {
-                setPageComponent(module);
-				setNotFound(false);
-			})
-			.catch((e) => {
+            if(page === 'create_goals' && !auth?.user.roles.includes("0004")) {
+                setNotFound(true);
                 setPageComponent(null);
-				setNotFound(true);
-			});
+
+            } else {
+                import(/* @vite-ignore */ `../../pages/${pageName}`)
+                .then((module) => {
+                    setPageComponent(module);
+                    setNotFound(false);
+                })
+                .catch((e) => {
+                    setPageComponent(null);
+                    setNotFound(true);
+                });
+            }
+
+           
         }		
-	}, [page, id, setPageComponent]);
+	}, [page, id, setPageComponent, auth?.user]);
 
 	if(PageComponent && !notFound) {
         const Component = PageComponent.default;

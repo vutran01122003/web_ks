@@ -37,9 +37,13 @@ const DynamicPage = () => {
                 if(table?.rowValueList?.length > 0) {
                     TABLE.tbody = table.rowValueList[0].content.map((rowValueItem) => {
                         return [...rowValueItem.rowValue, {
-                            label: `Xem Minh Chứng`,
+                            proofNameLabel: 'Xem Minh Chứng',
                             proofImages: rowValueItem.proofImageList
-                        }, `${rowValueItem.status}`];
+                        }, {
+                            statusLabel: rowValueItem.status,
+                            statusValue: rowValueItem.status === "Chờ Duyệt" ? null : 
+                            (rowValueItem.status === "Đã Duyệt" ? true : false)
+                        }];
                     })
                 } 
                

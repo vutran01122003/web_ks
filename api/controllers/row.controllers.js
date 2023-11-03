@@ -1,29 +1,32 @@
-const RowService = require("../services/row.service");
-const UploadService = require("../services/upload.service");
+const RowService = require('../services/row.service');
+const UploadService = require('../services/upload.service');
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
+            if (!res.locals.roles.includes('0002'))
+                throw createError.Forbidden('Chỉ có kỹ sư tài năng mới thêm được chỉ tiêu');
+
             const { rowList, rowItemId } = await RowService.addRow({
-                data: req.body,
+                data: req.body
             });
 
             const uploadedImages = await UploadService.uploadImageFromFiles({
                 files: req.files,
                 data: req.body,
-                rowListId: rowList._id,
+                rowListId: rowList._id
             });
 
             await RowService.addProofImages({
                 data: req.body,
                 uploadedImages,
                 rowListId: rowList._id,
-                rowItemId,
+                rowItemId
             });
 
             res.status(200).json({
-                status: "Thêm Thông Tin Thành Công",
-                data: rowList,
+                status: 'Thêm Thông Tin Thành Công',
+                data: rowList
             });
         } catch (error) {
             next(error);
@@ -32,11 +35,14 @@ class RowControllers {
 
     getPeddingRows = async (req, res, next) => {
         try {
+            if (!res.locals.roles.includes('0004'))
+                throw createError.Forbidden('Không đủ quyền lấy dữ liệu chỉ tiêu chờ duyệt');
+
             const peddingRow = await RowService.getPeddingRows();
             res.status(200).json({
                 code: peddingRow.code,
                 msg: peddingRow.msg,
-                data: peddingRow.data,
+                data: peddingRow.data
             });
         } catch (error) {
             next(error);
@@ -45,17 +51,19 @@ class RowControllers {
 
     updateRowStatus = async (req, res, next) => {
         try {
+            if (!res.locals.roles.includes('0004'))
+                throw createError.Forbidden('Không đủ quyền cập nhật trạng thái chỉ tiêu');
             const { rowListId, rowItemId, status } = req.body;
 
             const updatedRow = await RowService.updateRowStatus({
                 rowListId,
                 rowItemId,
-                status,
+                status
             });
 
             res.status(200).json({
                 code: updatedRow.code,
-                msg: updatedRow.msg,
+                msg: updatedRow.msg
             });
         } catch (error) {
             next(error);

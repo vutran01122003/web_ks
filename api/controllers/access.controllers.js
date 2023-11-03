@@ -25,7 +25,7 @@ class AccessControllers {
             if (checkLogin.isSuccessLogin) {
                 if (checkLogin.typePassword === 'password') {
                     const accessToken = await jwtService.signAccessToken({
-                        userId: checkLogin.user._id
+                        userData: checkLogin.user
                     });
 
                     res.status(200)
@@ -65,7 +65,7 @@ class AccessControllers {
     register = async (req, res, next) => {
         try {
             const createdUser = await accessService.register(req.body);
-            const accessToken = await jwtService.signAccessToken({ userId: createdUser._id });
+            const accessToken = await jwtService.signAccessToken({ userData: createdUser });
             res.status(201)
                 .cookie('accessToken', accessToken, {
                     httpOnly: true,

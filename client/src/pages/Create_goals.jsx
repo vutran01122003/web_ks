@@ -105,6 +105,10 @@ function CreatePages() {
             >
                 Tạo Pages
             </button>
+
+            <div className='content'>
+
+            </div>
         </div>
     );
 }

@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken');
 const { ACCESS_TOKEN_SECRET } = process.env;
 
 class JwtService {
-    static signAccessToken = async ({ userId }) => {
+    static signAccessToken = async ({ userData }) => {
         return new Promise((resolve, reject) => {
             jwt.sign(
-                { userId },
+                { userId: userData._id, roles: userData.roles },
                 ACCESS_TOKEN_SECRET,
                 {
                     expiresIn: '1h'
