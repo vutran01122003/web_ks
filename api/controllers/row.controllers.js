@@ -1,29 +1,29 @@
-const Page = require('../models/page.model');
-const Row = require('../models/row.model');
-const RowService = require('../services/row.service');
-const UploadService = require('../services/upload.service');
+const RowService = require("../services/row.service");
+const UploadService = require("../services/upload.service");
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
-            const { rowList, rowItemId } = await RowService.addRow({ data: req.body });
+            const { rowList, rowItemId } = await RowService.addRow({
+                data: req.body,
+            });
 
             const uploadedImages = await UploadService.uploadImageFromFiles({
                 files: req.files,
                 data: req.body,
-                rowListId: rowList._id
+                rowListId: rowList._id,
             });
 
             await RowService.addProofImages({
                 data: req.body,
                 uploadedImages,
                 rowListId: rowList._id,
-                rowItemId
+                rowItemId,
             });
 
             res.status(200).json({
-                status: 'Thêm Thông Tin Thành Công',
-                data: rowList
+                status: "Thêm Thông Tin Thành Công",
+                data: rowList,
             });
         } catch (error) {
             next(error);
@@ -36,7 +36,7 @@ class RowControllers {
             res.status(200).json({
                 code: peddingRow.code,
                 msg: peddingRow.msg,
-                data: peddingRow.data
+                data: peddingRow.data,
             });
         } catch (error) {
             next(error);
@@ -47,11 +47,15 @@ class RowControllers {
         try {
             const { rowListId, rowItemId, status } = req.body;
 
-            const updatedRow = await RowService.updateRowStatus({ rowListId, rowItemId, status });
+            const updatedRow = await RowService.updateRowStatus({
+                rowListId,
+                rowItemId,
+                status,
+            });
 
             res.status(200).json({
                 code: updatedRow.code,
-                msg: updatedRow.msg
+                msg: updatedRow.msg,
             });
         } catch (error) {
             next(error);

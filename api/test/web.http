@@ -81,3 +81,36 @@ GET {{url}}/api/access_token
 
 ###
 GET {{url}}/api/refresh_token
+
+###
+GET {{url}}/api/post
+
+###
+GET {{url}}/api/post/654503788fafe8b70e49202a
+
+###
+POST {{url}}/api/post
+Content-Type: application/json
+
+{
+    "title": "ga di bo",
+    "content": "ga khong di bo"
+}
+
+###
+PATCH  {{url}}/api/post
+Content-Type: application/json
+
+{
+    "id": "654503788fafe8b70e49202a",
+    "title": "ga tap lai xe",
+    "content": "ga truot lai xe"
+}
+
+###
+DELETE  {{url}}/api/post
+Content-Type: application/json
+
+{
+    "id": "654508a14e88b334461830f7"
+}
