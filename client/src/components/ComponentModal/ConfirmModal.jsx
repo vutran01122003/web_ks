@@ -17,7 +17,7 @@ function ConfirmModal({content, status, rowInfoData, handleHiddenConfirmModal}) 
         <div className="confirm_modal_overlap">
             <div className="confirm_modal">
                 <div className="confirm_modal_header">
-                    <h3 className="confirm_modal_title">Thông báo</h3>
+                    <h2 className="confirm_modal_title">Thông báo</h2>
                 </div>
                 <div className="confirm_modal_body">
                     <p className="confirm_modal_body_content">

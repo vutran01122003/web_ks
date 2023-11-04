@@ -186,7 +186,6 @@
 .container__menu {
     width: 270px;
     background-color: #fff;
-    // margin-top: 60px;
     border-right: 1px solid $line_color;
     position: fixed;
     left: 0px;
@@ -664,6 +663,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-width: 210px;
             align-items: center;
     
             .student_info {
@@ -688,7 +688,7 @@
     
                 button {
                     color: #fff;
-                    width: 98px;
+                    width: 100px;
                     padding: 8px 12px;
                     font-weight: 600;
                     max-width: 100%;
@@ -705,11 +705,11 @@
                 }
     
                 .reject_btn {
-                    background: red;
+                    background: #f75151;
                 }
     
                 .confirmation_btn {
-                    background: green;
+                    background: #059b05;
                 }
             }
         }
@@ -755,6 +755,12 @@
         padding: 20px 10px;
     }
 
+    .confirm_modal_body {
+        .confirm_modal_body_content {
+            font-weight: 600;
+        }
+    }
+
     .confirm_modal_footer {
         display: flex;
         justify-content: center;
@@ -769,6 +775,7 @@
             border: none;
             box-shadow: 0 0 3px gray;
             border-radius: 8px;
+            cursor: pointer;
             transition: 0.1s linear;
 
             &:active {

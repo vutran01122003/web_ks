@@ -1,17 +1,17 @@
-require("./dbs/init.mongodb");
+require('./dbs/init.mongodb');
 // require('./dbs/init.redis');
-const express = require("express");
-const createError = require("http-errors");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const compression = require("compression");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
+const express = require('express');
+const createError = require('http-errors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const compression = require('compression');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const {
     morganType,
-    app: { clientDomain_v1, clientDomain_v2 },
-} = require("./config/config");
+    app: { clientDomain_v1, clientDomain_v2 }
+} = require('./config/config');
 
 const app = express();
 
@@ -22,10 +22,10 @@ const corsOptions = {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            callback(new Error("Not allowed by CORS"));
+            callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true,
+    credentials: true
 };
 
 // MiddleWare
@@ -37,10 +37,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // Router
-app.use("/api", require("./router/page"));
-app.use("/api", require("./router/access"));
-app.use("/api", require("./router/table"));
-app.use("/api", require("./router/post"));
+app.use('/api', require('./router/page'));
+app.use('/api', require('./router/access'));
+app.use('/api', require('./router/table'));
+app.use('/api', require('./router/post'));
 
 // Catch NotFound
 app.use((req, res, next) => {
@@ -53,8 +53,7 @@ app.use((err, req, res, next) => {
     if (err) {
         res.status(err.status).json({
             status: err.status,
-            msg: err.msg,
-            code: err.code,
+            msg: err.message
         });
     }
 });

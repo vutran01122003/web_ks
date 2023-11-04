@@ -14,7 +14,6 @@ class PageControllers {
                 data: createdPage
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

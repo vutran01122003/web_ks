@@ -31,12 +31,12 @@ function ManagePagesPage() {
                                                         }
 
                                                         case "0003": {
-                                                            job = "Quản Trị Nội Dung Website"
+                                                            job = "Quản Trị Viên Nội Dung Website"
                                                             break;
                                                         }
 
                                                         case "0004": {
-                                                            job = "Quản Trị Cấu Trúc Website"
+                                                            job = "Quản Trị Viên Cấu Trúc Website"
                                                             break;
                                                         }
                                                         default:

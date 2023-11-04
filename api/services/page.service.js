@@ -1,9 +1,13 @@
 const Page = require('../models/page.model');
+const createError = require('http-errors');
 
 class PageService {
     static createPage = async (data) => {
         try {
             const { pageName, tables } = data;
+
+            const isExists = await Page.findOne({ pageName }).lean();
+            if (isExists) throw createError(409, 'Tên Page Đã Tồn Tại');
 
             const createdPage = await Page.create({
                 pageName,
@@ -12,7 +16,6 @@ class PageService {
 
             return createdPage;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

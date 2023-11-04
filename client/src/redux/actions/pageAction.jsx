@@ -1,41 +1,6 @@
 import { getDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
-export const addRow = ({formData}) => async (dispatch) => {
-    try {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                loading: true
-            }
-        })
-
-        const res = await postDataApi('/row', formData);
-        const newPage = await getDataApi(formData.get('path'));
-
-        dispatch({
-            type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
-            payload: {
-                tables: newPage?.data.data.tables
-            }
-        })
-
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                success: res?.data.status
-            }
-        })
-    } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error: error?.response?.status === 401? 'Hết Phiên Đăng Nhập' : 'Thêm Thông Tin Bảng Thất Bại'
-            }
-        })
-    }
-}
-
 export const createPage = (data) => async (dispatch) => {
     try {
         dispatch({
@@ -54,10 +19,12 @@ export const createPage = (data) => async (dispatch) => {
             }
         });
     } catch (error) {
+        console.dir();
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.status === 401 ? 'Hết Phiên Đăng Nhập' : 'Tạo Page Thất Bại'
+                error: error?.response.status === 401 ? 'Hết Phiên Đăng Nhập' : 
+                error?.response.data.msg || 'Tạo Page Thất Bại'
             }
         });
     }
@@ -91,7 +58,7 @@ export const getPages = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.status === 401 ? 'Hết Phiên Đăng Nhập' :  "Lấy Dữ Liệu Page Thất Bại"
+                error: error?.response?.status === 401 ? 'Hết Phiên Đăng Nhập' : "Lấy Dữ Liệu Page Thất Bại"
             }
         })
     }
