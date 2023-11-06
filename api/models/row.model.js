@@ -45,4 +45,15 @@ const RowSchema = new Schema(
 
 const Row = model(DOC, RowSchema);
 
+RowSchema.pre('deleteMany', async function (next) {
+    try {
+        const deletedDocs = await this.model.find(this._conditions).lean();
+        console.log(deletedDocs);
+
+        return next();
+    } catch (error) {
+        return next(error);
+    }
+});
+
 module.exports = Row;

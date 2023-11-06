@@ -27,7 +27,7 @@ const App = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if(auth?.user) {
+        if(auth?.user && auth?.user.roles.includes("0004")) {
           dispatch(getPeddingRows())
         }
     }, [auth?.user])
@@ -52,4 +52,5 @@ const App = () => {
    
   )
 }
+
 export default App;

@@ -23,8 +23,7 @@ export const createPage = (data) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response.status === 401 ? 'Hết Phiên Đăng Nhập' : 
-                error?.response.data.msg || 'Tạo Page Thất Bại'
+                error: error?.response?.data.msg || 'Tạo Page Thất Bại'
             }
         });
     }
@@ -58,7 +57,7 @@ export const getPages = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.status === 401 ? 'Hết Phiên Đăng Nhập' : "Lấy Dữ Liệu Page Thất Bại"
+                error: error?.response?.data.msg || "Lấy Dữ Liệu Page Thất Bại"
             }
         })
     }
@@ -97,7 +96,7 @@ export const getPage = ({pathName}) => async (dispatch) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error?.response?.status === 401 ? 'Hết Phiên Đăng Nhập' : 'Lấy Dữ Liệu Page Thất Bại'
+                    error: error?.response?.data.msg || 'Lấy Dữ Liệu Page Thất Bại'
                 }
             })
        
