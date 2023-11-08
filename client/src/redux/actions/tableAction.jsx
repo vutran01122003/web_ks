@@ -63,12 +63,6 @@ export const removeTable = ({pageId, tableId}) => async (dispatch) => {
             tableId
         });
 
-        
-        dispatch({
-            type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
-            
-        })
-
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
@@ -76,6 +70,7 @@ export const removeTable = ({pageId, tableId}) => async (dispatch) => {
             }
         })
     } catch (error) {
+        console.log(error);
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {

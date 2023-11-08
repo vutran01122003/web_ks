@@ -81,8 +81,6 @@ function ManagePagesPage() {
         }
     }, [JSON.stringify(page.pages)])
 
-    console.log(pages[6]?.sub_menu_item);
-
     return <div className='pages_management_container'>
         {
             openAddTableModal && 

@@ -7,15 +7,16 @@ import { tableSelector } from '../../redux/selector';
 function ViewTablesModal({ handleHideViewTablesModal, subPageName}) {
     const dispatch = useDispatch();
     const table = useSelector(tableSelector);
-    const handleClosePopup = () => {
-        handleHideViewTablesModal();
+    const handleClosePopup = (e) => {
+        if(e.target === e.currentTarget) {
+            handleHideViewTablesModal();
+        }
     }
 
     useEffect(() => {
         dispatch(getTables({subPageName}));
     }, [])
 
-    console.log(table);
 
     return (  
         <div 
@@ -37,17 +38,17 @@ function ViewTablesModal({ handleHideViewTablesModal, subPageName}) {
                         <div className='tables_wrapper'>
                             {
                                 table.tables.map((table, index) => 
-                                    <div key={table._id}>
+                                    <div key={table._id + index}>
                                         <h4 className='table_label_goal'>Chỉ Tiêu {index + 1}</h4>
                                         <table className="table_detail_goal">
-                                            <thead><th colSpan={table.rowTitleList.length}>{table.tableName}</th></thead>
-                                            <tbody>
+                                            <tr><th colSpan={table.rowTitleList.length}>{table.tableName}</th></tr>
+                                            <tr>
                                                 {
-                                                    table.rowTitleList.map((title) => 
-                                                        <td key={table._id + title}><span>{title}</span></td>
+                                                    table.rowTitleList.map((title, index) => 
+                                                        <td key={index + title}><span>{title}</span></td>
                                                     )
                                                 }
-                                            </tbody>
+                                            </tr>
                                         </table>
                                     </div>
                                 )

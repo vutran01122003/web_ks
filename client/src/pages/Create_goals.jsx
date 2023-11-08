@@ -1,131 +1,193 @@
-import { useState, useEffect } from 'react'
-import { createPage } from '../redux/actions/pageAction'
-import { useDispatch, useSelector } from 'react-redux'
-import { pageSelector } from '../redux/selector'
+import React, { useState } from 'react'
+import ComponentButton from '../components/ComponentButton/ComponentButton';
+import { BiSolidAddToQueue } from "react-icons/bi"
+import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from "react-icons/ai"
+import { MdOutlineAddCircle } from "react-icons/md"
+import { useDispatch } from 'react-redux';
+import { createPage } from '../redux/actions/pageAction';
+
+const CreateGoals = () => {
+    const dispatch = useDispatch();
+
+    const [pageName, setPageName] = useState('');
+    const [tables, setTables] = useState([
+        {
+            tableName: "",
+            description: "",
+            rowTitleList: [""],
+            rowValueList: []
+        }
+    ]);
+
+    const addTable = () => {
+        setTables([...tables, {
+            tableName: "",
+            description: "",
+            rowTitleList: [""],
+            rowValueList: []
+        }]);
+    };
+
+    const updateTable = (index, key, value) => {
+        const updatedTables = [...tables];
+        updatedTables[index][key] = value;
+        setTables(updatedTables);
+    };
+
+    const deleteTable = (tableIndex) => {
+        if (tables.length > 1) {
+            const updatedTables = [...tables];
+            updatedTables.splice(tableIndex, 1);
+            setTables(updatedTables);
+        }
+    };
+
+    const updateRowTitle = (tableIndex, rowIndex, value) => {
+        const updatedTables = [...tables];
+        updatedTables[tableIndex].rowTitleList[rowIndex] = value;
+        setTables(updatedTables);
+    };
+
+    const addRowValue = (tableIndex) => {
+        const updatedTables = [...tables];
+        updatedTables[tableIndex].rowTitleList.push('');
+        setTables(updatedTables);
+    };
+
+    const deleteRowValue = (tableIndex, index_row_title) => {
+        if (tables[tableIndex].rowTitleList.length > 1) {
+            const updatedTables = [...tables];
+            updatedTables[tableIndex].rowTitleList.splice(index_row_title, 1);
+            setTables(updatedTables);
+        }
+
+    };
 
 
-function CreatePages() {
-	const dispatch = useDispatch()
-	const [rowTitleList, setRowTitleList] = useState([])
-	const [titleRowValue, setTitleRowValue] = useState('')
-	const [tableName, setTableName] = useState('')
-	const [pageName, setPageName] = useState('')
-	const [description, setDescription] = useState('')
-	const page = useSelector(pageSelector)
-	const handleAddRowTitleList = () => {
-		if (titleRowValue) {
-			setRowTitleList((prev) => [...prev, titleRowValue])
-			setTitleRowValue('')
-		}
-	}
+    const handleCreatePage = async () => {
+        const kq = {
+            pageName,
+            tables: tables.map((table) => ({
+                tableName: table.tableName,
+                description: table.description,
+                rowTitleList: table.rowTitleList
+            }))
+        };
+        console.log(kq)
+        dispatch(createPage(kq));
+    }
 
-	const handleTitleRowValue = (e) => {
-		setTitleRowValue(e.target.value)
-	}
 
-	const handleCreatePage = async () => {
-		dispatch(createPage({ pageName, tables: [{ tableName, description, rowTitleList }] }))
-		handleCancelPage()
-	}
-	const handleCancelPage = () => {
-		setRowTitleList([])
-		setTitleRowValue('')
-		setTableName('')
-		setPageName('')
-		setDescription('')
-	}
 
-	return (
-		<div className="create_goal_container">
-			<h1 className="heading-4 page_title">Tạo menu nhóm chỉ tiêu</h1>
-			<div className="form_input">
-				<div className="input_page_item">
-					<label>Tên Page: </label>
-					<input
-						type="text"
-						className="outline-none border-2"
-						value={pageName}
-						onChange={(e) => {
-							setPageName(e.target.value)
-						}}
-					/>
-				</div>
+    return (
+        <div className="wrap__goals">
+            <div className="body__goals">
+                <div className='line__flex'>
+                    <h1>Thêm Nhóm Chi Tiêu</h1>
+                </div>
 
-				<div className="input_page_item">
-					<label>Tên Bảng: </label>
-					<input
-						type="text"
-						className="outline-none border-2"
-						value={tableName}
-						onChange={(e) => {
-							setTableName(e.target.value)
-						}}
-					/>
-				</div>
+                <div className="filed__line">
+                    <label>Tên Nhóm Chỉ Tiêu</label>
+                    <input
+                        type="text"
+                        id="name__chi_tieu"
+                        placeholder=''
+                        value={pageName}
+                        onChange={(e) => setPageName(e.target.value)}
+                    />
+                </div>
+                <div className="connection__table">
+                    {tables.map((table, tableIndex) => {
+                        return (
+                            <div key={tableIndex} className="box__table">
 
-				<div className="input_page_item">
-					<label>Ghi chú: </label>
-					<input
-						type="text"
-						className="outline-none border-2"
-						value={description}
-						onChange={(e) => {
-							setDescription(e.target.value)
-						}}
-					/>
-				</div>
+                                <div className="flex__hLine">
+                                    <div className="text__heading_fw">
+                                        <div className="text__length">Tên Chỉ Tiêu:</div>
+                                        <input
+                                            type="text"
+                                            value={table.tableName}
+                                            placeholder="Nhập tiêu đề chỉ tiêu"
+                                            onChange={(e) => updateTable(tableIndex, 'tableName', e.target.value)}
+                                            className="input_title--chi_tieu"
+                                        />
+                                    </div>
 
-				<div className="input_page_item">
-					<label>Thêm cột: </label>
-					<input
-						type="text"
-						className="outline-none border-2"
-						onChange={handleTitleRowValue}
-						value={titleRowValue}
-					/>
-					<button className="btn_add_column" onClick={handleAddRowTitleList}>
-						Thêm Cột
-					</button>
-				</div>
-				<div className="button_function">
-					<button onClick={handleCancelPage} className="btn_cancle">
-						Huỷ tạo page
-					</button>
-					<button onClick={handleCreatePage} className="btn_create_page">
-						Tạo Pages
-					</button>
-				</div>
-			</div>
-			<div className="goals_preview">
-				<h1 className="heading-4 page_title preview_title">Xem trước</h1>
-				<div className="mt-10 page">
-					{pageName || tableName || description || rowTitleList.length > 0 ? (
-						<div className="page_column">
-							<h1 className="page_title_preview ">{pageName || ''}</h1>
-							<h2 className="table_title_preview">{tableName || ''}</h2>
-							<h4 className="description_preview">
-								{description ? 'Ghi chú: ' + description : ''}
-							</h4>
+                                    <div className="btn__delete">
+                                        {tables.length > 1 && (
+                                            <button onClick={() => deleteTable(tableIndex)}>
+                                                <AiOutlineClose />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex__line_lable">
+                                    <label htmlFor="mo_ta_chi_tieu">Mô Tả Chỉ Tiêu:</label>
+                                    <input
+                                        type="text"
+                                        value={table.description}
+                                        placeholder="Nhập mô tả chỉ tiêu"
+                                        onChange={(e) => updateTable(tableIndex, 'description', e.target.value)}
+                                        id="mo_ta_chi_tieu"
+                                    />
 
-							<table>
-								<thead>
-									<tr>
-										{rowTitleList.map((rowTitle, index) => (
-											<th key={index} className="item_column">
-												{rowTitle}
-											</th>
-										))}
-									</tr>
-								</thead>
-							</table>
-						</div>
-					) : (
-						<h2 className="page_title_preview ">Vui lòng điền dữ liệu để xem trước</h2>
-					)}
-				</div>
-			</div>
-		</div>
-	)
+                                </div>
+
+                                <div className="table__col--target">
+                                    <div className="flex__line">
+                                        <ComponentButton onClick={() => addRowValue(tableIndex)} textButton="Thêm Cột"
+                                            className="btn__add-col" icon_before={<MdOutlineAddCircle />} />
+                                    </div>
+
+                                    <div className='tr__line--cols'>
+                                        <div className="box__cols">
+                                            <span className="hag_stt">#</span>
+                                            {table.rowTitleList.map((rowTitle, rowIndex) => {
+                                                return (
+                                                    <div key={rowIndex} className="item__col">
+                                                        <input
+                                                            type="text"
+                                                            value={rowTitle}
+                                                            placeholder={`Cột ${rowIndex + 1}`}
+                                                            onChange={(e) => updateRowTitle(tableIndex, rowIndex, e.target.value)}
+                                                        />
+                                                        {table.rowTitleList.length > 1 && (
+                                                            <div onClick={() => deleteRowValue(tableIndex, rowIndex)} className="del__col">
+                                                                <AiFillCloseCircle />
+                                                            </div>
+                                                        )
+                                                        }
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className="line__flex">
+
+                    <ComponentButton
+                        onClick={addTable}
+                        type="button"
+                        textButton="Thêm Chỉ Tiêu"
+                        className="btn__add_table"
+                        icon_before={<BiSolidAddToQueue />}
+                    />
+
+                    <ComponentButton
+                        textButton="Tạo Trang"
+                        onClick={handleCreatePage}
+                        type="button"
+                        className="btn__create--page"
+                        icon_before={<AiFillSave />} />
+                </div>
+            </div>
+        </div>
+    )
 }
 
-export default CreatePages
+export default CreateGoals
