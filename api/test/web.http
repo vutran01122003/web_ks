@@ -3,7 +3,7 @@
 ###
 GET {{url}}
 
-###
+### Login
 POST {{url}}/api/login
 Content-Type: application/json
 
@@ -12,12 +12,12 @@ Content-Type: application/json
     "password": "1111"
 }
 
-###
+### Create Page and mutiple tables
 POST {{url}}/api/page
 Content-Type: application/json
 
 {
-    "pageName": "Hoạt động Tuyen Sinh", 
+    "pageName": "Hoạt động Nghien Cuu", 
     "tables": [
         {
             "tableName": "Nghiên cứu tuyen sinh",
@@ -38,12 +38,67 @@ Content-Type: application/json
             "rowValueList": []
         },
         {
-            "tableName": "Hoạt động sinh sinh",
+            "tableName": "Hoạt động sinh sinh 2",
             "description": "Description 3",
             "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
             "rowValueList": []
         }
     ] 
+}
+
+### Get all table
+GET {{url}}/api/page
+
+### remove page
+DELETE {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageId": "654903da5fc9d102a4430fb7"
+}
+
+### Add table
+POST {{url}}/api/table
+Content-Type: application/json
+
+{
+    "pageId": "6548965e36bbd99ed5fffffd",
+    "tables": [
+        {
+            "tableName": "Hoc Tap V2",
+            "description": "La Mo Ta Bang Hoc Tap V2",
+            "rowTitleList": ["Ten Mon", "So Tin Chi", "Xep Loai", "Thuc Hanh", "Tinh Trang"],
+            "rowValueList": []
+        }
+    ] 
+}
+
+### Remove table
+DELETE {{url}}/api/table
+Content-Type: application/json
+
+{
+    "pageId": "6548965e36bbd99ed5fffffd",
+    "tableId": "6548b5ef623b01bd37769cb2"
+}
+
+### Update table
+PATCH {{url}}/api/table
+Content-Type: application/json
+
+{
+    "pageId": "6549076834040537486db1c5",
+    "tableData": {
+        "tableName": "Hoc Tap Nghien Cuu",
+        "rowTitleList": [
+            "Ten Mon",
+            "So Tin Chi",
+            "Xep Loai",
+            "Thuc Hanh",
+            "Tinh Trang"
+        ]
+    },
+    "tableId": "6549076834040537486db1c6"
 }
 ###
 POST {{url}}/api/row
@@ -52,7 +107,7 @@ Content-Type: application/json
 {   
     "page": "6539da65395099f799f4d312",
     "user": "6537f6c1adc22ad3e1829e21",
-    "table": "6539da65395099f799f4d313",
+    "table": "6547b4af4f0a7fc174b69cc0",
     "content": ["content 1", "content 2", "content 3", "content 4", "content 5"]
 }
 
@@ -79,16 +134,13 @@ GET {{url}}/api/page/page%201
 ###
 GET {{url}}/api/access_token
 
-###
-GET {{url}}/api/refresh_token
-
-###
+### Get Posts
 GET {{url}}/api/post
 
-###
+### Get Post
 GET {{url}}/api/post/654503788fafe8b70e49202a
 
-###
+### Create Post
 POST {{url}}/api/post
 Content-Type: application/json
 

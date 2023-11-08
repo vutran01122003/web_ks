@@ -65,7 +65,7 @@ export const register = (data) => async(dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: "Cập Nhật Thông Tin Không Thành Công"
+                error: error?.response?.data.msg || "Cập Nhật Thông Tin Không Thành Công"
             }
         });
     }
@@ -94,7 +94,7 @@ export const logout = () => async(dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: 'Đăng Xuất Không Thành Công'
+                error: error?.response?.data.msg || 'Đăng Xuất Không Thành Công'
             }
         });
     }

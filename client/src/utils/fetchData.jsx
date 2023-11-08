@@ -1,6 +1,6 @@
 import instance from '../config/axios.config';
-export const getDataApi = async (uri) => {
-    const res = await instance.get(`/api${uri}`);
+export const getDataApi = async (uri, params) => {
+    const res = await instance.get(`/api${uri}`, {params});
     return res;
 };
 
@@ -14,7 +14,7 @@ export const patchDataApi = async (uri, data) => {
     return res;
 };
 
-export const deleteDateApi = async (uri, data) => {
-    const res = await instance.delete(`/api${uri}`, data);
+export const deleteDataApi = async (uri, data) => {
+    const res = await instance.delete(`/api${uri}`, {data});
     return res;
 };

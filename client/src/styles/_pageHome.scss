@@ -2,7 +2,7 @@
 	padding: 10px;
 	background-color: $color_bgr;
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	gap: 10px;
 	min-height: calc(100vh - 60px);
 
@@ -32,57 +32,58 @@
 
 // Layout Info
 .container__info {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
+
 	.content {
-        flex: 1;
-		.info__text {
-			.line {
-				height: 35px;
-				display: flex;
-				align-items: center;
-				gap: 0px 5px;
-                span {
-                    white-space: nowrap;
-                    font-weight: 700;
-                }
-				p {
-                    white-space: nowrap;
-                    flex: 1;
-					font-weight: 500;
-					color: $color_gray-500;
+		flex: 1;
+
+		.info__avatar {
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+			justify-content: center;
+			align-items: center;
+
+			.more__info {
+				color: $main_color;
+
+				&:hover {
+					color: $main_color-hover;
 				}
 			}
 		}
+
+
 	}
 }
 
 // Avatar
 .info__avatar {
-    position: relative;
+	position: relative;
 
-    &-image {
-        border: 1px solid gray;
-    }
+	&-image {
+		// border: 1px solid $line_color;
+	}
 
-    .info__avatar-image {
-        border-radius: 100%;
-    }
+	.info__avatar-image {
+		border-radius: 100%;
+	}
 
-    .info__avatar-image.large {
-        width: 185px;
-        height: 185px;
-    }
+	.info__avatar-image.large {
+		width: 165px;
+		height: 165px;
+	}
 
-    .info__avatar-image.medium {
-        width: 92px;
-        height: 92px;
-    }
+	.info__avatar-image.medium {
+		width: 92px;
+		height: 92px;
+	}
 
-    .info__avatar-image.small {
-        width: 40px;
-        height: 40px;
-    }
+	.info__avatar-image.small {
+		width: 40px;
+		height: 40px;
+	}
 }
 
 // Layout Chart
@@ -120,4 +121,4 @@
 	background-color: $color_white;
 	border-radius: 5px;
 	box-shadow: 0 0 3px rgb(194, 193, 193);
-}	
+}

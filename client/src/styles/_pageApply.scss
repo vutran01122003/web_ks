@@ -1,0 +1,152 @@
+.pageApply {
+	// padding: 10px 20px;
+	display: flex;
+	flex-direction: column;
+	background-color: $color_bgr;
+	min-height: 100vh;
+	justify-content: center;
+	align-items: center;
+
+	.form__apply {
+		border-radius: 10px;
+		margin: 30px 0px;
+		padding: 40px;
+		height: fit-content;
+		width: 80vw;
+		background-color: $color_white;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+		&-header {
+			margin-right: auto;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+
+			.logo__image {
+				width: 150px;
+			}
+
+			.icon__close {
+				font-size: 20px;
+				width: 50px;
+				height: 50px;
+				display: grid;
+				place-items: center;
+				border-radius: 999px;
+				position: relative;
+
+				&:hover  {
+					background-color: $color_bgr;
+				}
+			}
+
+
+		}
+
+		&-content {
+			width: 100%;
+
+			.title__content {
+				font-size: 30px;
+				font-weight: 700;
+				text-transform: uppercase;
+				text-align: center;
+				padding: 10px 20px;
+
+			}
+
+			.main__content {
+				padding: 10px 20px;
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+
+				column-gap: 30px;
+				width: 100%;
+				margin: 0 auto;
+
+				.content__item {
+					width: 100%;
+
+					.item__file {
+						height: fit-content;
+						display: flex;
+						justify-content: center;
+						gap: 10px;
+					}
+
+					.label__item {
+						display: block;
+						color: #333;
+						font-size: 16px;
+						font-weight: 700;
+						margin-bottom: 10px;
+						margin-top: 15px;
+					}
+
+					.item__certifical {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						gap: 10px;
+
+						.select__input {
+							width: 100%;
+						}
+					}
+
+					.input__text,
+					.input__file-label {
+						font-size: 16px;
+						width: 100%;
+						outline: none;
+						border: none;
+						border: 1px solid gray;
+						padding: 8px 12px;
+						border-radius: 5px;
+						height: 45px;
+
+						&:focus {
+							border: 1px solid #006fee;
+						}
+
+					}
+
+
+
+
+
+
+
+
+				}
+
+			}
+
+			.btn__submit {
+				width: 30%;
+				margin: 20px auto;
+				border-radius: 5px;
+			}
+		}
+
+	}
+
+
+
+
+	// .image {
+	// 	width: 100%;
+
+	// 	img {
+	// 		width: 100%;
+	// 		height: 100%;
+	// 		object-fit: cover;
+	// 	}
+	// }
+}

@@ -34,15 +34,13 @@ const ComponentInput = ({
                         className={classNameInputItem}
                     />
 
-                    <div className="icon__before">
-                        {iconBefore}
-                    </div>               
-                </div>
+					<div className="icon__before">{iconBefore}</div>
+				</div>
 
-                {children}
-            </div>
-        </div>
-    )
+				{children}
+			</div>
+		</div>
+	)
 }
 
 export default ComponentInput

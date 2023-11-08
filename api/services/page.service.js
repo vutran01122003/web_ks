@@ -47,6 +47,19 @@ class PageService {
             throw error;
         }
     };
+
+    static removePage = async ({ pageId }) => {
+        try {
+            await Page.findOneAndDelete({ _id: pageId });
+
+            return {
+                status: 200,
+                msg: 'Xóa page thành công'
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = PageService;

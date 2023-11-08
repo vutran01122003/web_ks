@@ -36,11 +36,13 @@ app.use(morgan(morganType));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 // Router
 app.use('/api', require('./router/page'));
 app.use('/api', require('./router/access'));
 app.use('/api', require('./router/table'));
 app.use('/api', require('./router/post'));
+app.use('/api', require('./router/row'));
 
 // Catch NotFound
 app.use((req, res, next) => {

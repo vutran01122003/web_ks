@@ -1,5 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
+import no_image from '../../assets/images/no_image.jpg';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -14,7 +16,7 @@ function PreviewImagesModal({proofImagesData, setOpenPreviewModal}) {
 
     return ( 
         <div 
-            className="previewImagesModal"
+            className="modal_overlap"
             onMouseUp={handleHidePreviewImagesModal}
         >
             <div className='carousel_wrapper'>
@@ -33,12 +35,8 @@ function PreviewImagesModal({proofImagesData, setOpenPreviewModal}) {
                     {proofImagesData.map((proofImage) => (
                         <SwiperSlide key={proofImage.proofImageId}>     
                             <img
-                                src={proofImage.url}
+                                src={proofImage?.url || no_image}
                                 alt='preview_images'
-                                // onError={({ currentTarget }) => {
-                                //     currentTarget.onerror = null; 
-                                //     currentTarget.src = require('../../../images/no_image.png');
-                                // }}
                             />
                         
                         </SwiperSlide>
