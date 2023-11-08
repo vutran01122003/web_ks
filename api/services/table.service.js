@@ -1,4 +1,5 @@
 const Page = require('../models/page.model');
+const createError = require('http-errors');
 
 class TableService {
     static addTable = async ({ pageId, tables }) => {
@@ -62,11 +63,11 @@ class TableService {
                 status: 201
             };
         } catch (error) {
-            next(error);
+            throw error;
         }
     };
 
-    static updatedTable = async ({ pageId, tableId, tableData }) => {
+    static updateTable = async ({ pageId, tableId, tableData }) => {
         try {
             const page = await Page.findById(pageId).lean();
 

@@ -17,7 +17,7 @@ POST {{url}}/api/page
 Content-Type: application/json
 
 {
-    "pageName": "Hoạt động Tuyen Sinh 2345", 
+    "pageName": "Hoạt động Nghien Cuu", 
     "tables": [
         {
             "tableName": "Nghiên cứu tuyen sinh",
@@ -87,18 +87,18 @@ PATCH {{url}}/api/table
 Content-Type: application/json
 
 {
-    "pageId": "6548965e36bbd99ed5fffffd",
+    "pageId": "6549076834040537486db1c5",
     "tableData": {
-        "tableName": "Hoc Tap V3",
+        "tableName": "Hoc Tap Nghien Cuu",
         "rowTitleList": [
-            "Ten Mon 2",
-            "So Tin Chi 3",
-            "Xep Loai 4",
+            "Ten Mon",
+            "So Tin Chi",
+            "Xep Loai",
             "Thuc Hanh",
             "Tinh Trang"
         ]
     },
-    "tableId": "6548be5bbd64962082874db8"
+    "tableId": "6549076834040537486db1c6"
 }
 ###
 POST {{url}}/api/row

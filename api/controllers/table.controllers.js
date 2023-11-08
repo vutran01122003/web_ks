@@ -31,7 +31,7 @@ class TableControllers {
             const removedTable = await TableService.removeTable({ pageId, tableId });
 
             res.status(201).json({
-                msg: removedTable.status,
+                msg: removedTable.msg,
                 page: removedTable.page,
                 status: removedTable.status
             });
@@ -47,11 +47,11 @@ class TableControllers {
 
             const { pageId, tableId, tableData } = req.body;
 
-            const updatedTable = await TableService.updatedTable({ pageId, tableId, tableData });
+            const updatedTable = await TableService.updateTable({ pageId, tableId, tableData });
 
             res.status(200).json({
                 status: updatedTable.status,
-                page: updatedPage.page,
+                page: updatedTable.page,
                 msg: 'Cập nhật chỉ tiêu thành công'
             });
         } catch (error) {

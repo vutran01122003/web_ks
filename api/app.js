@@ -29,8 +29,8 @@ const corsOptions = {
 };
 
 // MiddleWare
-// app.use(cors(corsOptions));
-// app.use(helmet());
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(compression());
 app.use(morgan(morganType));
 app.use(express.json());

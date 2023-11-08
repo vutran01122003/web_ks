@@ -34,9 +34,10 @@ class PageControllers {
 
     getPage = async (req, res, next) => {
         const page = await pageService.getPage({
-            pageName: req.params.page,
+            pageName: req.params?.page,
             userId: res.locals.userId
         });
+
         try {
             res.status(200).json({
                 status: 'Lấy Dữ Liệu Page Thành Công',

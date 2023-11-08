@@ -13,8 +13,14 @@ function ConfirmModal({content, status, rowInfoData, handleHiddenConfirmModal}) 
         handleHiddenConfirmModal();
     }
 
+    const handleHiddenPopup = (e) => {
+        if(e.target === e.currentTarget) {
+            handleHiddenConfirmModal();
+        }
+    }
+    
     return (
-        <div className="confirm_modal_overlap">
+        <div className="modal_overlap" onMouseUp={handleHiddenPopup}>
             <div className="confirm_modal">
                 <div className="confirm_modal_header">
                     <h2 className="confirm_modal_title">Thông báo</h2>
