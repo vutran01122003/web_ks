@@ -9,4 +9,6 @@ router.get('/page', auth, pageControllers.getAllPage);
 
 router.get('/page/:page', auth, pageControllers.getPage);
 
+router.delete('/page', auth, pageControllers.removePage);
+
 module.exports = router;

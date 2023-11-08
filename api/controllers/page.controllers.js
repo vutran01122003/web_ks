@@ -1,3 +1,5 @@
+const Page = require('../models/page.model');
+const PageService = require('../services/page.service');
 const pageService = require('../services/page.service');
 const createError = require('http-errors');
 
@@ -32,13 +34,29 @@ class PageControllers {
 
     getPage = async (req, res, next) => {
         const page = await pageService.getPage({
-            pageName: req.params.page,
+            pageName: req.params?.page,
             userId: res.locals.userId
         });
+
         try {
             res.status(200).json({
                 status: 'Lấy Dữ Liệu Page Thành Công',
                 data: page
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    removePage = async (req, res, next) => {
+        try {
+            const { pageId } = req.body;
+
+            const removedPage = await PageService.removePage({ pageId });
+
+            res.status(200).json({
+                status: removedPage.status,
+                msg: removedPage.msg
             });
         } catch (error) {
             next(error);

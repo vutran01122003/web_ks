@@ -4,13 +4,14 @@
     }
 
     .menu_item {
-        background: rgb(230 253 230);
         padding: 20px 10px;
         align-items: center;
         font-weight: 700;
-        margin-top: 20px;
-        border: 1px solid rgb(210, 209, 209);
-        border-radius: 8px;
+        border-style: solid ;
+        border-width: 1px;
+        border-color:rgb(209, 207, 207);
+        // margin-bottom: 20px;
+        background: #ffecd757;
 
         .menu_item_name {
             display: inline-block;
@@ -23,11 +24,11 @@
             margin-left: 20px;
             border-radius: 10px;
             min-width: 220px;
-            padding: 4px 6px;
+            padding: 8px 12px;
             color: #fff;
             font-size: small;
-            font-weight: 500;
-            background: #559ef2;
+            font-weight: 600;
+            background: #1c7ae6;
             text-align: center;
         }
     }
@@ -39,10 +40,10 @@
         overflow: hidden;
 
         .sub_menu_item {
+            background: #ffeacd4a;
             display: flex;
             align-items: center;
             gap: 20px;
-            background: rgb(242 255 222);
             padding: 15px;
             font-weight: 600;
             border-bottom: 1px solid rgb(210, 209, 209);

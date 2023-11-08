@@ -30,7 +30,7 @@ export const addRow = ({formData}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.status === 401? 'Hết Phiên Đăng Nhập' : 'Thêm Hoạt Động Thất Bại'
+                error: error?.response?.data.msg || 'Thêm Hoạt Động Thất Bại'
             }
         })
     }
@@ -64,7 +64,7 @@ export const getPeddingRows = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.status === 401? 'Hết Phiên Đăng Nhập' : 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
+                error: error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
             }
         })
     }
@@ -92,7 +92,7 @@ export const updatePeddingRowStatus = ({ rowListId, rowItemId, status }) => asyn
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.status === 401? 'Hết Phiên Đăng Nhập' : 'Duyệt Chỉ Tiêu Thất Bại'
+                error: error?.response?.data.msg || 'Duyệt Chỉ Tiêu Thất Bại'
             }
         })
     }

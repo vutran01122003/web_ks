@@ -9,7 +9,7 @@ function PageRender() {
 	const pathName = location.pathname;
 	const [PageComponent, setPageComponent] = useState(null);
     const [notFound, setNotFound] = useState(false);
-    const privatePages = ['create_goals', 'create_news', ];
+    const privatePages = ['create_goals', 'create_news', 'manage_pages'];
 
     const auth = useSelector(state => state.auth);
 	const pageName = id
@@ -28,10 +28,9 @@ function PageRender() {
 				setNotFound(true);
 			});
         } else {
-            if(page === 'create_goals' && !auth?.user.roles.includes("0004")) {
+            if(privatePages.includes(page) && !auth?.user.roles.includes("0004")) {
                 setNotFound(true);
                 setPageComponent(null);
-
             } else {
                 import(/* @vite-ignore */ `../../pages/${pageName}`)
                 .then((module) => {
@@ -39,12 +38,11 @@ function PageRender() {
                     setNotFound(false);
                 })
                 .catch((e) => {
+                    console.log(e);
                     setPageComponent(null);
                     setNotFound(true);
                 });
             }
-
-           
         }		
 	}, [page, id, setPageComponent, auth?.user]);
 

@@ -1,10 +1,11 @@
-const upload = require('multer')();
 const router = require('express').Router();
-const rowControllers = require('../../controllers/row.controllers');
+const tableControllers = require('../../controllers/table.controllers');
 const { auth } = require('../../middleware/auth');
 
-router.post('/row', auth, upload.array('files'), rowControllers.addRow);
-router.get('/pending_rows', auth, rowControllers.getPeddingRows);
-router.patch('/pending_rows/update', auth, rowControllers.updateRowStatus);
+router.post('/table', auth, tableControllers.addTable);
+
+router.patch('/table', auth, tableControllers.updateTable);
+
+router.delete('/table', auth, tableControllers.removeTable);
 
 module.exports = router;

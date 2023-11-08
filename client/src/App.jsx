@@ -26,11 +26,13 @@ const App = () => {
 		dispatch(getPage({ pathName }))
 	}, [dispatch])
 
-	useEffect(() => {
-		if (auth?.user && auth?.user.roles.includes('0004')) {
-			dispatch(getPeddingRows())
-		}
-	}, [auth?.user])
+
+    useEffect(() => {
+        if(auth?.user && auth?.user.roles.includes("0004")) {
+          dispatch(getPeddingRows())
+        }
+    }, [auth?.user])
+
 
 	return (
 		<>
@@ -63,4 +65,5 @@ const App = () => {
 		</>
 	)
 }
-export default App
+
+export default App;

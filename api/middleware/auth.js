@@ -11,7 +11,7 @@ module.exports = {
             next();
         } catch (error) {
             if (['JsonWebTokenError', 'TokenExpiredError'].includes(error.name)) {
-                next({ status: 401, code: 401, message: error.message });
+                next({ status: 401, message: 'Hết phiên đăng nhập' });
             }
             next(error);
         }

@@ -6,9 +6,10 @@ import CreatedNewsHistory from '../components/ComponentHome/CreatedNewsHistory'
 import ChangeWebsiteHistory from '../components/ComponentHome/ChangeWebsiteHistory'
 import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows'
 import { useSelector } from 'react-redux'
+import { rowSelector } from '../redux/selector'
 
 const Home = ({ auth }) => {
-	const row = useSelector((state) => state.row)
+	const row = useSelector(rowSelector)
 
 	const DATA_CHART = [
 		{ caterogy: 'Hoạt động', value: 80 },

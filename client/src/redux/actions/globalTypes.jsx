@@ -11,6 +11,9 @@ const GLOBALTYPES = {
     },
     ROW: {
         GET_PENDING_ROWS: 'GET_PENDING_ROWS'
+    },
+    TABLE: {
+        SET_TABLES: 'SET_TABLES'
     }
 };
 
