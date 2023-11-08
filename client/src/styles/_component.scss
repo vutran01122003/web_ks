@@ -1,4 +1,5 @@
 .container__app {
+
     // background-color: rgb(106, 80, 80);
     .box_layout_body {
         height: auto;
@@ -31,6 +32,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.5s;
+
     &:hover {
         background-color: $main_color_hover;
     }
@@ -70,7 +72,7 @@
                 display: flex;
                 align-items: center;
 
-                > div {
+                >div {
                     margin-left: 20px;
                 }
 
@@ -149,7 +151,7 @@
                                 background-color: $color_white_hover;
                             }
 
-                            > svg {
+                            >svg {
                                 margin-right: 15px;
                                 font-size: 24px;
                             }
@@ -173,7 +175,7 @@
             }
         }
 
-        .border__text--role{
+        .border__text--role {
             padding: 5px 8px;
             border: 2px solid red;
             color: red;
@@ -224,7 +226,7 @@
                 transition: all 0.35s;
                 margin: 6px 10px;
 
-                > span {
+                >span {
                     @include flex_center;
                 }
 
@@ -242,7 +244,7 @@
                 .active_icon {
                     transform: rotate(90deg);
 
-                    > svg {
+                    >svg {
                         color: $color_black !important;
                     }
                 }
@@ -293,29 +295,32 @@
     }
 }
 
-.background_admin{
+.background_admin {
     background-color: #313A46;
-    .item_menu_a{
+
+    .item_menu_a {
         background-color: #313A46 !important;
         color: #ffffff !important;
     }
+
     .item_menu_a.active {
         background-color: #525a64 !important;
         // color: $color_black;
     }
 }
 
-.component__input + .component__input {
+.component__input+.component__input {
     margin-top: 10px;
 }
 
 .component__input {
-    > label {
+    >label {
         font-size: 18px;
         font-weight: 700;
         color: #282c52;
         display: block;
     }
+
     select {
         width: 100%;
         height: 100%;
@@ -327,14 +332,15 @@
         padding: 8px;
         margin-top: 5px;
     }
+
     .line__input {
         position: relative;
         height: 45px;
         margin: 6px 0px;
         border: 1px solid #cecece;
         border-radius: 5px;
-        
-        .btn__addFile{
+
+        .btn__addFile {
             width: 100%;
             height: 100%;
             background-color: #797878;
@@ -345,8 +351,8 @@
             cursor: pointer;
             font-weight: 500;
         }
-        
-        > input {
+
+        >input {
             width: 100%;
             height: 100%;
             border-radius: 5px;
@@ -365,7 +371,7 @@
             right: 0px;
             @include flex_center;
 
-            > svg {
+            >svg {
                 font-size: 25px;
                 color: #282c52;
                 margin: 0px 5px;
@@ -379,11 +385,11 @@
     display: flex;
     width: 100%;
 
-    > div:first-child {
+    >div:first-child {
         flex: 3;
     }
 
-    > div:last-child {
+    >div:last-child {
         flex: 7;
     }
 
@@ -427,10 +433,11 @@
             color: #fff;
             font-weight: 600;
             transition: 0.1s linear;
+
             &:active {
                 transform: scale(0.9);
             }
-        }    
+        }
     }
 
     .modal {
@@ -489,7 +496,7 @@
 
         .body__modal {
             .component__input {
-                > label {
+                >label {
                     color: #333;
                     font-size: 16px;
                     margin-bottom: 10px;
@@ -519,7 +526,6 @@
 
 .proof_wrapper {
     width: 100%;
-    height: 100%;
     background: rgb(253, 253, 253);
     display: flex;
     flex-direction: column;
@@ -533,23 +539,25 @@
     .proof_upload {
         display: flex;
         align-items: center;
+
         .icons_wrapper {
             display: flex;
             align-items: center;
             font-size: 22px;
             margin-top: 8px;
-    
+
             .icon-item--proof {
                 margin-left: 20px;
             }
-    
+
             .insert_image_icon {
                 color: rgb(12, 166, 12);
             }
+
             .camera_icon {
                 color: rgb(219, 77, 77);
             }
-            
+
         }
     }
 
@@ -566,7 +574,7 @@
         align-items: flex-start;
         overflow-y: scroll;
         overflow-x: hidden;
-        
+
         img {
             display: block;
             width: 33%;
@@ -574,7 +582,7 @@
         }
 
         .remove_img_btn {
-            position: absolute; 
+            position: absolute;
             top: 4px;
             right: 4px;
             display: flex;
@@ -586,21 +594,22 @@
             border-radius: 50%;
             background: #eff0f3;
             font-size: 20px;
-            font-weight: bold;  
+            font-weight: bold;
             transition: linear 0.1s;
 
             &:hover {
                 background: #DADDE1;
+
                 .remove_img_icon {
                     color: red;
                 }
             }
 
             .remove_img_icon {
-               color: rgb(251, 84, 84); 
+                color: rgb(251, 84, 84);
             }
         }
-        
+
     }
 }
 
@@ -630,7 +639,7 @@
             width: 100%;
             height: 100%;
         }
-          
+
         .swiper-slide {
             display: flex !important;
             align-items: center;
@@ -638,7 +647,7 @@
             height: auto !important;
             text-align: center;
         }
-        
+
         .swiper-slide img {
             display: block;
             height: 100%;
@@ -653,7 +662,7 @@
     margin-bottom: 40px;
     padding: 20px;
     border-bottom: 1px solid gray;
-    
+
     .pedding_goals_wrapper {
         display: flex;
         align-items: center;
@@ -665,27 +674,28 @@
             gap: 20px;
             min-width: 210px;
             align-items: center;
-    
+
             .student_info {
                 white-space: nowrap;
+
                 .student_info_label {
                     font-weight: 400;
                     color: gray;
                 }
-            
-                .student_info_id, 
+
+                .student_info_id,
                 .student_info_name,
                 .student_info_faculty {
                     font-weight: 500;
                 }
             }
-            
+
             .pedding_goals_btn_wrapper {
                 display: flex;
                 gap: 10px;
                 flex-wrap: wrap;
                 margin-top: 10px;
-    
+
                 button {
                     color: #fff;
                     width: 100px;
@@ -703,11 +713,11 @@
                         transform: scale(0.9);
                     }
                 }
-    
+
                 .reject_btn {
                     background: #f75151;
                 }
-    
+
                 .confirmation_btn {
                     background: #059b05;
                 }
@@ -718,11 +728,12 @@
     .title_pending_goals {
         display: flex;
         align-items: center;
-        margin-bottom: 10px; 
+        margin-bottom: 10px;
         gap: 4px;
         color: rgb(237, 72, 72);
         font-size: larger;
         font-weight: 600;
+
         svg {
             width: 25px;
             height: 25px;
@@ -742,7 +753,7 @@
     right: 0;
     background: rgba(0, 0, 0, 0.7);
     z-index: 9999;
-    
+
     .confirm_modal {
         display: flex;
         flex-direction: column;
@@ -765,7 +776,7 @@
         display: flex;
         justify-content: center;
         gap: 60px;
-        
+
         button {
             color: #fff;
             font-weight: 600;
@@ -794,95 +805,3 @@
 }
 
 // Create goals 
-.create_goal_container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .page_title {
-        margin: 20px;
-        margin-bottom: 30px;
-    }
-
-    .input_page_item {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-        label {
-            min-width: 150px;
-            font-weight: 700;
-        }
-
-        input {
-            width: 300px;
-            outline: none;
-            border: none;
-            box-shadow: 0 0 3px gray; 
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-    }
-
-    .btn_add_page {
-        width: 100px;
-        margin-left: 20px;
-        border: none;
-        outline: none;
-        padding: 8px 12px;
-        background: #006fee;
-        color: white;
-        font-weight: 600;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.1s linear;
-
-        &:active {
-            transform: scale(0.9);
-        }
-    }
-
-    .btn_create_page {
-        width: 300px;
-        margin-top: 30px;
-        border: none;
-        outline: none;
-        padding: 8px 12px;
-        background: #006fee;
-        color: white;
-        font-weight: 600;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.1s linear;
-
-        &:active {
-            transform: scale(0.9);
-        }
-    }
-    .page_column {
-        margin-top: 20px;
-    }
-
-    .item_column {
-        display: inline-block;
-        padding: 8px 12px;
-        margin-left: 10px;
-        background: green;
-        color: white;
-        font-weight: 600;
-        border-radius: 8px;
-        min-width: 80px;
-        text-align: center;
-    }
-
-    .page_title_preview, 
-    .table_title_preview, 
-    .description_preview {
-        text-align: center;
-    }
-
-    .description_preview {
-        font-weight: 400;
-        color: gray;
-    }
-}

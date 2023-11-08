@@ -1,6 +1,6 @@
 @import "@mixin_variable.scss";
 
-* { 
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -41,18 +41,47 @@ a {
     background-color: #979797;
     border-radius: 0px;
 }
+
 .text-danger {
     color: $color_danger !important;
 }
 
-.display_none{
-    display:none !important;
+.display_none {
+    display: none !important;
 }
 
-.display_block{
-    display:block !important;
+.display_block {
+    display: block !important;
 }
 
+.breadcrumb-item::before {
+    display: inline-block;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    color: #6c757d;
+    content: "/";
+}
+
+.info__text {
+    .line {
+        height: 35px;
+        display: flex;
+        align-items: center;
+        gap: 0px 5px;
+
+        span {
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        p {
+            white-space: nowrap;
+            flex: 1;
+            font-weight: 500;
+            color: $color_gray-500;
+        }
+    }
+}
 
 @import "component";
 @import "pages";
@@ -64,7 +93,12 @@ a {
 @import "pageProfile";
 @import "firstLogin";
 @import "scrollbar";
+@import "pageGoals";
 @import "notFound";
 @import "pagesManagement";
 @import "@media/@mediaComponentLogin.scss";
-
+@import "pageNewsDetail";
+@import "scrollToTopButton";
+@import "goalDetail";
+@import "pageApply";
+@import "infoDetails"

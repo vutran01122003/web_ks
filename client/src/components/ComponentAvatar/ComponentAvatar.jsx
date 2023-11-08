@@ -1,12 +1,10 @@
-import avatar from '../../assets/images/avatar_default.jpg';
-
+import avatar from '../../assets/images/avatar_default.jpg'
 function Avatar({ url, size }) {
-
-    return (
-        <div className="info__avatar">
-			<img className={`info__avatar-image ${size}`} src={url || avatar} alt='avatar' />
+	return (
+		<div className="info__avatar">
+			<img className={`info__avatar-image ${size}`} src={url || avatar} alt="avatar" />
 		</div>
-    );
+	)
 }
 
-export default Avatar;
+export default Avatar

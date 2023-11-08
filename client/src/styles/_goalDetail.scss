@@ -1,0 +1,55 @@
+.pageGoalDetail {
+	padding: 10px 20px;
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-bottom: 20px;
+
+		thead {
+			th {
+				text-align: center;
+
+			}
+		}
+
+		th,
+		td {
+			border: 1px solid $line_color;
+			text-align: left;
+			padding: 8px;
+		}
+
+		.table_function {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 20px;
+			font-size: 18px;
+
+			.edit:hover {
+				color: #006fee;
+				cursor: pointer;
+
+			}
+
+			.delete:hover {
+				color: red;
+				cursor: pointer;
+			}
+		}
+	}
+
+	.titlePage {
+		font-size: 25px;
+		padding: 10px 0;
+	}
+
+	.containerTable {
+		.listTable {
+			text-align: center;
+		}
+	}
+
+}
