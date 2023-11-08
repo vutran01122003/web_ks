@@ -1,4 +1,4 @@
-import { getDataApi, postDataApi } from '../../utils/fetchData';
+import { deleteDataApi, getDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 export const createPage = (data) => async (dispatch) => {
@@ -12,6 +12,7 @@ export const createPage = (data) => async (dispatch) => {
 
         const res = await postDataApi('/page', data);
 
+        console.log(res);
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
@@ -19,11 +20,10 @@ export const createPage = (data) => async (dispatch) => {
             }
         });
     } catch (error) {
-        console.dir();
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Tạo Page Thất Bại'
+                error: error?.response?.data.msg || 'Tạo Trang Thất Bại'
             }
         });
     }
@@ -57,7 +57,7 @@ export const getPages = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || "Lấy Dữ Liệu Page Thất Bại"
+                error: error?.response?.data.msg || "Lấy Dữ Liệu Trang Thất Bại"
             }
         })
     }
@@ -96,10 +96,46 @@ export const getPage = ({pathName}) => async (dispatch) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error?.response?.data.msg || 'Lấy Dữ Liệu Page Thất Bại'
+                    error: error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
                 }
             })
        
+    }
+}
+
+export const removePage = ({pageId}) => async (dispatch) => {
+    try {
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                loading: true
+            }
+        })
+
+        const res = await deleteDataApi('/page', {pageId});
+
+        dispatch({
+            type: GLOBALTYPES.PAGE.REMOVE_DYNAMIC_PAGE,
+            payload: {
+                pageId
+            }
+        })
+
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                success: res.data.msg
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                error: error?.response?.data.msg || 'Xóa Trang Thất Bại'
+            }
+        })
     }
 }
   

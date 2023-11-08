@@ -1,13 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {ARRAY_LIST_MENU} from '../assets/data/menu';
 import AddTableModal from '../components/ComponentModal/AddTableModal';
 import RemoveTableModal from '../components/ComponentModal/RemoveTableModal';
 import ViewTablesModal from '../components/ComponentModal/ViewTablesModal';
+import RemovePageModal from '../components/ComponentModal/RemovePageModal';
+import { useSelector } from 'react-redux';
+import { pageSelector } from '../redux/selector';
 
 function ManagePagesPage() {
+    const page = useSelector(pageSelector);
+    const [pages, setPages] = useState({});
     const [openAddTableModal, setOpenAddTableModal] = useState(false);
     const [openRemoveTableModal, setOpenRemoveTableModal] = useState(false);
     const [openViewTablesModal, setOpenViewTablesModal] = useState(false);
+    const [openRemovePageModal, setOpenRemovePageModal] = useState(false);
     const [pageId, setPageId] = useState(null);
     const [subPageName, setSubPageName] = useState("");
 
@@ -31,14 +37,52 @@ function ManagePagesPage() {
         setOpenRemoveTableModal(false);
     }
 
-    const handleOpenViewTablesModal = () => {
+    const handleOpenViewTablesModal = ({pageName}) => {
         setOpenViewTablesModal(true);
+        setSubPageName(pageName);
     }
 
     const handleHideViewTablesModal = () => {
         setOpenViewTablesModal(false);
     }
- 
+
+    const handleOpenRemovePageModal = ({pageId, pageName}) => {
+        setOpenRemovePageModal(true);
+        setSubPageName(pageName);
+        setPageId(pageId);
+    }
+
+    const handleHideRemovePageModal = () => {
+        setOpenRemovePageModal(false);
+    }
+
+    useEffect(() => {
+        setPages(ARRAY_LIST_MENU);
+    }, []);
+
+    useEffect(() => {
+        if (page.pages && Object.keys(pages).length > 0) {
+            setPages(prev => 
+                [
+                    ...prev, 
+                    {
+                        ...prev[6], 
+                        sub_menu_item: page.pages.map((page) => {
+                            return {
+                                id: page?._id,
+                                sub_name_menu: page?.pageName,
+                                sub_icon_before: '?',
+                                sub_to_link: `/page/${page?.pageName}`,
+                            }
+                        })
+                    }
+            ]
+            )
+        }
+    }, [JSON.stringify(page.pages)])
+
+    console.log(pages[6]?.sub_menu_item);
+
     return <div className='pages_management_container'>
         {
             openAddTableModal && 
@@ -62,11 +106,22 @@ function ManagePagesPage() {
             openViewTablesModal && 
             <ViewTablesModal 
                 handleHideViewTablesModal={handleHideViewTablesModal}
+                subPageName={subPageName}
             />
         }
+
+        {
+            openRemovePageModal &&
+            <RemovePageModal
+                handleHideRemovePageModal={handleHideRemovePageModal}
+                subPageName={subPageName}
+                pageId={pageId}
+            />
+        }
+
         <ul>
             {
-                ARRAY_LIST_MENU.map((menu_item, index) => {
+                Object.keys(pages).length > 0 && pages.map((menu_item, index) => {
                     return (
                         <li className='menu_item' key={index + menu_item.name_menu}>
                             <span className='menu_item_name'> 
@@ -125,7 +180,9 @@ function ManagePagesPage() {
                                                     <div className='sub_menu_item_btn_wrapper'>
                                                         <button 
                                                             className='watch_table_btn'
-                                                            onClick={() => {handleOpenViewTablesModal()}}
+                                                            onClick={() => {handleOpenViewTablesModal({
+                                                                pageName: sub_menu_item?.sub_name_menu
+                                                            })}}
                                                         >
                                                             Xem Các Chỉ Tiêu
                                                         </button>
@@ -153,7 +210,17 @@ function ManagePagesPage() {
                                                         >
                                                             Xoá Chỉ Tiêu
                                                         </button>
-                                                        <button className='remove_page_btn'>Xóa Page</button>
+                                                        <button 
+                                                            className='remove_page_btn'
+                                                            onClick={() => {
+                                                                handleOpenRemovePageModal({
+                                                                    pageId: sub_menu_item.id,
+                                                                    pageName: sub_menu_item?.sub_name_menu
+                                                                })
+                                                            }}
+                                                        >
+                                                            Xóa Page
+                                                        </button>
                                                     </div>
                                                 }
                                             </li>

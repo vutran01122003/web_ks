@@ -1,3 +1,4 @@
+import removeElem from '../../utils/removeElem';
 import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
@@ -27,8 +28,22 @@ function pageReducer(state = initialState, action) {
         case GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE: 
             return {
                 ...state,
-                tables: [...action.payload.tables]
+                tables: [...action.payload?.tables],
             };
+        case GLOBALTYPES.PAGE.REMOVE_DYNAMIC_PAGE: 
+            const newPageList = removeElem(state.pages, action.payload.pageId);
+
+            return {
+                ...state,
+                pages: [...newPageList]
+            };
+        // case GLOBALTYPES.PAGE.ADD_DYNAMIC_PAGE: 
+
+        //     return {
+        //         ...state,
+        //         pages: [...state.pages, ...action.payload.page]
+        //     };
+       
         default:
             return state;
     }

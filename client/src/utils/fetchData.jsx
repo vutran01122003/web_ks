@@ -14,7 +14,7 @@ export const patchDataApi = async (uri, data) => {
     return res;
 };
 
-export const deleteDateApi = async (uri, data) => {
+export const deleteDataApi = async (uri, data) => {
     const res = await instance.delete(`/api${uri}`, {data});
     return res;
 };

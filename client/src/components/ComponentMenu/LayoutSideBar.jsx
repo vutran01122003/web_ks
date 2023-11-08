@@ -15,16 +15,7 @@ const LayoutSideBar = ({ auth }) => {
 	const page = useSelector(pageSelector)
 	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003')
 
-	if (page.pages) {
-		ARRAY_LIST_MENU[6].sub_menu_item = page.pages.map((page) => {
-			return {
-				id: page._id,
-				sub_name_menu: page.pageName,
-				sub_icon_before: '?',
-				sub_to_link: `/page/${page.pageName}`,
-			}
-		})
-	}
+	
 
 	const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null))
 	const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'))
@@ -63,6 +54,7 @@ const LayoutSideBar = ({ auth }) => {
 			})
 		}
 	}
+
 	useEffect(() => {
 		refBoxSubs.forEach((ref, index) => {
 			if (ref.current && subMenu[index]) {
@@ -80,6 +72,19 @@ const LayoutSideBar = ({ auth }) => {
 	useEffect(() => {
 		dispatch(getPages())
 	}, [dispatch])
+
+    useEffect(() => {
+        if (page.pages) {
+            ARRAY_LIST_MENU[6].sub_menu_item = page.pages.map((page) => {
+                return {
+                    id: page._id,
+                    sub_name_menu: page.pageName,
+                    sub_icon_before: '?',
+                    sub_to_link: `/page/${page.pageName}`,
+                }
+            })
+        }
+    }, [JSON.stringify(page.pages)])
 
 	const renderArrMenu = ARRAY_LIST_MENU.map((item) => {
 		return (

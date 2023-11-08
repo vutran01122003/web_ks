@@ -1,4 +1,4 @@
-import { deleteDateApi, getDataApi, postDataApi } from "../../utils/fetchData"
+import { deleteDataApi, getDataApi, postDataApi } from "../../utils/fetchData"
 import GLOBALTYPES from "./globalTypes"
 
 export const addTable = ({pageId, tables}) => async (dispatch) => {
@@ -58,12 +58,16 @@ export const removeTable = ({pageId, tableId}) => async (dispatch) => {
             }
         })
 
-        const res = await deleteDateApi('/table', {
+        const res = await deleteDataApi('/table', {
             pageId,
             tableId
         });
 
-        console.log(res);
+        
+        dispatch({
+            type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
+            
+        })
 
         dispatch({
             type: GLOBALTYPES.ALERT,
