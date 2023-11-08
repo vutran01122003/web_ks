@@ -10,6 +10,7 @@ const ComponentInput = ({
     classNameWrap,
     className,
     classNameInputItem,
+    classNameRoot,
     iconBefore,
     disabled,
     onChange,
@@ -17,7 +18,7 @@ const ComponentInput = ({
     readonly,
 }) => {
     return (
-        <div className="component__input">
+        <div className={`component__input ${classNameRoot}`}>
             <label htmlFor={id}>{label}</label>
             <div className={classNameWrap}>
                 <div className={`line__input ${className}`}>      

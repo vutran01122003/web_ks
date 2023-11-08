@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { createPage } from '../redux/actions/pageAction';
 import { useDispatch } from 'react-redux';
 
@@ -23,15 +23,15 @@ function CreatePages() {
     };
 
     const handleCreatePage = async () => {
-        dispatch(createPage({pageName, tables: [{tableName, description, rowTitleList}]}));
+        dispatch(createPage({ pageName, tables: [{ tableName, description, rowTitleList }] }));
     };
 
     return (
         <div className='create_goal_container'>
             <h1 className='page_title'>Tạo Nhóm Chỉ Tiêu</h1>
             <div>
-               <div className='input_page_item'>
-                <label>Tên Page: </label>
+                <div className='input_page_item'>
+                    <label>Tên Page: </label>
                     <input
                         type='text'
                         className='outline-none border-2'
@@ -40,10 +40,10 @@ function CreatePages() {
                             setPageName(e.target.value);
                         }}
                     />
-               </div>
+                </div>
 
-               <div className='input_page_item'>
-                <label>Tên Bảng: </label>
+                <div className='input_page_item'>
+                    <label>Tên Bảng: </label>
                     <input
                         type='text'
                         className='outline-none border-2'
@@ -52,7 +52,7 @@ function CreatePages() {
                             setTableName(e.target.value);
                         }}
                     />
-               </div>
+                </div>
 
                 <div className='input_page_item'>
                     <label>Mô tả bảng: </label>
@@ -66,7 +66,7 @@ function CreatePages() {
                     />
                 </div>
 
-              <div className='input_page_item'>
+                <div className='input_page_item'>
                     <label>Thêm cột: </label>
                     <input
                         type='text'
@@ -80,9 +80,9 @@ function CreatePages() {
                     >
                         Thêm Cột
                     </button>
-              </div>
+                </div>
 
-               
+
             </div>
             <div className='mt-10'>
                 <h1 className='page_title_preview'>{pageName || ""}</h1>
@@ -92,7 +92,7 @@ function CreatePages() {
                 </h4>
                 <div className='page_column'>
                     {rowTitleList.map((rowTitle, index) => (
-                        <span key={index}  className='item_column'>
+                        <span key={index} className='item_column'>
                             {rowTitle}
                         </span>
                     ))}

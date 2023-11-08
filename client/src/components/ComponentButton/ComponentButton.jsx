@@ -4,7 +4,8 @@ const ComponentButton = ({
     type, 
     textButton, 
     className,
-    onClick
+    onClick,
+    icon_before
 }) => {
     return (
         <button 
@@ -12,6 +13,7 @@ const ComponentButton = ({
             type={type}
             onClick={onClick}
             >
+            {icon_before}
             {textButton}
         </button>
     )

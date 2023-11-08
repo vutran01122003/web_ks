@@ -31,6 +31,10 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.5s;
+    @include flex_center;
+    > svg {
+        margin-right: 10px;
+    }
     &:hover {
         background-color: $main_color_hover;
     }
@@ -48,7 +52,7 @@
 
     .tr__header {
         height: 100%;
-        padding: 5px 10px;
+        padding: 5px 20px;
 
         .flex__line {
             height: 100%;
@@ -105,8 +109,8 @@
                     .box__drop--account {
                         width: max-content;
                         position: absolute;
-                        top: 50px;
-                        right: 0px;
+                        top: 62px;
+                        right: 10px;
                         background-color: $color_white;
                         border: 1px solid #cecece;
                         border-radius: 10px;
@@ -120,13 +124,13 @@
                                 border: 1px solid #ddd4dafd;
                                 border-bottom: none;
                                 border-radius: 15px;
-                                border-radius: 0;
+                                border-radius: 0px;
                                 border-right: none;
                                 box-shadow: none;
                                 content: "";
                                 height: 15px;
                                 position: absolute;
-                                right: 11px;
+                                right: 10px;
                                 top: -8px;
                                 transform: rotate(45deg);
                                 width: 15px;
@@ -173,7 +177,7 @@
             }
         }
 
-        .border__text--role{
+        .border__text--role {
             padding: 5px 8px;
             border: 2px solid red;
             color: red;
@@ -293,10 +297,10 @@
     }
 }
 
-.background_admin{
-    background-color: #313A46;
-    .item_menu_a{
-        background-color: #313A46 !important;
+.background_admin {
+    background-color: #313a46;
+    .item_menu_a {
+        background-color: #313a46 !important;
         color: #ffffff !important;
     }
     .item_menu_a.active {
@@ -333,8 +337,8 @@
         margin: 6px 0px;
         border: 1px solid #cecece;
         border-radius: 5px;
-        
-        .btn__addFile{
+
+        .btn__addFile {
             width: 100%;
             height: 100%;
             background-color: #797878;
@@ -345,7 +349,7 @@
             cursor: pointer;
             font-weight: 500;
         }
-        
+
         > input {
             width: 100%;
             height: 100%;
@@ -430,7 +434,7 @@
             &:active {
                 transform: scale(0.9);
             }
-        }    
+        }
     }
 
     .modal {
@@ -507,7 +511,7 @@
     display: none;
 }
 
-// Proof Images Component 
+// Proof Images Component
 .proof_title {
     display: block;
     color: #333;
@@ -538,18 +542,17 @@
             align-items: center;
             font-size: 22px;
             margin-top: 8px;
-    
+
             .icon-item--proof {
                 margin-left: 20px;
             }
-    
+
             .insert_image_icon {
                 color: rgb(12, 166, 12);
             }
             .camera_icon {
                 color: rgb(219, 77, 77);
             }
-            
         }
     }
 
@@ -566,7 +569,7 @@
         align-items: flex-start;
         overflow-y: scroll;
         overflow-x: hidden;
-        
+
         img {
             display: block;
             width: 33%;
@@ -574,7 +577,7 @@
         }
 
         .remove_img_btn {
-            position: absolute; 
+            position: absolute;
             top: 4px;
             right: 4px;
             display: flex;
@@ -586,21 +589,20 @@
             border-radius: 50%;
             background: #eff0f3;
             font-size: 20px;
-            font-weight: bold;  
+            font-weight: bold;
             transition: linear 0.1s;
 
             &:hover {
-                background: #DADDE1;
+                background: #dadde1;
                 .remove_img_icon {
                     color: red;
                 }
             }
 
             .remove_img_icon {
-               color: rgb(251, 84, 84); 
+                color: rgb(251, 84, 84);
             }
         }
-        
     }
 }
 
@@ -630,7 +632,7 @@
             width: 100%;
             height: 100%;
         }
-          
+
         .swiper-slide {
             display: flex !important;
             align-items: center;
@@ -638,7 +640,7 @@
             height: auto !important;
             text-align: center;
         }
-        
+
         .swiper-slide img {
             display: block;
             height: 100%;
@@ -653,7 +655,7 @@
     margin-bottom: 40px;
     padding: 20px;
     border-bottom: 1px solid gray;
-    
+
     .pedding_goals_wrapper {
         display: flex;
         align-items: center;
@@ -665,27 +667,27 @@
             gap: 20px;
             min-width: 210px;
             align-items: center;
-    
+
             .student_info {
                 white-space: nowrap;
                 .student_info_label {
                     font-weight: 400;
                     color: gray;
                 }
-            
-                .student_info_id, 
+
+                .student_info_id,
                 .student_info_name,
                 .student_info_faculty {
                     font-weight: 500;
                 }
             }
-            
+
             .pedding_goals_btn_wrapper {
                 display: flex;
                 gap: 10px;
                 flex-wrap: wrap;
                 margin-top: 10px;
-    
+
                 button {
                     color: #fff;
                     width: 100px;
@@ -703,11 +705,11 @@
                         transform: scale(0.9);
                     }
                 }
-    
+
                 .reject_btn {
                     background: #f75151;
                 }
-    
+
                 .confirmation_btn {
                     background: #059b05;
                 }
@@ -718,7 +720,7 @@
     .title_pending_goals {
         display: flex;
         align-items: center;
-        margin-bottom: 10px; 
+        margin-bottom: 10px;
         gap: 4px;
         color: rgb(237, 72, 72);
         font-size: larger;
@@ -742,7 +744,7 @@
     right: 0;
     background: rgba(0, 0, 0, 0.7);
     z-index: 9999;
-    
+
     .confirm_modal {
         display: flex;
         flex-direction: column;
@@ -765,7 +767,7 @@
         display: flex;
         justify-content: center;
         gap: 60px;
-        
+
         button {
             color: #fff;
             font-weight: 600;
@@ -793,7 +795,7 @@
     }
 }
 
-// Create goals 
+// Create goals
 .create_goal_container {
     display: flex;
     flex-direction: column;
@@ -817,7 +819,7 @@
             width: 300px;
             outline: none;
             border: none;
-            box-shadow: 0 0 3px gray; 
+            box-shadow: 0 0 3px gray;
             padding: 8px 12px;
             border-radius: 8px;
             font-weight: 500;
@@ -875,8 +877,8 @@
         text-align: center;
     }
 
-    .page_title_preview, 
-    .table_title_preview, 
+    .page_title_preview,
+    .table_title_preview,
     .description_preview {
         text-align: center;
     }
@@ -884,5 +886,181 @@
     .description_preview {
         font-weight: 400;
         color: gray;
+    }
+}
+
+// page create goals
+.wrap__goals {
+    padding: 10px 20px;
+    .body__goals {
+        .line__flex {
+            display: flex;
+            justify-content: space-between;
+        }
+        .filed__line {
+            display: flex;
+            margin: 20px 0px;
+            > label {
+                font-size: 21px;
+                white-space: nowrap;
+            }
+            > input {
+                width: 100%;
+                height: 30px;
+                border: none;
+                border-bottom: 1px solid #a1a0a0;
+                outline: none;
+                padding: 0px 10px;
+                font-size: 20px;
+                font-weight: 600;
+                margin-left: 20px;
+            }
+        }
+
+        .component__tab {
+        }
+        .connection__table {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            .box__table {
+                width: 100%;
+                border: 1px solid #cdcdcd;
+                background-color: #f3f3f3;
+                border-radius: 8px;
+                margin: 10px 0px;
+                transition:
+                    transform 0.2s,
+                    opacity 0.2s;
+                animation: fade-in 0.3s ease-out;
+                .flex__hLine {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px;
+                }
+            }
+            @keyframes fade-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .text__heading_fw {
+                width: 100%;
+                font-size: 23px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                .text__length {
+                    white-space: nowrap;
+                }
+                .input_title--chi_tieu {
+                    width: 100%;
+                    margin: 0px 10px;
+                    padding: 5px 10px;
+                    font-size: 20px;
+                    border: none;
+                    border-bottom: 1px solid #afafaf;
+                    background-color: transparent;
+                    outline: none;
+                }
+            }
+
+            .btn__delete {
+                button {
+                    border: none;
+                    background: transparent;
+                    font-size: 25px;
+                    cursor: pointer;
+                }
+            }
+            .flex__line_lable{
+                padding: 10px;
+                display: flex;
+                >label{
+                    font-size: 20px;
+                    font-weight: 500;
+                    white-space: nowrap;
+                }
+                >input{
+                    width: 100%;
+                    height: 30px;
+                    margin: 0px 10px;
+                    background: transparent;
+                    border: none;
+                    border-bottom:1px solid #afafaf;
+                    outline: none;
+                    font-size: 20px;
+                }
+            }
+            .table__col--target {
+                .flex__line {
+                    display: flex;
+                    justify-content: right;
+                    .btn__add-col {
+                        width: max-content;
+                        padding: 8px 10px;
+                        font-size: 17px;
+                        background-color: #646464;
+                        margin: 10px;
+                    }
+                }
+
+                > .tr__line--cols {
+                    border-top: 1px solid #777777;
+                    border-radius: 0px 0px 8px 8px;
+                    background-color: #d9d9d9;
+                    .box__cols {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        .hag_stt {
+                            padding: 0px 10px;
+                            @include flex_center;
+                            font-size: 19px;
+                            font-weight: 600;
+                            border-right: 1px solid #c6c6c6;
+                        }
+                        .item__col {
+                            width: 100%;
+                            position: relative;
+                            border-right: 1px solid #c6c6c6;
+                        }
+                        .item__col > input {
+                            width: 100%;
+                            border: none;
+                            border-bottom: 1px solid #c5c5c5;
+                            background: transparent;
+                            font-size: 17px;
+                            padding: 5px;
+                            text-align: center;
+                            font-weight: 500;
+                            outline: none;
+                        }
+                        .del__col {
+                            font-size: 25px;
+                            position: absolute;
+                            right: 5px;
+                            top: 2px;
+                            color: #515151;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+        .btn__add_table {
+            width: max-content;
+            background-color: #5c5c5c;
+            padding: 8px;
+        }
+        .btn__create--page {
+            width: max-content;
+            padding:8px;
+        }
     }
 }
