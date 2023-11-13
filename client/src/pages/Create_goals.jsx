@@ -5,6 +5,7 @@ import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from "react-icons/ai"
 import { MdOutlineAddCircle } from "react-icons/md"
 import { useDispatch } from 'react-redux';
 import { createPage } from '../redux/actions/pageAction';
+import GLOBALTYPES from '../redux/actions/globalTypes';
 
 const CreateGoals = () => {
     const dispatch = useDispatch();
@@ -63,27 +64,36 @@ const CreateGoals = () => {
 
     };
 
-
     const handleCreatePage = async () => {
-        const kq = {
-            pageName,
-            tables: tables.map((table) => ({
-                tableName: table.tableName,
-                description: table.description,
-                rowTitleList: table.rowTitleList
-            }))
-        };
-        console.log(kq)
-        dispatch(createPage(kq));
+        const checkDuplicate = tables.some((table) => table.rowTitleList.length !== (new Set(table.rowTitleList)).size);
+
+        if(!checkDuplicate) {
+            const kq = {
+                pageName,
+                pageType: "Chỉ Tiêu",
+                tables: tables.map((table) => ({
+                    tableName: table.tableName,
+                    description: table.description,
+                    rowTitleList: table.rowTitleList
+                }))
+            };
+            dispatch(createPage(kq));
+        } else {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: "Các cột không được trùng tên"
+                }
+            })
+        }
+       
     }
-
-
 
     return (
         <div className="wrap__goals">
             <div className="body__goals">
                 <div className='line__flex'>
-                    <h1>Thêm Nhóm Chi Tiêu</h1>
+                    <h1>Thêm Nhóm Chỉ Tiêu</h1>
                 </div>
 
                 <div className="filed__line">
@@ -169,7 +179,6 @@ const CreateGoals = () => {
                     })}
                 </div>
                 <div className="line__flex">
-
                     <ComponentButton
                         onClick={addTable}
                         type="button"

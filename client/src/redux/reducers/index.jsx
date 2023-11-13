@@ -4,13 +4,15 @@ import alertReducer from './alertReducer';
 import { combineReducers } from 'redux';
 import rowReducer from './rowReducer';
 import TableReducer from './tableReducer';
+import newsReducer from './newsReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
     page: pageReducer,
     row: rowReducer,
     alert: alertReducer,
-    table: TableReducer
+    table: TableReducer,
+    news: newsReducer
 });
 
 export default rootReducer;

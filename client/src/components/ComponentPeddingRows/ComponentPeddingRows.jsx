@@ -31,7 +31,10 @@ function ComponentPeddingRows({penddingRows}) {
 
         setRowInfoData({
             rowListId: penddingRows._id, 
-            rowItemId: penddingRows.content[0]._id
+            contentIdList: penddingRows.content.map((content) => {
+                if(content.status === "Chờ Duyệt")
+                    return content._id;
+            })
         });
 
         TABLE.title = table.tableName;

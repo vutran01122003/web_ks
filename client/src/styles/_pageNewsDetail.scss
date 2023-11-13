@@ -5,10 +5,13 @@
 		display: flex;
 		justify-content: start;
 		align-items: center;
-		gap: 5px;
-
-		.paramRoot {
+		
+        gap: 5px;
+        font-weight: 600;
+		
+        .paramRoot {
 			color: $color_gray-500;
+            white-space: nowrap;
 
 			&:hover {
 				color: $color_black;
@@ -17,18 +20,26 @@
 
 		.paramCurrent {
 			color: $main_color;
-
+            white-space: nowrap;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
 			&:hover {
 				color: $main_color_hover
 			}
 		}
 
 		.shareNews {
-			margin-left: auto;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			gap: 5px;
+			gap: 10x;
+
+            p {
+                font-weight: 600;
+                color: gray;
+                margin-right: 10px;
+            }
 
 			.shareItems {
 				display: flex;
@@ -58,14 +69,12 @@
 	}
 
 	&__container {
-
-
 		.headerNews {
 			margin: 20px 0;
 			list-style: 1.5;
 			display: flex;
 			flex-direction: column;
-			gap: 5px;
+			gap: 10px;
 			justify-content: center;
 
 			&__title {
@@ -73,19 +82,59 @@
 			}
 
 			&__time {
-				font-size: 14px;
+				font-size: small;
+                font-weight: 500;
 				color: $color_gray-500;
 			}
+
+            .headerNews__title {
+                h1 {
+                    overflow-wrap: anywhere;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                }
+            }
+
+            .headerNew_info_wrapper {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .headerNew_info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+
+                    .headerNews__author {
+                        font-weight: 600;
+                    }
+                }
+            }
 		}
 
 		.contentNews {
-			line-height: 2;
-			font-size: 16px;
 			background-color: $color_bgr;
 			padding: 15px 30px;
 			text-align: justify;
 			border-radius: 5px;
 			min-height: 65vh;
+
+            p {
+                display: block;
+                img {
+                    display: block;
+                    width: 60%;
+                    object-fit: contain;
+                    margin: 10px auto;
+                }
+            }
+            
+
+            ol {
+                margin-left: 30px;
+            }
 		}
 	}
 }

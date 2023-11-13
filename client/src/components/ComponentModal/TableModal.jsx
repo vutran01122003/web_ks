@@ -12,7 +12,6 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
     const auth = useSelector(authSelector);
     const [row, setRow] = useState({});
     const [files, setFiles] = useState([]);
-    
     const handleChangeRow = (e) => {
         setRow({...row, [e.target.name]: e.target.value});
     }
@@ -20,9 +19,9 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
     const handleAddRow = (e) => {
         e.preventDefault();
 
-        if(thead.some((item) => {
-            return Object.keys(row).includes(item.textHeading) === false;
-        }) && files.length === 0) {
+        if(thead.find((head) => { 
+            return !head.requiredHeading && (!row[head.textHeading])
+        }) || files.length === 0) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -75,28 +74,30 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
 				<div className="body__modal">       
                    {   
                         thead &&
-                        thead.map((item) => (
-                            item.isShow ? (
-                                item.typeInput === 'file' ? 
-                                <ComponentProofFile 
-                                    files={files} 
-                                    setFiles={setFiles}
-                                    key={tableId + item.textHeading}
-                                /> :
-                                <ComponentInput
-                                    key={tableId + item.textHeading}
-                                    label={item.textHeading}
-                                    placeholder={item.textHeading}
-                                    className="input__modal"
-                                    type={item.typeInput} 
-                                    disabled={item.disabled}
-                                    value={item.value}
-                                    name={item.textHeading}
-                                    onChange={handleChangeRow}
-                                    classNameInputItem={item.classNameInputItem}
-                                />
-                            ) : null
-                        ))
+                        thead.map((item, index) => {
+                            return(
+                                item.isShow ? (
+                                    item.typeInput === 'file' ? 
+                                    <ComponentProofFile 
+                                        files={files} 
+                                        setFiles={setFiles}
+                                        key={tableId + item.textHeading + index}
+                                    /> :
+                                    <ComponentInput
+                                        key={tableId + item.textHeading + index}
+                                        label={item.textHeading}
+                                        placeholder={item.textHeading}
+                                        className="input__modal"
+                                        type={item.typeInput} 
+                                        disabled={item.disabled}
+                                        value={item.value}
+                                        name={item.textHeading}
+                                        onChange={handleChangeRow}
+                                        classNameInputItem={item.classNameInputItem}
+                                    />
+                                ) : null
+                            )
+                        })
                    }
 				</div>
 

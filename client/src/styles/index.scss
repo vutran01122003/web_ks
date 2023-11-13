@@ -27,7 +27,7 @@ a {
 .heading-4 {
     font-size: 25px;
     font-weight: 500;
-    padding: 10px 20px;
+    margin-bottom: 20px;
 }
 
 .text-danger {
@@ -90,4 +90,6 @@ a {
 @import "scrollToTopButton";
 @import "goalDetail";
 @import "pageApply";
-@import "infoDetails"
+@import "infoDetails";
+@import "pageCreateNews";
+@import "pageCreateNewsType";

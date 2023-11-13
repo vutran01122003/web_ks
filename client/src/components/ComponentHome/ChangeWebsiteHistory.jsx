@@ -13,7 +13,7 @@ function ChangeWebsiteHistory() {
             borderRadius: '5px'
         }
     }>
-        Lịch sử tạo page
+        Lịch Sử Tạo Trang
     </span>);
 }
 

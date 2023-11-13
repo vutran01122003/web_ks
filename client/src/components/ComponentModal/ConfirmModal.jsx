@@ -8,7 +8,7 @@ function ConfirmModal({content, status, rowInfoData, handleHiddenConfirmModal}) 
         dispatch(updatePeddingRowStatus({
             status,
             rowListId: rowInfoData.rowListId, 
-            rowItemId: rowInfoData.rowItemId
+            contentIdList: rowInfoData.contentIdList
         }));
         handleHiddenConfirmModal();
     }

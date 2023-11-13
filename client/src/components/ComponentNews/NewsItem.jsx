@@ -1,24 +1,34 @@
 import React from 'react'
-export const NewsItem = ({ children }) => {
-	const time = new Date(children.time)
-	const day = time.getDate()
-	const month = time.getMonth() + 1
+import no_image from '../../assets/images/no_image.jpg'
+import moment from 'moment'
+import { Link } from 'react-router-dom'
+
+export const NewsItem = ({ newsId, cover, title, summary, createdAt, author}) => {
 	return (
-		<div className="container__item">
+		<Link to={`/news/${newsId}`} className="container_news_item">
 			<div className="left__item">
-				<div className="time__month">{`Tháng ${month}`}</div>
-				<div className="time__day">{day}</div>
+                <img className="cover_news" src={cover?.url || no_image}/>
 			</div>
-			<a className="right__item" href={children.link}>
-				<div className="news__title ">
-					<div className={`news__title-text ${children.hot ? 'uppercase' : ''}`}>
-						{children.title}
-					</div>
-					{children.hot ? <div className="news__title-status">New</div> : ''}
-				</div>
-				<div className={`news__description ${children.hot ? 'uppercase' : ''}`}>{children.des}</div>
-				<div className="news__more">Xem chi tiết</div>
-			</a>
-		</div>
+			
+            <div className="right__item">
+                <div className='news_body'>
+                    <div className={`news__title-text`}>
+                        {title}
+                    </div>
+                    <div className='news_info'>
+                        <span className='createdAt_news'> 
+                            {moment(createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                        </span>
+                        {' Bởi '}
+                        <span className='news_author'>
+                            {author.fullName}
+                        </span>
+                    </div>
+                    <div className={`news__summary`}>{summary}</div>
+                </div>
+              
+                <div className="news__more">Xem chi tiết</div>
+            </div>
+		</Link>
 	)
 }

@@ -41,14 +41,23 @@ function ViewTablesModal({ handleHideViewTablesModal, subPageName}) {
                                     <div key={table._id + index}>
                                         <h4 className='table_label_goal'>Chỉ Tiêu {index + 1}</h4>
                                         <table className="table_detail_goal">
-                                            <tr><th colSpan={table.rowTitleList.length}>{table.tableName}</th></tr>
-                                            <tr>
-                                                {
-                                                    table.rowTitleList.map((title, index) => 
-                                                        <td key={index + title}><span>{title}</span></td>
-                                                    )
-                                                }
-                                            </tr>
+                                            <thead>
+                                                <tr>
+                                                    <td className="table_header" colSpan={table.rowTitleList.length}>
+                                                        {table.tableName}
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                          
+                                            <tbody>
+                                                <tr>
+                                                    {
+                                                        table.rowTitleList.map((title, index) => 
+                                                            <td key={index + title}><span>{title}</span></td>
+                                                        )
+                                                    }
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                 )

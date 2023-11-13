@@ -22,7 +22,8 @@ export const addTable = ({pageId, tables}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || "Thêm chỉ tiêu thất bại"
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || "Thêm chỉ tiêu thất bại"
             }
         })
     }
@@ -43,7 +44,8 @@ export const getTables  = ({subPageName}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || "Lấy dữ liệu chỉ tiêu thất bại"
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || "Lấy dữ liệu chỉ tiêu thất bại"
             }
         })
     }
@@ -74,7 +76,8 @@ export const removeTable = ({pageId, tableId}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || "Xóa chỉ tiêu thất bại"
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || "Xóa chỉ tiêu thất bại"
             }
         })
     }

@@ -2,6 +2,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import NotFound from '../../pages/NotFound'
 import { useEffect, useState} from 'react'
 import { useSelector } from 'react-redux'
+import { authSelector } from '../../redux/selector'
 
 function PageRender() {
 	const { page, id } = useParams()
@@ -11,7 +12,7 @@ function PageRender() {
     const [notFound, setNotFound] = useState(false);
     const privatePages = ['create_goals', 'create_news', 'manage_pages'];
 
-    const auth = useSelector(state => state.auth);
+    const auth = useSelector(authSelector);
 	const pageName = id
 		? `${page?.replace(/\w/, page?.charAt(0).toUpperCase())}/[id]`
 		: page?.replace(/\w/, page?.charAt(0).toUpperCase())
@@ -38,7 +39,6 @@ function PageRender() {
                     setNotFound(false);
                 })
                 .catch((e) => {
-                    console.log(e);
                     setPageComponent(null);
                     setNotFound(true);
                 });

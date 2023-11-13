@@ -1,5 +1,5 @@
 import {TbTargetArrow} from 'react-icons/tb';
-import { MdLightbulbOutline, MdOutlineCreate} from 'react-icons/md';
+import { MdOutlineForum, MdOutlineCreate} from 'react-icons/md';
 import { CgBrowser } from 'react-icons/cg';
 import { BiBookBookmark, BiHomeSmile } from 'react-icons/bi';
 import { HiOutlineNewspaper } from 'react-icons/hi'
@@ -27,7 +27,7 @@ export const ARRAY_LIST_MENU =  [
             roles: ['0004'],
             name_menu: 'Thêm Loại Tin Tức',
             icon_before: <BsTags />,
-            to_link: '/create_news',
+            to_link: '/create_news_type',
             submenu: false
         },
         {
@@ -52,11 +52,12 @@ export const ARRAY_LIST_MENU =  [
             allow: true,
             icon_before: <HiOutlineNewspaper />,
             to_link: '/news',
-            submenu: false
+            submenu: true,
+            sub_menu_item: []
         },
         {
             id: 6,
-            name_menu: 'Chỉ Tiêu',
+            name_menu: 'Nhóm Chỉ Tiêu',
             roles: ['0002'],
             icon_before: <BiBookBookmark />,
             submenu: true,
@@ -64,42 +65,11 @@ export const ARRAY_LIST_MENU =  [
         },
         {
             id: 7,
-            roles: ['0002'],
-            name_menu: 'Ngoại Khoá',
-            icon_before: <MdLightbulbOutline />,
-            submenu: true,
-            sub_menu_item: [
-                {
-                    id: 0,
-                    sub_name_menu: 'Tiến độ kế hoạch',
-                    sub_icon_before: '?',
-                    sub_to_link: '/plan'
-                },
-                {
-                    id: 1,
-                    sub_name_menu: 'Bằng cấp và chứng chỉ',
-                    sub_icon_before: '?',
-                    sub_to_link: '/degress'
-                },
-                {
-                    id: 2,
-                    sub_name_menu: 'Quá trình đào tạo',
-                    sub_icon_before: '?',
-                    sub_to_link: '/traning'
-                },
-                {
-                    id: 3,
-                    sub_name_menu: 'Thành tích',
-                    sub_icon_before: '?',
-                    sub_to_link: '/achievements'
-                },
-                {
-                    id: 4,
-                    sub_name_menu: 'Lập kế hoạch học tập',
-                    sub_icon_before: '?',
-                    sub_to_link: '/study'
-                }
-            ]
+            allow: true,
+            name_menu: 'Forum',
+            to_link: '/forum',
+            icon_before: <MdOutlineForum />,
+            submenu: false,
         }
     ];
 

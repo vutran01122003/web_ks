@@ -15,6 +15,10 @@ const GLOBALTYPES = {
     },
     TABLE: {
         SET_TABLES: 'SET_TABLES'
+    },
+    NEWS: {
+        GET_NEWS: 'GET_NEWS',
+        GET_NEWS_DETAILS: 'GET_NEWS_DETAILS',
     }
 };
 

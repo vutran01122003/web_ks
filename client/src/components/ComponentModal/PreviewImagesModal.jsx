@@ -33,7 +33,7 @@ function PreviewImagesModal({proofImagesData, setOpenPreviewModal}) {
                     className='mySwiper'
                 >
                     {proofImagesData.map((proofImage) => (
-                        <SwiperSlide key={proofImage.proofImageId}>     
+                        <SwiperSlide key={proofImage.imageId}>     
                             <img
                                 src={proofImage?.url || no_image}
                                 alt='preview_images'

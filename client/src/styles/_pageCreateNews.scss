@@ -1,0 +1,89 @@
+.create_post_container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px 40px;
+    .create_post_title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .create_post_form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+
+        .select_new_type,
+        .post_input, .file_input {
+            padding: 8px 12px;
+            height: 45px;
+            outline: none;
+            border: 1px solid rgb(225, 222, 222);
+            font-weight: 600;
+            font-size: 16px;
+            
+            span + input {
+                margin-left: 10px;
+            }
+        }
+
+        .select_new_type_wrapper {
+            display: flex;
+
+            .select_new_type {
+                flex: 1;
+            }   
+
+            .select_new_type_label {
+                padding: 8px 12px;
+                height: 45px;
+                outline: none;
+                border: 1px solid rgb(225, 222, 222);
+                font-weight: 600;
+                font-size: 16px;
+                color: gray;
+                width: 160px;
+            }
+        }
+
+        .label_new_type {
+            color: gray;
+        }
+        
+        .post_btn_wrapper {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+
+            .post_btn {
+                width: 300px;
+                max-width: 100%;
+                border: none;
+                outline: none;
+                box-shadow: 0 0 3px gray;
+                color: white;
+                font-weight: 600;
+                padding: 12px 20px;
+                background: #1c7ae6;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: 0.1s linear;
+                
+                &:active {
+                    transform: scale(0.9);
+                }
+            }
+        }
+
+        .ql-container.ql-snow {
+            min-height: 300px;
+            max-height: 500px;
+            overflow: auto;
+            img {
+                display: block;
+                margin: 10px auto;
+            }
+        }
+    }
+}

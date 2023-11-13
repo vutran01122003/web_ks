@@ -12,18 +12,18 @@ export const createPage = (data) => async (dispatch) => {
 
         const res = await postDataApi('/page', data);
 
-        console.log(res);
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                success: res?.data.status
+                success: res?.data.msg
             }
         });
     } catch (error) {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Tạo Trang Thất Bại'
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Tạo Trang Thất Bại'
             }
         });
     }
@@ -57,7 +57,8 @@ export const getPages = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || "Lấy Dữ Liệu Trang Thất Bại"
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || "Lấy Dữ Liệu Trang Thất Bại"
             }
         })
     }
@@ -79,6 +80,7 @@ export const getPage = ({pathName}) => async (dispatch) => {
                 type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
                 payload: {
                     pathName, 
+                    pageType: res?.data.data?.pageType,
                     pageId: res?.data.data?._id,
                     pageName: res?.data.data?.pageName,
                     tables: res?.data.data.tables
@@ -96,7 +98,8 @@ export const getPage = ({pathName}) => async (dispatch) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
+                    error: error.reponse?.data?.status === 401 ? 
+                    "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
                 }
             })
        
@@ -133,7 +136,8 @@ export const removePage = ({pageId}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Xóa Trang Thất Bại'
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Xóa Trang Thất Bại'
             }
         })
     }

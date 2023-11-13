@@ -30,7 +30,8 @@ export const addRow = ({formData}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Thêm Hoạt Động Thất Bại'
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Thêm Hoạt Động Thất Bại'
             }
         })
     }
@@ -64,13 +65,14 @@ export const getPeddingRows = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
             }
         })
     }
 }
 
-export const updatePeddingRowStatus = ({ rowListId, rowItemId, status }) => async (dispatch) => {
+export const updatePeddingRowStatus = ({ rowListId, contentIdList, status }) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -79,7 +81,7 @@ export const updatePeddingRowStatus = ({ rowListId, rowItemId, status }) => asyn
             }
         })
 
-        const res = await patchDataApi('/pending_rows/update', { rowListId, rowItemId, status });
+        const res = await patchDataApi('/pending_rows/update', { rowListId, contentIdList, status });
 
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -92,7 +94,8 @@ export const updatePeddingRowStatus = ({ rowListId, rowItemId, status }) => asyn
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Duyệt Chỉ Tiêu Thất Bại'
+                error: error.reponse?.data?.status === 401 ? 
+                "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Duyệt Chỉ Tiêu Thất Bại'
             }
         })
     }

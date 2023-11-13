@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import LayoutTable from '../components/ComponentTable/LayoutTable'
 import { useSelector } from 'react-redux'
 import { pageSelector } from '../redux/selector';
+import News from '../pages/News';
 
 const DynamicPage = () => {
     const page = useSelector(pageSelector);
     const [tables, setTables] = useState([]);
 
     useEffect(() => {
-        if(page?.tables) {
+        if(page?.tables && page.pageType === "Chỉ Tiêu") {
             const arr = page.tables.map((table) => {
                 const TABLE = {};
                 TABLE.tableId = table._id;
@@ -26,10 +27,12 @@ const DynamicPage = () => {
                     {
                         textHeading: "Minh Chứng",
                         typeInput: 'file',
+                        requiredHeading: true,
                         isShow: true,
                     }, {
                         textHeading: "Trạng Thái",
                         typeInput: 'text',
+                        requiredHeading: true,
                         isShow: false,
                     }
                 ];
@@ -50,20 +53,28 @@ const DynamicPage = () => {
                 return TABLE
             })
             setTables(arr);
+        } else if (page?.tables && page.pageType === "Tin Tức") {
+
         }
-    }, [page?.pageName, JSON.stringify(page?.tables)]);
+    }, [page?.pageName, page?.pageType, JSON.stringify(page?.tables)]);
 
 	return (
-		<div className="container__plan">
-			{tables.map((table) => {
-				return (
-					<LayoutTable
-						key={table.tableId}
-						table={table} 
-                        page={page}
-					></LayoutTable>
-				)
-			})}
+		<div className="dynamic_page_container">
+			{
+                page?.pageType && page?.pageType === "Chỉ Tiêu" &&
+                tables.map((table) => {
+                    return (
+                        <LayoutTable
+                            key={table.tableId}
+                            table={table} 
+                            page={page}
+                        ></LayoutTable>
+                    )
+                })
+            }
+            {
+                page?.pageType && page?.pageType === "Tin Tức" && <News />
+            }
 		</div>
 	)
 }

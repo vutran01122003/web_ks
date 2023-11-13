@@ -110,14 +110,13 @@ function AddTableModal({subPageName, pageId, handleHideAddTableModal }) {
                                     </span>
                                 ))}
                             </div>
-                            
-                            <button
-                                onClick={handleCreateTable}
-                                className='btn_create_goal'
-                            >
-                                Thêm Chỉ Tiêu
-                            </button>
                         </div>
+                        <button
+                            onClick={handleCreateTable}
+                            className='btn_create_goal'
+                        >
+                                Thêm Chỉ Tiêu
+                        </button>
                 </div>
             </div>
         </div>

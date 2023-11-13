@@ -289,7 +289,7 @@
     .preview_container {
         width: 100%;
         text-align: center;
-        margin-top: 30px;
+        margin-top: 10px;
         .page_title_preview, 
         .table_title_preview, 
         .description_preview {
@@ -422,7 +422,11 @@
             border: 1px solid;
             margin-bottom: 30px;
 
-            td, th {
+            .table_header {
+                font-weight: 700;
+            }
+
+            td {
                 border: 1px solid;
                 padding: 8px 12px;
             }

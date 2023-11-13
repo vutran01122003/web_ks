@@ -14,7 +14,6 @@ const LayoutSideBar = ({ auth }) => {
 	const dispatch = useDispatch()
 	const page = useSelector(pageSelector)
 	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003')
-
 	
 
 	const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null))
@@ -34,11 +33,12 @@ const LayoutSideBar = ({ auth }) => {
 	const handleGetPage = async ({ pathName }) => {
 		try {
 			if (pathName.includes('/page/')) {
-				const res = await getDataApi(pathName)
+				const res = await getDataApi(pathName);
 				dispatch({
 					type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
 					payload: {
 						pathName,
+                        pageType: res.data.data?.pageType,
 						pageId: res.data.data?._id,
 						pageName: res.data.data.pageName,
 						tables: res.data.data.tables,
@@ -49,7 +49,7 @@ const LayoutSideBar = ({ auth }) => {
 			dispatch({
 				type: GLOBALTYPES.ALERT,
 				payload: {
-					error: 'Cập Nhật Page Thất Bại',
+					error: 'Lấy Dữ Liệu Trang Thất Bại',
 				},
 			})
 		}
@@ -74,15 +74,36 @@ const LayoutSideBar = ({ auth }) => {
 	}, [dispatch])
 
     useEffect(() => {
-        if (page.pages) {
-            ARRAY_LIST_MENU[6].sub_menu_item = page.pages.map((page) => {
-                return {
-                    id: page._id,
-                    sub_name_menu: page.pageName,
-                    sub_icon_before: '?',
-                    sub_to_link: `/page/${page.pageName}`,
+        if (page?.pages) {
+            ARRAY_LIST_MENU[5].sub_menu_item = page.pages.reduce((intialArr, page) => {
+                if(page.pageType === "Tin Tức") {
+                    return [
+                        ...intialArr, 
+                        {
+                            id: page._id,
+                            sub_name_menu: page.pageName,
+                            sub_icon_before: '?',
+                            sub_to_link: `/page/${page.pageName}`,
+                        }
+                    ]
                 }
-            })
+                return intialArr;
+            }, [])
+
+            ARRAY_LIST_MENU[6].sub_menu_item = page.pages.reduce((intialArr, page) => {
+                if(page.pageType === "Chỉ Tiêu") {
+                    return [
+                        ...intialArr, 
+                        {
+                            id: page._id,
+                            sub_name_menu: page.pageName,
+                            sub_icon_before: '?',
+                            sub_to_link: `/page/${page.pageName}`,
+                        }
+                    ]
+                }
+                return intialArr;
+            }, [])
         }
     }, [JSON.stringify(page.pages)])
 
@@ -123,15 +144,15 @@ const LayoutSideBar = ({ auth }) => {
 								{item.sub_menu_item.map((item_sub) => {
 									return (
 										<NavLink
-											key={item_sub.id}
+											key={item_sub?.id}
 											className="sub_menu_item"
-											to={item_sub.sub_to_link}
-											title={item_sub.sub_name_menu}
+											to={item_sub?.sub_to_link}
+											title={item_sub?.sub_name_menu}
 											onClick={() => {
-												handleGetPage({ pathName: item_sub.sub_to_link })
+												handleGetPage({ pathName: item_sub?.sub_to_link })
 											}}
 										>
-											{item_sub.sub_name_menu}
+											{item_sub?.sub_name_menu}
 										</NavLink>
 									)
 								})}

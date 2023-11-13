@@ -6,6 +6,7 @@ const initialState = {
     pathName: '',
     pageId: '',
     pageName: '',
+    pageType: '',
     tables: []
 };
 
@@ -23,6 +24,7 @@ function pageReducer(state = initialState, action) {
                 pathName: action.payload.pathName,
                 pageId: action.payload.pageId,
                 pageName: action.payload.pageName,
+                pageType: action.payload.pageType,
                 tables: [...action.payload.tables]
             };
         case GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE: 
@@ -37,12 +39,6 @@ function pageReducer(state = initialState, action) {
                 ...state,
                 pages: [...newPageList]
             };
-        // case GLOBALTYPES.PAGE.ADD_DYNAMIC_PAGE: 
-
-        //     return {
-        //         ...state,
-        //         pages: [...state.pages, ...action.payload.page]
-        //     };
        
         default:
             return state;

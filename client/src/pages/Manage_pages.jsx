@@ -62,24 +62,30 @@ function ManagePagesPage() {
 
     useEffect(() => {
         if (page.pages && Object.keys(pages).length > 0) {
-            setPages(prev => 
-                [
-                    ...prev, 
-                    {
-                        ...prev[6], 
-                        sub_menu_item: page.pages.map((page) => {
-                            return {
-                                id: page?._id,
-                                sub_name_menu: page?.pageName,
-                                sub_icon_before: '?',
-                                sub_to_link: `/page/${page?.pageName}`,
-                            }
-                        })
-                    }
-            ]
-            )
+            setPages(prev => {
+                const newArr = [...prev];
+                newArr[6] =  {
+                    ...prev[6], 
+                    sub_menu_item: page.pages.reduce((initialArr, page) => {
+                        if(page.pageType === "Chỉ Tiêu") {
+                            return [
+                                ...initialArr,
+                                {
+                                    id: page?._id,
+                                    sub_name_menu: page?.pageName,
+                                    sub_icon_before: '?',
+                                    sub_to_link: `/page/${page?.pageName}`,
+                                }
+                            ]
+                        }
+                        return initialArr;
+                    }, [])
+                };
+
+                return newArr;
+            })
         }
-    }, [JSON.stringify(page.pages)])
+    }, [JSON.stringify(page.pages)]);
 
     return <div className='pages_management_container'>
         {
@@ -121,14 +127,15 @@ function ManagePagesPage() {
             {
                 Object.keys(pages).length > 0 && pages.map((menu_item, index) => {
                     return (
-                        <li className='menu_item' key={index + menu_item.name_menu}>
-                            <span className='menu_item_name'> 
-                                {menu_item.name_menu}
-                            </span>
-                            <>
+                        <li className='menu_item' key={menu_item.id}>
+                            <div className='menu_item_label'>
+                                <span className='menu_item_name'> 
+                                    {menu_item?.name_menu}
+                                </span>
+                                
                                 {
                                     menu_item?.allow ? 
-                                    <span className='required_role'>Tất Cả Người Dùng</span>:
+                                    <span className='required_role'>Tất Cả Người Dùng</span> : 
                                     <>
                                         {
                                             menu_item?.roles.map((role) => {
@@ -162,19 +169,21 @@ function ManagePagesPage() {
                                         }
                                     </>
                                 }
-                            </>
+                            </div>
+                            
                             {
-                                menu_item?.sub_menu_item &&
+                                menu_item?.sub_menu_item && 
+                                menu_item?.sub_menu_item.length > 0 ?
                                 <ul className='sub_menu_ul'>
                                 {   
-                                    menu_item?.sub_menu_item.map((sub_menu_item, index) => (
-                                            <li className='sub_menu_item' key={index + sub_menu_item?.sub_name_menu}>
+                                    menu_item?.sub_menu_item.map((sub_menu_item) => (
+                                            <li className='sub_menu_item' key={sub_menu_item?.id}>
                                                 <span className='sub_menu_item_name'>
                                                     {sub_menu_item?.sub_name_menu}
                                                 </span>
                                                 
                                                 {
-                                                    sub_menu_item.sub_to_link.includes("/page/") &&
+                                                    sub_menu_item?.sub_to_link.includes("/page/") &&
                                                     <div className='sub_menu_item_btn_wrapper'>
                                                         <button 
                                                             className='watch_table_btn'
@@ -189,7 +198,7 @@ function ManagePagesPage() {
                                                             className='add_table_btn'
                                                             onClick={() => {
                                                                 handleOpenAddTableModal({
-                                                                    pageId: sub_menu_item.id,
+                                                                    pageId: sub_menu_item?.id,
                                                                     pageName: sub_menu_item?.sub_name_menu
                                                                 })
                                                             }}
@@ -224,7 +233,7 @@ function ManagePagesPage() {
                                             </li>
                                         ))
                                     }
-                                </ul>
+                                </ul> : <></>
                             }
                         </li>       
                     )
