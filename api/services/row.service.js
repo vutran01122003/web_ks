@@ -134,16 +134,17 @@ class RowService {
         }
     };
 
-    static updateRowStatus = async ({ rowListId, rowItemId, status }) => {
+    static updateRowStatus = async ({ rowListId, contentIdList, status }) => {
         try {
-            console.log({ rowListId, rowItemId, status });
-            const updatedRow = await Row.findOneAndUpdate(
-                { _id: rowListId, 'content._id': rowItemId },
+            const updatedRow = await Row.updateMany(
+                { _id: rowListId },
                 {
-                    'content.$.status': status ? 'Đã Duyệt' : 'Từ Chối'
+                    'content.$[element].status': status ? 'Đã Duyệt' : 'Từ Chối'
                 },
                 {
-                    new: true
+                    multi: true,
+                    arrayFilters: [{ 'element._id': { $in: contentIdList } }],
+                    upsert: true
                 }
             );
 

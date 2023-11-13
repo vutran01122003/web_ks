@@ -4,17 +4,30 @@ const createError = require('http-errors');
 class PageService {
     static createPage = async (data) => {
         try {
-            const { pageName, tables } = data;
+            let createdPage = null;
+            const { pageName, tables, pageType } = data;
 
             const isExists = await Page.findOne({ pageName }).lean();
-            if (isExists) throw createError(409, 'Tên Page Đã Tồn Tại');
+            if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
 
-            const createdPage = await Page.create({
-                pageName,
-                tables
-            });
+            if (pageType === 'Tin Tức') {
+                createdPage = await Page.create({
+                    pageName,
+                    pageType
+                });
+            } else if (pageType === 'Chỉ Tiêu') {
+                createdPage = await Page.create({
+                    pageName,
+                    tables,
+                    pageType
+                });
+            }
 
-            return createdPage;
+            return {
+                status: 201,
+                msg: `Tạo ${pageType === 'Chỉ Tiêu' ? 'Trang' : 'Loại Tin Tức'} Thành Công`,
+                data: createdPage
+            };
         } catch (error) {
             throw error;
         }
@@ -42,7 +55,11 @@ class PageService {
                     }
                 })
                 .lean();
-            return page;
+            return {
+                status: 200,
+                msg: 'Lấy Dữ Liệu Trang Thành Công',
+                data: page
+            };
         } catch (error) {
             throw error;
         }
@@ -54,7 +71,7 @@ class PageService {
 
             return {
                 status: 200,
-                msg: 'Xóa page thành công'
+                msg: 'Xóa Trang thành công'
             };
         } catch (error) {
             throw error;

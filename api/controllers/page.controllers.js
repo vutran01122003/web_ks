@@ -1,4 +1,3 @@
-const Page = require('../models/page.model');
 const PageService = require('../services/page.service');
 const pageService = require('../services/page.service');
 const createError = require('http-errors');
@@ -7,13 +6,14 @@ class PageControllers {
     createPage = async (req, res, next) => {
         try {
             if (!res.locals.roles.includes('0004'))
-                throw createError.Forbidden('Không đủ quyền tạo page');
+                throw createError.Forbidden('Không đủ quyền tạo trang');
 
             const createdPage = await pageService.createPage(req.body);
 
             res.status(201).json({
-                status: 'Tạo Page Mới Thành Công',
-                data: createdPage
+                status: createdPage.status,
+                msg: createdPage.msg,
+                data: createdPage.data
             });
         } catch (error) {
             next(error);
@@ -40,8 +40,9 @@ class PageControllers {
 
         try {
             res.status(200).json({
-                status: 'Lấy Dữ Liệu Page Thành Công',
-                data: page
+                status: page.status,
+                data: page.data,
+                msg: page.msg
             });
         } catch (error) {
             next(error);

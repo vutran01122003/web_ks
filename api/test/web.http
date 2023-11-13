@@ -18,6 +18,7 @@ Content-Type: application/json
 
 {
     "pageName": "Hoạt động Nghien Cuu", 
+    "pageType": "Chỉ Tiêu",
     "tables": [
         {
             "tableName": "Nghiên cứu tuyen sinh",
@@ -44,6 +45,23 @@ Content-Type: application/json
             "rowValueList": []
         }
     ] 
+}
+
+### Create Page and mutiple tables
+POST {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageName": "Tin Tức Khoa Học", 
+    "pageType": "Tin Tức"
+}
+
+### Create News Page 
+POST {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageName": "Hoạt động Nghien Cuu"
 }
 
 ### Get all table
@@ -111,6 +129,16 @@ Content-Type: application/json
     "content": ["content 1", "content 2", "content 3", "content 4", "content 5"]
 }
 
+### update status row
+PATCH {{url}}/api/pending_rows/update
+Content-Type: application/json
+
+{
+    "status": true,
+    "contentIdList": ["654bb94335ed023d2c710209", "654bb94f35ed023d2c710218", "654bba2e35ed023d2c710249"],
+    "rowListId": "654bb94335ed023d2c710208"
+}
+
 ###
 GET {{url}}/api/row
 Content-Type: application/json
@@ -128,14 +156,12 @@ Content-Type: application/json
     "email": "n4g2u12312",
     "phone": "0943608225"
 }
-###
-GET {{url}}/api/page/page%201
 
 ###
 GET {{url}}/api/access_token
 
 ### Get Posts
-GET {{url}}/api/post
+GET {{url}}/api/news?news_type=Tin%20Tức%20Đào%20Tạo
 
 ### Get Post
 GET {{url}}/api/post/654503788fafe8b70e49202a

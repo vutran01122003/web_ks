@@ -15,7 +15,7 @@ class RowControllers {
             const uploadedImages = await UploadService.uploadImageFromFiles({
                 files: req.files,
                 data: req.body,
-                rowListId: rowList._id
+                folderName: `${process.env.CLOUDINARY_ROOT_FOLDER}/proof_images/user_${req.body.user}`
             });
 
             await RowService.addProofImages({
@@ -54,11 +54,11 @@ class RowControllers {
         try {
             if (!res.locals.roles.includes('0004'))
                 throw createError.Forbidden('Không đủ quyền cập nhật trạng thái chỉ tiêu');
-            const { rowListId, rowItemId, status } = req.body;
+            const { rowListId, contentIdList, status } = req.body;
 
             const updatedRow = await RowService.updateRowStatus({
                 rowListId,
-                rowItemId,
+                contentIdList,
                 status
             });
 

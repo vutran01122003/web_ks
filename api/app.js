@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use('/api', require('./router/page'));
 app.use('/api', require('./router/access'));
 app.use('/api', require('./router/table'));
-app.use('/api', require('./router/post'));
+app.use('/api', require('./router/news'));
 app.use('/api', require('./router/row'));
 
 // Catch NotFound

@@ -12,6 +12,11 @@ const PageSchema = new Schema(
             unique: true,
             required: true
         },
+        pageType: {
+            type: String,
+            enum: ['Chỉ Tiêu', 'Tin Tức'],
+            default: 'Chỉ Tiêu'
+        },
         tables: [TableSchema]
     },
     {

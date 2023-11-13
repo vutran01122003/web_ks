@@ -25,7 +25,7 @@ const RowSchema = new Schema(
                     proofImageList: {
                         type: [
                             {
-                                proofImageId: String,
+                                imageId: String,
                                 url: String
                             }
                         ],
