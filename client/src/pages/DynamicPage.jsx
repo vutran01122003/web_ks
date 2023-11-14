@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import LayoutTable from '../components/ComponentTable/LayoutTable'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { pageSelector } from '../redux/selector';
 import News from '../pages/News';
+import { useLocation } from 'react-router-dom';
+import { getPage } from '../redux/actions/pageAction';
 
 const DynamicPage = () => {
+    const dispatch = useDispatch();
     const page = useSelector(pageSelector);
     const [tables, setTables] = useState([]);
+    const location = useLocation()
+	const pathName = location.pathname;
 
+    useEffect(() => {
+        if(!page.pageType && !page.pageName) {
+            dispatch(getPage({pathName}))
+        }
+    }, [pathName]);
+    
     useEffect(() => {
         if(page?.tables && page.pageType === "Chỉ Tiêu") {
             const arr = page.tables.map((table) => {
@@ -53,9 +64,7 @@ const DynamicPage = () => {
                 return TABLE
             })
             setTables(arr);
-        } else if (page?.tables && page.pageType === "Tin Tức") {
-
-        }
+        } 
     }, [page?.pageName, page?.pageType, JSON.stringify(page?.tables)]);
 
 	return (

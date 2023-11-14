@@ -12,7 +12,7 @@ instance.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (getLogged() && error.response.status === 401 || error.config.url.includes("/api/page/")) {
+        if ((getLogged() || error.config.url.includes("/api/page/")) && error.response.status === 401 ) {
             removeLogged();
             window.location.href = "/";
         } 

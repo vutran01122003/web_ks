@@ -37,21 +37,22 @@ export const addRow = ({formData}) => async (dispatch) => {
     }
 }
 
-export const getPeddingRows = () => async (dispatch) => {
+export const getPeddingRows = ({ page, limit, currentPeddingRows}) => async (dispatch) => {
     try {
         dispatch({
-            type: GLOBALTYPES.ALERT,
+            type: GLOBALTYPES.ROW.LOADING_PENDING_ROWS,
             payload: {
                 loading: true
             }
         })
 
-        const res = await getDataApi('/pending_rows');
+        const res = await getDataApi(`/pending_rows?page=${page || 1}&limit=${limit || 3}&current_pedding_rows=${currentPeddingRows}`);
   
         dispatch({
             type: GLOBALTYPES.ROW.GET_PENDING_ROWS,
             payload: {
-                peddingRows: res.data.data
+                peddingRows: res.data.data,
+                page
             }
         })
 
@@ -69,6 +70,14 @@ export const getPeddingRows = () => async (dispatch) => {
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
             }
         })
+    } finally {
+        dispatch({
+            type: GLOBALTYPES.ROW.LOADING_PENDING_ROWS,
+            payload: {
+                loading: false
+            }
+        })
+
     }
 }
 
@@ -82,6 +91,13 @@ export const updatePeddingRowStatus = ({ rowListId, contentIdList, status }) => 
         })
 
         const res = await patchDataApi('/pending_rows/update', { rowListId, contentIdList, status });
+        
+        dispatch({
+            type: GLOBALTYPES.ROW.REMOVE_PENDING_ROW,
+            payload: {
+                peddingRowId: rowListId
+            }
+        });
 
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -91,6 +107,7 @@ export const updatePeddingRowStatus = ({ rowListId, contentIdList, status }) => 
         })
 
     } catch (error) {
+        console.log(error);
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {

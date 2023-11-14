@@ -3,6 +3,12 @@
 	padding: 10px 20px;
 	display: flex;
 	flex-direction: column;
+
+    .notify_nothing_header {
+        color: gray;
+        text-align: center;
+        margin-top: 200px;
+    }
 }
 
 // NewsItem

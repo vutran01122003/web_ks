@@ -18,30 +18,30 @@ const News = () => {
 	return (
 		<>
             {
-                news.newsType[page?.pageName] && news.newsType[page?.pageName].newsList.length > 0 &&
-                <div className="pageNews">
-                    <header className="heading-4">Tin tức - Sự kiện</header>
-                    {
-                        news.newsType[page?.pageName].newsList.map((news) => {
-                            return (
-                                <NewsItem 
-                                    key={news._id}
-                                    newsId={news._id}
-                                    cover={news.cover}
-                                    title={news.title}
-                                    summary={news.summary}
-                                    author={news.author}
-                                    createdAt={news.createdAt}
-                                />
-                            )
-                        })
-                    }
-		        </div>
-                
-            }
-            {
-                news.newsType[page?.pageName] && news.newsType[page?.pageName].newsList.length === 0 &&
-                <><h3>Không có tin tức</h3></>
+                news.newsType[page?.pageName] && 
+                    <div className="pageNews">
+                        <header className="heading-4">{page?.pageName}</header>
+                        {
+                            news.newsType[page?.pageName].newsList.length > 0 ? 
+                            <>
+                                {
+                                    news.newsType[page?.pageName].newsList.map((news) => {
+                                        return (
+                                            <NewsItem 
+                                                key={news._id}
+                                                newsId={news._id}
+                                                cover={news.cover}
+                                                title={news.title}
+                                                summary={news.summary}
+                                                author={news.author}
+                                                createdAt={news.createdAt}
+                                            />
+                                        )
+                                    })
+                                }
+                            </> : <h3 className='notify_nothing_header'>Không có tin tức</h3>
+                        }
+                </div>
             }
         </>
 	)

@@ -74,7 +74,11 @@ class RowService {
         }
     };
 
-    static getPeddingRows = async () => {
+    static getPeddingRows = async ({ page, limit, currentPeddingRows }) => {
+        let skip = (page - 1) * limit;
+        const removedPeddingRows = skip - currentPeddingRows;
+        if (removedPeddingRows > 0) skip = skip - removedPeddingRows;
+
         try {
             const peddingRows = await Row.aggregate([
                 {
@@ -109,6 +113,12 @@ class RowService {
                         foreignField: '_id',
                         as: 'user'
                     }
+                },
+                {
+                    $skip: skip * 1
+                },
+                {
+                    $limit: limit * 1
                 },
                 {
                     $project: {

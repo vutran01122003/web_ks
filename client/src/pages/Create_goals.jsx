@@ -78,6 +78,15 @@ const CreateGoals = () => {
                 }))
             };
             dispatch(createPage(kq));
+            setPageName('');
+            setTables([
+                {
+                    tableName: "",
+                    description: "",
+                    rowTitleList: [""],
+                    rowValueList: []
+                }
+            ])
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,

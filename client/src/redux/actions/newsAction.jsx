@@ -79,7 +79,6 @@ export const getNewsDetails = ({newsId}) => async(dispatch) => {
 
         const res = await getDataApi(`/news/${newsId}`);
 
-        console.log(res.data.data);
         dispatch({
             type: GLOBALTYPES.NEWS.GET_NEWS_DETAILS,
             payload: {

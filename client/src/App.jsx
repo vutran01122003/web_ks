@@ -26,14 +26,6 @@ const App = () => {
 		dispatch(getPage({ pathName }))
 	}, [dispatch])
 
-
-    useEffect(() => {
-        if(auth?.user && auth?.user.roles.includes("0004")) {
-          dispatch(getPeddingRows())
-        }
-    }, [auth?.user])
-
-
 	return (
 		<>
 			<Alert />
@@ -54,7 +46,8 @@ const App = () => {
 							<Login />
 						)
 					}
-				>
+				>   
+                    <Route path="/home" element={<Home auth={auth}/>} />
 					<Route index element={<Home auth={auth} />} />
 					<Route path="/:page" element={<PageRender />} />
 					<Route path="/:page/:id" element={<PageRender />} />

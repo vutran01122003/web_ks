@@ -128,6 +128,8 @@ Content-Type: application/json
     "table": "6547b4af4f0a7fc174b69cc0",
     "content": ["content 1", "content 2", "content 3", "content 4", "content 5"]
 }
+### get pedding row
+GET {{url}}/api/pending_rows?limit=3&page=2
 
 ### update status row
 PATCH {{url}}/api/pending_rows/update

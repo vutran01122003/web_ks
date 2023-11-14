@@ -104,18 +104,26 @@ export const logout = () => async(dispatch) => {
 
 export const verifyAccessToken = () => async (dispatch) => {
     try {
-        const res = await getDataApi('/access_token');
-                
-        dispatch({
-            type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
-            payload: res.data
-        });
+        if(document.cookie.split(';').some((cookie) => cookie.includes('accessToken')) || getLogged()) {
+            const res = await getDataApi('/access_token');
         
-        setLogged();
+            dispatch({
+                type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
+                payload: res.data
+            });
+            
+            setLogged();
+        }
+         
+        return;
     } catch (error) {
         if(getLogged()) {
-            removeLogged();
-            window.location.href = "/";
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: error.response.data?.msg || 'Hết Phiên Đăng Nhập'
+                }
+            })
         }
     }
 }

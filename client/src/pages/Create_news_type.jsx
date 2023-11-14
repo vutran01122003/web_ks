@@ -5,8 +5,7 @@ import {useDispatch} from 'react-redux';
 function CreateNewType() {
     const dispatch = useDispatch();
     const [newsTypeValue, setNewsTypeValue] = useState('');
-
-    console.log(newsTypeValue);
+    
     const handleChangeNewsTypeValue = (e) => {
         setNewsTypeValue(e.target.value);
     }
@@ -17,7 +16,6 @@ function CreateNewType() {
             pageType: "Tin Tức"
         }))
     }
-
     return ( 
         <div className="create_type_page_container">
             <h1>Thêm Loại Tin Tức</h1>

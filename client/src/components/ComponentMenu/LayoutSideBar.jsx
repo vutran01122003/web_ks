@@ -81,6 +81,7 @@ const LayoutSideBar = ({ auth }) => {
                         ...intialArr, 
                         {
                             id: page._id,
+                            sub_page_type: page.pageType,
                             sub_name_menu: page.pageName,
                             sub_icon_before: '?',
                             sub_to_link: `/page/${page.pageName}`,
@@ -96,6 +97,7 @@ const LayoutSideBar = ({ auth }) => {
                         ...intialArr, 
                         {
                             id: page._id,
+                            sub_page_type: page.pageType,
                             sub_name_menu: page.pageName,
                             sub_icon_before: '?',
                             sub_to_link: `/page/${page.pageName}`,

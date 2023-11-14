@@ -30,7 +30,6 @@ class AccessControllers {
 
                     res.status(200)
                         .cookie('accessToken', accessToken, {
-                            httpOnly: true,
                             sameSite: 'none',
                             secure: true
                         })
@@ -68,7 +67,6 @@ class AccessControllers {
             const accessToken = await jwtService.signAccessToken({ userData: createdUser });
             res.status(201)
                 .cookie('accessToken', accessToken, {
-                    httpOnly: true,
                     sameSite: 'none',
                     secure: true
                 })

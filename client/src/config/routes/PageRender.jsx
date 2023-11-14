@@ -44,7 +44,7 @@ function PageRender() {
                 });
             }
         }		
-	}, [page, id, setPageComponent, auth?.user]);
+	}, [page, id, setPageComponent, auth?.user, pathName]);
 
 	if(PageComponent && !notFound) {
         const Component = PageComponent.default;

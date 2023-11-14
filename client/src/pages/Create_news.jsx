@@ -16,14 +16,6 @@ function CreateNew() {
     const [file, setFile] = useState(null);
     const [newsType, setNewsType] = useState('');
 
-    console.log({
-        title,
-        summary,
-        content,
-        file,
-        newsType
-    });
-
     const createNewNews = (e) => {
         e.preventDefault();
 

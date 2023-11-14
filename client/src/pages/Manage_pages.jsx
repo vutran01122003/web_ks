@@ -72,6 +72,7 @@ function ManagePagesPage() {
                                 ...initialArr,
                                 {
                                     id: page?._id,
+                                    sub_page_type: page.pageType,
                                     sub_name_menu: page?.pageName,
                                     sub_icon_before: '?',
                                     sub_to_link: `/page/${page?.pageName}`,
@@ -86,6 +87,8 @@ function ManagePagesPage() {
             })
         }
     }, [JSON.stringify(page.pages)]);
+
+    console.log(pages);
 
     return <div className='pages_management_container'>
         {
@@ -185,38 +188,43 @@ function ManagePagesPage() {
                                                 {
                                                     sub_menu_item?.sub_to_link.includes("/page/") &&
                                                     <div className='sub_menu_item_btn_wrapper'>
-                                                        <button 
-                                                            className='watch_table_btn'
-                                                            onClick={() => {handleOpenViewTablesModal({
-                                                                pageName: sub_menu_item?.sub_name_menu
-                                                            })}}
-                                                        >
-                                                            Xem Các Chỉ Tiêu
-                                                        </button>
+                                                        {
+                                                            sub_menu_item?.sub_page_type === "Chỉ Tiêu" &&
+                                                            <>
+                                                                <button 
+                                                                    className='watch_table_btn'
+                                                                    onClick={() => {handleOpenViewTablesModal({
+                                                                        pageName: sub_menu_item?.sub_name_menu
+                                                                    })}}
+                                                                >
+                                                                    Xem Các Chỉ Tiêu
+                                                                </button>
 
-                                                        <button 
-                                                            className='add_table_btn'
-                                                            onClick={() => {
-                                                                handleOpenAddTableModal({
-                                                                    pageId: sub_menu_item?.id,
-                                                                    pageName: sub_menu_item?.sub_name_menu
-                                                                })
-                                                            }}
-                                                        >
-                                                            Thêm Chỉ Tiêu
-                                                        </button>
+                                                                <button 
+                                                                    className='add_table_btn'
+                                                                    onClick={() => {
+                                                                        handleOpenAddTableModal({
+                                                                            pageId: sub_menu_item?.id,
+                                                                            pageName: sub_menu_item?.sub_name_menu
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                    Thêm Chỉ Tiêu
+                                                                </button>
 
-                                                        <button 
-                                                            className='remove_table_btn'
-                                                            onClick={() => {
-                                                                handleOpenRemoveTableModal({
-                                                                    pageId: sub_menu_item.id,
-                                                                    pageName: sub_menu_item?.sub_name_menu
-                                                                })
-                                                            }}
-                                                        >
-                                                            Xoá Chỉ Tiêu
-                                                        </button>
+                                                                <button 
+                                                                    className='remove_table_btn'
+                                                                    onClick={() => {
+                                                                        handleOpenRemoveTableModal({
+                                                                            pageId: sub_menu_item.id,
+                                                                            pageName: sub_menu_item?.sub_name_menu
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                    Xoá Chỉ Tiêu
+                                                                </button>
+                                                            </>
+                                                        }
                                                         <button 
                                                             className='remove_page_btn'
                                                             onClick={() => {
@@ -226,7 +234,7 @@ function ManagePagesPage() {
                                                                 })
                                                             }}
                                                         >
-                                                            Xóa Page
+                                                            Xóa Trang
                                                         </button>
                                                     </div>
                                                 }
