@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { BsFillCaretRightFill } from 'react-icons/bs'
+import { FaAngleRight, FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import Logo_IUH from '../../assets/images/logo_iuh.png'
 import Logo_IUH_color_w from '../../assets/images/logo_iuh_color_w.png'
 import { getDataApi } from '../../utils/fetchData'
@@ -10,11 +10,12 @@ import GLOBALTYPES from '../../redux/actions/globalTypes'
 import { getPages } from '../../redux/actions/pageAction'
 import { ARRAY_LIST_MENU } from '../../assets/data/menu'
 
+
 const LayoutSideBar = ({ auth }) => {
 	const dispatch = useDispatch()
-	const page = useSelector(pageSelector)
-	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003')
-	
+	const page = useSelector(pageSelector);
+	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003');
+	const [toggleMenu, setToggleMenu] = useState(false);
 
 	const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null))
 	const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'))
@@ -28,7 +29,17 @@ const LayoutSideBar = ({ auth }) => {
 
 		setSubMenu(newSubMenuState)
 		setHeightBoxSub(newHeightBoxSub)
+
+		setToggleMenu(false);
 	}
+
+	const hanleToggleMenu = () => {
+		setToggleMenu(!toggleMenu);
+		const newSubMenu = subMenu.map(() => false);
+		setSubMenu(newSubMenu);
+	}
+
+
 
 	const handleGetPage = async ({ pathName }) => {
 		try {
@@ -38,7 +49,7 @@ const LayoutSideBar = ({ auth }) => {
 					type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
 					payload: {
 						pathName,
-                        pageType: res.data.data?.pageType,
+						pageType: res.data.data?.pageType,
 						pageId: res.data.data?._id,
 						pageName: res.data.data.pageName,
 						tables: res.data.data.tables,
@@ -73,41 +84,41 @@ const LayoutSideBar = ({ auth }) => {
 		dispatch(getPages())
 	}, [dispatch])
 
-    useEffect(() => {
-        if (page?.pages) {
-            ARRAY_LIST_MENU[5].sub_menu_item = page.pages.reduce((intialArr, page) => {
-                if(page.pageType === "Tin Tức") {
-                    return [
-                        ...intialArr, 
-                        {
-                            id: page._id,
-                            sub_page_type: page.pageType,
-                            sub_name_menu: page.pageName,
-                            sub_icon_before: '?',
-                            sub_to_link: `/page/${page.pageName}`,
-                        }
-                    ]
-                }
-                return intialArr;
-            }, [])
+	useEffect(() => {
+		if (page?.pages) {
+			ARRAY_LIST_MENU[5].sub_menu_item = page.pages.reduce((intialArr, page) => {
+				if (page.pageType === "Tin Tức") {
+					return [
+						...intialArr,
+						{
+							id: page._id,
+							sub_page_type: page.pageType,
+							sub_name_menu: page.pageName,
+							sub_icon_before: '?',
+							sub_to_link: `/page/${page.pageName}`,
+						}
+					]
+				}
+				return intialArr;
+			}, [])
 
-            ARRAY_LIST_MENU[6].sub_menu_item = page.pages.reduce((intialArr, page) => {
-                if(page.pageType === "Chỉ Tiêu") {
-                    return [
-                        ...intialArr, 
-                        {
-                            id: page._id,
-                            sub_page_type: page.pageType,
-                            sub_name_menu: page.pageName,
-                            sub_icon_before: '?',
-                            sub_to_link: `/page/${page.pageName}`,
-                        }
-                    ]
-                }
-                return intialArr;
-            }, [])
-        }
-    }, [JSON.stringify(page.pages)])
+			ARRAY_LIST_MENU[6].sub_menu_item = page.pages.reduce((intialArr, page) => {
+				if (page.pageType === "Chỉ Tiêu") {
+					return [
+						...intialArr,
+						{
+							id: page._id,
+							sub_page_type: page.pageType,
+							sub_name_menu: page.pageName,
+							sub_icon_before: '?',
+							sub_to_link: `/page/${page.pageName}`,
+						}
+					]
+				}
+				return intialArr;
+			}, [])
+		}
+	}, [JSON.stringify(page.pages)])
 
 	const renderArrMenu = ARRAY_LIST_MENU.map((item) => {
 		return (
@@ -115,24 +126,33 @@ const LayoutSideBar = ({ auth }) => {
 				{item.allow || item.roles.some((role) => auth.user.roles.includes(role)) ? (
 					<>
 						{item.submenu ? (
-							<div key={item.id} className="item_menu_a" onClick={() => handleSubMenu(item.id)}>
+							<div
+								key={item.id}
+								className={`item_menu_a ${subMenu[item.id] ? "active_item" : "unactive_item"} `}
+								onClick={() => handleSubMenu(item.id)}>
 								<span>
 									{item.icon_before}
-									{item.name_menu}
+									<span className={toggleMenu ? "none_text__menu--item" : ""}>{item.name_menu}</span>
 								</span>
-								<div
-									className={`icon_active_sub ${
-										subMenu[item.id] ? 'active_icon' : 'unactive_icon'
-									}`}
-								>
-									<BsFillCaretRightFill />
-								</div>
+								{
+									toggleMenu ? "" :
+										<div
+											className={`icon_active_sub ${subMenu[item.id] ? 'active_icon' : 'unactive_icon'
+												}`}
+										>
+											<FaAngleRight />
+										</div>
+								}
+
 							</div>
 						) : (
-							<NavLink key={item.id} className="item_menu_a" to={item.to_link}>
+							<NavLink
+								key={item.id}
+								className="item_menu_a"
+								to={item.to_link}>
 								<span>
 									{item.icon_before}
-									{item.name_menu}
+									<span className={toggleMenu ? "none_text__menu--item" : ""}>{item.name_menu}</span>
 								</span>
 							</NavLink>
 						)}
@@ -167,11 +187,32 @@ const LayoutSideBar = ({ auth }) => {
 	})
 
 	return (
-		<div className={`container__menu  ${determineAuth ? 'background_admin' : ''}`}>
+		<div
+			className={`container__menu  ${determineAuth ? 'background_admin ' : ''} 
+		${toggleMenu ? "active_toggle" : ""}`}
+		>
 			<div className="img__logo">
-				<a href="/">
-					<img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" />
-				</a>
+				{
+					toggleMenu ? "" :
+						<a href="/">
+							<img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" />
+						</a>
+				}
+
+				{
+					determineAuth ?
+						<div
+							className={`btn__toggle--menu ${toggleMenu ? "active_icon_toggle--menu" : ""}`}
+							onClick={hanleToggleMenu}
+						>
+							<div className="line__flex_icon">
+								<FaAnglesLeft />
+								<FaAnglesRight />
+							</div>
+						</div>
+						: ""
+				}
+
 			</div>
 			<div className="wrap__menu">
 				<div className="flex__box">{renderArrMenu}</div>

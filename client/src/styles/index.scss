@@ -11,6 +11,7 @@
         Geneva,
         Verdana,
         sans-serif;
+    // font-family: Inter,Helvetica,sans-serif;
 }
 
 body {
@@ -93,3 +94,5 @@ a {
 @import "infoDetails";
 @import "pageCreateNews";
 @import "pageCreateNewsType";
+
+@import "./admin";

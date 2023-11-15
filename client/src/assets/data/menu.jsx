@@ -5,12 +5,14 @@ import { BiBookBookmark, BiHomeSmile } from 'react-icons/bi';
 import { HiOutlineNewspaper } from 'react-icons/hi'
 import { BsTags } from 'react-icons/bs';
 
+import { AiTwotoneHome } from "react-icons/ai";
+
 export const ARRAY_LIST_MENU =  [
         {
             id: 0,
             allow: true,
             name_menu: 'Tổng Quan',
-            icon_before: <BiHomeSmile />,
+            icon_before: <AiTwotoneHome />,
             to_link: '/',
             submenu: false
         },
@@ -20,7 +22,7 @@ export const ARRAY_LIST_MENU =  [
             name_menu: 'Thêm Nhóm Chỉ Tiêu',
             icon_before: <TbTargetArrow />,
             to_link: '/create_goals',
-            submenu: false
+            submenu: false,
         },
         {
             id: 2,
@@ -36,7 +38,8 @@ export const ARRAY_LIST_MENU =  [
             name_menu: 'Quản Lý Trang',
             icon_before: <CgBrowser />,
             to_link: '/manage_pages',
-            submenu: false
+            submenu: false,
+            list:"Chỉ tiêu"
         },
         {
             id: 4,
@@ -61,7 +64,7 @@ export const ARRAY_LIST_MENU =  [
             roles: ['0002'],
             icon_before: <BiBookBookmark />,
             submenu: true,
-            sub_menu_item: []
+            sub_menu_item: [],
         },
         {
             id: 7,
