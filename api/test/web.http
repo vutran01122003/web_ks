@@ -165,9 +165,6 @@ GET {{url}}/api/access_token
 ### Get Posts
 GET {{url}}/api/news?news_type=Tin%20Tức%20Đào%20Tạo
 
-### Get Post
-GET {{url}}/api/post/654503788fafe8b70e49202a
-
 ### Create Post
 POST {{url}}/api/post
 Content-Type: application/json
@@ -193,4 +190,58 @@ Content-Type: application/json
 
 {
     "id": "654508a14e88b334461830f7"
+}
+
+### Get Faculties
+GET {{url}}/api/faculty
+
+### Get Majors
+GET {{url}}/api/faculty/65562daecfe9a2f7336e53ce
+
+
+### Create Faculty
+POST {{url}}/api/faculty
+Content-Type: application/json
+
+{
+    "facultyName": "Điện tử máy tính",
+    "isActive": true,
+    "majors": [
+        {
+            "majorName": "Kỹ thuật điện tử",
+            "isActive": true
+        },
+        {
+            "majorName": "Hệ thống mạch dẫn",
+            "isActive": false
+        }
+    ]
+}
+
+### Update Faculty
+PATCH  {{url}}/api/faculty
+Content-Type: application/json
+
+{
+    "facultyId": "65562daecfe9a2f7336e53ce",
+    "facultyName": "Công nghệ thông tin",
+    "isActive": false,
+    "majors": [
+        {
+            "majorName": "Kỹ thuật phần mềm",
+            "isActive": true
+        },
+        {
+            "majorName": "Khoa học máy tính",
+            "isActive": true
+        }
+    ]
+}
+
+###
+DELETE {{url}}/api/faculty
+Content-Type: application/json
+
+{
+    "facultyId": "655625fc62e1cd4fa44e4ff7"
 }
