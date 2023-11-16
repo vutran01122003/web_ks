@@ -26,7 +26,12 @@ const TopHeader = ({ auth }) => {
         <div className='container__header'>
             <div className="tr__header">
                 <div className="flex__line">
-                    <div>
+                    <div className="line__firts">
+                        {determineAuth ? <div>
+                            <div className='border__text--role'>
+                                ADMIN
+                            </div>
+                        </div> : ""}
                         <ComponentInput
                             iconBefore={<ImSearch />}
                             placeholder="Search"
@@ -35,14 +40,6 @@ const TopHeader = ({ auth }) => {
                         />
                     </div>
                     <div className="box__control">
-
-                        {determineAuth ? <div>
-                            <div className='border__text--role'>
-                                ADMIN
-                            </div>
-                        </div> : ""}
-
-
                         <div className="btn__noti">
                             <Link to="/notification">
                                 <IoNotificationsSharp />
@@ -53,7 +50,11 @@ const TopHeader = ({ auth }) => {
                         </div>
                         <div className="border__account" ref={refBoxAccount}>
                             <div className="btn_dropdown" onClick={() => setDropBoxAccount(!dropBoxAccount)}>
-                                <Avatar url={auth?.user.avatar} size="small"/>
+                                <div className="info__user">
+                                    <div id='name__user'>{auth?.user?.fullName}</div>
+                                    <div id='studentId__user'>{auth?.user?.studentId}</div>
+                                </div>
+                                <Avatar url={auth?.user.avatar} size="small" />
                             </div>
                             <div
                                 className={`box__drop--account ${dropBoxAccount ? "active_drop_box" : "unactive_drop_box"}`}

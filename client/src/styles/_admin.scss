@@ -1,0 +1,97 @@
+.border__text--role {
+    padding: 7px 10px;
+    background-color: #FF5D53;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+.background_admin {
+    background-color: #1c2741;
+
+    .item_menu_a {
+        background-color: transparent !important;
+        color: #8d98af !important;
+
+        svg {
+            color: #c9d0dd;
+        }
+        &:hover {
+            color: #fff !important;
+            svg {
+                color: #fff;
+            }
+        }
+        .active_icon {
+            svg {
+                color: #fff !important;
+            }
+        }
+    }
+
+    .item_menu_a.active {
+        background-color: #3e97ff !important;
+        color: $color_white !important;
+    }
+    .box_sub_menu_item {
+        .sub_menu_item {
+            background-color: transparent !important;
+            border-bottom: none !important;
+            color: #8d98af !important;
+            &:hover {
+                color: #fff !important;
+            }
+            &::before {
+                background-color: #8d98af;
+            }
+        }
+        .sub_menu_item.active {
+            background-color: #3e97ff !important;
+            color: #fff !important;
+            &::before {
+                content: "";
+                width: 5px;
+                height: 5px;
+                display: block;
+                background-color: #fff;
+                border-radius: 100%;
+                margin-right: 15px;
+            }
+        }
+    }
+
+    .btn__toggle--menu {
+        width: 40px;
+        height: 35px;
+        color: #afb8cc;
+        font-size: 17px;
+        background-color: #323c55;
+        border-radius: 3px;
+        cursor: pointer;
+        text-align: center;
+        overflow: hidden;
+        
+        .line__flex_icon{
+            width: 80px;
+            height: 100%;
+            display: flex;
+            padding-left: 8px;
+            align-items: center;
+            transition: transform 0.5s;
+            svg{
+                font-size: 25px;
+            }
+            svg:first-child{
+                margin-right: 20px;
+            }
+        }
+    }
+    .active_icon_toggle--menu {
+        .line__flex_icon{
+                transform: translateX(-45px);
+            svg{
+                color: #3e97ff;
+            }
+        }
+    }
+}
