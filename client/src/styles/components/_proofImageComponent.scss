@@ -1,0 +1,94 @@
+.proof_title {
+    display: block;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.proof_wrapper {
+    width: 100%;
+    background: rgb(253, 253, 253);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    box-shadow: 0 0 1px #333;
+
+    .proof_upload {
+        display: flex;
+        align-items: center;
+
+        .icons_wrapper {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            margin-top: 8px;
+
+            .icon-item--proof {
+                margin-left: 20px;
+            }
+
+            .insert_image_icon {
+                color: rgb(12, 166, 12);
+            }
+
+            .camera_icon {
+                color: rgb(219, 77, 77);
+            }
+        }
+    }
+
+    .images_wrapper {
+        position: relative;
+        margin-top: 10px;
+        border-radius: 8px;
+        width: 100%;
+        max-height: 200px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1px;
+        justify-content: center;
+        align-items: flex-start;
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+        img {
+            display: block;
+            width: 33%;
+            object-fit: contain;
+        }
+
+        .remove_img_btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            z-index: 999;
+            border-radius: 50%;
+            background: #eff0f3;
+            font-size: 20px;
+            font-weight: bold;
+            transition: linear 0.1s;
+
+            &:hover {
+                background: #dadde1;
+                .remove_img_icon {
+                    color: red;
+                }
+            }
+
+            .remove_img_icon {
+                color: rgb(251, 84, 84);
+            }
+        }
+    }
+}

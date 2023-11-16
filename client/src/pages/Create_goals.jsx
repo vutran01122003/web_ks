@@ -10,7 +10,7 @@ import { createPage } from '../redux/actions/pageAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import Tippy from '@tippyjs/react/headless';
 
-const CreateGoals = () => {
+const CreateGoals = ({handleAddTable}) => {
     const dispatch = useDispatch();
     const [pageName, setPageName] = useState('');
     const [pageFaculty, setPageFaculty] = useState('');
@@ -21,13 +21,7 @@ const CreateGoals = () => {
     const [visibleModal, setVisibleModal] = useState(false);
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
-    console.log({
-        pageStudentLevelYear,
-        pageFaculty,
-        pageName,
-        pageStudentCohort,
-        pageStudentMajor
-    })
+
     const [tables, setTables] = useState([
         {
             tableName: "",
@@ -178,51 +172,59 @@ const CreateGoals = () => {
         <div className="wrap__goals">
             <div className="body__goals">
                 <div className='line__flex'>
-                    <h1>Thêm Nhóm Chỉ Tiêu</h1>
+                    {
+                        handleAddTable ?
+                        <h1>Thêm Chỉ Tiêu</h1>: 
+                        <h1>Thêm Nhóm Chỉ Tiêu</h1>
+                    }
                 </div>
 
-                <div className='goals_info_wrapper'>
-                    <input 
-                        type="text" 
-                        placeholder='Nhập Khóa Sinh Viên'
-                        onChange={(e) => {setPageStudentCohort(e.target.value)}}
-                        value={pageStudentCohort}
-                    />
-                    <div>
-                        <select 
-                            onChange={(e) => {setPageFaculty(e.target.value)}}
-                            value={pageFaculty}
-                        >
-                            <option value=''>Chọn Khoa</option>
-                            <option value='Công Nghệ Thông Tin'>Công Nghệ Thông Tin</option>
-                            <option value='Tự Động Hóa'>Tự Động Hóa</option>
-                            <option value='Cơ Khí'>Cơ Khí</option>
-                        </select>
+                {
+                    !handleAddTable &&
+                    <div className='goals_info_wrapper'>
+                        <input 
+                            type="text" 
+                            placeholder='Nhập Khóa Sinh Viên'
+                            onChange={(e) => {setPageStudentCohort(e.target.value)}}
+                            value={pageStudentCohort}
+                        />
+                        <div>
+                            <select 
+                                onChange={(e) => {setPageFaculty(e.target.value)}}
+                                value={pageFaculty}
+                            >
+                                <option value=''>Chọn Khoa</option>
+                                <option value='Công Nghệ Thông Tin'>Công Nghệ Thông Tin</option>
+                                <option value='Tự Động Hóa'>Tự Động Hóa</option>
+                                <option value='Cơ Khí'>Cơ Khí</option>
+                            </select>
 
-                        <select 
-                            onChange={(e) => {setPageStudentMajor(e.target.value)}}
-                            value={pageStudentMajor}
-                        >
-                            <option value=''>Chọn Chuyên Ngành</option>
-                            <option value='Kỹ Thuật Phần Mềm'>Kỹ Thuật Phần Mềm</option>
-                            <option value='Khoa Học Máy Tính'>Khoa Học Máy Tính</option>
-                        </select>
+                            <select 
+                                onChange={(e) => {setPageStudentMajor(e.target.value)}}
+                                value={pageStudentMajor}
+                            >
+                                <option value=''>Chọn Chuyên Ngành</option>
+                                <option value='Kỹ Thuật Phần Mềm'>Kỹ Thuật Phần Mềm</option>
+                                <option value='Khoa Học Máy Tính'>Khoa Học Máy Tính</option>
+                            </select>
 
-                        <select 
-                            onChange={(e) => setPageStudentLevelYear(Number.parseInt(e.target.value))}
-                            value={pageStudentLevelYear}
-                        >
-                            <option value=''>Chọn Năm Học</option>
-                            <option value='1'>Năm 1</option>
-                            <option value='2'>Năm 2</option>
-                            <option value='3'>Năm 3</option>
-                            <option value='4'>Năm 4</option>
-                            <option value='5'>Năm 5</option>
-                        </select>
+                            <select 
+                                onChange={(e) => setPageStudentLevelYear(Number.parseInt(e.target.value))}
+                                value={pageStudentLevelYear}
+                            >
+                                <option value=''>Chọn Năm Học</option>
+                                <option value='1'>Năm 1</option>
+                                <option value='2'>Năm 2</option>
+                                <option value='3'>Năm 3</option>
+                                <option value='4'>Năm 4</option>
+                                <option value='5'>Năm 5</option>
+                            </select>
+                        </div>
                     </div>
+                }
 
-                </div>
-
+               {
+                !handleAddTable &&
                 <div className="filed__line">
                     <label>Tên Nhóm Chỉ Tiêu</label>
                     <input
@@ -233,6 +235,7 @@ const CreateGoals = () => {
                         onChange={(e) => setPageName(e.target.value)}
                     />
                 </div>
+               }
                 <div className="connection__table">
                     {tables.map((table, tableIndex) => {
                         return (

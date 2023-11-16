@@ -11,7 +11,6 @@
         Geneva,
         Verdana,
         sans-serif;
-    // font-family: Inter,Helvetica,sans-serif;
 }
 
 body {
@@ -72,27 +71,38 @@ a {
     }
 }
 
-@import "component";
-@import "pages";
-@import "pageHome";
-@import "pageNews";
-@import "pagePlan";
-@import "layout";
-@import "table";
-@import "pageProfile";
-@import "firstLogin";
-@import "scrollbar";
-@import "pageGoals";
-@import "notFound";
-@import "pagesManagement";
-@import "modal";
-@import "@media/@mediaComponentLogin.scss";
-@import "pageNewsDetail";
-@import "scrollToTopButton";
-@import "goalDetail";
-@import "pageApply";
-@import "infoDetails";
-@import "pageCreateNews";
-@import "pageCreateNewsType";
+// Pages
+@import "./pages/pageAdmin";
+@import "./pages/pageGoals";
+@import "./pages/pageApply";
+@import "./pages/pageGoals";
+@import "./pages/pageHome";
+@import "./pages/pageNews";
+@import "./pages/pageProfile";
+@import "./pages/pageCreateNews";
+@import "./pages/pageNewsDetail";
+@import "./pages/pageManagement";
+@import "./pages/pageNotFound";
+@import "./pages/pageCreateNewsType";
+@import "./pages/pageFirstLogin";
+@import "./layout/index";
+@import "./pages/pageLogin";
 
-@import "./admin";
+// Component
+@import "./components/modalComponent";
+@import "./components/tableComponent";
+@import "./components/headerComponent";
+@import "./components/menuComponent";
+@import "./components/inputComponent";
+@import "./components/proofImageComponent";
+@import "./components/peddingGoalsComponent";
+@import "./components/buttonComponent";
+
+// Scrollbar
+@import "./scrollBar/scrollBar";
+@import "./scrollBar/scrollToTopButton";
+
+
+// Media
+@import "@media/@mediaComponentLogin.scss";
+

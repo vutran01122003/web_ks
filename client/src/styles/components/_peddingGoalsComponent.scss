@@ -1,0 +1,82 @@
+.pedding_goals_container {
+    margin-bottom: 40px;
+    padding: 20px;
+    border-bottom: 1px solid gray;
+
+    .pedding_goals_wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .student_wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 210px;
+            align-items: center;
+
+            .student_info {
+                white-space: nowrap;
+
+                .student_info_label {
+                    font-weight: 400;
+                    color: gray;
+                }
+
+                .student_info_id,
+                .student_info_name,
+                .student_info_faculty {
+                    font-weight: 500;
+                }
+            }
+
+            .pedding_goals_btn_wrapper {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 10px;
+
+                button {
+                    color: #fff;
+                    width: 100px;
+                    padding: 8px 12px;
+                    font-weight: 600;
+                    max-width: 100%;
+                    outline: none;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    box-shadow: 0 0 3px gray;
+                    transition: 0.1s linear;
+
+                    &:active {
+                        transform: scale(0.9);
+                    }
+                }
+
+                .reject_btn {
+                    background: #f75151;
+                }
+
+                .confirmation_btn {
+                    background: #059b05;
+                }
+            }
+        }
+    }
+
+    .title_pending_goals {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        gap: 4px;
+        color: rgb(237, 72, 72);
+        font-size: larger;
+        font-weight: 600;
+
+        svg {
+            width: 25px;
+            height: 25px;
+        }
+    }
+}

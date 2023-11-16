@@ -167,35 +167,37 @@ const LayoutSideBar = ({ auth }) => {
 
 	return (
 		<div
-			className={`container__menu  ${determineAuth ? 'background_admin ' : ''} 
+			className={`container__menu ${determineAuth ? 'background_admin ' : ''} 
 		${toggleMenu ? "active_toggle" : ""}`}
 		>
-			<div className="img__logo">
-				{
-					toggleMenu ? "" :
-						<a href="/">
-							<img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" />
-						</a>
-				}
+			<div className={`menu_wrapper ${toggleMenu ? "active_toggle" : ""}`}>
+                <div className="img__logo">
+                    {
+                        toggleMenu ? "" :
+                            <a href="/">
+                                <img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" />
+                            </a>
+                    }
 
-				{
-					determineAuth ?
-						<div
-							className={`btn__toggle--menu ${toggleMenu ? "active_icon_toggle--menu" : ""}`}
-							onClick={hanleToggleMenu}
-						>
-							<div className="line__flex_icon">
-								<FaAnglesLeft />
-								<FaAnglesRight />
-							</div>
-						</div>
-						: ""
-				}
+                    {
+                        determineAuth ?
+                            <div
+                                className={`btn__toggle--menu ${toggleMenu ? "active_icon_toggle--menu" : ""}`}
+                                onClick={hanleToggleMenu}
+                            >
+                                <div className="line__flex_icon">
+                                    <FaAnglesLeft />
+                                    <FaAnglesRight />
+                                </div>
+                            </div>
+                            : ""
+                    }
 
-			</div>
-			<div className="wrap__menu">
-				<div className="flex__box">{renderArrMenu}</div>
-			</div>
+                </div>
+                <div className="wrap__menu">
+                    <div className="flex__box">{renderArrMenu}</div>
+                </div>
+            </div>
 		</div>
 	)
 }

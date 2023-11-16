@@ -1,0 +1,146 @@
+.container__header {
+    width: 100%;
+    height: 63px;
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    background-color: $color_white;
+    border-bottom: 1px dotted $line_color;
+    z-index: 10;
+
+    .tr__header {
+        height: 100%;
+        padding: 5px 20px;
+
+        .flex__line {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .line__firts {
+                @include flex_center;
+                .box_search {
+                    height: 35px;
+                    margin-left: 20px;
+                    svg {
+                        color: #6b6b6b;
+                        font-size: 19px;
+                    }
+                }
+                .line__input{
+                    border-radius: 3px;
+                }
+            }
+
+            .box__control {
+                height: 100%;
+                display: flex;
+                align-items: center;
+
+                > div {
+                    margin-left: 20px;
+                }
+
+                .btn__noti {
+                    font-size: 28px;
+                    position: relative;
+                    padding-top: 10px;
+
+                    svg {
+                        cursor: pointer;
+                        color: #6b6b6b;
+                    }
+
+                    .length__noti {
+                        svg {
+                            position: absolute;
+                            font-size: 35px;
+                            color: red;
+                            top: -5px;
+                            left: 8px;
+                        }
+                    }
+                }
+
+                .border__account {
+                    border-left:1px solid #cccbcb;
+                    padding-left: 20px;
+                    .btn_dropdown {
+                        width: 100%;
+                        height: 100%;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        .info__user {
+                            margin-right: 15px;
+                            #name__user {
+                                font-size: 20px;
+                                font-weight: 500;
+                            }
+                            #studentId__user {
+                                font-size: 11px;
+                                color: #6e6b6b;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+
+                    .box__drop--account {
+                        width: max-content;
+                        position: absolute;
+                        top: 64px;
+                        right: 20px;
+                        background-color: $color_white;
+                        border: 1px solid #cecece;
+                        border-radius: 4px;
+                        box-shadow: 3px 2px 8px 0 #0000002c;
+
+                        .pd__select {
+                            padding: 0px 10px;
+                            >div:last-child:hover{
+                                background-color: #FF5D53;
+                                color: #fff;
+                            }
+                        }
+
+                        .item_btn_control {
+                            @include flex_center;
+                            justify-content: left;
+                            padding: 10px 12px;
+                            font-size: 18px;
+                            cursor: pointer;
+                            color: #6b6b6b;
+                            font-weight: 500;
+                            transition: background-color 0.35s;
+                            border-radius: 3px;
+                            margin: 10px 0px;
+
+                            &:hover {
+                                background-color: $color_white_hover;
+                            }
+
+                            > svg {
+                                margin-right: 15px;
+                                font-size: 24px;
+                            }
+                        }
+                    }
+
+                    .active_drop_box {
+                        opacity: 1;
+                        transform: translateY(0);
+                        transition: 0.3s ease;
+                        visibility: visible;
+                    }
+
+                    .unactive_drop_box {
+                        opacity: 0;
+                        transform: translateY(-8px);
+                        transition: 0.2s ease;
+                        visibility: hidden;
+                    }
+                }
+            }
+        }
+    }
+}

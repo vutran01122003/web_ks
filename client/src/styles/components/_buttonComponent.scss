@@ -1,0 +1,17 @@
+.button__component {
+    width: 100%;
+    display: block;
+    background-color: $main_color;
+    padding: 12px 0px;
+    border: none;
+    margin: 20px 0px;
+    font-size: 18px;
+    color: $color_white;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.5s;
+    &:hover {
+        background-color: $main_color_hover;
+    }
+}

@@ -6,9 +6,15 @@
     font-weight: 500;
 }
 
-.background_admin {
+.container__menu.background_admin {
     background-color: #1c2741;
 
+    .menu_wrapper {
+        background-color: #1c2741;
+    }
+}
+
+.background_admin {
     .item_menu_a {
         background-color: transparent !important;
         color: #8d98af !important;

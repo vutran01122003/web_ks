@@ -1,0 +1,168 @@
+.container__menu {
+    min-width: 300px;
+    background-color: #fff;
+    transition: width 0.35s linear;
+    
+    .menu_wrapper {
+        min-width: 300px;
+        background-color: #fff;
+        border-right: 1px solid $line_color;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        z-index: 99;
+        transition: width 0.35s linear;
+
+        .img__logo {
+            width: 100%;
+            height: 63px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 20px;
+            border-bottom: 1px dashed #33446c;
+    
+            img {
+                width: 90px;
+            }
+        }
+    
+        .wrap__menu {
+            height: 100vh;
+            overflow: auto;
+            padding-bottom: 100px;
+            margin-right: 2px;
+            margin-top: 20px;
+    
+            .flex__box {
+                display: flex;
+                flex-direction: column;
+                padding: 0px 20px;
+    
+                .item_menu_a {
+                    justify-content: left;
+                    padding: 15px 10px;
+                    padding-right: 0px;
+                    color: $color_black;
+                    font-size: 15px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    @include flex_center;
+                    justify-content: space-between;
+                    border-radius: 3px;
+                    background-color: $color_white;
+                    transition: background-color 0.35s;
+                    margin: 5px 0px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+    
+                    > span {
+                        @include flex_center;
+                        > span {
+                            margin-left: 15px;
+                        }
+                    }
+                    .none_text__menu--item {
+                        display: none;
+                    }
+                    svg {
+                        font-size: 21px;
+                    }
+    
+                    .icon_active_sub {
+                        color: #797878;
+                        transition: transform 0.4s;
+                        svg {
+                            font-size: 14px;
+                            margin-right: 0px;
+                        }
+                    }
+    
+                    .active_icon {
+                        transform: rotate(90deg);
+    
+                        > svg {
+                            color: $color_black;
+                        }
+                    }
+    
+                    .unactive_icon {
+                        transform: rotate(0deg);
+                    }
+    
+                    &:hover {
+                        background-color: $color_white_hover;
+                    }
+                }
+                .active_item {
+                    color: #fff !important;
+                    svg {
+                        color: #fff !important;
+                    }
+                }
+    
+                .box_sub_menu_item {
+                    overflow: hidden;
+                    transition: height 0.25s;
+    
+                    .sub_menu_item {
+                        display: block;
+                        background-color: #f7f7f7;
+                        padding: 10px 0px;
+                        padding-left: 30px;
+                        color: $color_black;
+                        font-weight: 500;
+                        font-size: 15px;
+                        transition: all 0.35s;
+                        border-bottom: 1px solid #ececec;
+                        border-radius: 3px;
+                        color: #494949;
+                        display: flex;
+                        align-items: center;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        &::before {
+                            content: "";
+                            width: 5px;
+                            height: 5px;
+                            display: block;
+                            border-radius: 100%;
+                            margin-right: 15px;
+                            margin-top: 4px;
+                        }
+                        &:hover {
+                            background-color: #dadada;
+                        }
+                    }
+    
+                    .sub_menu_item.active {
+                        background-color: #d4d3d3;
+                        color: $color_black;
+                    }
+                }
+    
+                .item_menu_a.active {
+                    background-color: $color_white_hover;
+                    color: $color_black;
+                    svg {
+                        color: #fff;
+                    }
+                }
+            }
+        }   
+    }
+    
+}
+
+
+.active_toggle.menu_wrapper {
+    width: 85px;
+    min-width: unset;
+}
+
+.active_toggle.container__menu {
+    min-width: 85px;
+}

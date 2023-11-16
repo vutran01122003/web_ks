@@ -1,0 +1,361 @@
+.wrap__goals {
+    padding: 10px 20px;
+    .body__goals {
+        .goals_info_wrapper {
+            display: inline-block;
+            
+            input {
+                padding: 8px 12px;
+                height: 40px;
+                font-weight: 600;
+                font-size: 16px;
+                background: none;
+                outline: none;
+                border: 1px solid rgb(222, 221, 221);
+                width: 100%;
+            }
+          
+            select {
+                padding: 8px 12px;
+                font-weight: 600;
+                font-size: 16px;
+                background: none;
+                outline: none;
+                border: 1px solid rgb(222, 221, 221);
+                min-width: 220px;
+            }
+        }
+
+        .line__flex {
+            display: flex;
+            justify-content: space-between;
+            
+            > h1 {
+                color: #0153b1;
+                text-align: center;
+                width: 100%;
+                margin-bottom: 30px;
+            }
+        }
+        .filed__line {
+            display: flex;
+            margin: 20px 0px;
+
+            > label {
+                color: #0153b1;
+                font-size: 21px;
+                white-space: nowrap;
+                font-weight: 700;
+            }
+            > input {
+                width: 100%;
+                height: 30px;
+                border: none;
+                border-bottom: 1px solid #a1a0a0;
+                outline: none;
+                padding: 0px 10px;
+                font-size: 20px;
+                font-weight: 600;
+                margin-left: 20px;
+            }
+        }
+
+        .connection__table {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            .box__table {
+                width: 100%;
+                border: 1px solid #cccccc;
+                border-radius: 5px;
+                box-shadow: 0 0 3px rgba(188, 187, 187, 0.686);
+                margin: 10px 0px;
+                transition:
+                    transform 0.2s,
+                    opacity 0.2s;
+                animation: fade-in 0.3s ease-out;
+                .flex__hLine {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 20px 20px 0;
+                }
+            }
+            @keyframes fade-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .text__heading_fw {
+                width: 100%;
+                font-size: 23px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                .text__length {
+                    white-space: nowrap;
+                    font-size: 18px;
+                    display: inline-block;
+                    min-width: 150px;
+                    font-weight: 600;
+                }
+                .input_title--chi_tieu {
+                    width: 100%;
+                    margin: 0px 10px;
+                    padding: 5px 10px;
+                    font-size: 18px;
+                    font-weight: 500;
+                    border: none;
+                    border-bottom: 1px solid #afafaf;
+                    background-color: transparent;
+                    outline: none;
+                    &:placeholder-shown {
+                        font-size: medium;
+                        color: rgb(223, 220, 220);
+                    }
+                }
+            }
+
+            .btn__delete {
+                button {
+                    border: none;
+                    background: transparent;
+                    font-size: 25px;
+                    cursor: pointer;
+                }
+            }
+            .flex__line_lable {
+                padding: 20px 20px 0;
+                display: flex;
+                align-items: center;
+                > label {
+                    font-size: 18px;
+                    font-weight: 500;
+                    white-space: nowrap;
+                    display: inline-block;
+                    min-width: 150px;
+                }
+                > input {
+                    width: 100%;
+                    height: 30px;
+                    margin: 0px 10px;
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px solid #afafaf;
+                    outline: none;
+                    font-size: 18px;
+                    font-weight: 500;
+                    padding: 15px 10px;
+                    &:placeholder-shown {
+                        font-size: medium;
+                        color: rgb(223, 220, 220);
+                    }
+                }
+            }
+            .table__col--target {
+                .flex__line {
+                    display: flex;
+                    justify-content: right;
+                    .btn__add-col {
+                        width: max-content;
+                        padding: 10px 20px;
+                        font-size: 17px;
+                        background-color: $main_color;
+                        margin: 15px;
+                        @include flex_center;
+                        svg {
+                            margin-right: 10px;
+                        }
+                    }
+                }
+
+                > .tr__line--cols {
+                    border-top: 1px solid #bbbbbb;
+                    border-radius: 0px 0px 8px 8px;
+                    .box__cols {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        .hag_stt {
+                            padding: 0px 10px;
+                            @include flex_center;
+                            font-size: 19px;
+                            font-weight: 600;
+                            border-right: 1px solid #c6c6c6;
+                        }
+
+                        .add_value_col {
+                            background: #fff;
+                            padding: 10px;
+                            box-shadow: 0 0 3px gray;
+                            border-radius: 5px;
+                            width: 400px;
+                            max-width: 100%;
+
+                            .add_fixed_heading {
+                                color: #0153b1;
+                                margin-bottom: 15px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                                
+                                span {
+                                    font-size: small;
+                                    font-weight: 400;
+                                    color: gray
+                                }
+                            }
+
+                            .add_fixed_value_wrapper {
+                                display: flex;
+                                margin-bottom: 15px;
+                                gap: 5px;
+
+                                .fixed_value_input {
+                                    flex: 1;
+                                    padding: 8px 12px;
+                                    height: 40px;
+                                    outline: none;
+                                    border: 1px solid rgb(183, 181, 181);
+                                    border-radius: 5px;
+                                    font-weight: 600;
+                                    font-size: 16px;
+                                }   
+
+                                .add_fixed_value_btn {
+                                    width: 120px;
+                                    border-radius: 5px;
+                                    background: #006fee;
+                                    font-weight: 600;
+                                    color: #fff;
+                                    outline: none;
+                                    border: none;
+                                    transition: 0.1s linear;
+
+                                    &:active {
+                                        transform: scale(0.9);    
+                                    }
+                                }
+                            }
+
+                            .fixed_value_item {
+                                display: flex;
+                                justify-content: space-between;
+                                gap: 10px;
+                                padding: 8px 12px;
+                                border-bottom: 1px solid rgb(227, 226, 226);
+
+                                .fixed_value_wrapper {
+                                    display: flex;
+                                    align-items: center;
+                                    font-weight: 600;
+                                    font-size: 16px;
+                                    gap: 10px;
+                                    flex: 1;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+
+                                    .span {
+                                        display: flex;
+                                        align-items: center;
+                                    }
+
+                                    .fixed_value {
+                                        flex: 1;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    }
+                                }
+
+                                .btn_del_fixed_value {
+                                    display: flex;
+                                    align-items: center; 
+                                    color: rgba(255, 0, 0, 0.715);
+                                    transition: 0.1s linear;
+
+                                    &:hover {
+                                        color: red;
+                                    }
+                                }
+                            }
+                        }
+
+                        .item__col {
+                            width: 100%;
+                            position: relative;
+                            border-right: 1px solid #e3e3e3;
+                        }
+                        .item__col > input {
+                            width: 100%;
+                            border: none;
+                            background: #fffcf8;
+                            font-size: 16px;
+                            padding: 5px;
+                            height: 50px;
+                            text-align: center;
+                            font-weight: 500;
+                            outline: none;
+                        }
+                        .del__col {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 20px;
+                            position: absolute;
+                            right: 5px;
+                            bottom: -4px;
+                            color: rgba(255, 0, 0, 0.59);
+                            cursor: pointer;
+                            transition: 0.1s linear;
+
+                            &:hover {
+                                color: red;
+                            }
+                        }
+
+                        .add__col {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 20px;
+                            position: absolute;
+                            right: 5px;
+                            top: 0px;
+                            color: rgba(0, 128, 0, 0.525);
+                            cursor: pointer;
+                            transition: 0.1s linear;
+
+                            &:hover {
+                                color: green;
+                            } 
+                        }
+                    }
+                }
+            }
+        }
+        .btn__add_table {
+            width: max-content;
+            background-color: $main_color;
+            padding: 10px;
+            @include flex_center;
+            svg {
+                margin-right: 10px;
+            }
+        }
+        .btn__create--page {
+            width: max-content;
+            padding: 10px;
+            @include flex_center;
+            background-color: $main_color;
+            svg {
+                margin-right: 10px;
+            }
+        }
+    }
+}

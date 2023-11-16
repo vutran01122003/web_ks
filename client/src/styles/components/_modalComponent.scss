@@ -222,9 +222,14 @@
 
 // Create table Modal
 .create_goal_container {
-    width: 670px;
+    width: 800px;
     max-width: 100%;
+    max-height: 100%;
     padding: 20px;
+    
+    .wrap__goals {
+        width: 100%;    
+    }
 
     .input_goal_wrapper {
         .input_goal_item {
@@ -505,7 +510,6 @@
                 background: green;
             }
         }
-        
     }
 }
 
