@@ -27,10 +27,21 @@ const UserSchema = new Schema(
             type: Schema.Types.Date,
             required: true
         },
+        // faculty: {
+        //     // Khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
+        //     type: String,
+        //     required: true
+        // },
         major: {
+            // Chuyên ngành của sinh viên (Ví Dụ: Kỹ Thuật Phần Mềm,...)
             type: String,
             required: true
         },
+        // cohort: {
+        //     // Khóa sinh viên nhập học (Ví Dụ: K17, K18,...)
+        //     type: String,
+        //     required: true
+        // },
         roles: {
             type: Array,
             default: []

@@ -726,10 +726,35 @@
 .wrap__goals {
     padding: 10px 20px;
     .body__goals {
+        .goals_info_wrapper {
+            display: inline-block;
+            
+            input {
+                padding: 8px 12px;
+                height: 40px;
+                font-weight: 600;
+                font-size: 16px;
+                background: none;
+                outline: none;
+                border: 1px solid rgb(222, 221, 221);
+                width: 100%;
+            }
+          
+            select {
+                padding: 8px 12px;
+                font-weight: 600;
+                font-size: 16px;
+                background: none;
+                outline: none;
+                border: 1px solid rgb(222, 221, 221);
+                min-width: 220px;
+            }
+        }
+
         .line__flex {
             display: flex;
             justify-content: space-between;
-            
+          
             > h1 {
                 color: #0153b1;
                 text-align: center;   
@@ -764,7 +789,7 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            overflow: hidden;
+
             .box__table {
                 width: 100%;
                 border: 1px solid #cccccc;
@@ -888,6 +913,104 @@
                             font-weight: 600;
                             border-right: 1px solid #c6c6c6;
                         }
+
+                        .add_value_col {
+                            background: #fff;
+                            padding: 10px;
+                            box-shadow: 0 0 3px gray;
+                            border-radius: 5px;
+                            width: 400px;
+                            max-width: 100%;
+
+                            .add_fixed_heading {
+                                color: #0153b1;
+                                margin-bottom: 15px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                                
+                                span {
+                                    font-size: small;
+                                    font-weight: 400;
+                                    color: gray
+                                }
+                            }
+
+                            .add_fixed_value_wrapper {
+                                display: flex;
+                                margin-bottom: 15px;
+                                gap: 5px;
+
+                                .fixed_value_input {
+                                    flex: 1;
+                                    padding: 8px 12px;
+                                    height: 40px;
+                                    outline: none;
+                                    border: 1px solid rgb(183, 181, 181);
+                                    border-radius: 5px;
+                                    font-weight: 600;
+                                    font-size: 16px;
+                                }   
+
+                                .add_fixed_value_btn {
+                                    width: 120px;
+                                    border-radius: 5px;
+                                    background: #006fee;
+                                    font-weight: 600;
+                                    color: #fff;
+                                    outline: none;
+                                    border: none;
+                                    transition: 0.1s linear;
+
+                                    &:active {
+                                        transform: scale(0.9);    
+                                    }
+                                }
+                            }
+
+                            .fixed_value_item {
+                                display: flex;
+                                justify-content: space-between;
+                                gap: 10px;
+                                padding: 8px 12px;
+                                border-bottom: 1px solid rgb(227, 226, 226);
+
+                                .fixed_value_wrapper {
+                                    display: flex;
+                                    align-items: center;
+                                    font-weight: 600;
+                                    font-size: 16px;
+                                    gap: 10px;
+                                    flex: 1;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+
+                                    .span {
+                                        display: flex;
+                                        align-items: center;
+                                    }
+
+                                    .fixed_value {
+                                        flex: 1;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    }
+                                }
+
+                                .btn_del_fixed_value {
+                                    display: flex;
+                                    align-items: center; 
+                                    color: rgba(255, 0, 0, 0.715);
+                                    transition: 0.1s linear;
+
+                                    &:hover {
+                                        color: red;
+                                    }
+                                }
+                            }
+                        }
+
                         .item__col {
                             width: 100%;
                             position: relative;
@@ -897,20 +1020,45 @@
                             width: 100%;
                             border: none;
                             background: #fffcf8;
-                            font-size: 17px;
+                            font-size: 16px;
                             padding: 5px;
-                            height: 40px;
+                            height: 50px;
                             text-align: center;
                             font-weight: 500;
                             outline: none;
                         }
                         .del__col {
-                            font-size: 25px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 20px;
                             position: absolute;
                             right: 5px;
-                            top: 2px;
-                            color: #515151;
+                            bottom: -4px;
+                            color: rgba(255, 0, 0, 0.59);
                             cursor: pointer;
+                            transition: 0.1s linear;
+
+                            &:hover {
+                                color: red;
+                            }
+                        }
+
+                        .add__col {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 20px;
+                            position: absolute;
+                            right: 5px;
+                            top: 0px;
+                            color: rgba(0, 128, 0, 0.525);
+                            cursor: pointer;
+                            transition: 0.1s linear;
+
+                            &:hover {
+                                color: green;
+                            } 
                         }
                     }
                 }

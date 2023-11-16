@@ -61,7 +61,7 @@ export const getAllNews = ({ newsType }) => async(dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error.reponse?.data?.status === 401 ? 
+                error: error?.response.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error.response?.data?.msg || 'Lấy Dữ Liệu Tin Tức Thất Bại'
             }
         })
@@ -96,7 +96,7 @@ export const getNewsDetails = ({newsId}) => async(dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error.reponse?.data?.status === 401 ? 
+                error: error?.response.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error.response?.data?.msg || 'Lấy Dữ Liệu Tin Tức Thất Bại'
             }
         })

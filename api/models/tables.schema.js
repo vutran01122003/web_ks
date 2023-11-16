@@ -10,8 +10,18 @@ const TableSchema = new Schema({
         type: String
     },
     rowTitleList: {
-        type: Schema.Types.Array,
+        type: [
+            {
+                titleValue: String,
+                fixedValue: Array
+            }
+        ],
         default: []
+    },
+    quantityDemanded: {
+        // Số lượng chỉ tiêu yều cầu cho một bảng
+        type: Number,
+        required: true
     },
     rowValueList: {
         type: [{ type: Schema.Types.ObjectId, ref: 'row' }],

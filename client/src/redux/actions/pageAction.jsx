@@ -1,7 +1,7 @@
 import { deleteDataApi, getDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
-export const createPage = (data) => async (dispatch) => {
+export const createPage = ({pageData, resetAllData}) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -10,7 +10,7 @@ export const createPage = (data) => async (dispatch) => {
             }
         });
 
-        const res = await postDataApi('/page', data);
+        const res = await postDataApi('/page', pageData);
 
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -18,11 +18,13 @@ export const createPage = (data) => async (dispatch) => {
                 success: res?.data.msg
             }
         });
+
+        if(resetAllData) resetAllData();
     } catch (error) {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error.reponse?.data?.status === 401 ? 
+                error: error?.response.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Tạo Trang Thất Bại'
             }
         });
@@ -57,7 +59,7 @@ export const getPages = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error.reponse?.data?.status === 401 ? 
+                error: error?.response.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || "Lấy Dữ Liệu Trang Thất Bại"
             }
         })
@@ -98,7 +100,7 @@ export const getPage = ({pathName}) => async (dispatch) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error.reponse?.data?.status === 401 ? 
+                    error: error?.response.data?.status === 401 ? 
                     "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
                 }
             })
@@ -132,11 +134,10 @@ export const removePage = ({pageId}) => async (dispatch) => {
         })
 
     } catch (error) {
-        console.log(error)
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error.reponse?.data?.status === 401 ? 
+                error: error?.response.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Xóa Trang Thất Bại'
             }
         })

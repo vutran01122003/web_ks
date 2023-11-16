@@ -2,20 +2,41 @@ import React, { useState } from 'react'
 import ComponentButton from '../components/ComponentButton/ComponentButton';
 import { BiSolidAddToQueue } from "react-icons/bi"
 import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from "react-icons/ai"
+import { FaCaretRight } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineAddCircle } from "react-icons/md"
 import { useDispatch } from 'react-redux';
 import { createPage } from '../redux/actions/pageAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
+import Tippy from '@tippyjs/react/headless';
 
 const CreateGoals = () => {
     const dispatch = useDispatch();
-
     const [pageName, setPageName] = useState('');
+    const [pageFaculty, setPageFaculty] = useState('');
+    const [pageStudentCohort, setPageStudentCohort] = useState('');
+    const [pageStudentMajor, setPageStudentMajor] = useState('');
+    const [pageStudentLevelYear, setPageStudentLevelYear] = useState('');
+    const [fixedValue, setFixedValue] = useState('');
+    const [visibleModal, setVisibleModal] = useState(false);
+    const [indexTableValue, setIndexTableValue] = useState(null);
+    const [indexRowValue, setIndexRowValue] = useState(null);
+    console.log({
+        pageStudentLevelYear,
+        pageFaculty,
+        pageName,
+        pageStudentCohort,
+        pageStudentMajor
+    })
     const [tables, setTables] = useState([
         {
             tableName: "",
             description: "",
-            rowTitleList: [""],
+            quantityDemanded: "",
+            rowTitleList: [{
+                titleValue: "",
+                fixedValue: []
+            }],
             rowValueList: []
         }
     ]);
@@ -24,7 +45,11 @@ const CreateGoals = () => {
         setTables([...tables, {
             tableName: "",
             description: "",
-            rowTitleList: [""],
+            quantityDemanded: "",
+            rowTitleList: [{
+                titleValue: "",
+                fixedValue: []
+            }],
             rowValueList: []
         }]);
     };
@@ -45,13 +70,27 @@ const CreateGoals = () => {
 
     const updateRowTitle = (tableIndex, rowIndex, value) => {
         const updatedTables = [...tables];
-        updatedTables[tableIndex].rowTitleList[rowIndex] = value;
+        updatedTables[tableIndex].rowTitleList[rowIndex].titleValue = value;
+        setTables(updatedTables);
+    };
+
+    const addFixedValue = (tableIndex, rowIndex, value) => {
+        if(value.trim()) {
+            const updatedTables = [...tables];
+            updatedTables[tableIndex].rowTitleList[rowIndex].fixedValue.push(value);
+            setTables(updatedTables);
+        } 
+    };
+
+    const removeFixedValue = (tableIndex, rowIndex, index) => {
+        const updatedTables = [...tables];
+        updatedTables[tableIndex].rowTitleList[rowIndex].fixedValue.splice(index, 1);
         setTables(updatedTables);
     };
 
     const addRowValue = (tableIndex) => {
         const updatedTables = [...tables];
-        updatedTables[tableIndex].rowTitleList.push('');
+        updatedTables[tableIndex].rowTitleList.push({titleValue: '', fixedValue: []});
         setTables(updatedTables);
     };
 
@@ -61,41 +100,78 @@ const CreateGoals = () => {
             updatedTables[tableIndex].rowTitleList.splice(index_row_title, 1);
             setTables(updatedTables);
         }
-
     };
 
+    const handleOpenModalAddFixedValue = (indexTableValue, indexRowValue) => {
+        setIndexTableValue(indexTableValue);
+        setIndexRowValue(indexRowValue);
+        setVisibleModal(true);
+    }
+
+    const handleCloseModelAddFixedValue = () => {
+        setIndexTableValue(null);
+        setIndexRowValue(null);
+        setVisibleModal(false);
+    }
+
+    const resetAllData = () => {
+        setPageName('');
+        setPageFaculty('');
+        setPageStudentCohort('');
+        setPageStudentMajor('');
+        setPageStudentLevelYear('');
+        setTables([
+            {
+                tableName: "",
+                description: "",
+                quantityDemanded: "",
+                rowTitleList: [{
+                    titleValue: "",
+                    fixedValue: []
+                }],
+                rowValueList: []
+            }
+        ])
+    }
+
     const handleCreatePage = async () => {
+        if(!pageName || !pageStudentCohort|| !pageStudentMajor || !pageFaculty || !pageStudentLevelYear) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: "Vui Lòng Điền Đầy Đủ Thông Tin"
+                }
+            })
+            return;
+        }
+
         const checkDuplicate = tables.some((table) => table.rowTitleList.length !== (new Set(table.rowTitleList)).size);
 
         if(!checkDuplicate) {
-            const kq = {
+            const pageData = {
                 pageName,
                 pageType: "Chỉ Tiêu",
+                pageFaculty,
+                pageStudentCohort,
+                pageStudentMajor,
+                pageStudentLevelYear,
                 tables: tables.map((table) => ({
                     tableName: table.tableName,
+                    quantityDemanded: table.quantityDemanded,
                     description: table.description,
                     rowTitleList: table.rowTitleList
                 }))
             };
-            dispatch(createPage(kq));
-            setPageName('');
-            setTables([
-                {
-                    tableName: "",
-                    description: "",
-                    rowTitleList: [""],
-                    rowValueList: []
-                }
-            ])
+
+            dispatch(createPage({pageData, resetAllData}));
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: "Các cột không được trùng tên"
+                    error: "Các Cột Không Được Trùng Tên"
                 }
             })
         }
-       
     }
 
     return (
@@ -103,6 +179,48 @@ const CreateGoals = () => {
             <div className="body__goals">
                 <div className='line__flex'>
                     <h1>Thêm Nhóm Chỉ Tiêu</h1>
+                </div>
+
+                <div className='goals_info_wrapper'>
+                    <input 
+                        type="text" 
+                        placeholder='Nhập Khóa Sinh Viên'
+                        onChange={(e) => {setPageStudentCohort(e.target.value)}}
+                        value={pageStudentCohort}
+                    />
+                    <div>
+                        <select 
+                            onChange={(e) => {setPageFaculty(e.target.value)}}
+                            value={pageFaculty}
+                        >
+                            <option value=''>Chọn Khoa</option>
+                            <option value='Công Nghệ Thông Tin'>Công Nghệ Thông Tin</option>
+                            <option value='Tự Động Hóa'>Tự Động Hóa</option>
+                            <option value='Cơ Khí'>Cơ Khí</option>
+                        </select>
+
+                        <select 
+                            onChange={(e) => {setPageStudentMajor(e.target.value)}}
+                            value={pageStudentMajor}
+                        >
+                            <option value=''>Chọn Chuyên Ngành</option>
+                            <option value='Kỹ Thuật Phần Mềm'>Kỹ Thuật Phần Mềm</option>
+                            <option value='Khoa Học Máy Tính'>Khoa Học Máy Tính</option>
+                        </select>
+
+                        <select 
+                            onChange={(e) => setPageStudentLevelYear(Number.parseInt(e.target.value))}
+                            value={pageStudentLevelYear}
+                        >
+                            <option value=''>Chọn Năm Học</option>
+                            <option value='1'>Năm 1</option>
+                            <option value='2'>Năm 2</option>
+                            <option value='3'>Năm 3</option>
+                            <option value='4'>Năm 4</option>
+                            <option value='5'>Năm 5</option>
+                        </select>
+                    </div>
+
                 </div>
 
                 <div className="filed__line">
@@ -149,7 +267,18 @@ const CreateGoals = () => {
                                         onChange={(e) => updateTable(tableIndex, 'description', e.target.value)}
                                         id="mo_ta_chi_tieu"
                                     />
-
+                                </div>
+                                <div className="flex__line_lable">
+                                    <label htmlFor="mo_ta_chi_tieu">Số Lượng:</label>
+                                    <input
+                                        type="text"
+                                        value={table.quantityDemanded}
+                                        placeholder="Nhập số lượng cần hoàn thành"
+                                        onChange={(e) => {
+                                            updateTable(tableIndex, 'quantityDemanded', Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : '')
+                                        }}
+                                        id="mo_ta_chi_tieu"
+                                    />
                                 </div>
 
                                 <div className="table__col--target">
@@ -166,16 +295,94 @@ const CreateGoals = () => {
                                                     <div key={rowIndex} className="item__col">
                                                         <input
                                                             type="text"
-                                                            value={rowTitle}
+                                                            value={rowTitle?.titleValue || ''}
                                                             placeholder={`Cột ${rowIndex + 1}`}
                                                             onChange={(e) => updateRowTitle(tableIndex, rowIndex, e.target.value)}
                                                         />
-                                                        {table.rowTitleList.length > 1 && (
+                                                        {
+                                                            table.rowTitleList.length > 1 && 
                                                             <div onClick={() => deleteRowValue(tableIndex, rowIndex)} className="del__col">
-                                                                <AiFillCloseCircle />
+                                                                <abbr title="Xóa cột">
+                                                                    <AiFillCloseCircle />
+                                                                </abbr>
                                                             </div>
-                                                        )
                                                         }
+                                                            <Tippy
+                                                                interactive
+                                                                placement= 'top'
+                                                                visible={
+                                                                    visibleModal && 
+                                                                    tableIndex === indexTableValue && 
+                                                                    rowIndex === indexRowValue
+                                                                }
+                                                                onClickOutside={handleCloseModelAddFixedValue}
+                                                                render={attrs => (
+                                                                <div className="add_value_col" tabIndex="-1" {...attrs}>
+                                                                    <h3 className='add_fixed_heading'>
+                                                                        Thêm Giá Trị Cố Định{' '}
+                                                                       <span>
+                                                                        {   
+                                                                            rowTitle?.titleValue ?
+                                                                            "(" + rowTitle?.titleValue + ")" :
+                                                                            rowTitle?.titleValue
+                                                                        }
+                                                                       </span>
+                                                                    </h3>
+                                                                    <div className='add_fixed_value_wrapper'>
+                                                                            <input 
+                                                                                type="text" 
+                                                                                placeholder='Nhập giá trị' 
+                                                                                className='fixed_value_input'
+                                                                                onChange={(e) => {setFixedValue(e.target.value)}}
+                                                                                value={fixedValue}
+                                                                            />
+                                                                            <button 
+                                                                                className='add_fixed_value_btn'
+                                                                                onClick={(e) => {
+                                                                                    addFixedValue(tableIndex, rowIndex, fixedValue);
+                                                                                    setFixedValue('');
+                                                                                }}
+                                                                            >
+                                                                                Thêm
+                                                                            </button>
+                                                                    </div>
+                                                                    <ul>
+                                                                        {
+                                                                            table.rowTitleList[rowIndex].fixedValue.map((value, index) => (
+                                                                                <li key={index} className='fixed_value_item'>
+                                                                                    <span className='fixed_value_wrapper'>
+                                                                                        <span className='fixed_value_icon'>
+                                                                                            <FaCaretRight />
+                                                                                        </span>
+                                                                                        <span className='fixed_value'>
+                                                                                            {value}
+                                                                                        </span>
+                                                                                    </span>
+                                                                                    <div 
+                                                                                        className='btn_del_fixed_value'
+                                                                                        onClick={() => removeFixedValue(tableIndex, rowIndex, index)}
+                                                                                    >
+                                                                                        <AiFillCloseCircle />
+                                                                                    </div>
+                                                                                </li>
+                                                                            ))
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                                )}
+                                                            >
+                                                                <div 
+                                                                    className="add__col"
+                                                                        onClick={() => {
+                                                                            handleOpenModalAddFixedValue(tableIndex, rowIndex);
+                                                                        }}
+                                                                >
+                                                                    <abbr title="Thêm giá trị cố định">
+                                                                        <IoIosAddCircle /> 
+                                                                    </abbr>
+                                                                </div>
+                                                            </Tippy>
+                                                        
                                                     </div>
                                                 )
                                             })}

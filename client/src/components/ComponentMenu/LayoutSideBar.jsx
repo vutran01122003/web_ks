@@ -7,7 +7,7 @@ import { getDataApi } from '../../utils/fetchData'
 import { useDispatch, useSelector } from 'react-redux'
 import { pageSelector } from '../../redux/selector'
 import GLOBALTYPES from '../../redux/actions/globalTypes'
-import { getPages } from '../../redux/actions/pageAction'
+import { getPage, getPages } from '../../redux/actions/pageAction'
 import { ARRAY_LIST_MENU } from '../../assets/data/menu'
 
 const LayoutSideBar = ({ auth }) => {
@@ -31,28 +31,7 @@ const LayoutSideBar = ({ auth }) => {
 	}
 
 	const handleGetPage = async ({ pathName }) => {
-		try {
-			if (pathName.includes('/page/')) {
-				const res = await getDataApi(pathName);
-				dispatch({
-					type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
-					payload: {
-						pathName,
-                        pageType: res.data.data?.pageType,
-						pageId: res.data.data?._id,
-						pageName: res.data.data.pageName,
-						tables: res.data.data.tables,
-					},
-				})
-			}
-		} catch (error) {
-			dispatch({
-				type: GLOBALTYPES.ALERT,
-				payload: {
-					error: 'Lấy Dữ Liệu Trang Thất Bại',
-				},
-			})
-		}
+        if(pathName) dispatch(getPage({pathName}));
 	}
 
 	useEffect(() => {

@@ -27,8 +27,9 @@ const DynamicPage = () => {
                 TABLE.title = table.tableName;
                 TABLE.thead = table.rowTitleList.map((rowTitle) => {
                     return {
-                        textHeading: rowTitle,
-                        typeInput: 'text', 
+                        textHeading: rowTitle.titleValue,
+                        fixedValueList: rowTitle.fixedValue,
+                        typeInput: rowTitle.fixedValue.length > 0 ? 'select' : 'text', 
 					    isShow: true,
                     }
                 })
@@ -50,7 +51,13 @@ const DynamicPage = () => {
 
                 if(table?.rowValueList?.length > 0) {
                     TABLE.tbody = table.rowValueList[0].content.map((rowValueItem) => {
-                        return [...rowValueItem.rowValue, {
+                        const thead = [...TABLE.thead];
+                        const rowValueItemArr = thead.reduce((arr, headingItem) => {
+                            if(!thead.requiredHeading && rowValueItem.rowValue[headingItem.textHeading])
+                                return [...arr, rowValueItem.rowValue[headingItem.textHeading]] ;
+                            return arr
+                        }, []);
+                        return [...rowValueItemArr, {
                             proofNameLabel: 'Xem Minh Chứng',
                             proofImages: rowValueItem.proofImageList
                         }, {
@@ -67,6 +74,7 @@ const DynamicPage = () => {
         } 
     }, [page?.pageName, page?.pageType, JSON.stringify(page?.tables)]);
 
+    console.log(tables);
 	return (
 		<div className="dynamic_page_container">
 			{

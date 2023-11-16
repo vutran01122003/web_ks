@@ -15,9 +15,7 @@ class RowService {
                     page
                 });
 
-                rowList.content.push({
-                    rowValue: content
-                });
+                rowList.content.push({ rowValue: JSON.parse(content) });
 
                 rowItemId = rowList.content[rowList.content.length - 1]._id;
 
@@ -41,7 +39,7 @@ class RowService {
                     {
                         $push: {
                             content: {
-                                rowValue: content
+                                rowValue: JSON.parse(content)
                             }
                         }
                     },

@@ -52,8 +52,8 @@ function ViewTablesModal({ handleHideViewTablesModal, subPageName}) {
                                             <tbody>
                                                 <tr>
                                                     {
-                                                        table.rowTitleList.map((title, index) => 
-                                                            <td key={index + title}><span>{title}</span></td>
+                                                        table.rowTitleList.map((rowTitleItem, index) => 
+                                                            <td key={index + rowTitleItem.titleValue}><span>{rowTitleItem.titleValue}</span></td>
                                                         )
                                                     }
                                                 </tr>

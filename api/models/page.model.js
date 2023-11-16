@@ -8,14 +8,48 @@ const PageSchema = new Schema(
     {
         pageName: {
             type: String,
-            trim: true,
-            unique: true,
-            required: true
+            trim: true
         },
         pageType: {
             type: String,
             enum: ['Chỉ Tiêu', 'Tin Tức'],
             default: 'Chỉ Tiêu'
+        },
+        pageFaculty: {
+            type: String,
+            validate: {
+                validator: function () {
+                    return this.pageType === 'Chỉ Tiêu';
+                },
+                message: 'pageFaculty is required when pageType is "Chỉ Tiêu".'
+            }
+        },
+        pageStudentMajor: {
+            type: String,
+            validate: {
+                validator: function () {
+                    return this.pageType === 'Chỉ Tiêu';
+                },
+                message: 'pageStudentMajor is required when pageType is "Chỉ Tiêu".'
+            }
+        },
+        pageStudentCohort: {
+            type: Number,
+            validate: {
+                validator: function () {
+                    return this.pageType === 'Chỉ Tiêu';
+                },
+                message: 'pageStudentCohort is required when pageType is "Chỉ Tiêu".'
+            }
+        },
+        pageStudentLevelYear: {
+            type: Number,
+            validate: {
+                validator: function () {
+                    return this.pageType === 'Chỉ Tiêu';
+                },
+                message: 'pageStudentLevelYear is required when pageType is "Chỉ Tiêu".'
+            }
         },
         tables: [TableSchema]
     },

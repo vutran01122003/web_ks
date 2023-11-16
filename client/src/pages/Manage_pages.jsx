@@ -88,8 +88,6 @@ function ManagePagesPage() {
         }
     }, [JSON.stringify(page.pages)]);
 
-    console.log(pages);
-
     return <div className='pages_management_container'>
         {
             openAddTableModal && 

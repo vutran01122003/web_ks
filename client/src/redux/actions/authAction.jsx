@@ -121,7 +121,7 @@ export const verifyAccessToken = () => async (dispatch) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error.response.data?.msg || 'Hết Phiên Đăng Nhập'
+                    error: error.response?.data?.msg || 'Hết Phiên Đăng Nhập'
                 }
             })
         }

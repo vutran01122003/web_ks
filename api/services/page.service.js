@@ -5,9 +5,24 @@ class PageService {
     static createPage = async (data) => {
         try {
             let createdPage = null;
-            const { pageName, tables, pageType } = data;
+            const {
+                pageName,
+                tables,
+                pageType,
+                pageFaculty,
+                pageStudentCohort,
+                pageStudentMajor,
+                pageStudentLevelYear
+            } = data;
 
-            const isExists = await Page.findOne({ pageName }).lean();
+            const isExists = await Page.findOne({
+                pageName,
+                pageFaculty,
+                pageStudentCohort,
+                pageStudentMajor,
+                pageStudentLevelYear
+            }).lean();
+
             if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
 
             if (pageType === 'Tin Tức') {
@@ -18,6 +33,10 @@ class PageService {
             } else if (pageType === 'Chỉ Tiêu') {
                 createdPage = await Page.create({
                     pageName,
+                    pageFaculty,
+                    pageStudentCohort,
+                    pageStudentMajor,
+                    pageStudentLevelYear,
                     tables,
                     pageType
                 });
@@ -29,6 +48,7 @@ class PageService {
                 data: createdPage
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

@@ -40,8 +40,9 @@ function ComponentPeddingRows({penddingRows}) {
         TABLE.title = table.tableName;
         TABLE.thead = table.rowTitleList.map((rowTitle) => {
             return {
-                textHeading: rowTitle,
-                typeInput: 'text', 
+                textHeading: rowTitle.titleValue,
+                fixedValueList: rowTitle.fixedValue,
+                typeInput: rowTitle.fixedValue.length > 0 ? 'select' : 'text', 
                 isShow: true,
             }
         })
@@ -61,7 +62,13 @@ function ComponentPeddingRows({penddingRows}) {
 
         if(penddingRows?.content?.length > 0) {
             TABLE.tbody = penddingRows.content.map((rowValueItem) => {
-                return [...rowValueItem.rowValue, {
+                const thead = [...TABLE.thead];
+                const rowValueItemArr = thead.reduce((arr, headingItem) => {
+                    if(!thead.requiredHeading && rowValueItem.rowValue[headingItem.textHeading])
+                        return [...arr, rowValueItem.rowValue[headingItem.textHeading]] ;
+                    return arr
+                }, []);
+                return [...rowValueItemArr, {
                     proofNameLabel: 'Xem Minh Chứng',
                     proofImages: rowValueItem.proofImageList
                 }, {

@@ -12,8 +12,10 @@ function CreateNewType() {
 
     const handleCreateNewsType = () => {
         dispatch(createPage({
-            pageName: newsTypeValue,
-            pageType: "Tin Tức"
+            pageData: {
+                pageName: newsTypeValue,
+                pageType: "Tin Tức"
+            }
         }))
     }
     return ( 

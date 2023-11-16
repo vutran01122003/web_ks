@@ -31,7 +31,9 @@ const RowSchema = new Schema(
                         ],
                         default: []
                     },
-                    rowValue: [String]
+                    rowValue: {
+                        type: {}
+                    }
                 }
             ],
             default: []
