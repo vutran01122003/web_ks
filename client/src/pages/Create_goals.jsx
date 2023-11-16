@@ -48,6 +48,10 @@ const CreateGoals = ({handleAddTable}) => {
         }]);
     };
 
+    const handleAddGoal = () => {
+        handleAddTable({data: tables[0]})
+    }
+
     const updateTable = (index, key, value) => {
         const updatedTables = [...tables];
         updatedTables[index][key] = value;
@@ -397,21 +401,25 @@ const CreateGoals = ({handleAddTable}) => {
                         )
                     })}
                 </div>
+
                 <div className="line__flex">
                     <ComponentButton
-                        onClick={addTable}
+                        onClick={handleAddTable ? handleAddGoal : addTable}
                         type="button"
                         textButton="Thêm Chỉ Tiêu"
-                        className="btn__add_table"
+                        className={`btn__add_table ${handleAddTable ? "active" : ""}`}
                         icon_before={<BiSolidAddToQueue />}
                     />
-
-                    <ComponentButton
-                        textButton="Tạo Trang"
-                        onClick={handleCreatePage}
-                        type="button"
-                        className="btn__create--page"
-                        icon_before={<AiFillSave />} />
+                    {
+                        !handleAddTable &&
+                        <ComponentButton
+                            textButton="Tạo Trang"
+                            onClick={handleCreatePage}
+                            type="button"
+                            className="btn__create--page"
+                            icon_before={<AiFillSave />} 
+                        />
+                    }
                 </div>
             </div>
         </div>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {useDispatch} from "react-redux";
 import {addTable} from '../../redux/actions/tableAction';
 import {AiOutlineClose} from 'react-icons/ai';
@@ -13,14 +12,15 @@ function AddTableModal({subPageName, pageId, handleHideAddTableModal }) {
         }
     }
 
-    const handleAddTable = () => {
+    const handleAddTable = ({data}) => {
         dispatch(addTable({
             pageId, 
             tables: [
                 {
-                    tableName,
-                    description,
-                    rowTitleList
+                    tableName: data.tableName,
+                    description: data.description,
+                    rowTitleList: data.rowTitleList,
+                    quantityDemanded: data.quantityDemanded
                 }
             ]
         }))

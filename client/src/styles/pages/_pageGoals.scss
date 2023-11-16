@@ -348,6 +348,11 @@
                 margin-right: 10px;
             }
         }
+
+        .btn__add_table.active {
+            margin-left: auto;
+        }
+
         .btn__create--page {
             width: max-content;
             padding: 10px;

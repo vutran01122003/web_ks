@@ -52,7 +52,7 @@ const TopHeader = ({ auth }) => {
                             <div className="btn_dropdown" onClick={() => setDropBoxAccount(!dropBoxAccount)}>
                                 <div className="info__user">
                                     <div id='name__user'>{auth?.user?.fullName}</div>
-                                    <div id='studentId__user'>{auth?.user?.studentId}</div>
+                                    <div id='studentId__user'>{"ID: " + auth?.user?.studentId}</div>
                                 </div>
                                 <Avatar url={auth?.user.avatar} size="small" />
                             </div>
