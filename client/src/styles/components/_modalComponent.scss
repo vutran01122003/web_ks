@@ -391,7 +391,7 @@
 // Remove table modal 
 .remove_table_wrapper {
     padding: 20px;
-    width: 500px;
+    width: 600px;
     max-width: 100%;
 
     .table_item {
@@ -404,7 +404,13 @@
         align-items: center;
         
         span {
-            min-width: 200px;
+            display: block;
+            height: 100%;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .remove_table_btn {
@@ -413,8 +419,8 @@
             justify-content: center;
             background: rgb(202, 68, 68);
             border-radius: 8px;
-            height: 30px;
-            width: 120px;
+            height: 40px;
+            width: 180px;
             color: white;
             font-size: small;
             cursor: pointer;

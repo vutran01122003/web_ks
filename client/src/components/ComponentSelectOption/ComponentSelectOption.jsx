@@ -21,7 +21,7 @@ const ComponentSelectOption = ({
         <div className='component__input'>
             <label htmlFor={id}>{label}</label>
             <select name={name} id={id} onChange={onChange}>
-                <option value="null" >{labelOptionNull}</option>
+                <option value="" >{labelOptionNull}</option>
                 {optionData.map((option, item) => {
                     return (
                         <option value={option.value} key={item}>

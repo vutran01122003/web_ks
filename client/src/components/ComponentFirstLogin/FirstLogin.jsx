@@ -32,6 +32,7 @@ function FirstLogin({studentId, birthday}) {
         }));
     }
 
+    console.log(data);
     return (
         <div className="container__fisrt--login">
             <div className="form__update--info">
@@ -68,14 +69,34 @@ function FirstLogin({studentId, birthday}) {
                         value={formattedBirthday}
                     />
 
+                    <ComponentInput
+                        id="cohort"
+                        label="Khóa Sinh Viên"
+                        name="cohort"
+                        type="text"
+                        placeholder="Nhập khóa sinh viên"
+                        onChange={handleChangeData}
+                    />
+
                     <ComponentSelectOption
-                        id="major"
-                        name="major"
-                        label="Ngành học"
-                        labelOptionNull="Chọn nghành học"
+                        id="faculty"
+                        name="faculty"
+                        label="Khoa"
+                        labelOptionNull="Chọn khoa"
                         options={[
                             { labelOption: "Công nghệ thông tin", value: "Công nghệ thông tin" },
                             { labelOption: "Kế Toán", value: "Kế Toán" },
+                        ]}
+                        onChange={handleChangeData}
+                    />
+                    <ComponentSelectOption
+                        id="major"
+                        name="major"
+                        label="Chuyên Ngành"
+                        labelOptionNull="Chọn nghành học"
+                        options={[
+                            { labelOption: "Kỹ thuật phần mềm", value: "Kỹ thuật phần mềm" },
+                            { labelOption: "Khoa học máy tính", value: "Khoa học máy tính" },
                         ]}
                         onChange={handleChangeData}
                     />

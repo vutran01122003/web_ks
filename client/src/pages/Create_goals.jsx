@@ -198,9 +198,9 @@ const CreateGoals = ({handleAddTable}) => {
                                 value={pageFaculty}
                             >
                                 <option value=''>Chọn Khoa</option>
-                                <option value='Công Nghệ Thông Tin'>Công Nghệ Thông Tin</option>
-                                <option value='Tự Động Hóa'>Tự Động Hóa</option>
-                                <option value='Cơ Khí'>Cơ Khí</option>
+                                <option value='Công nghệ thông tin'>Công nghệ thông tin</option>
+                                <option value='Tự động hóa'>ự động hóa</option>
+                                <option value='Cơ khí'>Cơ khí</option>
                             </select>
 
                             <select 
@@ -208,8 +208,8 @@ const CreateGoals = ({handleAddTable}) => {
                                 value={pageStudentMajor}
                             >
                                 <option value=''>Chọn Chuyên Ngành</option>
-                                <option value='Kỹ Thuật Phần Mềm'>Kỹ Thuật Phần Mềm</option>
-                                <option value='Khoa Học Máy Tính'>Khoa Học Máy Tính</option>
+                                <option value='Kỹ thuật phần mềm'>Kỹ thuật phần mềm</option>
+                                <option value='Khoa học máy tính'>Khoa học máy tính</option>
                             </select>
 
                             <select 

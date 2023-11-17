@@ -27,9 +27,7 @@ const LayoutInfo = ({ auth }) => {
 								info="Ngày sinh"
 								text={new Date(auth?.user.birthday).toLocaleDateString('en-GB') || 'Chưa cập nhật'}
 							/>
-							<LineItem info="Khoa" text={auth?.user?.major || 'Chưa cập nhật'} />
-							{/* <LineItem info="Chuyên Ngành" text={'Chưa cập nhật'} /> */}
-							{/* <LineItem info="Email" text={auth?.user?.email || 'Chưa cập nhật'} /> */}
+							<LineItem info="Khoa" text={auth?.user?.faculty || 'Chưa cập nhật'} />
 						</div>
 					) : (
 						<div>
@@ -39,9 +37,9 @@ const LayoutInfo = ({ auth }) => {
 								info="Ngày sinh"
 								text={new Date(auth?.user.birthday).toLocaleDateString('en-GB') || 'Chưa cập nhật'}
 							/>
-							<LineItem info="Khoa" text={auth?.user?.major || 'Chưa cập nhật'} />
-							<LineItem info="Chuyên Ngành" text={'Chưa cập nhật'} />
-							{/* <LineItem info="Email" text={auth?.user?.email || 'Chưa cập nhật'} /> */}
+							<LineItem info="Khoa" text={auth?.user?.faculty || 'Chưa cập nhật'} />
+                            <LineItem info="Chuyên Ngành" text={auth?.user?.major || 'Chưa cập nhật'} />
+
 						</div>
 					)}
 				</div>

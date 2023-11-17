@@ -67,7 +67,17 @@ class AccessService {
 
     static register = async (data) => {
         try {
-            const { studentId, fullName, password, birthday, major, email, phone } = data;
+            const {
+                studentId,
+                fullName,
+                password,
+                birthday,
+                major,
+                cohort,
+                faculty,
+                email,
+                phone
+            } = data;
 
             const createdUser = new User({
                 studentId,
@@ -75,6 +85,8 @@ class AccessService {
                 password,
                 birthday: moment(birthday, 'DD/MM/YYYY').toDate(),
                 major,
+                cohort,
+                faculty,
                 email,
                 phone,
                 roles: [role.engineer]

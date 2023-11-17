@@ -66,7 +66,7 @@ const LayoutSideBar = ({ auth }) => {
 	useEffect(() => {
 		if (page?.pages) {
 			ARRAY_LIST_MENU[5].sub_menu_item = page.pages.reduce((intialArr, page) => {
-				if (page.pageType === "Tin Tức") {
+				if (page.pageType === "Tin Tức" ) {
 					return [
 						...intialArr,
 						{
@@ -82,7 +82,11 @@ const LayoutSideBar = ({ auth }) => {
 			}, [])
 
 			ARRAY_LIST_MENU[6].sub_menu_item = page.pages.reduce((intialArr, page) => {
-				if (page.pageType === "Chỉ Tiêu") {
+				if (page.pageType === "Chỉ Tiêu" &&
+                    page.pageStudentCohort === auth?.user.cohort &&
+                    page.pageFaculty === auth?.user.faculty &&
+                    page.pageStudentMajor ===  auth?.user.major    
+                ) {
 					return [
 						...intialArr,
 						{
