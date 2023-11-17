@@ -7,8 +7,6 @@
 }
 
 .container__menu.background_admin {
-    background-color: #1c2741;
-
     .menu_wrapper {
         background-color: #1c2741;
     }
@@ -83,9 +81,10 @@
             display: flex;
             padding-left: 8px;
             align-items: center;
-            transition: transform 0.5s;
+            transition: all 0.5s;
             svg{
                 font-size: 25px;
+                transform: translateX(0px);
             }
             svg:first-child{
                 margin-right: 20px;

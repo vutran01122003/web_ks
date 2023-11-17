@@ -1,9 +1,10 @@
 .container__menu {
     min-width: 300px;
     background-color: #fff;
-    transition: width 0.35s linear;
+    transition: all 0.35s ;
     
     .menu_wrapper {
+        width: 300px;
         min-width: 300px;
         background-color: #fff;
         border-right: 1px solid $line_color;
@@ -12,7 +13,7 @@
         left: 0px;
         bottom: 0px;
         z-index: 99;
-        transition: width 0.35s linear;
+        transition: all 0.35s ;
 
         .img__logo {
             width: 100%;
