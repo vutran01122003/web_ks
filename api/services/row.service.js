@@ -1,5 +1,7 @@
 const Page = require('../models/page.model');
 const Row = require('../models/row.model');
+const mongoose = require('mongoose');
+const createError = require('http-errors');
 
 class RowService {
     static addRow = async ({ data }) => {
@@ -8,8 +10,11 @@ class RowService {
             let rowList = await Row.findOne({ user, table, page });
             let rowItemId = null;
 
+            const pageData = await Page.findById(page);
+            if (!pageData) throw createError.NotFound('Trang Không Tồn Tại');
+
             if (!rowList) {
-                rowList = await Row({
+                rowList = new Row({
                     user,
                     table,
                     page
@@ -29,7 +34,48 @@ class RowService {
                         }
                     }
                 );
+
+                return {
+                    rowList,
+                    rowItemId
+                };
             } else {
+                const quantityDemanded = await Row.aggregate([
+                    {
+                        $match: {
+                            table: new mongoose.Types.ObjectId(table),
+                            user: new mongoose.Types.ObjectId(user),
+                            page: new mongoose.Types.ObjectId(page)
+                        }
+                    },
+                    {
+                        $unwind: '$content'
+                    },
+                    {
+                        $match: {
+                            'content.status': { $in: ['Đã Duyệt', 'Chờ Duyệt'] }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: '$_id',
+                            count: { $sum: 1 }
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            count: 1
+                        }
+                    }
+                ]);
+
+                if (
+                    quantityDemanded[0] &&
+                    quantityDemanded[0].count === pageData.tables.id(table).quantityDemanded
+                )
+                    throw createError.BadRequest('Số Lượng Hoạt Động Đã Đạt Tối Đa');
+
                 rowList = await Row.findOneAndUpdate(
                     {
                         user,
@@ -46,8 +92,9 @@ class RowService {
                     { new: true }
                 ).lean();
 
-                rowItemId = rowList.content[rowList.content.length - 1]._id;
+                rowItemId = rowList?.content[rowList.content.length - 1]._id;
             }
+
             return {
                 rowList,
                 rowItemId

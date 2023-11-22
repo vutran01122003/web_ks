@@ -13,7 +13,8 @@ const UserSchema = new Schema(
         },
         studentId: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         fullName: {
             type: String,
@@ -44,6 +45,10 @@ const UserSchema = new Schema(
         roles: {
             type: Array,
             default: []
+        },
+        levelYear: {
+            type: Number,
+            default: 1
         },
         isActive: {
             type: Boolean,

@@ -118,15 +118,14 @@ Content-Type: application/json
     },
     "tableId": "6549076834040537486db1c6"
 }
-###
+### add row
 POST {{url}}/api/row
 Content-Type: application/json
 
 {   
-    "page": "6539da65395099f799f4d312",
-    "user": "6537f6c1adc22ad3e1829e21",
-    "table": "6547b4af4f0a7fc174b69cc0",
-    "content": ["content 1", "content 2", "content 3", "content 4", "content 5"]
+    "page": "65570d108e800ae7c5adeace",
+    "user": "65570c9b8e800ae7c5adeac7",
+    "table": "65570d108e800ae7c5adeacf"
 }
 ### get pedding row
 GET {{url}}/api/pending_rows?limit=3&page=2
@@ -245,3 +244,15 @@ Content-Type: application/json
 {
     "facultyId": "655625fc62e1cd4fa44e4ff7"
 }
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "studentId": "21013481",
+    "password": "1111"
+}
+
+### get progress
+GET {{url}}/api/progress?pageStudentMajor=Kỹ thuật phần mềm&pageStudentLevelYear=1&pageStudentCohort=17

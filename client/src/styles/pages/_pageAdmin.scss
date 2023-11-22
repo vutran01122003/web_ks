@@ -18,25 +18,39 @@
         color: #8d98af !important;
 
         svg {
-            color: #c9d0dd;
+            color: #c9d0dd !important;
         }
+
         &:hover {
             color: #fff !important;
             svg {
-                color: #fff;
+                color: #fff !important;
             }
         }
+
         .active_icon {
             svg {
                 color: #fff !important;
             }
+        }
+
+        &:active {
+            color: #fff !important;
+            svg {
+                color: #fff;
+            }  
         }
     }
 
     .item_menu_a.active {
         background-color: #3e97ff !important;
         color: $color_white !important;
+
+        svg {
+            color: #fff !important;
+        }
     }
+
     .box_sub_menu_item {
         .sub_menu_item {
             background-color: transparent !important;
@@ -52,6 +66,7 @@
         .sub_menu_item.active {
             background-color: #3e97ff !important;
             color: #fff !important;
+         
             &::before {
                 content: "";
                 width: 5px;
@@ -95,7 +110,7 @@
         .line__flex_icon{
                 transform: translateX(-45px);
             svg{
-                color: #3e97ff;
+                color: #fff;
             }
         }
     }

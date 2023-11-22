@@ -51,7 +51,11 @@ const PageSchema = new Schema(
                 message: 'pageStudentLevelYear is required when pageType is "Chỉ Tiêu".'
             }
         },
-        tables: [TableSchema]
+        tables: [TableSchema],
+        isActive: {
+            type: Boolean,
+            default: true
+        }
     },
     {
         collection: COL,

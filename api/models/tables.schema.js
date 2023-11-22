@@ -6,7 +6,7 @@ const TableSchema = new Schema({
         type: String,
         required: true
     },
-    tableDescription: {
+    description: {
         type: String
     },
     rowTitleList: {
@@ -26,6 +26,10 @@ const TableSchema = new Schema({
     rowValueList: {
         type: [{ type: Schema.Types.ObjectId, ref: 'row' }],
         default: []
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 });
 

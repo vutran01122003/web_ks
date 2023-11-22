@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import rowReducer from './rowReducer';
 import TableReducer from './tableReducer';
 import newsReducer from './newsReducer';
+import progressReducer from './progressReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     row: rowReducer,
     alert: alertReducer,
     table: TableReducer,
-    news: newsReducer
+    news: newsReducer,
+    progress: progressReducer
 });
 
 export default rootReducer;

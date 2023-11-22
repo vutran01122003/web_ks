@@ -1,6 +1,5 @@
 const createError = require('http-errors');
 const TableService = require('../services/table.service');
-const Page = require('../models/page.model');
 
 class TableControllers {
     addTable = async (req, res, next) => {

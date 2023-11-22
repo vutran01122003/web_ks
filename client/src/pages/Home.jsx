@@ -2,26 +2,53 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import LayoutInfo from '../components/ComponentHome/LayoutInfo'
 import LayoutChart from '../components/ComponentHome/LayoutChart'
 import ApplyComponent from '../components/ComponentHome/ApplyComponent'
-import CreatedNewsHistory from '../components/ComponentHome/CreatedNewsHistory'
-import ChangeWebsiteHistory from '../components/ComponentHome/ChangeWebsiteHistory'
 import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows'
 import { useDispatch, useSelector } from 'react-redux'
 import { rowSelector } from '../redux/selector'
 import { getPeddingRows } from '../redux/actions/rowAction'
 import CircularProgress from '@mui/material/CircularProgress';
+import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo'
+import { getProgressByYear } from '../redux/actions/progressAction'
 
 const Home = ({ auth }) => {
 	const row = useSelector(rowSelector)
     const observer = useRef();
     const dispatch = useDispatch();
+    const progress = useSelector((state) => state.progress);
     const [nextPage, setNextPage] = useState(1);
+    const [chartData, setChartData] = useState([]);
+    const [goalsInfo, setGoalInfo] = useState([]);
 
-	const DATA_CHART = [
-		{ caterogy: 'Hoạt động', value: 80 },
-		{ caterogy: 'Chứng chỉ', value: 60 },
-		{ caterogy: 'Nghiên cứu', value: 40 },
-		{ caterogy: 'Thể thao', value: 100 },
-	]
+    useEffect(() => {
+       if(auth?.user && auth?.user.roles.includes("0002")) {
+            dispatch(getProgressByYear({
+                studentMajor: auth.user?.major, 
+                studentCohort: auth.user?.cohort, 
+                studentLevelYear: auth.user?.levelYear || 1
+            }))
+       }
+    }, [auth?.user]);
+
+    useEffect(() => {
+        if(progress.goalsInfoData.length > 0) {
+            setGoalInfo(progress.goalsInfoData);
+            setChartData(progress.goalsInfoData.map((elemProgress) => {
+                return {caterogy: elemProgress.pageName, value: elemProgress.percent}
+            }));
+        }
+    }, [progress.goalsInfoData]);
+
+    useEffect(() => {
+        if(auth?.user && auth?.user.roles.includes("0004")) {
+          dispatch(getPeddingRows(
+            {
+                page: nextPage, 
+                currentPeddingRows: row.currentPeddingRows,
+                limit: 3
+            }
+          ))
+        }
+    }, [nextPage, auth?.user]);
 
     const lastPostElementRef = useCallback(
         (elem) => {
@@ -38,30 +65,29 @@ const Home = ({ auth }) => {
         [row.loading]
     ); 
     
-    useEffect(() => {
-        if(auth?.user && auth?.user.roles.includes("0004")) {
-          dispatch(getPeddingRows(
-            {
-                page: nextPage, 
-                currentPeddingRows: row.currentPeddingRows,
-                limit: 3
-            }
-          ))
-        }
-    }, [nextPage, auth?.user])
-
 	return (
 		<div className="pageHome">
 			<div className="container__top">
 				<LayoutInfo auth={auth} />
 				<>
-					{((auth?.user.roles.includes('0001') && auth?.user.roles.length === 1) ||
-						auth?.user.roles.length === 0) && <ApplyComponent />}
-					{auth?.user.roles.includes('0002') && <LayoutChart>{DATA_CHART}</LayoutChart>}
-					{auth?.user.roles.includes('0003') && <CreatedNewsHistory />}
-					{auth?.user.roles.includes('0004') && <ChangeWebsiteHistory />}
+					{
+                        (auth?.user.roles.includes('0001') && auth?.user.roles.length === 1) ||
+						auth?.user.roles.length === 0 && <ApplyComponent />
+                    }
+					{
+                        auth?.user.roles.includes('0002') && chartData.length > 0 &&
+                        <LayoutChart>{chartData}</LayoutChart>
+                    }
 				</>
 			</div>
+
+           <div>
+                {
+                    auth?.user.roles.includes('0002') && goalsInfo.length > 0 && 
+                    <GoalsInfo goalsInfo={goalsInfo} />
+                }
+           </div>
+
 			<div className="container__center">
 				{auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
 					<>

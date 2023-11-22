@@ -199,8 +199,6 @@ const CreateGoals = ({handleAddTable}) => {
                             >
                                 <option value=''>Chọn Khoa</option>
                                 <option value='Công nghệ thông tin'>Công nghệ thông tin</option>
-                                <option value='Tự động hóa'>ự động hóa</option>
-                                <option value='Cơ khí'>Cơ khí</option>
                             </select>
 
                             <select 

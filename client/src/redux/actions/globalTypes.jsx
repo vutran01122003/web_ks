@@ -21,6 +21,9 @@ const GLOBALTYPES = {
     NEWS: {
         GET_NEWS: 'GET_NEWS',
         GET_NEWS_DETAILS: 'GET_NEWS_DETAILS',
+    },
+    PROGRESS: {
+        GET_PROGRESS_BY_YEAR: 'GET_PROGRESS_BY_YEAR'
     }
 };
 

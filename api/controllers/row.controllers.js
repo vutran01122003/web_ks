@@ -27,7 +27,7 @@ class RowControllers {
 
             res.status(200).json({
                 status: 'Thêm Thông Tin Thành Công',
-                data: rowList
+                data: rowList || []
             });
         } catch (error) {
             next(error);

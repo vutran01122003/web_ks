@@ -70,6 +70,7 @@ const LayoutChart = ({ children }) => {
 		average,
 		colors,
 	}
+    
 	return (
 		<div className="container__chart">
 			<header className="heading-4">Tiến độ</header>
