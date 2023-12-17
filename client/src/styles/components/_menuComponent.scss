@@ -5,9 +5,8 @@
     
     .menu_wrapper {
         width: 300px;
-        min-width: 300px;
         background-color: #fff;
-        border-right: 1px solid $line_color;
+        border-right: 1px dashed #686868;
         position: fixed;
         top: 0px;
         left: 0px;
@@ -22,7 +21,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 9px 20px;
-            border-bottom: 1px solid rgb(240, 240, 240);
+            border-bottom: 1px dashed #686868;
     
             img {
                 width: 90px;

@@ -4,31 +4,34 @@
     position: sticky;
     top: 0px;
     left: 0px;
-    background-color: $color_white;
-    border-bottom: 1px dotted $line_color;
+    background-color: #1c2741;
+    // border-bottom: 1px dotted $line_color;
     z-index: 10;
 
     .tr__header {
         height: 100%;
         padding: 5px 20px;
-        border-bottom: 1px solid rgb(240, 240, 240);
+        // border-bottom: 1px solid rgb(240, 240, 240);
 
         .flex__line {
             height: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+
             .line__firts {
                 @include flex_center;
+
                 .box_search {
                     height: 35px;
-                    margin-left: 20px;
+
                     svg {
-                        color: #6b6b6b;
+                        color: #6e6e6e;
                         font-size: 19px;
                     }
                 }
-                .line__input{
+
+                .line__input {
                     border-radius: 3px;
                 }
             }
@@ -38,50 +41,131 @@
                 display: flex;
                 align-items: center;
 
-                > div {
+                >div {
                     margin-left: 20px;
                 }
 
-                .btn__noti {
-                    font-size: 28px;
+                .btn__border {
+                    width: 35px;
+                    height: 35px;
+                    background-color: #efece8e8;
+                    font-size: 25px;
                     position: relative;
-                    padding-top: 10px;
+                    border-radius: 3px;
+
+                    .flex__center {
+                        width: 100%;
+                        height: 100%;
+                        @include flex_center;
+                        position: relative;
+
+                    }
 
                     svg {
                         cursor: pointer;
-                        color: #6b6b6b;
+                        color: #6e6e6e;
                     }
 
                     .length__noti {
                         svg {
                             position: absolute;
-                            font-size: 35px;
+                            font-size: 50px;
                             color: red;
-                            top: -5px;
-                            left: 8px;
+                            top: -25px;
+                            left: 10px;
+                        }
+                    }
+
+                    .box__drop--notification {
+                        width: 400px;
+                        height: 100px;
+                        background-color: #fafafa;
+                        border: 1px solid #cecece;
+                        border-radius: 4px;
+                        box-shadow: 3px 2px 8px 0 #0000002c;
+                        position: absolute;
+                        right: 0px;
+                        top: 55px;
+                    }
+                }
+
+                .box__drop--product-list {
+                    width: max-content;
+                    background-color: #fafafa;
+                    border: 1px solid #cecece;
+                    border-radius: 4px;
+                    box-shadow: 3px 2px 8px 0 #0000002c;
+                    position: absolute;
+                    top: 55px;
+                    right: 0px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    padding: 0px 5px;
+
+                    .item__product {
+                        width: 80px;
+                        height: 80px;
+                        margin: 8px 5px;
+                        @include flex_center;
+                        flex-direction: column;
+                        padding: 20px;
+                        border-radius: 3px;
+                        transition: all 0.35s;
+
+                        .img__list--product {
+                            width: 90%;
+                            display: block;
+                        }
+
+                        .text__list--product {
+                            font-size: 15px;
+                            color: #000;
+                            font-weight: 500;
+                            margin-top: 5px;
+                        }
+
+                        &:hover {
+                            background-color: #d3d3d3;
+
                         }
                     }
                 }
 
                 .border__account {
-                    border-left:1px solid #cccbcb;
+                    border-left: 1px solid #868585;
                     padding-left: 20px;
+
                     .btn_dropdown {
                         width: 100%;
                         height: 100%;
                         cursor: pointer;
                         display: flex;
                         align-items: center;
+
                         .info__user {
                             margin-right: 15px;
+                            user-select: none;
+                            color: #fff !important;
+
                             #name__user {
-                                font-size: 20px;
+                                font-size: 19px;
                                 font-weight: 500;
+                                text-transform: uppercase;
                             }
+
                             #studentId__user {
                                 font-size: 11px;
-                                color: #999797;
-                                font-weight: 500;
+                                color: #d8d8d8;
+                                font-weight: 600;
+                            }
+                        }
+
+                        .border__avatar {
+                            border: 2px solid $main_color;
+
+                            img {
+                                border-radius: 100%;
                             }
                         }
                     }
@@ -89,59 +173,74 @@
                     .box__drop--account {
                         width: max-content;
                         position: absolute;
-                        top: 64px;
+                        top: 70px;
                         right: 20px;
-                        background-color: $color_white;
+                        background-color: #fafafa;
                         border: 1px solid #cecece;
-                        border-radius: 4px;
                         box-shadow: 3px 2px 8px 0 #0000002c;
+                        border-radius: 3px;
 
                         .pd__select {
                             padding: 0px 10px;
-                            >div:last-child:hover{
+
+                            >div:last-child {
+                                font-weight: 600;
+                                color: #575757;
+                            }
+
+                            >div:last-child:hover {
                                 background-color: #FF5D53;
                                 color: #fff;
                             }
                         }
 
+                        .border__collpe {
+                            width: 95%;
+                            height: 1px;
+                            background-color: #d6d5d5;
+                            margin: 0px auto;
+                        }
+
                         .item_btn_control {
-                            @include flex_center;
+                            display: flex;
                             justify-content: left;
-                            padding: 10px 12px;
+                            padding: 7px 10px;
                             font-size: 18px;
                             cursor: pointer;
-                            color: #6b6b6b;
+                            color: #5e5e5e;
                             font-weight: 500;
                             transition: background-color 0.35s;
+                            margin: 8px 0px;
                             border-radius: 3px;
-                            margin: 10px 0px;
 
                             &:hover {
                                 background-color: $color_white_hover;
                             }
 
-                            > svg {
-                                margin-right: 15px;
-                                font-size: 24px;
+                            >svg {
+                                margin-right: 20px;
+                                font-size: 25px;
                             }
                         }
                     }
 
-                    .active_drop_box {
-                        opacity: 1;
-                        transform: translateY(0);
-                        transition: 0.3s ease;
-                        visibility: visible;
-                    }
 
-                    .unactive_drop_box {
-                        opacity: 0;
-                        transform: translateY(-8px);
-                        transition: 0.2s ease;
-                        visibility: hidden;
-                    }
                 }
             }
         }
+    }
+
+    .active_drop_box {
+        opacity: 1;
+        transform: translateY(0);
+        transition: 0.3s ease;
+        visibility: visible;
+    }
+
+    .unactive_drop_box {
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: 0.2s ease;
+        visibility: hidden;
     }
 }

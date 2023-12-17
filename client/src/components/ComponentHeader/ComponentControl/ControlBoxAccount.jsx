@@ -2,9 +2,13 @@ import React from 'react'
 import { BsSun } from 'react-icons/bs';
 import { PiUserCircleGear } from "react-icons/pi"
 import { IoMdLogOut } from 'react-icons/io'
+import { HiOutlineLogout } from "react-icons/hi";
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../redux/actions/authAction';
+import { IoSettingsOutline } from "react-icons/io5";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+import { CiDark } from "react-icons/ci";
 
 const ControlBoxAccount = ({setState}) => {
     const dispatch = useDispatch();
@@ -20,11 +24,22 @@ const ControlBoxAccount = ({setState}) => {
             icon_before: <PiUserCircleGear />,
             toLink: "/profile",
         },
+        // {
+        //     id: 1,
+        //     name_select: "Darkmode",
+        //     icon_before: <CiDark />,
+        // },
         {
-            id: 1,
-            name_select: "Darkmode",
-            icon_before: <BsSun />,
-        }
+            id: 2,
+            name_select: "Cài đặt",
+            icon_before: <IoSettingsOutline />,
+        },
+        {
+            id: 3,
+            name_select: "Hỗ trợ",
+            icon_before: <IoIosHelpCircleOutline />,
+        },
+
     ];
 
     const returnListControlAccount = LIST_CONTROL_ACCOUNT.map((item) => {
@@ -54,9 +69,10 @@ const ControlBoxAccount = ({setState}) => {
     return (
         <>
             {returnListControlAccount}
+            <div className="border__collpe"></div>
             <React.Fragment >     
                 <div className='item_btn_control' onClick={()=>{setState(false); handleLogout()}}>
-                    {<IoMdLogOut />}
+                    {<HiOutlineLogout />}
                     {"Đăng xuất"}
                 </div>
             </React.Fragment>

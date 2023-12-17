@@ -11,7 +11,7 @@ import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo'
 import { getProgressByYear } from '../redux/actions/progressAction'
 
 const Home = ({ auth }) => {
-	const row = useSelector(rowSelector)
+    const row = useSelector(rowSelector)
     const observer = useRef();
     const dispatch = useDispatch();
     const progress = useSelector((state) => state.progress);
@@ -20,33 +20,33 @@ const Home = ({ auth }) => {
     const [goalsInfo, setGoalInfo] = useState([]);
 
     useEffect(() => {
-       if(auth?.user && auth?.user.roles.includes("0002")) {
+        if (auth?.user && auth?.user.roles.includes("0002")) {
             dispatch(getProgressByYear({
-                studentMajor: auth.user?.major, 
-                studentCohort: auth.user?.cohort, 
+                studentMajor: auth.user?.major,
+                studentCohort: auth.user?.cohort,
                 studentLevelYear: auth.user?.levelYear || 1
             }))
-       }
+        }
     }, [auth?.user]);
 
     useEffect(() => {
-        if(progress.goalsInfoData.length > 0) {
+        if (progress.goalsInfoData.length > 0) {
             setGoalInfo(progress.goalsInfoData);
             setChartData(progress.goalsInfoData.map((elemProgress) => {
-                return {caterogy: elemProgress.pageName, value: elemProgress.percent}
+                return { caterogy: elemProgress.pageName, value: elemProgress.percent }
             }));
         }
     }, [progress.goalsInfoData]);
 
     useEffect(() => {
-        if(auth?.user && auth?.user.roles.includes("0004")) {
-          dispatch(getPeddingRows(
-            {
-                page: nextPage, 
-                currentPeddingRows: row.currentPeddingRows,
-                limit: 3
-            }
-          ))
+        if (auth?.user && auth?.user.roles.includes("0004")) {
+            dispatch(getPeddingRows(
+                {
+                    page: nextPage,
+                    currentPeddingRows: row.currentPeddingRows,
+                    limit: 3
+                }
+            ))
         }
     }, [nextPage, auth?.user]);
 
@@ -63,48 +63,48 @@ const Home = ({ auth }) => {
             if (elem) observer.current.observe(elem);
         },
         [row.loading]
-    ); 
-    
-	return (
-		<div className="pageHome">
-			<div className="container__top">
-				<LayoutInfo auth={auth} />
-				<>
-					{
+    );
+
+    return (
+        <div className="pageHome">
+            <div className="container__top transform__animation--top">
+                {/* <LayoutInfo auth={auth} /> */}
+                <>
+                    {
                         (auth?.user.roles.includes('0001') && auth?.user.roles.length === 1) ||
-						auth?.user.roles.length === 0 && <ApplyComponent />
+                        auth?.user.roles.length === 0 && <ApplyComponent />
                     }
-					{
+                    {
                         auth?.user.roles.includes('0002') && chartData.length > 0 &&
                         <LayoutChart>{chartData}</LayoutChart>
                     }
-				</>
-			</div>
+                </>
+            </div>
 
-           <div>
+            <div>
                 {
-                    auth?.user.roles.includes('0002') && goalsInfo.length > 0 && 
+                    auth?.user.roles.includes('0002') && goalsInfo.length > 0 &&
                     <GoalsInfo goalsInfo={goalsInfo} />
                 }
-           </div>
+            </div>
 
-			<div className="container__center">
-				{auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
-					<>
-						{row?.peddingRows.map((penddingRows, index) => {
-                            if(index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
+            <div className="container__center transform__animation--top">
+                {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
+                    <>
+                        {row?.peddingRows.map((penddingRows, index) => {
+                            if (index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
                                 return (
-                                    <div 
+                                    <div
                                         ref={lastPostElementRef}
-                                        key={penddingRows?.table + index}     
+                                        key={penddingRows?.table + index}
                                     >
-                                        <ComponentPeddingRows 
-                                            penddingRows={penddingRows} 
+                                        <ComponentPeddingRows
+                                            penddingRows={penddingRows}
                                         />
                                     </div>
                                 )
                             }
-                            
+
                             return (
                                 <div key={penddingRows?.table + index}>
                                     <ComponentPeddingRows className="last" penddingRows={penddingRows} />
@@ -113,16 +113,16 @@ const Home = ({ auth }) => {
                         })}
 
                         {
-                            row?.loading && 
+                            row?.loading &&
                             <div className='loading_rows_pendding'>
                                 <CircularProgress />
                             </div>
                         }
-					</>
-				)}
-			</div>
-		</div>
-	)
+                    </>
+                )}
+            </div>
+        </div>
+    )
 }
 
 export default Home

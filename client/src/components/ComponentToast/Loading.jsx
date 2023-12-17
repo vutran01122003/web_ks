@@ -12,7 +12,18 @@ export default function SimpleBackdrop() {
                 }}
                 open={true}
             >
-                <CircularProgress color='inherit' />
+                {/* <CircularProgress color='inherit' /> */}
+                <div class="mesh-loader">
+                    <div class="set-one">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                    <div class="set-two">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </div>
+
             </Backdrop>
         </div>
     );
