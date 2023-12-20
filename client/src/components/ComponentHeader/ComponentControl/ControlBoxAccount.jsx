@@ -9,9 +9,19 @@ import { logout } from '../../../redux/actions/authAction';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { CiDark } from "react-icons/ci";
+import { Modal } from 'antd';
+import { useState } from 'react';
 
-const ControlBoxAccount = ({setState}) => {
+const ControlBoxAccount = ({ setState }) => {
     const dispatch = useDispatch();
+    const [openHelp, setOpenHelp] = useState(false);
+    const handleOpenModalHelp = ()=>{
+        setState(false);
+        setOpenHelp(true);
+    }
+    const handleOpenModalSetting = ()=>{
+        setState(false);
+    }
 
     const handleLogout = () => {
         dispatch(logout());
@@ -33,11 +43,13 @@ const ControlBoxAccount = ({setState}) => {
             id: 2,
             name_select: "Cài đặt",
             icon_before: <IoSettingsOutline />,
+            onClick:handleOpenModalSetting
         },
         {
             id: 3,
             name_select: "Hỗ trợ",
             icon_before: <IoIosHelpCircleOutline />,
+            onClick:handleOpenModalHelp
         },
 
     ];
@@ -47,18 +59,18 @@ const ControlBoxAccount = ({setState}) => {
         return (
             <React.Fragment key={item.id}>
                 {
-                    selToLink ? 
-                    <Link 
-                        className='item_btn_control' 
-                        key={item.id} 
-                        to={item.toLink}
-                        onClick={()=>setState(false)}
-                    >
-                        {item.icon_before}
-                        {item.name_select}
-                    </Link>
+                    selToLink ?
+                        <Link
+                            className='item_btn_control'
+                            key={item.id}
+                            to={item.toLink}
+                            onClick={() => setState(false)}
+                        >
+                            {item.icon_before}
+                            {item.name_select}
+                        </Link>
                         :
-                        <div className='item_btn_control' key={item.id} onClick={()=>setState(false)}>
+                        <div className='item_btn_control' key={item.id} onClick={item.onClick}>
                             {item.icon_before}
                             {item.name_select}
                         </div>
@@ -68,10 +80,22 @@ const ControlBoxAccount = ({setState}) => {
     })
     return (
         <>
+            <Modal
+                title="Thông Tin Liên Hệ"
+                centered
+                open={openHelp}
+                onCancel={() => setOpenHelp(false)}
+                width={700}
+                footer={false}
+            >
+                1. THÔNG TIN LIÊN LẠC: 099999999< br/>
+                2. Email: abc@gmail.com <br/>
+                3. Zalo: 09123123123
+            </Modal>
             {returnListControlAccount}
             <div className="border__collpe"></div>
-            <React.Fragment >     
-                <div className='item_btn_control' onClick={()=>{setState(false); handleLogout()}}>
+            <React.Fragment >
+                <div className='item_btn_control' onClick={() => { setState(false); handleLogout() }}>
                     {<HiOutlineLogout />}
                     {"Đăng xuất"}
                 </div>

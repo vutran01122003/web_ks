@@ -8,9 +8,12 @@ import { authSelector, rowSelector } from '../redux/selector'
 import { getPeddingRows } from '../redux/actions/rowAction'
 import CircularProgress from '@mui/material/CircularProgress';
 import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo'
+import { MdDownload } from "react-icons/md";
 import { getProgressByYear } from '../redux/actions/progressAction'
 import TestPedding from '../components/ComponentPeddingRows/TestPedding'
-import { Space, Table, Tag } from 'antd'
+import { Button, Select, Space, Table, Tabs, Tag } from 'antd'
+import { Input } from 'antd';
+const { Search } = Input;
 
 const ListGoals = () => {
     const auth = useSelector(authSelector);
@@ -67,76 +70,134 @@ const ListGoals = () => {
         },
         [row.loading]
     );
+    console.log(row?.peddingRows)
+
+    const ComponentSortTab1 = () => {
+        return (
+            <div className="line__sort">
+                <div className='box__left'>
+
+                    <Select
+                        labelInValue
+                        defaultValue={{
+                            value: 'all',
+                            label: 'TẤT CẢ',
+                        }}
+                        style={{
+                            width: 120,
+                        }}
+                        options={[
+                            {
+                                value: 'all',
+                                label: 'TẤT CẢ',
+                            },
+                            {
+                                value: 'Nnew',
+                                label: 'MỚI NHẤT',
+                            },
+                        ]}
+                    />
+                    <Search
+                        placeholder="Name, Student id"
+                        allowClear
+                        style={{
+                            width: 220,
+                        }}
+                    />
+                </div>
+                <div className='box__right'>
+                    <Button type="primary" icon={<MdDownload />} className="btn__download">
+                        Download
+                    </Button>
+                </div>
+
+            </div>
+        )
+    }
+
+    const RenderListGoas = () => {
+        return (
+            <>
+                <ComponentSortTab1 />
+                <div className="mg__content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>HỌ TÊN</th>
+                                <th>MÃ SINH VIÊN</th>
+                                <th>SỐ FILE MINH CHỨNG</th>
+                                <th>NGÀY NỘP</th>
+                                <th>TRẠNG THÁI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
+                                <>
+                                    {row?.peddingRows.map((penddingRows, index) => {
+                                        if (index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
+                                            return (
+                                                <TestPedding
+                                                    ref={lastPostElementRef}
+                                                    key={penddingRows?.table + index}
+                                                    penddingRows={penddingRows}
+                                                    index={index + 1}
+                                                />
+                                            )
+                                        }
+
+                                        return (
+                                            <TestPedding
+                                                key={penddingRows?.table + index}
+                                                penddingRows={penddingRows}
+                                                index={index + 1}
+                                            />
+                                        )
+                                    })}
+
+                                    {
+                                        row?.loading &&
+                                        <div className='loading_rows_pendding'>
+                                            loading...
+                                        </div>
+                                    }
+                                </>
+                            )}
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </>
+        )
+    };
 
 
-    const columns = [
+    const items = [
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'studentId',
+            key: '1',
+            label: 'CHỈ TIÊU CHƯA DUYỆT (' + row?.peddingRows.length + ")",
+            children: <RenderListGoas />,
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
-        },
-        {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
-            title: 'Tags',
-            key: 'tags',
-            dataIndex: 'tags',
-            
-        },
-        {
-            title: 'Action',
-            key: 'action',
+            key: '2',
+            label: 'CHỈ TIÊU ĐÃ DUYỆT (0)',
+            children: 'Content of Tab Pane 2',
         },
     ];
 
-
-
-    console.log(row?.peddingRows)
-
     return (
         <>
-            <div className="container__tables transform__animation--top">
-                {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
-                    <>
-                        {row?.peddingRows.map((penddingRows, index) => {
-                            if (index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
-                                return (
-                                    <div
-                                        ref={lastPostElementRef}
-                                        key={penddingRows?.table + index}
-                                    >
-                                        <TestPedding
-                                            penddingRows={penddingRows}
-                                        />
-                                    </div>
-                                )
-                            }
-
-                            return (
-                                <div key={penddingRows?.table + index}>
-                                    <TestPedding penddingRows={penddingRows} />
-                                </div>
-                            )
-                        })}
-
-                        {
-                            row?.loading &&
-                            <div className='loading_rows_pendding'>
-                                <CircularProgress />
-                            </div>
-                        }
-                    </>
-                )}
+            <div className="container__tables">
+                <div className="body__tables transform__animation--top">
+                    <Tabs
+                        defaultActiveKey="1"
+                        items={items}
+                        className='tab__tables--goal'
+                    />
+                </div>
             </div>
-            
+
         </>
     )
 }

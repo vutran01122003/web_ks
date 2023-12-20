@@ -20,7 +20,7 @@ export const ARRAY_LIST_MENU =  [
         {
             id: 1,
             roles: ['0004'],
-            name_menu: 'Danh Sách Chỉ tiêu',
+            name_menu: 'Danh Sách Chỉ Tiêu',
             icon_before: <FaClipboardList />,
             to_link: '/listGoals',
             submenu: false,

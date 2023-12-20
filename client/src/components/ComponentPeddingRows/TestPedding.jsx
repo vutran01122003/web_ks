@@ -10,7 +10,7 @@ import { Button, Modal, Space } from 'antd';
 const { confirm } = Modal;
 
 
-const TestPedding = ({ penddingRows }) => {
+const TestPedding = ({ penddingRows, index }) => {
 
     const [table, setTable] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -160,31 +160,16 @@ const TestPedding = ({ penddingRows }) => {
                 </div>
             </Modal>
             {
-                table && 
-                <div className='pedding_item' onClick={() => setOpen(true)}>
-                    {/* <div className='pedding_goals_wrapper'>
-                        <div className='student_wrapper'>
-                            <ComponentAvatar size="medium" />
-                            <div className='student_info_wrapper'>
-                                <div className='student_info'>
-                                    <span className='student_info_label'>ID:{' '}</span>
-                                    <span className='student_info_id'>{penddingRows?.user[0].studentId}</span>
-                                </div>
-
-                                <div className='student_info'>
-                                    <span className='student_info_label'>Tên:{' '}</span>
-                                    <span className='student_info_name'>{penddingRows?.user[0].fullName}</span>
-                                </div>
-
-                                <div className='student_info'>
-                                    <span className='student_info_label'>Ngành:{' '}</span>
-                                    <span className='student_info_faculty'>{penddingRows?.user[0].major}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
-                    id : {penddingRows?.user[0].studentId} + tên : {penddingRows?.user[0].fullName}
-                </div>
+                table &&
+                <tr className='pedding_item' onClick={() => setOpen(true)}>
+                    {/* <ComponentAvatar size="medium" /> */}
+                    <td>{index}</td>
+                    <td>{penddingRows?.user[0].fullName}</td>
+                    <td>{penddingRows?.user[0].studentId} </td>
+                    <td>{penddingRows?.content?.length} </td>
+                    <td>null</td>
+                    <td className="true__date">Đúng giờ</td>
+                </tr>
             }
         </>
     )
