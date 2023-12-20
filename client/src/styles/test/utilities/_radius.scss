@@ -1,0 +1,3 @@
+@each $name, $value in $radius{
+    radius--#{$name}
+}

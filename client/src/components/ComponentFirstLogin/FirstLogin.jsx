@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/actions/authAction";
-import ComponentInput from "../ComponentForm/ComponentInput"
 import ComponentButton from "../ComponentButton/ComponentButton";
 import ComponentSelectOption from "../ComponentSelectOption/ComponentSelectOption";
+import FormControl from "../ComponentForm/FormControl";
 
 export const createNumberOption = (startNumber, endNumber) => {
     const options = [];
@@ -38,7 +38,7 @@ function FirstLogin({studentId, birthday}) {
             <div className="form__update--info">
                 <form className="">
                     <h1 className="heading__text">Cập Nhật Thông Tin </h1>
-                    <ComponentInput
+                    <FormControl
                         id="name_sv"
                         label="Tên Sinh Viên"
                         type="text"
@@ -47,7 +47,7 @@ function FirstLogin({studentId, birthday}) {
                         onChange={handleChangeData}
                     />
 
-                    <ComponentInput
+                    <FormControl
                         i="password_new"
                         label="Mật khẩu mới"
                         type="password"
@@ -55,21 +55,21 @@ function FirstLogin({studentId, birthday}) {
                         placeholder="Nhập mật khẩu"
                         onChange={handleChangeData}
                     />
-                    <ComponentInput
+                    <FormControl
                         id="msv"
                         label="Mã Sinh Viên"
                         name="studentId"
                         readonly
                         value={studentId}
                     />
-                    <ComponentInput
+                    <FormControl
                         id="bir"
                         label="Ngày Sinh"
                         readonly
                         value={formattedBirthday}
                     />
 
-                    <ComponentInput
+                    <FormControl
                         id="cohort"
                         label="Khóa Sinh Viên"
                         name="cohort"
@@ -100,13 +100,13 @@ function FirstLogin({studentId, birthday}) {
                         ]}
                         onChange={handleChangeData}
                     />
-                    <ComponentInput
+                    <FormControl
                         label="Email"
                         name="email"
                         placeholder="Nhập email"
                         onChange={handleChangeData}
                     />
-                    <ComponentInput
+                    <FormControl
                         label="Số điện thoại liên hệ"
                         name="phone"
                         placeholder="Nhập số điện thoại liên hệ"

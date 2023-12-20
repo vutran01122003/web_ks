@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import LayoutSideBar from '../ComponentMenu/LayoutSideBar';
 import TopHeader from '../ComponentHeader/TopHeader';
+import Modal from '../ComponentModal/Modal';
 function Layout({auth}) {
     return (
         <>
@@ -14,6 +15,7 @@ function Layout({auth}) {
                         </div>
                     </main>
                 </div>
+                {/* <Modal/> */}
             </div>
         </>
     );

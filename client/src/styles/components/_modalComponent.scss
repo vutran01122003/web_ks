@@ -3,10 +3,10 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
     background: rgba(0, 0, 0, 0.7);
     z-index: 100;
     overflow: auto;
@@ -512,4 +512,13 @@
         }
     }
 }
-
+// modal
+.modal__container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top:0px;
+    left: 0px;
+    z-index: 99;
+    background: rgba(163, 0, 0, 0.356)000;
+}

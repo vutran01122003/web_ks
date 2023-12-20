@@ -7,6 +7,7 @@ import StoreProvide from './redux/store';
 
 import RenderGetSizeWindow from './components/ComponentWindow/RenderGetSizeWindow.jsx'
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <RenderGetSizeWindow>
       <BrowserRouter>

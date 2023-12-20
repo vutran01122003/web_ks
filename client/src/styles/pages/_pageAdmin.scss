@@ -1,9 +1,18 @@
 .border__text--role {
-    padding: 7px 10px;
-    background-color: #FF5D53;
+    width: 39px;
+    height: 35px;
+    background-color: #f0635c;
     color: #fff;
     border-radius: 3px;
     font-weight: 500;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor:pointer
+}
+.bgr__green{
+    background-color: #008000;
 }
 
 .container__menu.background_admin {
