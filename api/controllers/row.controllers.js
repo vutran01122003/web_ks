@@ -4,6 +4,7 @@ const createError = require('http-errors');
 
 class RowControllers {
     addRow = async (req, res, next) => {
+        console.log(res.locals);
         try {
             if (!res.locals.roles.includes('0002'))
                 throw createError.Forbidden('Chỉ có kỹ sư tài năng mới thêm được chỉ tiêu');
@@ -12,15 +13,14 @@ class RowControllers {
                 data: req.body
             });
 
-            const uploadedImages = await UploadService.uploadImageFromFiles({
+            const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                data: req.body,
-                folderName: `${process.env.CLOUDINARY_ROOT_FOLDER}/proof_images/user_${req.body.user}`
+                folderName: `proof_files/user_${req.body.studentId}`
             });
 
-            await RowService.addProofImages({
+            await RowService.addProofFiles({
                 data: req.body,
-                uploadedImages,
+                uploadedFiles,
                 rowListId: rowList._id,
                 rowItemId
             });

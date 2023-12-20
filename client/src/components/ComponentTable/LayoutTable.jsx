@@ -9,13 +9,22 @@ const MainItem = ({ row, handleOpenPreviewImagesModal }) => {
 			{row.map((item, index) => {
                 if(item?.proofNameLabel) {
                     return (
+                        item?.proofFiles.length > 1 ?
                         <td 
-                            onClick={() => {handleOpenPreviewImagesModal({proofData: item?.proofImages})}}
+                            onClick={() => {handleOpenPreviewImagesModal({proofData: item?.proofFiles})}}
                             className="preview_proof_images line__item" 
                             key={index}
                         >
                             {item?.proofNameLabel}
-                        </td>
+                        </td> : 
+                        <a 
+                            key={item?.proofFiles[0]?.fileId} 
+                            href={item?.proofFiles[0]?.fileUrl} 
+                            className="preview_proof_images line__item" 
+                            download 
+                        >
+                            {item?.proofNameLabel}
+                        </a>
                     )
                 } else if (item?.statusLabel) {
                     return (
@@ -37,10 +46,10 @@ const MainItem = ({ row, handleOpenPreviewImagesModal }) => {
 const LayoutTable = ({ table, page, pendingTable }) => {
 	const [useStateModal, setUseStateModal] = useState(false);
     const [openPreviewModal, setOpenPreviewModal] = useState(false);
-    const [proofImagesData, setProofImagesData] = useState(null);
+    const [proofFilesData, setProofFilesData] = useState(null);
 
     const handleOpenPreviewImagesModal = ({proofData}) => {
-        setProofImagesData(proofData);
+        setProofFilesData(proofData);
         setOpenPreviewModal(true);
     }
 
@@ -103,7 +112,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
             {
                 openPreviewModal && 
                 <PreviewImagesModal 
-                    proofImagesData={proofImagesData}
+                    proofFilesData={proofFilesData}
                     setOpenPreviewModal={setOpenPreviewModal}
                 />}
 		</div>

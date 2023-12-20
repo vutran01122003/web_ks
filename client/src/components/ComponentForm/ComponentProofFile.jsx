@@ -58,7 +58,7 @@ function ComponentProofFile({ files, setFiles }) {
 							type="file"
 							ref={inputRef}
 							multiple
-							accept="image/*"
+							// accept="image/*"
 							onChange={handleInsertFiles}
 							hidden
 						/>

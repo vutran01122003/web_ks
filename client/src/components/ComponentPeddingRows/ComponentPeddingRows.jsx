@@ -70,7 +70,7 @@ function ComponentPeddingRows({penddingRows}) {
                 }, []);
                 return [...rowValueItemArr, {
                     proofNameLabel: 'Xem Minh Chứng',
-                    proofImages: rowValueItem.proofImageList
+                    proofFiles: rowValueItem.proofFilesList
                 }, {
                     statusLabel: rowValueItem.status,
                     statusValue: rowValueItem.status === "Chờ Duyệt" ? null : 

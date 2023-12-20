@@ -104,13 +104,16 @@ class RowService {
         }
     };
 
-    static addProofImages = async ({ uploadedImages, rowListId, rowItemId }) => {
+    static addProofFiles = async ({ uploadedFiles, rowListId, rowItemId }) => {
         try {
             await Row.findOneAndUpdate(
                 { _id: rowListId, 'content._id': rowItemId },
                 {
                     $set: {
-                        'content.$.proofImageList': uploadedImages.results
+                        'content.$.proofFilesList': uploadedFiles.map((uploadedFile) => ({
+                            fileId: uploadedFile.Key,
+                            fileUrl: uploadedFile.Location
+                        }))
                     }
                 }
             );

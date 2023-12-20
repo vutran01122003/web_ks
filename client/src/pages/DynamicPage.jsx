@@ -77,7 +77,7 @@ const DynamicPage = () => {
                                 ...rowValueItemArr,
                                 {
                                     proofNameLabel: "Xem Minh Chứng",
-                                    proofImages: rowValueItem.proofImageList,
+                                    proofFiles: rowValueItem.proofFilesList,
                                 },
                                 {
                                     statusLabel: rowValueItem.status,
@@ -99,7 +99,6 @@ const DynamicPage = () => {
         }
     }, [page?.pageName, page?.pageType, JSON.stringify(page?.tables)]);
 
-    console.log(tables);
     return (
         <div className="dynamic_page_container">
             {page?.pageType &&

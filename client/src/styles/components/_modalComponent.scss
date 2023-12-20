@@ -195,29 +195,23 @@
     max-width: 100%;
     height: 70vh;
     user-select: none;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #fff;
     box-shadow: 0 0 5px rgb(60, 56, 56);
-    border-radius: 10px;
+    border-radius: 5px;
 
-    .swiper {
-        width: 100%;
-        height: 100%;
-    }
-        
-    .swiper-slide {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        height: auto !important;
-        text-align: center;
-    }
-    
-    .swiper-slide img {
+    a {
         display: block;
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
+        color: #006fee;
+        font-weight: 600;
+        transition: 0.1s linear;
+
+        &:hover {
+            color: #0153b1;
+            text-decoration: underline;
+        }
     }
+
+
 }
 
 // Create table Modal

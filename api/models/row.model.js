@@ -22,11 +22,11 @@ const RowSchema = new Schema(
                         enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối'],
                         default: 'Chờ Duyệt'
                     },
-                    proofImageList: {
+                    proofFilesList: {
                         type: [
                             {
-                                imageId: String,
-                                url: String
+                                fileId: String,
+                                fileUrl: String
                             }
                         ],
                         default: []

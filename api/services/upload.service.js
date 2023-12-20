@@ -1,9 +1,23 @@
 const cloudinary = require('../config/cloudinary.config');
 const createError = require('http-errors');
-
-// function to encode file data to base64 encoded string
+const S3UploadV2 = require('../config/S3Buckets.config');
+const { v4: uuidv4 } = require('uuid');
 
 class UploadService {
+    static uploadFilesToS3 = async ({ files, folderName }) => {
+        const uploadedFiles = await Promise.all(
+            files.map((file) => {
+                console.log(file);
+                return S3UploadV2.upload({
+                    Bucket: process.env.S3_BUCKET_NAME,
+                    Key: `${folderName}/${uuidv4()}-${file.originalname}`,
+                    Body: file.buffer
+                }).promise();
+            })
+        );
+        return uploadedFiles;
+    };
+
     static uploadImageFromFiles = async ({ files, folderName }) => {
         const results = [];
         try {

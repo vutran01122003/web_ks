@@ -16,7 +16,6 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
         setRow({...row, [e.target.name]: e.target.value});
     }
 
-    console.log(row);
     const handleAddRow = (e) => {
         e.preventDefault();
 
@@ -35,13 +34,14 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
         const formData = new FormData();
 
         formData.set('user', auth?.user._id);
+        formData.set('studentId', auth?.user.studentId);
         formData.set('page', page.pageId);
         formData.set('table', tableId);
         formData.set('path', page.pathName);
         formData.set('content', JSON.stringify(row));
 
         files.forEach((file) => {
-            formData.append('files', file, file.name);
+            formData.append('files', file, file.name); 
         })
 
         setStateModal(false);
