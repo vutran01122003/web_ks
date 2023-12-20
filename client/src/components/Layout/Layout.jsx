@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import LayoutSideBar from '../ComponentMenu/LayoutSideBar';
 import TopHeader from '../ComponentHeader/TopHeader';
 import Modal from '../ComponentModal/Modal';
+import Footer from '../ComponentFooter/Footer';
 function Layout({auth}) {
     return (
         <>
@@ -12,6 +13,7 @@ function Layout({auth}) {
                         <TopHeader auth={auth} />
                         <div className='main'>
                             <Outlet />
+                            {/* <Footer/> */}
                         </div>
                     </main>
                 </div>

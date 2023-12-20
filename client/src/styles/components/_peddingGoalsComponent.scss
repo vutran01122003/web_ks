@@ -83,8 +83,108 @@
 
 // testing
 .container__tables {
+    height: calc(100vh - 65px);
     padding: 20px;
-    .pedding_item {
-        cursor: pointer;
+    background-color: #F5F5F5;
+
+    .body__tables {
+        height: 100%;
+
+        .tab__tables--goal {
+            height: 100%;
+
+            .ant-tabs-nav {
+                background-color: #FAFAFA;
+                border-radius: 3px;
+
+                .ant-tabs-tab {
+                    padding: 15px;
+                    font-weight: 600;
+                    font-size: 17px;
+                }
+            }
+
+            .ant-tabs-content-holder {
+                // margin-top: 65px;
+                overflow-y: scroll;
+                background-color: #eeeeee;
+            }
+        }
+
+        .pedding_item {
+            width: 100%;
+            cursor: pointer;
+            background-color: #ffffff;
+            transition: all 0.35s;
+
+            td {
+                padding: 15px;
+                border-bottom:1px solid #c4c4c4;
+                font-size: 15.5px;
+                font-weight: 500;
+            }
+            .true__date{
+                color: #059b05;
+            }
+
+            &:hover {
+                background-color: #fafafa;
+            }
+
+        }
+
+    }
+
+    .line__sort {
+        width: 100%;
+        position: fixed;
+        background-color: #FAFAFA;
+        margin-top: -15px;
+        padding: 10px 15px;
+        display: flex;
+        border-bottom: 2px solid #a5a5a5;
+        .box__left{
+            width: 100%;
+            > div{
+                margin-right: 15px;
+            }
+        }
+        .box__right{
+            .btn__download{
+                background-color: #3E97FF;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                font-weight: 500;
+                svg{
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+
+    .mg__content {
+        padding-top: 40px;
+
+        >table {
+            width: 100%;
+            border-spacing: 0px;
+
+            tr:first-child {
+                th {
+                    font-size: 15px;
+                    padding: 6px;
+                    padding-left: 15px;
+                    font-weight: 600;
+                    color: #000000;
+                }
+            }
+
+            td,
+            th {
+                text-align: left;
+            }
+        }
     }
 }

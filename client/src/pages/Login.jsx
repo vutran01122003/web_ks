@@ -27,7 +27,7 @@ const Login = () => {
 							<div className="text_name_sl">Đại học Công Nghiệp TP.HCM</div>
 						</div>
 						<div className="text_heading_prt">
-							<div className="display_text">HỆ THỐNG ĐÀO TẠO KĨ SƯ TÀI NĂNG</div>
+							<div className="display_text">HỆ THỐNG QUẢN LÝ HỌC TẬP THÔNG QUA KPIs</div>
 						</div>
 
 						<img src={ImageIntro} alt="intro" className="img_intro" />
@@ -39,7 +39,7 @@ const Login = () => {
 						<img src={ImageIntro} alt="intro" />
 						<div className="box_text_present">
 							<div className="text_heading_prt">
-								HỆ THỐNG ĐÀO TẠO <br /> KĨ SƯ TÀI NĂNG
+								HỆ THỐNG QUẢN LÝ HỌC TẬP <br /> THÔNG QUA KPIs
 							</div>
 						</div>
 					</div>
