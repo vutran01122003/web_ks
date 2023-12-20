@@ -1,11 +1,11 @@
 import React, {useState } from 'react'
-import ComponentInput from '../ComponentForm/ComponentInput';
 import { RiAccountCircleFill } from 'react-icons/ri'
 import { BiSolidLock } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/actions/authAction';
 import ComponentButton from '../ComponentButton/ComponentButton';
+import FormControl from '../ComponentForm/FormControl';
 
 
 const FormLogin = () => {
@@ -35,7 +35,7 @@ const FormLogin = () => {
 
                 <div className='heading_text--login'>ĐĂNG NHẬP HỆ THỐNG</div>
                 <form onSubmit={handleSumbitFormLogin}>
-                    <ComponentInput
+                    <FormControl
                         label="Tên đăng nhập"
                         type="text"
                         id="user"
@@ -43,7 +43,7 @@ const FormLogin = () => {
                         value={studentId}
                         onChange={handleChangeStudentId}
                     />
-                    <ComponentInput
+                    <FormControl
                         label="Mật khẩu"
                         type="password"
                         id="password"

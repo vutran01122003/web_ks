@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { IoCloseOutline } from 'react-icons/io5'
-import ComponentInput from '../ComponentForm/ComponentInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { addRow } from '../../redux/actions/rowAction'
 import { authSelector } from '../../redux/selector'
 import ComponentProofFile from '../ComponentForm/ComponentProofFile'
 import GLOBALTYPES from '../../redux/actions/globalTypes'
+import FormControl from '../ComponentForm/FormControl'
 
 const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page }) => {
     const dispatch = useDispatch();
@@ -87,7 +87,7 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
                                    
                             if(item.typeInput === 'text') {
                                 return (
-                                    <ComponentInput
+                                    <FormControl
                                         key={item.textHeading + index}
                                         label={item.textHeading}
                                         placeholder={item.textHeading}

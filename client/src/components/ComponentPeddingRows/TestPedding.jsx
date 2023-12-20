@@ -9,7 +9,9 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Modal, Space } from 'antd';
 const { confirm } = Modal;
 
-function ComponentPeddingRows({ penddingRows }) {
+
+const TestPedding = ({ penddingRows }) => {
+
     const [table, setTable] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [content, setContent] = useState('');
@@ -22,9 +24,9 @@ function ComponentPeddingRows({ penddingRows }) {
         setStatus(status);
     }
 
-    const handleHiddenConfirmModal = () => {
-        setIsOpen(false);
-    }
+    // const handleHiddenConfirmModal = () => {
+    //     setIsOpen(false);
+    // }
 
     useEffect(() => {
         const TABLE = {};
@@ -87,40 +89,80 @@ function ComponentPeddingRows({ penddingRows }) {
         setTable(TABLE);
     }, []);
 
-//-----------------------------------------------------
+    //-----------------------------------------------------
     const showConfirm = () => {
         confirm({
-            title: 'Do you Want to delete these items?',
-            icon: <ExclamationCircleFilled />,
-            content: 'Some descriptions',
+            title: 'Bạn xác nhận duyệt chỉ tiêu này?',
             onOk() {
-                console.log('OK');
+                // console.log('Xác nhận');
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     };
 
+    const showConfirmTuChoi = () => {
+        confirm({
+            title: 'Bạn xác nhận từ chối chỉ tiêu này?',
+            onOk() {
+                // console.log('OK');
+            },
+            onCancel() {
+                // console.log('Cancel');
+            },
+        });
+    };
+
+    const [open, setOpen] = useState(false);
+
     return (
         <>
-            {
-                isOpen &&
-                <ConfirmModal
-                    content={content}
-                    status={status}
-                    rowInfoData={rowInfoData}
-                    handleHiddenConfirmModal={handleHiddenConfirmModal}
-                />
-            }
-            {
-                table && <div className='pedding_goals_container'>
-                    <div className='title_pending_goals'>
-                        <MdPendingActions />
-                        Chờ Duyệt Chỉ Tiêu
-                    </div>
+            <Modal
+                title="Thông tin chỉ tiêu"
+                centered
+                open={open}
+                onCancel={() => setOpen(false)}
+                width={1000}
+                footer={false}
+            >
+                <LayoutTable table={table} pendingTable={true} />
+                <div className='pedding_goals_btn_wrapper'>
+                    <button
+                        className="reject_btn"
+                        // onClick={() => {
+                        //     handleOpenConfirmModal(
+                        //         {
+                        //             content: "Bạn chắc chắn muốn từ chối duyệt chỉ tiêu này ?",
+                        //             status: false
+                        //         }
+                        //     )
+                        // }}
+                        onClick={showConfirmTuChoi}
+                    >
+                        Từ Chối - <span className='student_info_id'>{penddingRows?.user[0].studentId}</span>
+                    </button>
 
-                    <div className='pedding_goals_wrapper'>
+                    <button
+                        className="confirmation_btn"
+                        //     onClick={() => {
+                        //         handleOpenConfirmModal(
+                        //             {
+                        //                 content: "Bạn chắc chắn muốn duyệt chỉ tiêu này ?",
+                        //                 status: true
+                        //             }
+                        //         )
+                        //     }}
+                        onClick={showConfirm}
+                    >
+                        Xác Nhận
+                    </button>
+                </div>
+            </Modal>
+            {
+                table && 
+                <div className='pedding_item' onClick={() => setOpen(true)}>
+                    {/* <div className='pedding_goals_wrapper'>
                         <div className='student_wrapper'>
                             <ComponentAvatar size="medium" />
                             <div className='student_info_wrapper'>
@@ -139,44 +181,13 @@ function ComponentPeddingRows({ penddingRows }) {
                                     <span className='student_info_faculty'>{penddingRows?.user[0].major}</span>
                                 </div>
                             </div>
-
-                            <div className='pedding_goals_btn_wrapper'>
-                                <button
-                                    className="reject_btn"
-                                    onClick={() => {
-                                        handleOpenConfirmModal(
-                                            {
-                                                content: "Bạn chắc chắn muốn từ chối duyệt chỉ tiêu này ?",
-                                                status: false
-                                            }
-                                        )
-                                    }}
-                                >
-                                    Từ Chối
-                                </button>
-
-                                <button
-                                    className="confirmation_btn"
-                                //     onClick={() => {
-                                //         handleOpenConfirmModal(
-                                //             {
-                                //                 content: "Bạn chắc chắn muốn duyệt chỉ tiêu này ?",
-                                //                 status: true
-                                //             }
-                                //         )
-                                //     }}
-                                onClick={showConfirm}
-                                >
-                                    Xác Nhận
-                                </button>
-                            </div>
                         </div>
-                        <LayoutTable table={table} pendingTable={true} />
-                    </div>
+                    </div> */}
+                    id : {penddingRows?.user[0].studentId} + tên : {penddingRows?.user[0].fullName}
                 </div>
             }
         </>
-    );
+    )
 }
 
-export default ComponentPeddingRows;
+export default TestPedding

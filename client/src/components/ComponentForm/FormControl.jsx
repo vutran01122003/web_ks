@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ComponentInput = ({
+const FormControl = ({
     children,
     label,
     type,
@@ -43,4 +43,5 @@ const ComponentInput = ({
 	)
 }
 
-export default ComponentInput
+export default FormControl;
+

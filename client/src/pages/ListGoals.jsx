@@ -4,16 +4,17 @@ import LayoutChart from '../components/ComponentHome/LayoutChart'
 import ApplyComponent from '../components/ComponentHome/ApplyComponent'
 import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows'
 import { useDispatch, useSelector } from 'react-redux'
-import { rowSelector } from '../redux/selector'
+import { authSelector, rowSelector } from '../redux/selector'
 import { getPeddingRows } from '../redux/actions/rowAction'
 import CircularProgress from '@mui/material/CircularProgress';
 import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo'
 import { getProgressByYear } from '../redux/actions/progressAction'
 import TestPedding from '../components/ComponentPeddingRows/TestPedding'
-import Quantity from '../components/ComponentQuantity/Quantity'
+import { Space, Table, Tag } from 'antd'
 
-const Home = ({ auth }) => {
-    const row = useSelector(rowSelector)
+const ListGoals = () => {
+    const auth = useSelector(authSelector);
+    const row = useSelector(rowSelector);
     const observer = useRef();
     const dispatch = useDispatch();
     const progress = useSelector((state) => state.progress);
@@ -67,31 +68,42 @@ const Home = ({ auth }) => {
         [row.loading]
     );
 
+
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'studentId',
+        },
+        {
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            key: 'address',
+        },
+        {
+            title: 'Tags',
+            key: 'tags',
+            dataIndex: 'tags',
+            
+        },
+        {
+            title: 'Action',
+            key: 'action',
+        },
+    ];
+
+
+
+    console.log(row?.peddingRows)
+
     return (
-        <div className="pageHome ">
-            <Quantity/>
-            <div className="container__top transform__animation--top">
-                <LayoutInfo auth={auth} />
-                <>
-                    {
-                        (auth?.user.roles.includes('0001') && auth?.user.roles.length === 1) ||
-                        auth?.user.roles.length === 0 && <ApplyComponent />
-                    }
-                    {
-                        auth?.user.roles.includes('0002') && chartData.length > 0 &&
-                        <LayoutChart>{chartData}</LayoutChart>
-                    }
-                </>
-            </div>
-
-            <div>
-                {
-                    auth?.user.roles.includes('0002') && goalsInfo.length > 0 &&
-                    <GoalsInfo goalsInfo={goalsInfo} />
-                }
-            </div>
-
-            {/* <div className="container__center transform__animation--top">
+        <>
+            <div className="container__tables transform__animation--top">
                 {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
                     <>
                         {row?.peddingRows.map((penddingRows, index) => {
@@ -110,7 +122,7 @@ const Home = ({ auth }) => {
 
                             return (
                                 <div key={penddingRows?.table + index}>
-                                    <TestPedding penddingRows={penddingRows}/>
+                                    <TestPedding penddingRows={penddingRows} />
                                 </div>
                             )
                         })}
@@ -123,9 +135,10 @@ const Home = ({ auth }) => {
                         }
                     </>
                 )}
-            </div> */}
-        </div>
+            </div>
+            
+        </>
     )
 }
 
-export default Home
+export default ListGoals
