@@ -1,11 +1,10 @@
 import {TbTargetArrow} from 'react-icons/tb';
 import { MdOutlineForum, MdOutlineCreate} from 'react-icons/md';
 import { CgBrowser } from 'react-icons/cg';
-import { BiBookBookmark, BiHomeSmile } from 'react-icons/bi';
+import { BiBookBookmark } from 'react-icons/bi';
 import { HiOutlineNewspaper } from 'react-icons/hi'
 import { BsTags } from 'react-icons/bs';
 
-import { AiTwotoneHome } from "react-icons/ai";
 import { RiHome3Fill } from 'react-icons/ri';
 import { FaClipboardList } from "react-icons/fa6";
 
@@ -64,7 +63,7 @@ export const ARRAY_LIST_MENU =  [
             name_menu: 'Tin Tức',
             allow: true,
             icon_before: <HiOutlineNewspaper />,
-            to_link: '/news',
+            dynamicPage: 'news',
             submenu: true,
             sub_menu_item: []
         },
@@ -73,6 +72,7 @@ export const ARRAY_LIST_MENU =  [
             name_menu: 'Nhóm Chỉ Tiêu',
             roles: ['0002'],
             icon_before: <BiBookBookmark />,
+            dynamicPage: 'goals',
             submenu: true,
             sub_menu_item: [],
         },

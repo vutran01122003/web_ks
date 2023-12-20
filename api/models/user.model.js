@@ -9,7 +9,7 @@ const UserSchema = new Schema(
         avatar: {
             type: String,
             default:
-                'https://res.cloudinary.com/dzm0nupxy/image/upload/v1698825146/kstn_db/avatar/avatar_default/av6xdxf126i9o8upv0gb.png'
+                'https://tesf.s3.ap-southeast-1.amazonaws.com/avatar/avatar_default/avatar_default.jpg'
         },
         studentId: {
             type: String,

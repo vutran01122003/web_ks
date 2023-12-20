@@ -24,6 +24,7 @@
         margin: 6px 0px;
         border: 1px solid #cecece;
         border-radius: 3px;
+        overflow: hidden;
 
         .btn__addFile {
             width: 100%;
@@ -46,6 +47,7 @@
             font-weight: 400;
             padding-left: 10px;
             padding-right: 40px;
+            overflow: hidden;
         }
 
         .icon__before {

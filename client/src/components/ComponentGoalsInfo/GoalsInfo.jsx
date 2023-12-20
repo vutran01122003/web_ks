@@ -3,7 +3,6 @@ import { MdOutlineLibraryBooks } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 function GoalsInfo({goalsInfo}) {
-    console.log(goalsInfo);
     return ( 
         <div className="goals_info_container">
             <h2 className="goals_info_container_heading">Thông Tin Nhóm Chỉ Tiêu</h2>

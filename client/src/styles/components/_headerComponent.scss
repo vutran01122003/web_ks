@@ -25,7 +25,8 @@
                 .khoa_style {
                     text-transform: uppercase;
                     color: #fff;
-                    font-size: 22px;
+                    font-weight: 500;
+                    font-size: 16px;
                     border-left: 5px solid #bb4741;
                     padding-left: 15px;
                 }
@@ -161,9 +162,10 @@
                             color: #fff !important;
 
                             #name__user {
-                                font-size: 19px;
+                                font-size: 14px;
                                 font-weight: 500;
                                 text-transform: uppercase;
+                                margin-bottom: 2px;
                             }
 
                             #studentId__user {

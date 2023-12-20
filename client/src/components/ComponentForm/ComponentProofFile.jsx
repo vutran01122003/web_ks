@@ -1,16 +1,13 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { BsImageFill, BsCameraFill } from 'react-icons/bs'
-import { IoMdClose } from 'react-icons/io'
+import { RiUpload2Fill } from "react-icons/ri";
+import { IoMdClose  } from "react-icons/io";
 import { checkImageUpload } from '../../utils/uploadFile'
 import GLOBALTYPES from '../../redux/actions/globalTypes'
 
 function ComponentProofFile({ files, setFiles }) {
 	const inputRef = useRef()
-	// const videoRef = useRef();
-	// const canvasRef = useRef();
 	const dispatch = useDispatch()
-	// const [openVideo, setOpenVideo] = useState(false);
 
 	const handleInsertFiles = async (e) => {
 		let localFiles = [...e.target.files]
@@ -42,23 +39,22 @@ function ComponentProofFile({ files, setFiles }) {
 			<label className="proof_title">Minh Chứng</label>
 			<div className="proof_wrapper">
 				<div className="proof_upload">
-					<h3>{`Tải lên hoặc chụp minh chứng:`} </h3>
+					<h4>{`Tải lên minh chứng :`} </h4>
 					<div className="icons_wrapper">
-						<label htmlFor="insert_image" className="insert_image_icon icon-item--proof">
-							<BsImageFill />
+						<label htmlFor="insert_files" className="insert_files_icon icon-item--proof">
+							<RiUpload2Fill />
 						</label>
-
-						<label className="icon-item--proof camera_icon">
-							<BsCameraFill />
-							{/* onClick={handleOpenCamera} */}
-						</label>
+                        
+                        <span className="files_type" > 
+                            (doc, docx, pdf, image)
+                        </span>
 
 						<input
-							id="insert_image"
+							id="insert_files"
 							type="file"
 							ref={inputRef}
 							multiple
-							// accept="image/*"
+                            accept="application/pdf, image/*, application/msword"
 							onChange={handleInsertFiles}
 							hidden
 						/>
@@ -66,10 +62,10 @@ function ComponentProofFile({ files, setFiles }) {
 				</div>
 
 				{files?.length > 0 && (
-					<div className="show_images">
-						<div className="images_wrapper">
-							<div className="remove_img_btn">
-								<IoMdClose className="remove_img_icon" onClick={handleClearImages} />
+					<div className="show_files">
+						<div className="files_wrapper">
+							<div className="remove_files_btn">
+								<IoMdClose className="remove_files_icon" onClick={handleClearImages} />
 							</div>
 							{files.map((file, index) => {
 								return (

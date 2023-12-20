@@ -3,13 +3,10 @@ import { NavLink } from 'react-router-dom'
 import { FaAngleRight, FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import Logo_IUH from '../../assets/images/logo_iuh.png'
 import Logo_IUH_color_w from '../../assets/images/logo_iuh_color_w.png'
-import { getDataApi } from '../../utils/fetchData'
 import { useDispatch, useSelector } from 'react-redux'
 import { pageSelector } from '../../redux/selector'
-import GLOBALTYPES from '../../redux/actions/globalTypes'
 import { getPage, getPages } from '../../redux/actions/pageAction'
 import { ARRAY_LIST_MENU } from '../../assets/data/menu'
-
 
 const LayoutSideBar = ({ auth }) => {
 	const dispatch = useDispatch()
@@ -39,8 +36,6 @@ const LayoutSideBar = ({ auth }) => {
 		setSubMenu(newSubMenu);
 	}
 
-
-
 	const handleGetPage = async ({ pathName }) => {
         if(pathName) dispatch(getPage({pathName}));
 	}
@@ -65,42 +60,48 @@ const LayoutSideBar = ({ auth }) => {
 
 	useEffect(() => {
 		if (page?.pages) {
-			ARRAY_LIST_MENU[5].sub_menu_item = page.pages.reduce((intialArr, page) => {
-				if (page.pageType === "Tin Tức" ) {
-					return [
-						...intialArr,
-						{
-							id: page._id,
-							sub_page_type: page.pageType,
-							sub_name_menu: page.pageName,
-							sub_icon_before: '?',
-							sub_to_link: `/page/${page.pageName}`,
-						}
-					]
-				}
-				return intialArr;
-			}, [])
+            ARRAY_LIST_MENU.forEach((menuItem) => {
+                if(menuItem.dynamicPage && menuItem.dynamicPage === 'news') {
+                    menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
+                        if (page.pageType === "Tin Tức" ) {
+                            return [
+                                ...intialArr,
+                                {
+                                    id: page._id,
+                                    sub_page_type: page.pageType,
+                                    sub_name_menu: page.pageName,
+                                    sub_icon_before: '?',
+                                    sub_to_link: `/page/${page.pageName}`,
+                                }
+                            ]
+                        }
+                        return intialArr;
+                    }, [])
+                }
 
-			ARRAY_LIST_MENU[6].sub_menu_item = page.pages.reduce((intialArr, page) => {
-				if (page.pageType === "Chỉ Tiêu" &&
-                    page.pageStudentCohort === auth?.user.cohort &&
-                    page.pageFaculty === auth?.user.faculty &&
-                    page.pageStudentMajor ===  auth?.user.major    
-                ) {
-					return [
-						...intialArr,
-						{
-							id: page._id,
-							sub_page_type: page.pageType,
-							sub_name_menu: page.pageName,
-							sub_icon_before: '?',
-							sub_to_link: `/page/${page.pageName}`,
-						}
-					]
-				}
-				return intialArr;
-			}, [])
-		}
+                if(menuItem.dynamicPage && menuItem.dynamicPage === 'goals') {
+                    menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
+                        if (page.pageType === "Chỉ Tiêu" &&
+                            page.pageStudentCohort === auth?.user.cohort &&
+                            page.pageFaculty === auth?.user.faculty &&
+                            page.pageStudentMajor ===  auth?.user.major    
+                        ) {
+                            return [
+                                ...intialArr,
+                                {
+                                    id: page._id,
+                                    sub_page_type: page.pageType,
+                                    sub_name_menu: page.pageName,
+                                    sub_icon_before: '?',
+                                    sub_to_link: `/page/${page.pageName}`,
+                                }
+                            ]
+                        }
+                        return intialArr;
+                    }, [])
+                }
+            })
+        }
 	}, [JSON.stringify(page.pages)])
 
 	const renderArrMenu = ARRAY_LIST_MENU.map((item) => {

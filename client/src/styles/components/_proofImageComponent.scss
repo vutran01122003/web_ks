@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 8px;
+    padding: 0 8px;
     font-size: 14px;
     font-weight: 500;
     border-radius: 5px;
@@ -26,24 +26,30 @@
         .icons_wrapper {
             display: flex;
             align-items: center;
+            justify-content: center;
             font-size: 22px;
-            margin-top: 8px;
+            height: 45px;
 
             .icon-item--proof {
                 margin-left: 20px;
+                display: flex;
+                align-items: center;
             }
 
-            .insert_image_icon {
+            .insert_files_icon {
                 color: rgb(12, 166, 12);
+                font-size: 20px;
             }
 
-            .camera_icon {
-                color: rgb(219, 77, 77);
+            .files_type {
+                font-size: 12px;
+                color: gray;
+                margin-left: 10px;
             }
         }
     }
 
-    .images_wrapper {
+    .files_wrapper {
         position: relative;
         margin-top: 10px;
         border-radius: 8px;
@@ -63,7 +69,7 @@
             object-fit: contain;
         }
 
-        .remove_img_btn {
+        .remove_files_btn {
             position: absolute;
             top: 4px;
             right: 4px;
@@ -81,12 +87,12 @@
 
             &:hover {
                 background: #dadde1;
-                .remove_img_icon {
+                .remove_files_icon {
                     color: red;
                 }
             }
 
-            .remove_img_icon {
+            .remove_files_icon {
                 color: rgb(251, 84, 84);
             }
         }
