@@ -5,6 +5,7 @@ import { pageSelector } from "../redux/selector";
 import News from "../pages/News";
 import { useLocation } from "react-router-dom";
 import { getPage } from "../redux/actions/pageAction";
+import { renderTable } from "../helpers/renderTable";
 
 const DynamicPage = () => {
     const dispatch = useDispatch();
@@ -22,78 +23,7 @@ const DynamicPage = () => {
     useEffect(() => {
         if (page?.tables && page.pageType === "Chỉ Tiêu") {
             const arr = page.tables.map((table) => {
-                const TABLE = {};
-                TABLE.tableId = table._id;
-                TABLE.title = table.tableName;
-                TABLE.thead = table.rowTitleList.map((rowTitle) => {
-                    return {
-                        textHeading: rowTitle.titleValue,
-                        fixedValueList: rowTitle.fixedValue,
-                        typeInput:
-                            rowTitle.fixedValue.length > 0 ? "select" : "text",
-                        isShow: true,
-                    };
-                });
-
-                TABLE.thead = [
-                    ...TABLE.thead,
-                    {
-                        textHeading: "Minh Chứng",
-                        typeInput: "file",
-                        requiredHeading: true,
-                        isShow: true,
-                    },
-                    {
-                        textHeading: "Trạng Thái",
-                        typeInput: "text",
-                        requiredHeading: true,
-                        isShow: false,
-                    },
-                ];
-
-                if (table?.rowValueList?.length > 0) {
-                    TABLE.tbody = table.rowValueList[0].content.map(
-                        (rowValueItem) => {
-                            const thead = [...TABLE.thead];
-                            const rowValueItemArr = thead.reduce(
-                                (arr, headingItem) => {
-                                    if (
-                                        !thead.requiredHeading &&
-                                        rowValueItem.rowValue[
-                                            headingItem.textHeading
-                                        ]
-                                    )
-                                        return [
-                                            ...arr,
-                                            rowValueItem.rowValue[
-                                                headingItem.textHeading
-                                            ],
-                                        ];
-                                    return arr;
-                                },
-                                []
-                            );
-                            return [
-                                ...rowValueItemArr,
-                                {
-                                    proofNameLabel: "Xem Minh Chứng",
-                                    proofFiles: rowValueItem.proofFilesList,
-                                },
-                                {
-                                    statusLabel: rowValueItem.status,
-                                    statusValue:
-                                        rowValueItem.status === "Chờ Duyệt"
-                                            ? null
-                                            : rowValueItem.status === "Đã Duyệt"
-                                            ? true
-                                            : false,
-                                },
-                            ];
-                        }
-                    );
-                }
-
-                return TABLE;
+                return renderTable({table});
             });
             setTables(arr);
         }

@@ -59,6 +59,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
     const handleOpenModal = () => {
         setUseStateModal(true)
     }
+    console.log(openPreviewModal);
 
 	return (
 		<div className="container__table">
@@ -116,6 +117,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
                 openPreviewModal && 
                 <PreviewFilesModal 
                     proofFilesData={proofFilesData}
+                    openPreviewModal={openPreviewModal}
                     setOpenPreviewModal={setOpenPreviewModal}
                 />}
 		</div>

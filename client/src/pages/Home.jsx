@@ -7,18 +7,7 @@ import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo'
 import { getProgressByYear } from '../redux/actions/progressAction'
 import Quantity from '../components/ComponentQuantity/Quantity'
 
-// import React, { useCallback, useEffect, useRef, useState } from 'react'
-// import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows'
-// import { rowSelector } from '../redux/selector'
-// import { getPeddingRows } from '../redux/actions/rowAction'
-// import CircularProgress from '@mui/material/CircularProgress';
-// import TestPedding from '../components/ComponentPeddingRows/TestPedding'
-
 const Home = ({ auth }) => {
-    // const row = useSelector(rowSelector)
-    // const observer = useRef();
-    // const [nextPage, setNextPage] = useState(1);
-
     const dispatch = useDispatch();
     const progress = useSelector((state) => state.progress);
     const [chartData, setChartData] = useState([]);
@@ -42,67 +31,6 @@ const Home = ({ auth }) => {
             }));
         }
     }, [progress.goalsInfoData]);
-
-    // useEffect(() => {
-    //     if (auth?.user && auth?.user.roles.includes("0004")) {
-    //         dispatch(getPeddingRows(
-    //             {
-    //                 page: nextPage,
-    //                 currentPeddingRows: row.currentPeddingRows,
-    //                 limit: 3
-    //             }
-    //         ))
-    //     }
-    // }, [nextPage, auth?.user]);
-
-    // const lastPostElementRef = useCallback(
-    //     (elem) => {
-    //         if (row.loading) return;
-    //         if (observer.current) observer.current.disconnect();
-    //         observer.current = new IntersectionObserver((entries) => {
-    //             if (entries[0].isIntersecting && !row.maxPage) {
-    //                 console.log('last elem')
-    //                 setNextPage((prev) => prev + 1);
-    //             }
-    //         });
-    //         if (elem) observer.current.observe(elem);
-    //     },
-    //     [row.loading]
-    // );
-
-    // <div className="container__center transform__animation--top">
-    //     {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
-    //         <>
-    //             {row?.peddingRows.map((penddingRows, index) => {
-    //                 if (index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
-    //                     return (
-    //                         <div
-    //                             ref={lastPostElementRef}
-    //                             key={penddingRows?.table + index}
-    //                         >
-    //                             <TestPedding
-    //                                 penddingRows={penddingRows}
-    //                             />
-    //                         </div>
-    //                     )
-    //                 }
-
-    //                 return (
-    //                     <div key={penddingRows?.table + index}>
-    //                         <TestPedding penddingRows={penddingRows}/>
-    //                     </div>
-    //                 )
-    //             })}
-
-    //             {
-    //                 row?.loading &&
-    //                 <div className='loading_rows_pendding'>
-    //                     <CircularProgress />
-    //                 </div>
-    //             }
-    //         </>
-    //     )}
-    // </div> 
 
     return (
         <div className="pageHome ">

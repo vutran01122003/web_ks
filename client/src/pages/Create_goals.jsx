@@ -294,7 +294,6 @@ const CreateGoals = ({handleAddTable}) => {
 
                                     <div className='tr__line--cols'>
                                         <div className="box__cols">
-                                            <span className="hag_stt">#</span>
                                             {table.rowTitleList.map((rowTitle, rowIndex) => {
                                                 return (
                                                     <div key={rowIndex} className="item__col">

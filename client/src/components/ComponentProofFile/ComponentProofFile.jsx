@@ -77,7 +77,7 @@ function ComponentProofFile({ files, setFiles }) {
 								return (
                                     <div className="previewed_file_wrapper" key={index}>
                                         <img src={src} alt="previewed_file" />
-                                        <span> {file.name} </span>
+                                        <span> {decodeURI(file.name)} </span>
                                     </div>	
 								)
 							})}

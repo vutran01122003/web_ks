@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { authSelector, rowSelector } from '../redux/selector'
-import { getPeddingRows } from '../redux/actions/rowAction'
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, rowSelector } from '../redux/selector';
+import { getPeddingRows } from '../redux/actions/rowAction';
 import { MdDownload } from "react-icons/md";
-import TestPedding from '../components/ComponentPeddingRows/TestPedding'
-import { Button, Select, Tabs} from 'antd'
+import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Button, Select, Tabs} from 'antd';
 import { Input } from 'antd';
 const { Search } = Input;
 
@@ -33,7 +34,6 @@ const ListGoals = () => {
             if (observer.current) observer.current.disconnect();
             observer.current = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && !row.maxPage) {
-                    console.log('last elem')
                     setNextPage((prev) => prev + 1);
                 }
             });
@@ -41,7 +41,6 @@ const ListGoals = () => {
         },
         [row.loading]
     );
-    console.log(row?.peddingRows)
 
     const ComponentSortTab1 = () => {
         return (
@@ -89,56 +88,47 @@ const ListGoals = () => {
     const RenderListGoas = () => {
         return (
             <>
-                <ComponentSortTab1 />
-                <div className="mg__content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>HỌ TÊN</th>
-                                <th>MÃ SINH VIÊN</th>
-                                <th>SỐ FILE MINH CHỨNG</th>
-                                <th>NGÀY NỘP</th>
-                                <th>TRẠNG THÁI</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
-                                <>
-                                    {row?.peddingRows.map((penddingRows, index) => {
-                                        if (index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
+                {
+                    auth?.user && 
+                    <>  
+                        <ComponentSortTab1 />
+                        <div className="mg__content">
+                            <div className="container__center">
+                                {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
+                                    <>
+                                        {row?.peddingRows.map((penddingRows, index) => {
+                                            if(index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
+                                                return (
+                                                    <div 
+                                                        ref={lastPostElementRef}
+                                                        key={penddingRows?.table + index}     
+                                                    >
+                                                        <ComponentPeddingRows 
+                                                            penddingRows={penddingRows} 
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                            
                                             return (
-                                                <TestPedding
-                                                    ref={lastPostElementRef}
-                                                    key={penddingRows?.table + index}
-                                                    penddingRows={penddingRows}
-                                                    index={index + 1}
-                                                />
+                                                <div key={penddingRows?.table + index}>
+                                                    <ComponentPeddingRows className="last" penddingRows={penddingRows} />
+                                                </div>
                                             )
+                                        })}
+
+                                        {
+                                            row?.loading && 
+                                            <div className='loading_rows_pendding'>
+                                                <CircularProgress />
+                                            </div>
                                         }
-
-                                        return (
-                                            <TestPedding
-                                                key={penddingRows?.table + index}
-                                                penddingRows={penddingRows}
-                                                index={index + 1}
-                                            />
-                                        )
-                                    })}
-
-                                    {
-                                        row?.loading &&
-                                        <div className='loading_rows_pendding'>
-                                            loading...
-                                        </div>
-                                    }
-                                </>
-                            )}
-
-                        </tbody>
-                    </table>
-
-                </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                }
             </>
         )
     };
@@ -159,16 +149,18 @@ const ListGoals = () => {
 
     return (
         <>
-            <div className="container__tables">
-                <div className="body__tables transform__animation--top">
-                    <Tabs
-                        defaultActiveKey="1"
-                        items={items}
-                        className='tab__tables--goal'
-                    />
+            {
+                auth?.user && 
+                <div className="container__tables">
+                    <div className="body__tables transform__animation--top">
+                        <Tabs
+                            defaultActiveKey="1"
+                            items={items}
+                            className='tab__tables--goal'
+                        />
+                    </div>
                 </div>
-            </div>
-
+            }
         </>
     )
 }

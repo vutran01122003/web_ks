@@ -1,12 +1,12 @@
 .modal_overlap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: fixed;
     top: 0px;
     left: 0px;
     bottom: 0px;
     right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: rgba(0, 0, 0, 0.7);
     z-index: 100;
     overflow: auto;
@@ -195,37 +195,12 @@
 .files_preview_wrapper {
     width: 500px;
     max-width: 100%;
-    padding: 10px 20px;
     user-select: none;
-    background-color: #fff;
-    box-shadow: 0 0 5px rgb(60, 56, 56);
-    border-radius: 5px;
 
     .files_preview_title {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
-
-        .files_preview_close_btn {
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: rgb(252, 38, 38);
-            background: #f0efef;
-            font-size: 16px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: 0.1s linear;
-            
-            &:hover {
-                color: red;
-                background-color: #0000002c;
-            }
-        }
     }
 
     .file_item_link_wrapper {

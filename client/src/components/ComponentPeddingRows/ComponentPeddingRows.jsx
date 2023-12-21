@@ -1,25 +1,22 @@
 import { useEffect, useState } from 'react';
 import ComponentAvatar from '../../components/ComponentAvatar/ComponentAvatar';
-import { MdPendingActions } from 'react-icons/md';
 import LayoutTable from '../ComponentTable/LayoutTable';
 import ConfirmModal from '../ComponentModal/ConfirmModal';
-
-// Ant design underconstruction
-import { ExclamationCircleFilled } from '@ant-design/icons';
-import { Button, Modal, Space } from 'antd';
-const { confirm } = Modal;
+import { renderTable } from '../../helpers/renderTable';
 
 function ComponentPeddingRows({ penddingRows }) {
     const [table, setTable] = useState(null);
+    const [title, setTitle] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [content, setContent] = useState('');
     const [status, setStatus] = useState(false);
     const [rowInfoData, setRowInfoData] = useState({});
 
-    const handleOpenConfirmModal = ({ content, status }) => {
+    const handleOpenConfirmModal = ({ content, status, title}) => {
         setIsOpen(true);
         setContent(content);
         setStatus(status);
+        setTitle(title);
     }
 
     const handleHiddenConfirmModal = () => {
@@ -27,99 +24,29 @@ function ComponentPeddingRows({ penddingRows }) {
     }
 
     useEffect(() => {
-        const TABLE = {};
-        TABLE.tableId = penddingRows.table;
-
-        const table = penddingRows.page[0].tables.find((table) => {
-            return table._id === penddingRows.table;
-        })
-
+        setTable(renderTable({pendingGoalsInfo: penddingRows}));
         setRowInfoData({
-            rowListId: penddingRows._id,
+            rowListId: penddingRows._id, 
             contentIdList: penddingRows.content.map((content) => {
-                if (content.status === "Chờ Duyệt")
+                if(content.status === "Chờ Duyệt")
                     return content._id;
             })
         });
-
-        TABLE.title = table.tableName;
-        TABLE.thead = table.rowTitleList.map((rowTitle) => {
-            return {
-                textHeading: rowTitle.titleValue,
-                fixedValueList: rowTitle.fixedValue,
-                typeInput: rowTitle.fixedValue.length > 0 ? 'select' : 'text',
-                isShow: true,
-            }
-        })
-
-        TABLE.thead = [
-            ...TABLE.thead,
-            {
-                textHeading: "Minh Chứng",
-                typeInput: 'file',
-                isShow: true,
-            }, {
-                textHeading: "Trạng Thái",
-                typeInput: 'text',
-                isShow: false,
-            }
-        ];
-
-        if (penddingRows?.content?.length > 0) {
-            TABLE.tbody = penddingRows.content.map((rowValueItem) => {
-                const thead = [...TABLE.thead];
-                const rowValueItemArr = thead.reduce((arr, headingItem) => {
-                    if (!thead.requiredHeading && rowValueItem.rowValue[headingItem.textHeading])
-                        return [...arr, rowValueItem.rowValue[headingItem.textHeading]];
-                    return arr
-                }, []);
-                return [...rowValueItemArr, {
-                    proofNameLabel: 'Xem Minh Chứng',
-                    proofFiles: rowValueItem.proofFilesList
-                }, {
-                    statusLabel: rowValueItem.status,
-                    statusValue: rowValueItem.status === "Chờ Duyệt" ? null :
-                        (rowValueItem.status === "Đã Duyệt" ? true : false)
-                }];
-            })
-        }
-
-        setTable(TABLE);
     }, []);
 
-//-----------------------------------------------------
-    const showConfirm = () => {
-        confirm({
-            title: 'Do you Want to delete these items?',
-            icon: <ExclamationCircleFilled />,
-            content: 'Some descriptions',
-            onOk() {
-                console.log('OK');
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    };
 
     return (
         <>
             {
-                isOpen &&
-                <ConfirmModal
-                    content={content}
-                    status={status}
-                    rowInfoData={rowInfoData}
-                    handleHiddenConfirmModal={handleHiddenConfirmModal}
-                />
-            }
-            {
                 table && <div className='pedding_goals_container'>
-                    <div className='title_pending_goals'>
-                        <MdPendingActions />
-                        Chờ Duyệt Chỉ Tiêu
-                    </div>
-
+                    <ConfirmModal
+                        isOpen={isOpen}
+                        title={title}
+                        content={content}
+                        status={status}
+                        rowInfoData={rowInfoData}
+                        handleHiddenConfirmModal={handleHiddenConfirmModal}
+                    />
                     <div className='pedding_goals_wrapper'>
                         <div className='student_wrapper'>
                             <ComponentAvatar size="medium" />
@@ -145,8 +72,9 @@ function ComponentPeddingRows({ penddingRows }) {
                                     className="reject_btn"
                                     onClick={() => {
                                         handleOpenConfirmModal(
-                                            {
-                                                content: "Bạn chắc chắn muốn từ chối duyệt chỉ tiêu này ?",
+                                            {   
+                                                title: "Xác nhận từ chối chỉ tiêu",
+                                                content: "Bạn đã kiểm tra thật kỹ minh chứng và chắc chắn từ chối chỉ tiêu này ?",
                                                 status: false
                                             }
                                         )
@@ -157,15 +85,15 @@ function ComponentPeddingRows({ penddingRows }) {
 
                                 <button
                                     className="confirmation_btn"
-                                //     onClick={() => {
-                                //         handleOpenConfirmModal(
-                                //             {
-                                //                 content: "Bạn chắc chắn muốn duyệt chỉ tiêu này ?",
-                                //                 status: true
-                                //             }
-                                //         )
-                                //     }}
-                                onClick={showConfirm}
+                                    onClick={() => {
+                                        handleOpenConfirmModal(
+                                            {
+                                                title: "Xác nhận duyệt chỉ tiêu",
+                                                content: "Bạn đã kiểm tra thật kỹ minh chứng và chắc chắn duyệt chỉ tiêu này ?",
+                                                status: true
+                                            }
+                                        )
+                                    }}
                                 >
                                     Xác Nhận
                                 </button>

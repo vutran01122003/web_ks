@@ -181,13 +181,6 @@
                         width: 100%;
                         height: 100%;
                         display: flex;
-                        .hag_stt {
-                            padding: 0px 10px;
-                            @include flex_center;
-                            font-size: 19px;
-                            font-weight: 600;
-                            border-right: 1px solid #c6c6c6;
-                        }
 
                         .add_value_col {
                             background: #fff;

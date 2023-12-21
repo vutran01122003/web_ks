@@ -44,9 +44,9 @@
                     max-width: 100%;
                     outline: none;
                     border: none;
-                    border-radius: 8px;
+                    border-radius: 5px;
                     cursor: pointer;
-                    box-shadow: 0 0 3px gray;
+                    box-shadow: 0 0 3px rgb(181, 181, 181);
                     transition: 0.1s linear;
 
                     &:active {
@@ -62,21 +62,6 @@
                     background: #059b05;
                 }
             }
-        }
-    }
-
-    .title_pending_goals {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        gap: 4px;
-        color: rgb(237, 72, 72);
-        font-size: larger;
-        font-weight: 600;
-
-        svg {
-            width: 25px;
-            height: 25px;
         }
     }
 }
