@@ -63,27 +63,31 @@ function ManagePagesPage() {
     useEffect(() => {
         if (page.pages && Object.keys(pages).length > 0) {
             setPages(prev => {
-                const newArr = [...prev];
-                newArr[6] =  {
-                    ...prev[6], 
-                    sub_menu_item: page.pages.reduce((initialArr, page) => {
-                        if(page.pageType === "Chỉ Tiêu") {
-                            return [
-                                ...initialArr,
-                                {
-                                    id: page?._id,
-                                    sub_page_type: page.pageType,
-                                    sub_name_menu: page?.pageName,
-                                    sub_icon_before: '?',
-                                    sub_to_link: `/page/${page?.pageName}`,
+                const menu = [...prev];
+                for(let menuItem of menu) {
+                    if(menuItem.dynamicPage && menuItem.dynamicPage === 'goals') {
+                        menuItem =  {
+                            ...menuItem, 
+                            sub_menu_item: page.pages.reduce((initialArr, page) => {
+                                if(page.pageType === "Chỉ Tiêu") {
+                                    return [    
+                                        ...initialArr,
+                                        {
+                                            id: page?._id,
+                                            sub_page_type: page.pageType,
+                                            sub_name_menu: page?.pageName,
+                                            sub_icon_before: '?',
+                                            sub_to_link: `/page/${page?.pageName}`,
+                                        }
+                                    ]
                                 }
-                            ]
-                        }
-                        return initialArr;
-                    }, [])
-                };
-
-                return newArr;
+                                return initialArr;
+                            }, [])
+                        };
+                        break;
+                    }
+                }
+                return menu;
             })
         }
     }, [JSON.stringify(page.pages)]);

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import ComponentModal from '../ComponentModal/TableModal'
-import PreviewImagesModal from '../ComponentModal/PreviewImagesModal';
+import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
 
-const MainItem = ({ row, handleOpenPreviewImagesModal }) => {
+const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
 
 	return (
 		<tr className="table__line__item">
@@ -11,20 +11,23 @@ const MainItem = ({ row, handleOpenPreviewImagesModal }) => {
                     return (
                         item?.proofFiles.length > 1 ?
                         <td 
-                            onClick={() => {handleOpenPreviewImagesModal({proofData: item?.proofFiles})}}
-                            className="preview_proof_images line__item" 
+                            onClick={() => {handleOpenPreviewFilesModal({proofData: item?.proofFiles})}}
+                            className="preview_proof_files line__item" 
                             key={index}
                         >
                             {item?.proofNameLabel}
                         </td> : 
-                        <a 
-                            key={item?.proofFiles[0]?.fileId} 
-                            href={item?.proofFiles[0]?.fileUrl} 
-                            className="preview_proof_images line__item" 
-                            download 
+                        <td 
+                            key={item?.proofFiles[0]?._id} 
+                            className="line__item" 
                         >
-                            {item?.proofNameLabel}
-                        </a>
+                           <a
+                                href={item?.proofFiles[0]?.fileUrl} 
+                                className='preview_proof_files'
+                            >
+                                {item?.proofNameLabel}
+                            </a>
+                        </td>
                     )
                 } else if (item?.statusLabel) {
                     return (
@@ -48,7 +51,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
     const [openPreviewModal, setOpenPreviewModal] = useState(false);
     const [proofFilesData, setProofFilesData] = useState(null);
 
-    const handleOpenPreviewImagesModal = ({proofData}) => {
+    const handleOpenPreviewFilesModal = ({proofData}) => {
         setProofFilesData(proofData);
         setOpenPreviewModal(true);
     }
@@ -101,7 +104,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
                     <tbody className="table__items">
                         {table.tbody.map((row, index) => (
                             <MainItem 
-                                handleOpenPreviewImagesModal={handleOpenPreviewImagesModal} 
+                                handleOpenPreviewFilesModal={handleOpenPreviewFilesModal} 
                                 row={row} 
                                 key={index} 
                             />
@@ -111,7 +114,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
 			</table>
             {
                 openPreviewModal && 
-                <PreviewImagesModal 
+                <PreviewFilesModal 
                     proofFilesData={proofFilesData}
                     setOpenPreviewModal={setOpenPreviewModal}
                 />}

@@ -1,17 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import LayoutInfo from '../components/ComponentHome/LayoutInfo'
-import LayoutChart from '../components/ComponentHome/LayoutChart'
-import ApplyComponent from '../components/ComponentHome/ApplyComponent'
-import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows'
 import { useDispatch, useSelector } from 'react-redux'
 import { authSelector, rowSelector } from '../redux/selector'
 import { getPeddingRows } from '../redux/actions/rowAction'
-import CircularProgress from '@mui/material/CircularProgress';
-import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo'
 import { MdDownload } from "react-icons/md";
-import { getProgressByYear } from '../redux/actions/progressAction'
 import TestPedding from '../components/ComponentPeddingRows/TestPedding'
-import { Button, Select, Space, Table, Tabs, Tag } from 'antd'
+import { Button, Select, Tabs} from 'antd'
 import { Input } from 'antd';
 const { Search } = Input;
 
@@ -20,29 +13,7 @@ const ListGoals = () => {
     const row = useSelector(rowSelector);
     const observer = useRef();
     const dispatch = useDispatch();
-    const progress = useSelector((state) => state.progress);
     const [nextPage, setNextPage] = useState(1);
-    const [chartData, setChartData] = useState([]);
-    const [goalsInfo, setGoalInfo] = useState([]);
-
-    useEffect(() => {
-        if (auth?.user && auth?.user.roles.includes("0002")) {
-            dispatch(getProgressByYear({
-                studentMajor: auth.user?.major,
-                studentCohort: auth.user?.cohort,
-                studentLevelYear: auth.user?.levelYear || 1
-            }))
-        }
-    }, [auth?.user]);
-
-    useEffect(() => {
-        if (progress.goalsInfoData.length > 0) {
-            setGoalInfo(progress.goalsInfoData);
-            setChartData(progress.goalsInfoData.map((elemProgress) => {
-                return { caterogy: elemProgress.pageName, value: elemProgress.percent }
-            }));
-        }
-    }, [progress.goalsInfoData]);
 
     useEffect(() => {
         if (auth?.user && auth?.user.roles.includes("0004")) {

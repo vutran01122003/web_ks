@@ -4,18 +4,18 @@ const createError = require('http-errors');
 
 class RowControllers {
     addRow = async (req, res, next) => {
-        console.log(res.locals);
         try {
+            const rowData = JSON.parse(req.body.rowData);
             if (!res.locals.roles.includes('0002'))
                 throw createError.Forbidden('Chỉ có kỹ sư tài năng mới thêm được chỉ tiêu');
 
             const { rowList, rowItemId } = await RowService.addRow({
-                data: req.body
+                data: rowData
             });
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/user_${req.body.studentId}`
+                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.studentId}/${rowData.tableName}`
             });
 
             await RowService.addProofFiles({
@@ -26,8 +26,8 @@ class RowControllers {
             });
 
             res.status(200).json({
-                status: 'Thêm Thông Tin Thành Công',
-                data: rowList || []
+                status: 'Thêm Thông Tin Thành Công'
+                // data: rowList
             });
         } catch (error) {
             next(error);

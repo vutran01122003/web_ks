@@ -1,0 +1,45 @@
+import { ARRAY_LIST_MENU } from '../assets/data/menu';
+
+export const renderSideBar = ({auth, page}) => {
+    ARRAY_LIST_MENU.forEach((menuItem) => {
+        if(menuItem.dynamicPage && menuItem.dynamicPage === 'news') {
+            menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
+                if (page.pageType === "Tin Tức" ) {
+                    return [
+                        ...intialArr,
+                        {
+                            id: page._id,
+                            sub_page_type: page.pageType,
+                            sub_name_menu: page.pageName,
+                            sub_icon_before: '?',
+                            sub_to_link: `/page/${page.pageName}`,
+                        }
+                    ]
+                }
+                return intialArr;
+            }, [])
+        }
+
+        if(menuItem.dynamicPage && menuItem.dynamicPage === 'goals') {
+            menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
+                if (page.pageType === "Chỉ Tiêu" &&
+                    page.pageStudentCohort === auth?.user.cohort &&
+                    page.pageFaculty === auth?.user.faculty &&
+                    page.pageStudentMajor ===  auth?.user.major    
+                ) {
+                    return [
+                        ...intialArr,
+                        {
+                            id: page._id,
+                            sub_page_type: page.pageType,
+                            sub_name_menu: page.pageName,
+                            sub_icon_before: '?',
+                            sub_to_link: `/page/${page.pageName}`,
+                        }
+                    ]
+                }
+                return intialArr;
+            }, [])
+        }
+    })
+}

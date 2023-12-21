@@ -25,8 +25,9 @@ const RowSchema = new Schema(
                     proofFilesList: {
                         type: [
                             {
-                                fileId: String,
-                                fileUrl: String
+                                originalName: String,
+                                fileUrl: String,
+                                fileType: String
                             }
                         ],
                         default: []

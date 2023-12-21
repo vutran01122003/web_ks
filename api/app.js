@@ -12,6 +12,7 @@ const {
     morganType,
     app: { clientDomain_v1, clientDomain_v2 }
 } = require('./config/config');
+const { MulterError } = require('multer');
 
 const app = express();
 
@@ -53,9 +54,39 @@ app.use((req, res, next) => {
 
 // Catch Error
 app.use((err, req, res, next) => {
-    console.log(err);
+    if (err instanceof MulterError) {
+        let errInfo = {};
+        switch (err.code) {
+            case 'LIMIT_FILE_SIZE':
+                errInfo = {
+                    status: 413,
+                    msg: 'Kích thước file tối đa là 10MB'
+                };
+                break;
+            case 'LIMIT_FILE_COUNT':
+                errInfo = {
+                    status: 413,
+                    msg: 'Giới hạn tải lên là 10 files'
+                };
+                break;
+            case 'LIMIT_UNEXPECTED_FILE':
+                errInfo = {
+                    status: 422,
+                    msg: 'Định dạng file không đúng'
+                };
+                break;
+            default:
+                errInfo = {
+                    status: 400,
+                    msg: 'Tải lên các files gặp sự cố'
+                };
+                break;
+        }
+        return res.status(errInfo.status).json(errInfo);
+    }
+
     if (err) {
-        res.status(err.status).json({
+        return res.status(err.status).json({
             status: err.status,
             msg: err.message
         });

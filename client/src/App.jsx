@@ -12,7 +12,6 @@ import Alert from './components/ComponentToast/Alert'
 import FirstLogin from './components/ComponentFirstLogin/FirstLogin'
 import NotFound from './pages/NotFound'
 import { getPage } from './redux/actions/pageAction'
-import { getPeddingRows } from './redux/actions/rowAction'
 import Apply from './pages/Apply'
 
 const App = () => {

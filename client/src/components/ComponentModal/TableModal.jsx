@@ -3,7 +3,7 @@ import { IoCloseOutline } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { addRow } from '../../redux/actions/rowAction'
 import { authSelector } from '../../redux/selector'
-import ComponentProofFile from '../ComponentForm/ComponentProofFile'
+import ComponentProofFile from '../ComponentProofFile/ComponentProofFile'
 import GLOBALTYPES from '../../redux/actions/globalTypes'
 import FormControl from '../ComponentForm/FormControl'
 
@@ -33,12 +33,18 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
 
         const formData = new FormData();
 
-        formData.set('user', auth?.user._id);
-        formData.set('studentId', auth?.user.studentId);
-        formData.set('page', page.pageId);
-        formData.set('table', tableId);
-        formData.set('path', page.pathName);
-        formData.set('content', JSON.stringify(row));
+        formData.set('rowData', JSON.stringify({
+            user: auth?.user._id,
+            studentId: auth?.user.studentId,
+            faculty: auth?.user.faculty,
+            major: auth?.user.major,
+            cohort: auth?.user.cohort,
+            tableName: title,
+            page: page.pageId,
+            table: tableId,
+            path: page.pathName,
+            content: JSON.stringify(row)
+        }));
 
         files.forEach((file) => {
             formData.append('files', file, file.name); 

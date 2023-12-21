@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { RiUpload2Fill } from "react-icons/ri";
 import { IoMdClose  } from "react-icons/io";
-import { checkImageUpload } from '../../utils/uploadFile'
+import { checkFilesUpload, encodeFileName } from '../../utils/uploadFiles'
 import GLOBALTYPES from '../../redux/actions/globalTypes'
 
 function ComponentProofFile({ files, setFiles }) {
@@ -14,7 +14,7 @@ function ComponentProofFile({ files, setFiles }) {
 		const newFiles = []
 
 		for (let file of localFiles) {
-			const { inValid, msg } = checkImageUpload(file)
+			const { inValid, msg } = checkFilesUpload(file);
 			if (inValid) {
 				dispatch({
 					type: GLOBALTYPES.ALERT,
@@ -23,7 +23,7 @@ function ComponentProofFile({ files, setFiles }) {
 					},
 				})
 			} else {
-				newFiles.push(file)
+				newFiles.push(encodeFileName(file))
 			}
 		}
 		setFiles((prev) => [...prev, ...newFiles])
@@ -39,14 +39,14 @@ function ComponentProofFile({ files, setFiles }) {
 			<label className="proof_title">Minh Chứng</label>
 			<div className="proof_wrapper">
 				<div className="proof_upload">
-					<h4>{`Tải lên minh chứng :`} </h4>
+					<h4>{`Tải lên :`} </h4>
 					<div className="icons_wrapper">
 						<label htmlFor="insert_files" className="insert_files_icon icon-item--proof">
 							<RiUpload2Fill />
 						</label>
                         
                         <span className="files_type" > 
-                            (doc, docx, pdf, image)
+                            (Giới hạn là 10 files; Kích thước file tối đa 10MB có định dạng là doc, docx, pdf và image)
                         </span>
 
 						<input
@@ -54,7 +54,7 @@ function ComponentProofFile({ files, setFiles }) {
 							type="file"
 							ref={inputRef}
 							multiple
-                            accept="application/pdf, image/*, application/msword"
+                            accept="application/pdf, image/*, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 							onChange={handleInsertFiles}
 							hidden
 						/>
@@ -68,12 +68,17 @@ function ComponentProofFile({ files, setFiles }) {
 								<IoMdClose className="remove_files_icon" onClick={handleClearImages} />
 							</div>
 							{files.map((file, index) => {
+                                let src = null;
+                                if (file.type.split('/').includes('image')) src = URL.createObjectURL(file) 
+                                else if (file.type === 'application/pdf') src = import.meta.env.VITE_APP_PDF_FILE_ICON_URL; 
+                                else if ( file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.type === "application/msword") src = import.meta.env.VITE_APP_DOC_FILE_ICON_URL;
+                                else src = import.meta.env.VITE_APP_INVAILD_FILE_ICON_URL;
+                                 
 								return (
-									<img
-										src={file?.imgCamera || URL.createObjectURL(file)}
-										key={index}
-										alt="previewed_image"
-									/>
+                                    <div className="previewed_file_wrapper" key={index}>
+                                        <img src={src} alt="previewed_file" />
+                                        <span> {file.name} </span>
+                                    </div>	
 								)
 							})}
 						</div>

@@ -24,6 +24,7 @@
         align-items: center;
 
         .icons_wrapper {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -31,7 +32,7 @@
             height: 45px;
 
             .icon-item--proof {
-                margin-left: 20px;
+                margin-left: 10px;
                 display: flex;
                 align-items: center;
             }
@@ -39,10 +40,12 @@
             .insert_files_icon {
                 color: rgb(12, 166, 12);
                 font-size: 20px;
+                cursor: pointer;
             }
 
             .files_type {
-                font-size: 12px;
+                flex: 1;
+                font-size: 10px;
                 color: gray;
                 margin-left: 10px;
             }
@@ -63,11 +66,32 @@
         overflow-y: scroll;
         overflow-x: hidden;
 
-        img {
-            display: block;
+        .previewed_file_wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 33%;
-            object-fit: contain;
+            height: 170px;
+            margin-bottom: 10px;
+
+            img {
+                display: block;
+                flex: 1;
+                width: 100%;
+                height: 85%;
+                object-fit: contain;
+            }
+
+            span {
+                margin-top: 4px;
+                white-space: nowrap;
+                width: 100%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                text-align: center;
+            }
         }
+       
 
         .remove_files_btn {
             position: absolute;

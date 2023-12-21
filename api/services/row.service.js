@@ -111,8 +111,9 @@ class RowService {
                 {
                     $set: {
                         'content.$.proofFilesList': uploadedFiles.map((uploadedFile) => ({
-                            fileId: uploadedFile.Key,
-                            fileUrl: uploadedFile.Location
+                            fileUrl: uploadedFile.Location,
+                            fileType: uploadedFile.Key.split('.').slice(-1)[0],
+                            originalName: uploadedFile.Key.split('/').slice(-1)[0]
                         }))
                     }
                 }
