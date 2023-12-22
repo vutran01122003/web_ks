@@ -55,7 +55,7 @@
                 }
 
                 .reject_btn {
-                    background: #f75151;
+                    background: #f0635c;
                 }
 
                 .confirmation_btn {
@@ -90,7 +90,6 @@
             }
 
             .ant-tabs-content-holder {
-                // margin-top: 65px;
                 overflow-y: scroll;
                 background-color: #eeeeee;
             }
@@ -115,7 +114,6 @@
             &:hover {
                 background-color: #fafafa;
             }
-
         }
 
     }
@@ -128,7 +126,9 @@
         padding: 10px 15px;
         display: flex;
         border-bottom: 2px solid #a5a5a5;
+        z-index: 5;
         .box__left{
+            display: flex;
             width: 100%;
             > div{
                 margin-right: 15px;
@@ -145,30 +145,6 @@
                 svg{
                     font-size: 18px;
                 }
-            }
-        }
-    }
-
-    .mg__content {
-        padding-top: 40px;
-
-        >table {
-            width: 100%;
-            border-spacing: 0px;
-
-            tr:first-child {
-                th {
-                    font-size: 15px;
-                    padding: 6px;
-                    padding-left: 15px;
-                    font-weight: 600;
-                    color: #000000;
-                }
-            }
-
-            td,
-            th {
-                text-align: left;
             }
         }
     }

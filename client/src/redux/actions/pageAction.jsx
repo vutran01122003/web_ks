@@ -24,7 +24,7 @@ export const createPage = ({pageData, resetAllData}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response.data?.status === 401 ? 
+                error: error.response?.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Tạo Trang Thất Bại'
             }
         });
@@ -59,7 +59,7 @@ export const getPages = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response.data?.status === 401 ? 
+                error: error.response?.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || "Lấy Dữ Liệu Trang Thất Bại"
             }
         })
@@ -100,7 +100,7 @@ export const getPage = ({pathName}) => async (dispatch) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error?.response.data?.status === 401 ? 
+                    error: error.response?.data?.status === 401 ? 
                     "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
                 }
             })
@@ -137,7 +137,7 @@ export const removePage = ({pageId}) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response.data?.status === 401 ? 
+                error: error.response?.data?.status === 401 ? 
                 "Hết Phiên Đăng Nhập" : error?.response?.data.msg || 'Xóa Trang Thất Bại'
             }
         })

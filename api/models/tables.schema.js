@@ -13,7 +13,12 @@ const TableSchema = new Schema({
         type: [
             {
                 titleValue: String,
-                fixedValue: Array
+                fixedValue: [
+                    {
+                        value: String,
+                        score: Number
+                    }
+                ]
             }
         ],
         default: []

@@ -24,7 +24,7 @@ const upload = multer({
 
 router.post('/row', auth, upload.array('files'), rowControllers.addRow);
 
-router.get('/pending_rows', auth, rowControllers.getPeddingRows);
+router.get('/pending_rows', auth, rowControllers.getPendingRows);
 
 router.patch('/pending_rows/update', auth, rowControllers.updateRowStatus);
 

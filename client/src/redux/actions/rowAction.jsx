@@ -37,7 +37,7 @@ export const addRow = ({formData}) => async (dispatch) => {
     }
 }
 
-export const getPeddingRows = ({ page, limit, currentPeddingRows}) => async (dispatch) => {
+export const getPendingRows = ({ page, limit, currentPendingRows}) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ROW.LOADING_PENDING_ROWS,
@@ -46,12 +46,12 @@ export const getPeddingRows = ({ page, limit, currentPeddingRows}) => async (dis
             }
         })
 
-        const res = await getDataApi(`/pending_rows?page=${page || 1}&limit=${limit || 3}&current_pedding_rows=${currentPeddingRows}`);
+        const res = await getDataApi(`/pending_rows?page=${page || 1}&limit=${limit || 3}&current_pedding_rows=${currentPendingRows}`);
   
         dispatch({
             type: GLOBALTYPES.ROW.GET_PENDING_ROWS,
             payload: {
-                peddingRows: res.data.data,
+                pendingRows: res.data.data,
                 page
             }
         })
@@ -81,7 +81,7 @@ export const getPeddingRows = ({ page, limit, currentPeddingRows}) => async (dis
     }
 }
 
-export const updatePeddingRowStatus = ({ rowListId, contentIdList, status }) => async (dispatch) => {
+export const updatePendingRowStatus = ({ rowListId, contentIdList, status }) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -95,7 +95,7 @@ export const updatePeddingRowStatus = ({ rowListId, contentIdList, status }) => 
         dispatch({
             type: GLOBALTYPES.ROW.REMOVE_PENDING_ROW,
             payload: {
-                peddingRowId: rowListId
+                pendingRowId: rowListId
             }
         });
 

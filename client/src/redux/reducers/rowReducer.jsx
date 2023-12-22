@@ -2,10 +2,10 @@ import GLOBALTYPES from "../actions/globalTypes";
 import removeElem from '../../utils/removeElem';
 const initialState = {
     loading: false,
-    peddingRows: [],
+    pendingRows: [],
     page: 1,
     maxPage: false,
-    currentPeddingRows: 0
+    currentPendingRows: 0
 }
 
 function rowReducer(state = initialState, action) {
@@ -18,23 +18,23 @@ function rowReducer(state = initialState, action) {
         case GLOBALTYPES.ROW.GET_PENDING_ROWS:          
             return {
                 ...state,
-                peddingRows: action.payload.page === 1 ? 
-                    action.payload.peddingRows : 
-                    [...state.peddingRows, ...action.payload.peddingRows],
+                pendingRows: action.payload.page === 1 ? 
+                    action.payload.pendingRows : 
+                    [...state.pendingRows, ...action.payload.pendingRows],
                 page: action.payload?.page || 1,
-                maxPage: action.payload.peddingRows.length === 0 ? true : false,
-                currentPeddingRows: action.payload?.page === 1 ? 
-                    action.payload.peddingRows.length : 
-                    state.peddingRows.length + action.payload.peddingRows.length
+                maxPage: action.payload.pendingRows.length === 0 ? true : false,
+                currentPendingRows: action.payload?.page === 1 ? 
+                    action.payload.pendingRows.length : 
+                    state.pendingRows.length + action.payload.pendingRows.length
             }
         case GLOBALTYPES.ROW.REMOVE_PENDING_ROW:
-                console.log(action.payload.peddingRowId);
-                const newArr = removeElem([...state.peddingRows], action.payload.peddingRowId);
+                console.log(action.payload.pendingRowId);
+                const newArr = removeElem([...state.pendingRows], action.payload.pendingRowId);
 
                 return {
                     ...state,
-                    peddingRows: newArr,
-                    currentPeddingRows: state.currentPeddingRows - 1
+                    pendingRows: newArr,
+                    currentPendingRows: state.currentPendingRows - 1
                 }
 
         default:

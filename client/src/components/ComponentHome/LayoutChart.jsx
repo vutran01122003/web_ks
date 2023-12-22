@@ -59,7 +59,7 @@ const SubChart = ({ caterogy, color }) => {
 
 const LayoutChart = ({ children }) => {
 	const colors = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0']
-	const dataValue = children.map((item) => item.value)
+	const dataValue = children.map((item) => item.value.toFixed(2))
 	const dataCategory = children.map((item) => item.caterogy)
 	const sum = dataValue.reduce((total, num) => total + num, 0)
 	const average = (sum / dataValue.length).toFixed(2)

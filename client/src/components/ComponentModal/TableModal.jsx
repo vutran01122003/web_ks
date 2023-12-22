@@ -126,8 +126,8 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
                                         </option>
                                         {
                                             item.fixedValueList.map((fixedValue) => (
-                                                <option key={fixedValue} value={fixedValue} >
-                                                    {fixedValue}
+                                                <option key={fixedValue.value} value={fixedValue.value} >
+                                                    {fixedValue.value}
                                                 </option>
                                             ))   
                                         }

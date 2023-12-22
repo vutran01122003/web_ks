@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import ComponentAvatar from '../../components/ComponentAvatar/ComponentAvatar';
+import ComponentAvatar from '../ComponentAvatar/ComponentAvatar';
 import LayoutTable from '../ComponentTable/LayoutTable';
 import ConfirmModal from '../ComponentModal/ConfirmModal';
 import { renderTable } from '../../helpers/renderTable';
 
-function ComponentPeddingRows({ penddingRows }) {
+function ComponentPendingRows({ pendingRows }) {
     const [table, setTable] = useState(null);
     const [title, setTitle] = useState('');
     const [isOpen, setIsOpen] = useState(false);
@@ -24,10 +24,10 @@ function ComponentPeddingRows({ penddingRows }) {
     }
 
     useEffect(() => {
-        setTable(renderTable({pendingGoalsInfo: penddingRows}));
+        setTable(renderTable({pendingGoalsInfo: pendingRows}));
         setRowInfoData({
-            rowListId: penddingRows._id, 
-            contentIdList: penddingRows.content.map((content) => {
+            rowListId: pendingRows._id, 
+            contentIdList: pendingRows.content.map((content) => {
                 if(content.status === "Chờ Duyệt")
                     return content._id;
             })
@@ -38,7 +38,7 @@ function ComponentPeddingRows({ penddingRows }) {
     return (
         <>
             {
-                table && <div className='pedding_goals_container'>
+                <div className='pedding_goals_container'>
                     <ConfirmModal
                         isOpen={isOpen}
                         title={title}
@@ -53,17 +53,22 @@ function ComponentPeddingRows({ penddingRows }) {
                             <div className='student_info_wrapper'>
                                 <div className='student_info'>
                                     <span className='student_info_label'>ID:{' '}</span>
-                                    <span className='student_info_id'>{penddingRows?.user[0].studentId}</span>
+                                    <span className='student_info_id'>{pendingRows?.user[0].studentId}</span>
                                 </div>
 
                                 <div className='student_info'>
                                     <span className='student_info_label'>Tên:{' '}</span>
-                                    <span className='student_info_name'>{penddingRows?.user[0].fullName}</span>
+                                    <span className='student_info_name'>{pendingRows?.user[0].fullName}</span>
+                                </div>
+
+                                <div className='student_info'>
+                                    <span className='student_info_label'>Khoa:{' '}</span>
+                                    <span className='student_info_name'>{pendingRows?.user[0].faculty}</span>
                                 </div>
 
                                 <div className='student_info'>
                                     <span className='student_info_label'>Ngành:{' '}</span>
-                                    <span className='student_info_faculty'>{penddingRows?.user[0].major}</span>
+                                    <span className='student_info_faculty'>{pendingRows?.user[0].major}</span>
                                 </div>
                             </div>
 
@@ -107,4 +112,4 @@ function ComponentPeddingRows({ penddingRows }) {
     );
 }
 
-export default ComponentPeddingRows;
+export default ComponentPendingRows;

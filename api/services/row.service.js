@@ -123,13 +123,13 @@ class RowService {
         }
     };
 
-    static getPeddingRows = async ({ page, limit, currentPeddingRows }) => {
+    static getPendingRows = async ({ page, limit, currentPendingRows }) => {
         let skip = (page - 1) * limit;
-        const removedPeddingRows = skip - currentPeddingRows;
-        if (removedPeddingRows > 0) skip = skip - removedPeddingRows;
+        const removedPendingRows = skip - currentPendingRows;
+        if (removedPendingRows > 0) skip = skip - removedPendingRows;
 
         try {
-            const peddingRows = await Row.aggregate([
+            const pendingRows = await Row.aggregate([
                 {
                     $unwind: '$content'
                 },
@@ -186,7 +186,7 @@ class RowService {
                 code: 200,
                 status: 'success',
                 msg: 'Lấy dữ liệu chưa duyệt thành công',
-                data: peddingRows
+                data: pendingRows
             };
         } catch (error) {
             throw error;

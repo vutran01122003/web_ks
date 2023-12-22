@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, rowSelector } from '../redux/selector';
-import { getPeddingRows } from '../redux/actions/rowAction';
+import { getPendingRows } from '../redux/actions/rowAction';
 import { MdDownload } from "react-icons/md";
-import ComponentPeddingRows from '../components/ComponentPeddingRows/ComponentPeddingRows';
+import ComponentPendingRows from '../components/ComponentPendingRows/ComponentPendingRows';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Button, Select, Tabs} from 'antd';
 import { Input } from 'antd';
@@ -15,13 +15,13 @@ const ListGoals = () => {
     const observer = useRef();
     const dispatch = useDispatch();
     const [nextPage, setNextPage] = useState(1);
-
+    
     useEffect(() => {
         if (auth?.user && auth?.user.roles.includes("0004")) {
-            dispatch(getPeddingRows(
+            dispatch(getPendingRows(
                 {
                     page: nextPage,
-                    currentPeddingRows: row.currentPeddingRows,
+                    currentPendingRows: row.currentPendingRows,
                     limit: 3
                 }
             ))
@@ -33,7 +33,11 @@ const ListGoals = () => {
             if (row.loading) return;
             if (observer.current) observer.current.disconnect();
             observer.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && !row.maxPage) {
+                if(entries[0].isIntersecting && nextPage === 1 && row.pendingRows.length === 3) {
+                    setNextPage((prev) => prev + 1);
+                } 
+                
+                if (entries[0].isIntersecting && nextPage > 1 && !row.maxPage) {
                     setNextPage((prev) => prev + 1);
                 }
             });
@@ -46,29 +50,33 @@ const ListGoals = () => {
         return (
             <div className="line__sort">
                 <div className='box__left'>
-
                     <Select
                         labelInValue
                         defaultValue={{
-                            value: 'all',
-                            label: 'TẤT CẢ',
+                            value: '',
+                            label: 'Chọn Chuyên Ngành',
                         }}
                         style={{
-                            width: 120,
+                            width: '20%',
                         }}
                         options={[
                             {
-                                value: 'all',
-                                label: 'TẤT CẢ',
+                                value: '',
+                                label: 'Chọn Chuyên Ngành',
                             },
                             {
-                                value: 'Nnew',
-                                label: 'MỚI NHẤT',
+                                value: 'Kỹ Thuật Phần Mềm',
+                                label: 'Kỹ Thuật Phần Mềm',
+                            },
+                            {
+                                value: 'Khoa Học Máy Tính',
+                                label: 'Khoa Học Máy Tính',
                             },
                         ]}
                     />
+                    
                     <Search
-                        placeholder="Name, Student id"
+                        placeholder="Mã sinh viên"
                         allowClear
                         style={{
                             width: 220,
@@ -88,47 +96,35 @@ const ListGoals = () => {
     const RenderListGoas = () => {
         return (
             <>
-                {
-                    auth?.user && 
-                    <>  
-                        <ComponentSortTab1 />
-                        <div className="mg__content">
-                            <div className="container__center">
-                                {auth?.user.roles.includes('0004') && row?.peddingRows.length > 0 && (
-                                    <>
-                                        {row?.peddingRows.map((penddingRows, index) => {
-                                            if(index === row?.peddingRows.length - 1 && row?.peddingRows.length != 0) {
-                                                return (
-                                                    <div 
-                                                        ref={lastPostElementRef}
-                                                        key={penddingRows?.table + index}     
-                                                    >
-                                                        <ComponentPeddingRows 
-                                                            penddingRows={penddingRows} 
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                            
-                                            return (
-                                                <div key={penddingRows?.table + index}>
-                                                    <ComponentPeddingRows className="last" penddingRows={penddingRows} />
-                                                </div>
-                                            )
-                                        })}
+                <ComponentSortTab1 />
+               	<div className="container__center">
+                    {auth?.user.roles.includes('0004') && row?.pendingRows.length > 0 && (
+                        <>
+                            {row?.pendingRows.map((pendingRows, index) => {
+                                if(index === row?.pendingRows.length - 1 && row?.pendingRows.length != 0) {
+                                    return (
+                                        <div ref={lastPostElementRef} key={pendingRows?.table + index} >
+                                            <ComponentPendingRows pendingRows={pendingRows} />
+                                        </div>
+                                    )
+                                }
+                                
+                                return (
+                                    <div key={pendingRows?.table + index} >
+                                        <ComponentPendingRows pendingRows={pendingRows} />
+                                    </div>
+                                )
+                            })}
 
-                                        {
-                                            row?.loading && 
-                                            <div className='loading_rows_pendding'>
-                                                <CircularProgress />
-                                            </div>
-                                        }
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </>
-                }
+                            {
+                                row?.loading && 
+                                <div className='loading_rows_pendding'>
+                                    <CircularProgress />
+                                </div>
+                            }
+                        </>
+                    )}
+			    </div>
             </>
         )
     };
@@ -137,7 +133,7 @@ const ListGoals = () => {
     const items = [
         {
             key: '1',
-            label: 'CHỈ TIÊU CHƯA DUYỆT (' + row?.peddingRows.length + ")",
+            label: 'CHỈ TIÊU CHƯA DUYỆT (' + row?.pendingRows.length + ")",
             children: <RenderListGoas />,
         },
         {
@@ -147,7 +143,7 @@ const ListGoals = () => {
         },
     ];
 
-    return (
+    return ( 
         <>
             {
                 auth?.user && 

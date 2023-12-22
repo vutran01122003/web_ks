@@ -59,7 +59,6 @@ const LayoutTable = ({ table, page, pendingTable }) => {
     const handleOpenModal = () => {
         setUseStateModal(true)
     }
-    console.log(openPreviewModal);
 
 	return (
 		<div className="container__table">

@@ -210,22 +210,28 @@
                                 margin-bottom: 15px;
                                 gap: 5px;
 
+                                .score_value_input,
                                 .fixed_value_input {
-                                    flex: 1;
+                                    width: 160px;
                                     padding: 8px 12px;
                                     height: 40px;
                                     outline: none;
                                     border: 1px solid rgb(183, 181, 181);
-                                    border-radius: 5px;
+                                    border-radius: 3px;
                                     font-weight: 600;
                                     font-size: 16px;
                                 }   
+
+                                .score_value_input {
+                                    width: 100px;
+                                }
 
                                 .add_fixed_value_btn {
                                     width: 120px;
                                     border-radius: 5px;
                                     background: #006fee;
                                     font-weight: 600;
+                                    font-size: 15px;
                                     color: #fff;
                                     outline: none;
                                     border: none;
@@ -254,15 +260,21 @@
                                     overflow: hidden;
                                     text-overflow: ellipsis;
 
-                                    .span {
+                                    .fixed_value_icon {
                                         display: flex;
                                         align-items: center;
                                     }
-
+                                    
                                     .fixed_value {
-                                        flex: 1;
+                                        font-weight: 700;
                                         overflow: hidden;
                                         text-overflow: ellipsis;
+                                    }
+
+                                    .score_value {
+                                        color: gray;
+                                        font-size: 14px;
+                                        font-weight: 400;
                                     }
                                 }
 

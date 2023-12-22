@@ -18,6 +18,7 @@ const CreateGoals = ({handleAddTable}) => {
     const [pageStudentMajor, setPageStudentMajor] = useState('');
     const [pageStudentLevelYear, setPageStudentLevelYear] = useState('');
     const [fixedValue, setFixedValue] = useState('');
+    const [scoreValue, setScoreValue] = useState('');
     const [visibleModal, setVisibleModal] = useState(false);
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
@@ -72,10 +73,13 @@ const CreateGoals = ({handleAddTable}) => {
         setTables(updatedTables);
     };
 
-    const addFixedValue = (tableIndex, rowIndex, value) => {
-        if(value.trim()) {
+    const addFixedValue = (tableIndex, rowIndex, value, score) => {
+        if(value.trim() && score) {
             const updatedTables = [...tables];
-            updatedTables[tableIndex].rowTitleList[rowIndex].fixedValue.push(value);
+            updatedTables[tableIndex].rowTitleList[rowIndex].fixedValue.push({
+                value,
+                score
+            });
             setTables(updatedTables);
         } 
     };
@@ -340,11 +344,19 @@ const CreateGoals = ({handleAddTable}) => {
                                                                                 onChange={(e) => {setFixedValue(e.target.value)}}
                                                                                 value={fixedValue}
                                                                             />
+                                                                            <input 
+                                                                                type="text" 
+                                                                                placeholder='Điểm' 
+                                                                                className='score_value_input'
+                                                                                onChange={(e) => {setScoreValue(Number.parseInt(e.target.value))}}
+                                                                                value={isNaN(scoreValue) ? '' : scoreValue}
+                                                                            />
                                                                             <button 
                                                                                 className='add_fixed_value_btn'
                                                                                 onClick={(e) => {
-                                                                                    addFixedValue(tableIndex, rowIndex, fixedValue);
+                                                                                    addFixedValue(tableIndex, rowIndex, fixedValue, scoreValue);
                                                                                     setFixedValue('');
+                                                                                    setScoreValue('');
                                                                                 }}
                                                                             >
                                                                                 Thêm
@@ -352,14 +364,17 @@ const CreateGoals = ({handleAddTable}) => {
                                                                     </div>
                                                                     <ul>
                                                                         {
-                                                                            table.rowTitleList[rowIndex].fixedValue.map((value, index) => (
+                                                                            table.rowTitleList[rowIndex].fixedValue.map((fixedValueObj, index) => (
                                                                                 <li key={index} className='fixed_value_item'>
                                                                                     <span className='fixed_value_wrapper'>
                                                                                         <span className='fixed_value_icon'>
                                                                                             <FaCaretRight />
                                                                                         </span>
                                                                                         <span className='fixed_value'>
-                                                                                            {value}
+                                                                                            {fixedValueObj.value}
+                                                                                        </span>
+                                                                                        <span className='score_value'>
+                                                                                            {"Điểm: " + fixedValueObj.score }
                                                                                         </span>
                                                                                     </span>
                                                                                     <div 

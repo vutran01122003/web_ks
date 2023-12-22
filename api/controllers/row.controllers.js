@@ -34,16 +34,16 @@ class RowControllers {
         }
     };
 
-    getPeddingRows = async (req, res, next) => {
+    getPendingRows = async (req, res, next) => {
         try {
             if (!res.locals.roles.includes('0004'))
                 throw createError.Forbidden('Không đủ quyền lấy dữ liệu chỉ tiêu chờ duyệt');
 
             const { page, limit, current_pedding_rows } = req.query;
-            const peddingRow = await RowService.getPeddingRows({
+            const peddingRow = await RowService.getPendingRows({
                 page,
                 limit,
-                currentPeddingRows: current_pedding_rows
+                currentPendingRows: current_pedding_rows
             });
             res.status(200).json({
                 code: peddingRow.code,
