@@ -1,18 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoNotificationsSharp } from 'react-icons/io5';
-import { BsDot } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 import { TbGridDots } from "react-icons/tb";
 import ControlBoxAccount from './ComponentControl/ControlBoxAccount';
 import Avatar from '../ComponentAvatar/ComponentAvatar';
 import { RiAdminFill } from "react-icons/ri";
-
 import ImageMessenger from "../../assets/images/image_messenger.png";
 import ImageTask from "../../assets/images/image_task.png";
 import ImageNote from "../../assets/images/image_note.png";
-import FormControl from '../ComponentForm/FormControl';
-import { Button, Modal, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { useMemo } from 'react';
 
 const TopHeader = ({ auth }) => {
@@ -56,9 +52,9 @@ const TopHeader = ({ auth }) => {
     const ARRAY_LIST_PRODUCT = [
         {
             id: 0,
-            name_production: "Messenger",
+            name_production: "IUH Chat",
             icon_size: ImageMessenger,
-            to_link: "#"
+            to_link: "/chat"
         },
         {
             id: 1,
@@ -100,14 +96,6 @@ const TopHeader = ({ auth }) => {
             <div className="tr__header">
                 <div className="flex__line">
                     <div className="line__firts">
-
-
-                        {/* <FormControl
-                            iconBefore={<ImSearch />}
-                            placeholder="Search"
-                            className="box_search"
-                            id="search_box"
-                        /> */}
                         <div className="khoa_style">
                             KHOA : {auth?.user?.faculty}
                         </div>

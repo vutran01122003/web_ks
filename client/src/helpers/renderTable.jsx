@@ -1,13 +1,31 @@
-export const renderTable = ({ table, pendingGoalsInfo }) => {
+export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
     const TABLE = {};
-
-    const pendingTable = pendingGoalsInfo ? pendingGoalsInfo.page[0].tables.find((table) => {
-        return table._id === pendingGoalsInfo.table;
+  
+    const dynamicTable = dynamicRowsInfo ? dynamicRowsInfo.page[0].tables.find((table) => {
+        return table._id === dynamicRowsInfo.table;
     }) : null
 
-    TABLE.tableId = table ? table._id : pendingTable.table;
-    TABLE.title = table ? table.tableName : pendingTable.tableName;
-    const rowTitleList = table ? table.rowTitleList : pendingTable.rowTitleList;
+    let buttonNameLabel = "";
+    if(rowsType) {
+        switch (rowsType) {
+            case "pendingRows":
+                buttonNameLabel = "Xét Duyệt Chỉ Tiêu";
+                break;
+            case "acceptedRows":
+                buttonNameLabel = "Nhấn Để Hủy";
+                break;
+            case "rejectedRows":
+                buttonNameLabel = "Nhấn Để Duyệt";
+                break;
+            default:
+                buttonNameLabel = "Xét Duyệt Chỉ Tiêu";
+                break;
+        }
+    }
+
+    TABLE.tableId = table ? table._id : dynamicTable.table;
+    TABLE.title = table ? table.tableName : dynamicTable.tableName;
+    const rowTitleList = table ? table.rowTitleList : dynamicTable.rowTitleList;
     
     TABLE.thead = rowTitleList.map((rowTitle) => {
         return {
@@ -32,10 +50,19 @@ export const renderTable = ({ table, pendingGoalsInfo }) => {
             typeInput: "text",
             requiredHeading: true,
             isShow: false,
-        },
+        }
     ];
 
-    const content = table ? table.rowValueList[0]?.content : pendingGoalsInfo?.content;
+    if(!table) {
+        TABLE.thead.push({
+            textHeading: buttonNameLabel,
+            typeInput: "text",
+            requiredHeading: true,
+            isShow: false,
+        });
+    }
+
+    const content = table ? table.rowValueList[0]?.content : dynamicRowsInfo?.content;
 
     if (content && content?.length > 0) {
         TABLE.tbody = content.map(
@@ -74,6 +101,15 @@ export const renderTable = ({ table, pendingGoalsInfo }) => {
                                 ? true
                                 : false,
                     },
+                    {
+                        buttonNameLabel: true,
+                        textHeadingExists: table ? false : true,
+                        rowsType,
+                        rowInfoData: {
+                            rowListId: dynamicRowsInfo?._id,
+                            contentIdList: [rowValueItem?._id]
+                        }
+                    }
                 ];
             }
         );

@@ -6,6 +6,7 @@ import rowReducer from './rowReducer';
 import TableReducer from './tableReducer';
 import newsReducer from './newsReducer';
 import progressReducer from './progressReducer';
+import chatBotReducer from './chatbotReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     alert: alertReducer,
     table: TableReducer,
     news: newsReducer,
-    progress: progressReducer
+    progress: progressReducer,
+	chatbot: chatBotReducer,
 });
 
 export default rootReducer;

@@ -1,12 +1,13 @@
 import { useDispatch } from "react-redux";
-import { updatePendingRowStatus } from "../../redux/actions/rowAction";
+import { updateRowsStatus } from "../../redux/actions/rowAction";
 import { Modal } from "antd";
 
-function ConfirmModal({isOpen, content, title, status, rowInfoData, handleHiddenConfirmModal}) {
+function ConfirmModal({isOpen, content, title, status, rowInfoData, handleHiddenConfirmModal, rowsType}) {
     const dispatch = useDispatch();
 
-    const handleUpdateRowStatus = () => {
-        dispatch(updatePendingRowStatus({
+    const handleUpdateRowsStatus = () => {
+        dispatch(updateRowsStatus({
+            rowsType,
             status,
             rowListId: rowInfoData.rowListId, 
             contentIdList: rowInfoData.contentIdList
@@ -19,7 +20,7 @@ function ConfirmModal({isOpen, content, title, status, rowInfoData, handleHidden
             title={title}
             centered
             open={isOpen}
-            onOk={handleUpdateRowStatus}
+            onOk={handleUpdateRowsStatus}
             onCancel={handleHiddenConfirmModal}
         >
             {content}

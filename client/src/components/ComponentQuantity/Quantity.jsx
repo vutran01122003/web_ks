@@ -11,7 +11,7 @@ const Quantity = () => {
             text_heading: "Số lượng đơn chờ duyệt",
             quantity: 88,
             icon_after: <BiTaskX/>,
-            color_border: "#FF5D53"
+            color_border: "#f0635c"
         },
         {
             id: 1,

@@ -19,6 +19,10 @@ const LayoutSideBar = ({ auth }) => {
 	const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'))
 	const [subMenu, setSubMenu] = useState(ARRAY_LIST_MENU.map(() => false))
 
+    // console.log(heightBoxSub);
+    // console.log(subMenu);
+    // console.log(refBoxSubs);
+
 	const handleSubMenu = (index) => {
 		const newSubMenuState = [...subMenu]
 		newSubMenuState[index] = !newSubMenuState[index]

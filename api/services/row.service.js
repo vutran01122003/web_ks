@@ -123,19 +123,34 @@ class RowService {
         }
     };
 
-    static getPendingRows = async ({ page, limit, currentPendingRows }) => {
+    static getDynamicRows = async ({ page, limit, currentRows, rowsType }) => {
+        let rowStatus = null;
         let skip = (page - 1) * limit;
-        const removedPendingRows = skip - currentPendingRows;
-        if (removedPendingRows > 0) skip = skip - removedPendingRows;
+        const removedDynamicRows = skip - currentRows;
+        if (removedDynamicRows > 0) skip = skip - removedDynamicRows;
+
+        switch (rowsType) {
+            case 'pendingRows':
+                rowStatus = 'Chờ Duyệt';
+                break;
+            case 'acceptedRows':
+                rowStatus = 'Đã Duyệt';
+                break;
+            case 'rejectedRows':
+                rowStatus = 'Từ Chối';
+                break;
+            default:
+                throw createError.BadRequest();
+        }
 
         try {
-            const pendingRows = await Row.aggregate([
+            const dynamicRows = await Row.aggregate([
                 {
                     $unwind: '$content'
                 },
                 {
                     $match: {
-                        'content.status': 'Chờ Duyệt'
+                        'content.status': rowStatus
                     }
                 },
                 {
@@ -185,8 +200,8 @@ class RowService {
             return {
                 code: 200,
                 status: 'success',
-                msg: 'Lấy dữ liệu chưa duyệt thành công',
-                data: pendingRows
+                msg: `Lấy dữ liệu chỉ tiêu ${rowStatus.toLowerCase()} thành công`,
+                data: dynamicRows
             };
         } catch (error) {
             throw error;
