@@ -40,9 +40,24 @@ class RowControllers {
                 throw createError.Forbidden('Không đủ quyền lấy dữ liệu chỉ tiêu chờ duyệt');
 
             const { page, limit, current_rows, rows_type } = req.query;
+
+            const userFilterConditions = {
+                ['user.major']: req.query?.major ? req.query?.major.toLowerCase() : null,
+                ['user.studentId']: req.query?.student_id
+                    ? {
+                          ['$regex']: new RegExp(`^${req.query?.student_id}`)
+                      }
+                    : null
+            };
+
+            Object.keys(userFilterConditions).forEach((key) => {
+                if (!userFilterConditions[key]) delete userFilterConditions[key];
+            });
+
             const peddingRow = await RowService.getDynamicRows({
                 page,
                 limit,
+                userFilterConditions,
                 currentRows: current_rows,
                 rowsType: rows_type
             });
@@ -52,6 +67,7 @@ class RowControllers {
                 data: peddingRow.data
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

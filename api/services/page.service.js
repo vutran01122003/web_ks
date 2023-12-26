@@ -25,12 +25,12 @@ class PageService {
 
             if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
 
-            if (pageType === 'Tin Tức') {
+            if (pageType === 'tin tức') {
                 createdPage = await Page.create({
                     pageName,
                     pageType
                 });
-            } else if (pageType === 'Chỉ Tiêu') {
+            } else if (pageType === 'chỉ tiêu') {
                 createdPage = await Page.create({
                     pageName,
                     pageFaculty,
@@ -44,7 +44,7 @@ class PageService {
 
             return {
                 status: 201,
-                msg: `Tạo ${pageType === 'Chỉ Tiêu' ? 'Trang' : 'Loại Tin Tức'} Thành Công`,
+                msg: `Tạo ${pageType === 'chỉ tiêu' ? 'Trang' : 'Loại Tin Tức'} Thành Công`,
                 data: createdPage
             };
         } catch (error) {

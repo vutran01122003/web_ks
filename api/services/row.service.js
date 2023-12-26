@@ -123,7 +123,13 @@ class RowService {
         }
     };
 
-    static getDynamicRows = async ({ page, limit, currentRows, rowsType }) => {
+    static getDynamicRows = async ({
+        page,
+        limit,
+        userFilterConditions,
+        currentRows,
+        rowsType
+    }) => {
         let rowStatus = null;
         let skip = (page - 1) * limit;
         const removedDynamicRows = skip - currentRows;
@@ -177,6 +183,9 @@ class RowService {
                         foreignField: '_id',
                         as: 'user'
                     }
+                },
+                {
+                    $match: userFilterConditions
                 },
                 {
                     $skip: skip * 1

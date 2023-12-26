@@ -4,7 +4,7 @@ export const renderSideBar = ({auth, page}) => {
     ARRAY_LIST_MENU.forEach((menuItem) => {
         if(menuItem.dynamicPage && menuItem.dynamicPage === 'news') {
             menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
-                if (page.pageType === "Tin Tức" ) {
+                if (page.pageType === "tin tức" ) {
                     return [
                         ...intialArr,
                         {
@@ -22,7 +22,7 @@ export const renderSideBar = ({auth, page}) => {
 
         if(menuItem.dynamicPage && menuItem.dynamicPage === 'goals') {
             menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
-                if (page.pageType === "Chỉ Tiêu" &&
+                if (page.pageType === "chỉ tiêu" &&
                     page.pageStudentCohort === auth?.user.cohort &&
                     page.pageFaculty === auth?.user.faculty &&
                     page.pageStudentMajor ===  auth?.user.major    

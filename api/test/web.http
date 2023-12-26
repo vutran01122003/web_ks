@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "pageName": "Hoạt động Nghien Cuu", 
-    "pageType": "Chỉ Tiêu",
+    "pageType": "chỉ tiêu",
     "tables": [
         {
             "tableName": "Nghiên cứu tuyen sinh",

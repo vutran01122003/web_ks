@@ -1,5 +1,6 @@
+const talentESConn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 const [DOC, COL] = ['row', 'rows'];
 
 const RowSchema = new Schema(
@@ -46,7 +47,7 @@ const RowSchema = new Schema(
     }
 );
 
-const Row = model(DOC, RowSchema);
+const Row = talentESConn.model(DOC, RowSchema);
 
 RowSchema.pre('deleteMany', async function (next) {
     try {

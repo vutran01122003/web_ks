@@ -152,7 +152,7 @@ const CreateGoals = ({handleAddTable}) => {
         if(!checkDuplicate) {
             const pageData = {
                 pageName,
-                pageType: "Chỉ Tiêu",
+                pageType: "chỉ tiêu",
                 pageFaculty,
                 pageStudentCohort,
                 pageStudentMajor,

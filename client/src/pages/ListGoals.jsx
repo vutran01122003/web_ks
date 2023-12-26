@@ -7,6 +7,7 @@ import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDy
 import CircularProgress from '@mui/material/CircularProgress';
 import { Button, Select, Tabs} from 'antd';
 import { Input } from 'antd';
+import GLOBALTYPES from '../redux/actions/globalTypes';
 const { Search } = Input;
 
 const ListGoals = () => {
@@ -14,6 +15,12 @@ const ListGoals = () => {
     const row = useSelector(rowSelector);
     const observer = useRef();
     const dispatch = useDispatch();
+    const [refreshTabTrigger, setRefreshTabTrigger] = useState(false);
+    const [studentData, setStudentData] = useState({
+        studentId: '',
+        major: ''
+    });
+
     const [nextPage, setNextPage] = useState({
         pendingRows: 1,
         acceptedRows: 1,
@@ -21,7 +28,6 @@ const ListGoals = () => {
     });
 
     const [tab, setTab] = useState('pendingRows');
-    const [refreshRows, setRefreshRows] = useState(false);
     const limit = 3;
 
     useEffect(() => {
@@ -29,16 +35,45 @@ const ListGoals = () => {
             dispatch(getDynamicRows(
                 {   
                     tab,
+                    studentData,
                     page: nextPage[tab],
                     currentRows: row[tab]?.currentRows,
                     limit
                 }
             ))
         }
-    }, [nextPage[tab], auth?.user, tab]);
+    }, [nextPage[tab], auth?.user, tab, refreshTabTrigger]);
     
+    const handleRefreshTab = () => {
+        dispatch({
+            type: GLOBALTYPES.ROW.REFRESH_TAB,
+            payload: {
+                rowsType: tab
+            }
+        })
+        setRefreshTabTrigger(prev => !prev);
+        setNextPage(prev => ({...prev, [tab]: 1}));
+    }
+
     const handleChangeTabValue = (tabValue) => {
+        setStudentData({
+            studentId: '',
+            major: ''
+        });
+
         setTab(tabValue);
+    }
+
+    const handleRelativeSearchByStudentId = (value, _e, info) => {
+        if(info?.source === "input") {
+            handleRefreshTab();
+            setStudentData(prev => ({...prev, studentId: value}));
+        }
+    }
+
+    const handleSearchByStudentMajor = (major) => {
+        handleRefreshTab();
+        setStudentData(prev => ({...prev, major: major.value}));
     }
 
     const lastPostElementRef = useCallback(
@@ -65,6 +100,7 @@ const ListGoals = () => {
                 <div className='box__left'>
                     <Select
                         labelInValue
+                        onChange={handleSearchByStudentMajor}
                         defaultValue={{
                             value: '',
                             label: 'Chọn Chuyên Ngành',
@@ -91,13 +127,19 @@ const ListGoals = () => {
                     <Search
                         placeholder="Mã sinh viên"
                         allowClear
+                        onSearch={handleRelativeSearchByStudentId}
                         style={{
                             width: 220,
                         }}
                     />
                 </div>
                 <div className='box__right'>
-                    <Button type="primary" icon={<ReloadOutlined />} className="btn__download">
+                    <Button 
+                        type="primary" 
+                        icon={<ReloadOutlined />} 
+                        className="btn__download"
+                        onClick={handleRefreshTab}
+                    >
                         Làm Mới
                     </Button>
                 </div>
@@ -108,6 +150,7 @@ const ListGoals = () => {
 
     const RenderListGoas = () => {
         return (
+            tab ?
             <>
                 <ComponentSortTab1 />
                	<div className="container__center">
@@ -124,7 +167,7 @@ const ListGoals = () => {
                                 
                                 return (
                                     <div key={dynamicRows?.table + index} >
-                                        <ComponentDynamicRows dynamicRows={dynamicRows} />
+                                        <ComponentDynamicRows rowsType={tab} dynamicRows={dynamicRows} />
                                     </div>
                                 )
                             })}
@@ -138,7 +181,7 @@ const ListGoals = () => {
                         </>
                     )}
 			    </div>
-            </>
+            </> : null
         )
     };
 

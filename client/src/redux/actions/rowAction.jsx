@@ -37,7 +37,7 @@ export const addRow = ({formData}) => async (dispatch) => {
     }
 }
 
-export const getDynamicRows = ({ tab, page, limit, currentRows}) => async (dispatch) => {
+export const getDynamicRows = ({ tab, studentData, page, limit, currentRows}) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ROW.LOADING_PENDING_ROWS,
@@ -46,8 +46,15 @@ export const getDynamicRows = ({ tab, page, limit, currentRows}) => async (dispa
             }
         })
 
-        const res = await getDataApi(`/dynamic_rows?page=${page || 1}&limit=${limit || 3}&current_rows=${currentRows}&rows_type=${tab}`);
-        
+        const res = await getDataApi('/dynamic_rows', {
+            page: page || 1,
+            limit: limit || 3,
+            current_rows: currentRows,
+            rows_type: tab,
+            student_id: studentData?.studentId || null,
+            major: studentData?.major || null
+        })
+  
         dispatch({
             type: GLOBALTYPES.ROW.GET_DYNAMIC_ROWS,
             payload: {

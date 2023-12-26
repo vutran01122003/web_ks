@@ -4,10 +4,12 @@ const { Schema } = mongoose;
 const TableSchema = new Schema({
     tableName: {
         type: String,
+        lowercase: true,
         required: true
     },
     description: {
-        type: String
+        type: String,
+        lowercase: true
     },
     rowTitleList: {
         type: [
@@ -16,7 +18,7 @@ const TableSchema = new Schema({
                 fixedValue: [
                     {
                         value: String,
-                        score: Number
+                        score: Schema.Types.Number
                     }
                 ]
             }
@@ -25,7 +27,7 @@ const TableSchema = new Schema({
     },
     quantityDemanded: {
         // Số lượng chỉ tiêu yều cầu cho một bảng
-        type: Number,
+        type: Schema.Types.Number,
         required: true
     },
     rowValueList: {
@@ -33,7 +35,7 @@ const TableSchema = new Schema({
         default: []
     },
     isActive: {
-        type: Boolean,
+        type: Schema.Types.Boolean,
         default: true
     }
 });

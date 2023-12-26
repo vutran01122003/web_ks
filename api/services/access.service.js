@@ -89,7 +89,12 @@ class AccessService {
                 faculty,
                 email,
                 phone,
-                roles: [role.engineer]
+                roles: [
+                    role.engineer,
+                    role.talentedEngineer,
+                    role.contentAdministrator,
+                    role.webStructureAdministrator
+                ]
             });
 
             await createdUser.save();

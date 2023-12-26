@@ -1,6 +1,6 @@
 export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
     const TABLE = {};
-  
+
     const dynamicTable = dynamicRowsInfo ? dynamicRowsInfo.page[0].tables.find((table) => {
         return table._id === dynamicRowsInfo.table;
     }) : null

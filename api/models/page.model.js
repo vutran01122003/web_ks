@@ -1,5 +1,6 @@
+const talentESConn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 const TableSchema = require('./tables.schema');
 
 const [DOC, COL] = ['page', 'pages'];
@@ -8,27 +9,31 @@ const PageSchema = new Schema(
     {
         pageName: {
             type: String,
+            lowercase: true,
             trim: true
         },
         pageType: {
             type: String,
-            enum: ['Chỉ Tiêu', 'Tin Tức'],
-            default: 'Chỉ Tiêu'
+            lowercase: true,
+            enum: ['chỉ tiêu', 'tin tức'],
+            default: 'chỉ tiêu'
         },
         pageFaculty: {
             type: String,
+            lowercase: true,
             validate: {
                 validator: function () {
-                    return this.pageType === 'Chỉ Tiêu';
+                    return this.pageType === 'chỉ tiêu';
                 },
                 message: 'pageFaculty is required when pageType is "Chỉ Tiêu".'
             }
         },
         pageStudentMajor: {
             type: String,
+            lowercase: true,
             validate: {
                 validator: function () {
-                    return this.pageType === 'Chỉ Tiêu';
+                    return this.pageType === 'chỉ tiêu';
                 },
                 message: 'pageStudentMajor is required when pageType is "Chỉ Tiêu".'
             }
@@ -37,7 +42,7 @@ const PageSchema = new Schema(
             type: Number,
             validate: {
                 validator: function () {
-                    return this.pageType === 'Chỉ Tiêu';
+                    return this.pageType === 'chỉ tiêu';
                 },
                 message: 'pageStudentCohort is required when pageType is "Chỉ Tiêu".'
             }
@@ -46,7 +51,7 @@ const PageSchema = new Schema(
             type: Number,
             validate: {
                 validator: function () {
-                    return this.pageType === 'Chỉ Tiêu';
+                    return this.pageType === 'chỉ tiêu';
                 },
                 message: 'pageStudentLevelYear is required when pageType is "Chỉ Tiêu".'
             }
@@ -109,6 +114,6 @@ PageSchema.pre('findOneAndUpdate', async function (next) {
     }
 });
 
-const Page = model(DOC, PageSchema);
+const Page = talentESConn.model(DOC, PageSchema);
 
 module.exports = Page;

@@ -1,5 +1,5 @@
-require('./dbs/init.mongodb');
 // require('./dbs/init.redis');
+require('./dbs/init.mongodb');
 const express = require('express');
 const createError = require('http-errors');
 const helmet = require('helmet');

@@ -1,5 +1,6 @@
+const chatbotConn = require('../dbs/init.atlas');
 const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 
 const ChatSchema = new Schema(
     {
@@ -15,4 +16,4 @@ const ChatSchema = new Schema(
     }
 );
 
-module.exports = model('chat', ChatSchema);
+module.exports = chatbotConn.model('chat', ChatSchema);

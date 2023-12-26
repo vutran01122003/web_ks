@@ -41,27 +41,20 @@ function rowReducer(state = initialState, action) {
                         action.payload.dynamicRows.length : 
                         state[action.payload.rowsType].data.length + action.payload.dynamicRows.length
                 }
-                // pendingRows: action.payload.page === 1 ? 
-                //     action.payload.pendingRows : 
-                //     [...state.pendingRows, ...action.payload.pendingRows],
-                // page: action.payload?.page || 1,
-                // maxPage: action.payload.pendingRows.length === 0 ? true : false,
-                // currentPendingRows: action.payload?.page === 1 ? 
-                //     action.payload.pendingRows.length : 
-                //     state.pendingRows.length + action.payload.pendingRows.length
             }
         case GLOBALTYPES.ROW.REMOVE_ALL_ROW: {
-            const newArr = removeElem([...state.pendingRows], action.payload.pendingRowId);
+            const newArr = removeElem([...state[action.payload.rowsType].data], action.payload.rowId);
 
             return {
                 ...state,
-                pendingRows: newArr,
-                currentPendingRows: state.currentPendingRows - 1
+                [action.payload.rowsType]: {
+                    ...state[action.payload.rowsType],
+                    data: newArr
+                }
             }
         }
                
         case GLOBALTYPES.ROW.REMOVE_ROW: {
-            console.log(action.payload.rowsType);
             const rowList = [...state[action.payload.rowsType].data];
             let flat = null;
 
@@ -89,7 +82,17 @@ function rowReducer(state = initialState, action) {
                 }
             }
         }
-           
+        case GLOBALTYPES.ROW.REFRESH_TAB: {
+            return {
+                ...state,
+                [action.payload.rowsType]: {
+                    data: [],
+                    page: 0,
+                    maxPage: false,
+                    currentRows: 0
+                }
+            }
+        }
         default:
             return state;
     }
