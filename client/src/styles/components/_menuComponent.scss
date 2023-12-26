@@ -45,7 +45,7 @@
                     padding: 13px 10px;
                     padding-right: 0px;
                     color: $color_black;
-                    font-size: 15px;
+                    font-size: 14px;
                     font-weight: 700;
                     cursor: pointer;
                     @include flex_center;
@@ -57,6 +57,7 @@
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    text-transform: uppercase;
     
                     > span {
                         @include flex_center;
