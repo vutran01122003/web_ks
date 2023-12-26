@@ -7,16 +7,16 @@ import { Button } from 'antd'
 import { FaArrowDown } from 'react-icons/fa6'
 import { chatbotSelector } from '../redux/selector'
 import GLOBALTYPES from '../redux/actions/globalTypes'
-
+import Markdown from 'react-markdown'
 const Chat = () => {
 	const dispatch = useDispatch()
 	const chatbot = useSelector(chatbotSelector)
 	const chatContainerRef = useRef(null)
 	const [question, setQuestion] = useState('')
 	const [showScrollButton, setShowScrollButton] = useState(false)
-	useEffect(() => {
-		dispatch(getTypeChat())
-	}, [])
+	// useEffect(() => {
+	// 	dispatch(getTypeChat())
+	// }, [])
 
 	useEffect(() => {
 		scrollToBottom()
@@ -79,7 +79,7 @@ const Chat = () => {
 				{matches.map((part, index) =>
 					index % 2 === 0 ? (
 						// Phần tử có chỉ số chẵn là văn bản
-						<span key={index}>{part}</span>
+						<Markdown key={index}>{part}</Markdown>
 					) : (
 						// Phần tử có chỉ số lẻ là liên kết
 						<a key={index} href={part} target="_blank">
@@ -118,11 +118,11 @@ const Chat = () => {
 					))
 				) : (
 					<div className="choice-type">
+						{/* <div className="choice-type__item">Item1</div>
 						<div className="choice-type__item">Item1</div>
 						<div className="choice-type__item">Item1</div>
 						<div className="choice-type__item">Item1</div>
-						<div className="choice-type__item">Item1</div>
-						<div className="choice-type__item">Item1</div>
+						<div className="choice-type__item">Item1</div> */}
 					</div>
 				)}
 			</div>
