@@ -37,7 +37,7 @@ function chatBotReducer(state = initialState, action) {
 		case GLOBALTYPES.CHATBOT.GET_TYPE_CHAT: {
 			return {
 				...state,
-				typeChat: ["Hello"],
+				typeChat: action.payload.typeChat,
 			}
 		}
 

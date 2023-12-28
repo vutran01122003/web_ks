@@ -31,7 +31,7 @@ class ChatControllers {
 		try {
 			const type = await ChatService.getType()
 			const typeChat = type.type.map((item) => item.type)
-			res.status(200).json({ typeChat })
+			res.status(200).json({ response: typeChat })
 		} catch (error) {
 			console.log(error)
 			next(error)

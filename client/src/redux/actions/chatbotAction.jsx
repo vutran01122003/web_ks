@@ -1,4 +1,4 @@
-import { postDataApi } from '../../utils/fetchData'
+import { getDataApi, postDataApi } from '../../utils/fetchData'
 import GLOBALTYPES from './globalTypes'
 
 export const sendChat = (question, typeChat) => async (dispatch) => {
@@ -53,22 +53,21 @@ export const sendChat = (question, typeChat) => async (dispatch) => {
 export const getTypeChat = () => async (dispatch) => {
 	try {
 		const res = await getDataApi('/chat')
-		console.log(res)
 		dispatch({
 			type: GLOBALTYPES.CHATBOT.GET_TYPE_CHAT,
 			payload: {
-				typeChat: res.data.typeChat,
+				typeChat: res.data.response,
 			},
 		})
 	} catch (error) {
-		// dispatch({
-		// 	type: GLOBALTYPES.ALERT,
-		// 	payload: {
-		// 		error:
-		// 			error?.response.data?.status === 401
-		// 				? 'Hết phiên đăng nhập'
-		// 				: error?.response.data?.msg || 'Lấy dữ liệu thất bại',
-		// 	},
-		// })
+		dispatch({
+			type: GLOBALTYPES.ALERT,
+			payload: {
+				error:
+					error?.response.data?.status === 401
+						? 'Hết phiên đăng nhập'
+						: error?.response.data?.msg || 'Lấy dữ liệu thất bại',
+			},
+		})
 	}
 }

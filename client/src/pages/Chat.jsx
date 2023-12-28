@@ -14,9 +14,10 @@ const Chat = () => {
 	const chatContainerRef = useRef(null)
 	const [question, setQuestion] = useState('')
 	const [showScrollButton, setShowScrollButton] = useState(false)
-	// useEffect(() => {
-	// 	dispatch(getTypeChat())
-	// }, [])
+	const [typeChat, setTypeChat] = useState(null)
+	useEffect(() => {
+		dispatch(getTypeChat())
+	}, [])
 
 	useEffect(() => {
 		scrollToBottom()
@@ -47,7 +48,7 @@ const Chat = () => {
 					data: question,
 				},
 			})
-			dispatch(sendChat(question, 'INNOGREEN'))
+			dispatch(sendChat(question, typeChat))
 			setQuestion('')
 		}
 		return
@@ -79,7 +80,9 @@ const Chat = () => {
 				{matches.map((part, index) =>
 					index % 2 === 0 ? (
 						// Phần tử có chỉ số chẵn là văn bản
-						<Markdown key={index}>{part}</Markdown>
+						<div key={index}>
+							<Markdown>{part}</Markdown>
+						</div>
 					) : (
 						// Phần tử có chỉ số lẻ là liên kết
 						<a key={index} href={part} target="_blank">
@@ -90,7 +93,12 @@ const Chat = () => {
 			</div>
 		)
 	}
-
+	console.log(typeChat)
+	const handleTypeChat =
+		({ item }) =>
+		() => {
+			setTypeChat(item)
+		}
 	return (
 		<div className="pageChatbot">
 			<div className="chat-content" ref={chatContainerRef}>
@@ -118,11 +126,13 @@ const Chat = () => {
 					))
 				) : (
 					<div className="choice-type">
-						{/* <div className="choice-type__item">Item1</div>
-						<div className="choice-type__item">Item1</div>
-						<div className="choice-type__item">Item1</div>
-						<div className="choice-type__item">Item1</div>
-						<div className="choice-type__item">Item1</div> */}
+						{chatbot.typeChat &&
+							!typeChat &&
+							chatbot.typeChat.map((item, index) => (
+								<div key={index} className="choice-type__item" onClick={handleTypeChat({ item })}>
+									{item}
+								</div>
+							))}
 					</div>
 				)}
 			</div>
