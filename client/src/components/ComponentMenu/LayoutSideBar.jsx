@@ -137,7 +137,7 @@ const LayoutSideBar = ({ auth }) => {
 
 	return (
 		<div
-			className={`container__menu ${determineAuth ? 'background_admin ' : ''} 
+			className={`container__menu ${determineAuth ? 'sidebar_admin ' : ''} 
 		${toggleMenu ? "active_toggle" : ""}`}
 		>
 			<div className={`menu_wrapper ${toggleMenu ? "active_toggle" : ""}`}>
