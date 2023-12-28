@@ -2,7 +2,8 @@ import GLOBALTYPES from '../actions/globalTypes'
 
 const initialState = {
 	isLoading: false,
-    data: []
+	data: [],
+	typeChat: [],
 }
 
 function chatBotReducer(state = initialState, action) {
@@ -13,24 +14,33 @@ function chatBotReducer(state = initialState, action) {
 				isLoading: action.payload.isLoading,
 			}
 		}
-        case GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA: {
-            if(action.payload.key === 'answer') {
-                const new_data = [...state.data];
-                new_data[new_data.length -1][action.payload.key] = action.payload.data;
-                return {
-                    ...state,
-                    data: new_data
-                }
-            }
+		case GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA: {
+			if (action.payload.key === 'answer') {
+				const new_data = [...state.data]
+				new_data[new_data.length - 1][action.payload.key] = action.payload.data
+				return {
+					...state,
+					data: new_data,
+				}
+			}
+			return {
+				...state,
+				data: [
+					...state.data,
+					{
+						[action.payload.key]: action.payload.data,
+					},
+				],
+			}
+		}
 
-            return {
-                ...state,
-                data: [...state.data, {
-                    [action.payload.key]: action.payload.data
-                }]
-            }
-        }
-        
+		case GLOBALTYPES.CHATBOT.GET_TYPE_CHAT: {
+			return {
+				...state,
+				typeChat: ["Hello"],
+			}
+		}
+
 		default:
 			return state
 	}
