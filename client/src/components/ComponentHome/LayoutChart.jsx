@@ -72,7 +72,7 @@ const LayoutChart = ({ children }) => {
 	}
     
 	return (
-		<div className="container__chart transform__animation--top">
+		<div className="container__chart">
 			<header className="heading-4">Tiến độ</header>
 			<div className="content">
 				<div className="chart__graph">

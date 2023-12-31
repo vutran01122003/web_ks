@@ -35,7 +35,7 @@ const Home = ({ auth }) => {
     return (
         <div className="pageHome ">
             <Quantity/>
-            <div className="container__top transform__animation--top">
+            <div className="container__top">
                 <LayoutInfo auth={auth} />
                 <>
                     {

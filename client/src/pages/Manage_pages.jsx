@@ -191,7 +191,7 @@ function ManagePagesPage() {
                                                     sub_menu_item?.sub_to_link.includes("/page/") &&
                                                     <div className='sub_menu_item_btn_wrapper'>
                                                         {
-                                                            sub_menu_item?.sub_page_type === "Chỉ Tiêu" &&
+                                                            sub_menu_item?.sub_page_type === "chỉ tiêu" &&
                                                             <>
                                                                 <button 
                                                                     className='watch_table_btn'

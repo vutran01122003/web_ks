@@ -217,12 +217,13 @@ class RowService {
         }
     };
 
-    static updateRowStatus = async ({ rowListId, contentIdList, status }) => {
+    static updateRowStatus = async ({ noteValue, rowListId, contentIdList, status }) => {
         try {
             const updatedRow = await Row.updateMany(
                 { _id: rowListId },
                 {
-                    'content.$[element].status': status ? 'Đã Duyệt' : 'Từ Chối'
+                    'content.$[element].status':
+                        status === null ? 'Chờ Duyệt' : status ? 'Đã Duyệt' : 'Từ Chối'
                 },
                 {
                     multi: true,
@@ -231,12 +232,26 @@ class RowService {
                 }
             );
 
+            if (noteValue) {
+                await Row.findOneAndUpdate(
+                    { _id: rowListId, 'content._id': contentIdList[0] },
+                    {
+                        $push: {
+                            'content.$.note': {
+                                value: noteValue
+                            }
+                        }
+                    }
+                );
+            }
+
             return {
                 code: 200,
                 msg: `Bạn đã ${status ? 'duyệt' : 'từ chối'} chỉ tiêu`,
                 data: updatedRow
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

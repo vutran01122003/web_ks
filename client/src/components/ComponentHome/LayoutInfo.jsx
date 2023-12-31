@@ -2,18 +2,13 @@ import React from 'react'
 import ComponentAvatar from '../ComponentAvatar/ComponentAvatar'
 import { Link } from 'react-router-dom'
 import LineItem from '../ComponentHome/LineItem'
+import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
 
 const LayoutInfo = ({ auth }) => {
 	const heading =
 		auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003')
 			? 'Thông tin giảng viên'
 			: 'Thông tin sinh viên'
-
-    function capitalizeFirstLetter(str) {
-        return str.replace(/^.|\s\S/g, function (match) {
-            return match.toUpperCase();
-        });
-    }
     
 	return (
 		<div className="container__info">

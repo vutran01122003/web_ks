@@ -1,7 +1,5 @@
 @import "@mixin_variable.scss";
 
-
-
 * {
     padding: 0;
     margin: 0;
@@ -73,20 +71,6 @@ a {
         }
     }
 }
-// animation box
-.transform__animation--top{
-    animation: transform_animation 0.5s forwards;
-    @keyframes transform_animation {
-        from{
-            transform: translateY(20px);
-        }
-        to{
-            transform: translateY(0px);
-        }
-    }
-}
-
-
 
 // loading
 .mesh-loader {

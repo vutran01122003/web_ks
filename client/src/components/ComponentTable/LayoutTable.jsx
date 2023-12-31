@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import TableModal from '../ComponentModal/TableModal'
 import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
 import ConfirmModal from '../ComponentModal/ConfirmModal';
-import { CheckSquareFilled , CloseSquareFilled } from '@ant-design/icons';
+import { CheckSquareFilled , CloseSquareFilled, MinusSquareFilled } from '@ant-design/icons';
+import NoteModal from '../ComponentModal/NoteModal';
+import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
 
 const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
+    const [visibleNoteModal, setVisibleNoteModal] = useState(false);
     const [modalData, setModalData] = useState({});
 
     const handleVisibleConfirmModal = () => {
@@ -14,6 +17,15 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
 
     const handleHiddenConfirmModal = () => {
         setVisibleConfirmModal(false);
+    }
+
+    const handleVisibleNoteModal = () => {
+        setVisibleNoteModal(true);
+    }
+
+    const handleHiddenNoteModal = (e) => {
+        e.preventDefault();
+        setVisibleNoteModal(false);
     }
 
 	return (
@@ -52,56 +64,90 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                     )
                 } else if (item?.buttonNameLabel) {
                     return (
-                            item?.textHeadingExists ? 
-                            <td key={index} className="line__item" >
-                                {
-                                    visibleConfirmModal &&
-                                    <ConfirmModal 
-                                        rowsType={item.rowsType}
-                                        isOpen={visibleConfirmModal}
-                                        title={modalData.title}
-                                        content={modalData.content}
-                                        status={modalData.status}
-                                        rowInfoData={item.rowInfoData}
-                                        handleHiddenConfirmModal={handleHiddenConfirmModal}
-                                    />
+                        <td key={index} className="line__item" >
+                            {
+                                visibleConfirmModal &&
+                                <ConfirmModal 
+                                    rowsType={item.rowsType}
+                                    isOpen={visibleConfirmModal}
+                                    title={modalData.title}
+                                    content={modalData.content}
+                                    status={modalData.status}
+                                    rowInfoData={item.rowInfoData}
+                                    handleHiddenConfirmModal={handleHiddenConfirmModal}
+                                />
+                            }
+                            <div className='button_wrapper'>
+                                {   
+                                    !["pendingRows"].includes(item.rowsType) &&
+                                    <button 
+                                        className='row_button_wrapper'
+                                        onClick={() => {
+                                            handleVisibleConfirmModal();
+                                            setModalData({
+                                                title: 'Thông Báo',
+                                                content: 'Bạn muốn hoạt động về trạng thái chưa duyệt ?',
+                                                status:  null,
+                                            })
+                                        }}    
+                                    >
+                                        <MinusSquareFilled className='row_button pending_button'/>
+                                    </button>
                                 }
-                                <div className='button_wrapper'>
-                                    {
-                                        ["rejectedRows", "pendingRows"].includes(item.rowsType) &&
-                                        <button 
-                                            className="row_button_wrapper" 
-                                            onClick={() => {
-                                                handleVisibleConfirmModal();
-                                                setModalData({
-                                                    title: 'Chấp Nhận Chỉ Tiêu',
-                                                    content: 'Bạn đã đọc kỹ minh chứng và chắc chắn chấp nhận chỉ tiêu này',
-                                                    status: true,
-                                                })
-                                            }}
-                                        >
-                                            <CheckSquareFilled className='row_button accpect_button' />
-                                        </button> 
-                                    }
 
-                                    {   
-                                         ["acceptedRows", "pendingRows"].includes(item.rowsType) &&
-                                        <button 
-                                            className='row_button_wrapper'
-                                            onClick={() => {
-                                                handleVisibleConfirmModal();
-                                                setModalData({
-                                                    title: 'Từ Chối Chỉ Tiêu',
-                                                    content: 'Bạn đã đọc kỹ minh chứng và chắc chắn từ chối chỉ tiêu này',
-                                                    status: false,
-                                                })
-                                            }}    
-                                        >
-                                            <CloseSquareFilled className='row_button reject_button' />
-                                        </button>
-                                    }
-                                </div>
-                            </td> : null
+                                {
+                                    ["rejectedRows", "pendingRows"].includes(item.rowsType) &&
+                                    <button 
+                                        className="row_button_wrapper" 
+                                        onClick={() => {
+                                            handleVisibleConfirmModal();
+                                            setModalData({
+                                                title: 'Thông Báo',
+                                                content: 'Bạn chắc chắn chấp nhận hoạt động này',
+                                                status: true,
+                                            })
+                                        }}
+                                    >
+                                        <CheckSquareFilled className='row_button accpect_button' />
+                                    </button> 
+                                }
+
+                                {   
+                                        ["acceptedRows", "pendingRows"].includes(item.rowsType) &&
+                                    <button 
+                                        className='row_button_wrapper'
+                                        onClick={() => {
+                                            handleVisibleConfirmModal();
+                                            setModalData({
+                                                title: 'Thông Báo',
+                                                content: 'Bạn chắc chắn từ chối hoạt động này',
+                                                status: false,
+                                            })
+                                        }}    
+                                    >
+                                        <CloseSquareFilled className='row_button reject_button' />
+                                    </button>
+                                }
+                            </div>
+                        </td> 
+                    )
+                } else if (item?.noteLabel) {
+                    return (
+                        <td className="line__item" key={index}>   
+                            {
+                                visibleNoteModal && 
+                                <NoteModal 
+                                    handleHiddenNoteModal={handleHiddenNoteModal} 
+                                    noteList={item?.noteValue}
+                                />
+                            }
+                            <span 
+                                className='note_row'
+                                onClick={handleVisibleNoteModal}
+                            >
+                                Ghi Chú
+                            </span>
+                        </td>
                     )
                 }
 
@@ -111,7 +157,7 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
 	)
 }
 
-const LayoutTable = ({ table, page, pendingTable }) => {
+const LayoutTable = ({ index, table, page, pendingTable, isDynamicRows}) => {
 	const [useStateModal, setUseStateModal] = useState(false);
     const [openPreviewModal, setOpenPreviewModal] = useState(false);
     const [proofFilesData, setProofFilesData] = useState(null);
@@ -126,33 +172,36 @@ const LayoutTable = ({ table, page, pendingTable }) => {
     }
 
 	return (
-		<div className="container__table">
-			<header>
-				<div className="heading-4">{table?.title}</div>
-				{
-                    !pendingTable && 
-                    <div className="modal">
-                        <button className="modal_btn_open" onClick={handleOpenModal}>Thêm hoạt động</button>
-                        <>
-                            {
-                                useStateModal && 
-                                <TableModal
-                                        stateModal={useStateModal}
-                                        setStateModal={setUseStateModal}
-                                        title={table?.title}
-                                        thead={table?.thead}
-                                        tableId={table?.tableId}
-                                        page={page}
-                                    />
-                            }
-                        </>
-				    </div>
-                }
-			</header>
-
-			<table className="table">
+		<div className={`container__table ${isDynamicRows ? 'margin-0' : ''}`}>
+			{
+                !isDynamicRows &&
+                <header>
+				    <div className="heading-4">{capitalizeFirstLetter(table?.title)}</div>
+                    {
+                        !pendingTable && 
+                        <div className="modal">
+                            <button className="modal_btn_open" onClick={handleOpenModal}>Thêm hoạt động</button>
+                            <>
+                                {
+                                    useStateModal && 
+                                    <TableModal
+                                            stateModal={useStateModal}
+                                            setStateModal={setUseStateModal}
+                                            title={table?.title}
+                                            thead={table?.thead}
+                                            tableId={table?.tableId}
+                                            page={page}
+                                        />
+                                }
+                            </>
+                        </div>
+                    }
+			    </header>
+            }
+           
+			<table className={`table ${isDynamicRows ? 'margin-0' : ''}`}>
                 {
-                  table?.thead &&
+                  table?.thead && (!isDynamicRows || index === 0) &&
                     <thead>
                         <tr className="table__line__header">
                             {table.thead.map((item, index) => (

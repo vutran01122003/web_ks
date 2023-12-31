@@ -14,7 +14,7 @@ export function checkFilesUpload(file) {
     )) {
         return {
             inValid: true,
-            msg: 'Vui lòng kiểm tra lại định dạng ảnh'
+            msg: 'Định dạng file không hợp lệ'
         };
     }
 

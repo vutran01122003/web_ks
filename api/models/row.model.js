@@ -16,27 +16,43 @@ const RowSchema = new Schema(
         },
         content: {
             type: [
-                {
-                    rowId: Schema.Types.ObjectId,
-                    status: {
-                        type: String,
-                        enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối'],
-                        default: 'Chờ Duyệt'
+                new mongoose.Schema(
+                    {
+                        rowId: Schema.Types.ObjectId,
+                        status: {
+                            type: String,
+                            enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối'],
+                            default: 'Chờ Duyệt'
+                        },
+                        proofFilesList: {
+                            type: [
+                                {
+                                    originalName: String,
+                                    fileUrl: String,
+                                    fileType: String
+                                }
+                            ],
+                            default: []
+                        },
+                        rowValue: {
+                            type: {}
+                        },
+                        note: {
+                            type: [
+                                new mongoose.Schema(
+                                    {
+                                        value: String
+                                    },
+                                    { timestamps: true }
+                                )
+                            ],
+                            default: []
+                        }
                     },
-                    proofFilesList: {
-                        type: [
-                            {
-                                originalName: String,
-                                fileUrl: String,
-                                fileType: String
-                            }
-                        ],
-                        default: []
-                    },
-                    rowValue: {
-                        type: {}
+                    {
+                        timestamps: true
                     }
-                }
+                )
             ],
             default: []
         }

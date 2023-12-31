@@ -125,10 +125,28 @@
 }
 
 .container__center {
-    padding-top: 40px;
 	background-color: $color_white;
 	border-radius: 3px;
-	box-shadow: 0 0 3px rgb(194, 193, 193);
+    
+    .notify_nothing {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+        min-height: 73vh;
+        flex-direction: column;
+        color: #333333ad;
+        font-weight: 600;
+
+        .notify_nothing_content {
+            font-size: 16px;
+        }
+
+        .notify_nothing_sub {
+            font-size: 12px;
+            font-weight: 400;
+        }
+    }
 
     .loading_rows_pendding {
         display: flex;

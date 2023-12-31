@@ -43,7 +43,7 @@ const Quantity = () => {
 
 
     return (
-        <div className='container__quantity transform__animation--top'>
+        <div className='container__quantity'>
             <div className="body__quantity">
                 {returnListQuantity}
             </div>

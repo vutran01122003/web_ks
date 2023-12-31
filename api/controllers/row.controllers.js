@@ -76,12 +76,13 @@ class RowControllers {
         try {
             if (!res.locals.roles.includes('0004'))
                 throw createError.Forbidden('Không đủ quyền cập nhật trạng thái chỉ tiêu');
-            const { rowListId, contentIdList, status } = req.body;
+            const { rowListId, contentIdList, status, noteValue } = req.body;
 
             const updatedRow = await RowService.updateRowStatus({
                 rowListId,
                 contentIdList,
-                status
+                status,
+                noteValue
             });
 
             res.status(200).json({
@@ -89,7 +90,6 @@ class RowControllers {
                 msg: updatedRow.msg
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

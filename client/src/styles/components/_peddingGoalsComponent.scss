@@ -1,83 +1,9 @@
-.pedding_goals_container {
-    margin-bottom: 40px;
-    padding: 20px 10px;
-    border-bottom: 1px solid gray;
-
-    .pedding_goals_wrapper {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        .student_wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-width: 210px;
-            align-items: center;
-
-            .student_info {
-                white-space: nowrap;
-
-                .student_info_label {
-                    font-weight: 400;
-                    color: gray;
-                }
-
-                .student_info_id,
-                .student_info_name,
-                .student_info_faculty {
-                    font-weight: 500;
-                }
-            }
-
-            .pedding_goals_btn_wrapper {
-                display: flex;
-                gap: 10px;
-                justify-content: center;
-                flex-wrap: wrap;
-                margin-top: 10px;
-
-                button {
-                    white-space: nowrap;
-                    color: #fff;
-                    padding: 8px 16px;
-                    font-weight: 600;
-                    width: 200px;
-                    max-width: 100%;
-                    outline: none;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    box-shadow: 0 0 3px rgb(181, 181, 181);
-                    transition: 0.1s linear;
-
-                    &:active {
-                        transform: scale(0.9);
-                    }
-                }
-
-                .reject_btn {
-                    background: #f0635c;
-                }
-
-                .confirmation_btn {
-                    background: #1677ff;
-                }
-            }
-        }
-    }
-}
-
-// testing
 .container__tables {
     height: calc(100vh - 65px);
     padding: 10px;
-    min-width: 720px;
     background-color: #F5F5F5;
 
     .body__tables {
-        height: 100%;
-
         .tab__tables--goal {
             height: 100%;
 
@@ -98,55 +24,58 @@
             }
         }
 
-        .pedding_item {
-            width: 100%;
-            cursor: pointer;
-            background-color: #ffffff;
-            transition: all 0.35s;
-
-            td {
-                padding: 15px;
-                border-bottom:1px solid #c4c4c4;
-                font-size: 15.5px;
-                font-weight: 500;
-            }
-            .true__date{
-                color: #059b05;
-            }
-
-            &:hover {
-                background-color: #fafafa;
+        .pedding_goals_container {
+            min-height: 73vh;
+            
+            .pedding_item {
+                width: 100%;
+                cursor: pointer;
+                background-color: #ffffff;
+                transition: all 0.35s;
+    
+                td {
+                    padding: 15px;
+                    border-bottom:1px solid #c4c4c4;
+                    font-size: 15.5px;
+                    font-weight: 500;
+                }
+                .true__date{
+                    color: #059b05;
+                }
+    
+                &:hover {
+                    background-color: #fafafa;
+                }
             }
         }
 
-    }
-
-    .line__sort {
-        width: 100%;
-        position: fixed;
-        background-color: #FAFAFA;
-        margin-top: -15px;
-        padding: 10px 15px;
-        display: flex;
-        border-bottom: 2px solid #a5a5a5;
-        z-index: 5;
-        .box__left{
+        .line__sort {
+            width: 100%;
+            background: #fff;
+            margin-top: -15px;
+            padding: 10px 15px;
             display: flex;
-            width: 100%;
-            > div{
-                margin-right: 15px;
-            }
-        }
-        .box__right{
-            .btn__download{
-                background-color: #3E97FF;
+            border-bottom: 1px solid #eceaea;
+    
+            .box__left{
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 16px;
-                font-weight: 500;
-                svg{
-                    font-size: 18px;
+                width: 100%;
+               gap: 15px;
+            }
+    
+            .box__right {
+                flex: 1;
+
+                .btn__refresh {
+                    background-color: #2387f9;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 16px;
+                    font-weight: 500;
+                    svg{
+                        font-size: 18px;
+                    }
                 }
             }
         }

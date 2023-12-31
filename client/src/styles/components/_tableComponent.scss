@@ -3,6 +3,10 @@
 	width: 100%;
 	position: relative;
 
+    &.margin-0 {
+        margin: 0;
+    }
+    
     .modal_btn_open {
         background: #006fee;
         padding: 8px 20px;
@@ -31,9 +35,12 @@
 	.table {
 		border: 1px solid $line_color;
 		margin: 10px 0px;
-		min-height: 100px;
 		width: 100%;
-		border-radius: 5px;
+        min-height: 120px;
+
+        &.margin-0 {
+            margin: 0;
+        }
 
 		[class^="table__line"] {
 			padding: 5px 10px;
@@ -49,7 +56,6 @@
 			}
 		}
 
-
 		.table__line__header {
 			border-bottom: 1px solid $line_color;
 
@@ -62,7 +68,6 @@
 		}
 
 		.table__items {
-			min-height: 100px;
 			overflow-y: auto;
 
             .button_wrapper {
@@ -81,6 +86,19 @@
                         transition: 0.1s linear;
                         font-size: 25px;
                         
+                        &.pending_button {
+                            color: rgb(243, 174, 44);
+                            
+                            &:hover {
+                                color: rgb(252, 181, 47);
+                            }
+
+                            &:active {
+                                color: rgb(255, 177, 33);
+                            }
+                        }
+
+
                         &.reject_button {
                             color: #f0635c;
                             
@@ -141,6 +159,15 @@
 
                 .deny_status {
                     color: red;
+                }
+
+                .note_row {
+                    color: #006fee;
+                    cursor: pointer;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
 			}
 		}

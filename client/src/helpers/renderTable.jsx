@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+
 export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
     const TABLE = {};
 
@@ -9,16 +11,14 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
     if(rowsType) {
         switch (rowsType) {
             case "pendingRows":
-                buttonNameLabel = "Xét Duyệt Chỉ Tiêu";
+                buttonNameLabel = "Xét Duyệt";
                 break;
             case "acceptedRows":
-                buttonNameLabel = "Nhấn Để Hủy";
-                break;
             case "rejectedRows":
-                buttonNameLabel = "Nhấn Để Duyệt";
+                buttonNameLabel = "Thao Tác";
                 break;
             default:
-                buttonNameLabel = "Xét Duyệt Chỉ Tiêu";
+                buttonNameLabel = "";
                 break;
         }
     }
@@ -27,16 +27,45 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
     TABLE.title = table ? table.tableName : dynamicTable.tableName;
     const rowTitleList = table ? table.rowTitleList : dynamicTable.rowTitleList;
     
-    TABLE.thead = rowTitleList.map((rowTitle) => {
-        return {
-            textHeading: rowTitle.titleValue,
-            fixedValueList: rowTitle.fixedValue,
-            typeInput:
-                rowTitle.fixedValue.length > 0 ? "select" : "text",
-            isShow: true,
-        };
-    });
-
+    if(table) {
+        TABLE.thead = rowTitleList.map((rowTitle) => {
+            return {
+                textHeading: rowTitle.titleValue,
+                fixedValueList: rowTitle.fixedValue,
+                typeInput:
+                    rowTitle.fixedValue.length > 0 ? "select" : "text",
+                isShow: true,
+            };
+        });
+    } else {
+        TABLE.thead= [
+            {
+                textHeading: "Mã Sinh Viên",
+                fixedValueList: [],
+                typeInput: "text",
+                isShow: true,
+            },
+            {
+                textHeading: "Tên Sinh Viên",
+                fixedValueList: [],
+                typeInput: "text",
+                isShow: true,
+            },
+            {
+                textHeading: "Hoạt Động",
+                fixedValueList: [],
+                typeInput: "text",
+                isShow: true,
+            },
+            {
+                textHeading: "Ngày Nộp",
+                fixedValueList: [],
+                typeInput: "text",
+                isShow: true,
+            },
+        ]
+    }
+   
     TABLE.thead = [
         ...TABLE.thead,
         {
@@ -44,18 +73,24 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
             typeInput: "file",
             requiredHeading: true,
             isShow: true,
-        },
-        {
-            textHeading: "Trạng Thái",
-            typeInput: "text",
-            requiredHeading: true,
-            isShow: false,
         }
     ];
 
     if(!table) {
         TABLE.thead.push({
             textHeading: buttonNameLabel,
+            typeInput: "text",
+            requiredHeading: true,
+            isShow: false,
+        });
+    } else {
+        TABLE.thead.push({
+            textHeading: "Trạng Thái",
+            typeInput: "text",
+            requiredHeading: true,
+            isShow: false,
+        }, {
+            textHeading: "Ghi Chú",
             typeInput: "text",
             requiredHeading: true,
             isShow: false,
@@ -68,49 +103,55 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
         TABLE.tbody = content.map(
             (rowValueItem) => {
                 const thead = [...TABLE.thead];
-                const rowValueItemArr = thead.reduce(
-                    (arr, headingItem) => {
-                        if (
-                            !thead.requiredHeading &&
-                            rowValueItem.rowValue[
-                                headingItem.textHeading
-                            ]
-                        )
-                            return [
-                                ...arr,
-                                rowValueItem.rowValue[
-                                    headingItem.textHeading
-                                ],
-                            ];
-                        return arr;
-                    },
-                    []
-                );
-                return [
-                    ...rowValueItemArr,
-                    {
-                        proofNameLabel: "Xem Minh Chứng",
-                        proofFiles: rowValueItem.proofFilesList,
-                    },
-                    {
-                        statusLabel: rowValueItem.status,
-                        statusValue:
-                            rowValueItem.status === "Chờ Duyệt"
-                                ? null
-                                : rowValueItem.status === "Đã Duyệt"
-                                ? true
-                                : false,
-                    },
-                    {
-                        buttonNameLabel: true,
-                        textHeadingExists: table ? false : true,
-                        rowsType,
-                        rowInfoData: {
-                            rowListId: dynamicRowsInfo?._id,
-                            contentIdList: [rowValueItem?._id]
-                        }
+                let rowValueItemArr = null;
+
+                if(dynamicRowsInfo) {
+                    rowValueItemArr =  [
+                        dynamicRowsInfo?.user[0].studentId,
+                        capitalizeFirstLetter(dynamicRowsInfo?.user[0].fullName),
+                        capitalizeFirstLetter(TABLE.title),
+                        new Date(rowValueItem.createdAt).toLocaleDateString('en-GB')
+                    ]
+                } else {
+                    rowValueItemArr = thead.reduce(
+                        (arr, headingItem) => {
+                            if (table && !thead.requiredHeading && rowValueItem.rowValue[headingItem.textHeading])
+                                return [
+                                    ...arr,
+                                    rowValueItem.rowValue[
+                                        headingItem.textHeading
+                                    ],
+                                ];
+                            else 
+                            return arr;
+                        },
+                        []
+                    );
+                }
+                
+                const tbody = [...rowValueItemArr, {
+                    proofNameLabel: "Xem Minh Chứng",
+                    proofFiles: rowValueItem.proofFilesList,
+                }];
+
+                dynamicRowsInfo ? 
+                tbody.push({
+                    buttonNameLabel: true,
+                    rowsType,
+                    rowInfoData: {
+                        rowListId: dynamicRowsInfo?._id,
+                        contentIdList: [rowValueItem?._id]
                     }
-                ];
+                }) : 
+                tbody.push({
+                    statusLabel: rowValueItem.status,
+                    statusValue: rowValueItem.status === "Chờ Duyệt" ? null : 
+                        rowValueItem.status === "Đã Duyệt" ? true : false,
+                }, {
+                    noteLabel: "Xem Ghi Chú",
+                    noteValue: rowValueItem.note
+                })
+                return tbody;
             }
         );
     }
