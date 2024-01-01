@@ -32,7 +32,6 @@ function FirstLogin({studentId, birthday}) {
         }));
     }
 
-    console.log(data);
     return (
         <div className="container__fisrt--login">
             <div className="form__update--info">

@@ -4,6 +4,7 @@
         display: flex;
         > .item__quantity{
             width: 100%;
+            display: block;
             margin: 0px 10px;
             border-left: 5px solid ;
             border-radius: 5px;
@@ -13,18 +14,21 @@
             box-shadow: 0 0 3px rgb(194, 193, 193);
             padding: 15px;
             display: flex;
+            transition: all 0.35s;
             .quantily__number{
                 width: 100%;
                 .text__heading{
                     font-size: 16px;
                     font-weight: 600;
                     text-transform: uppercase;
+                    color:#000;
                 }
                 .number__quntity{
-                    font-size: 20px;
+                    font-size: 21px;
                     font-weight: 700;
                     margin-top: 10px;
                     margin-left: 10px;
+                    color:#000;
                 }
             }
             .icon_size { 
@@ -33,11 +37,14 @@
                 font-size: 40px;
                 color: #b8b8b8;
             }
+            &:hover{
+                background: #e7e7e7;
+            }
         }
-        &>div:first-child{
+        &>.item__quantity:first-child{
             margin-left: 0px;
         }
-        &>div:last-child{
+        &>.item__quantity:last-child{
             margin-right: 0px;
         }
     }

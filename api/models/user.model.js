@@ -1,6 +1,7 @@
+const talentESConn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 
 const [DOC, COL] = ['user', 'users'];
 
@@ -18,6 +19,7 @@ const UserSchema = new Schema(
         },
         fullName: {
             type: String,
+            lowercase: true,
             required: true
         },
         password: {
@@ -31,11 +33,13 @@ const UserSchema = new Schema(
         faculty: {
             // Khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
             type: String,
+            lowercase: true,
             required: true
         },
         major: {
             // Chuyên ngành của sinh viên (Ví Dụ: Kỹ Thuật Phần Mềm,...)
-            type: String
+            type: String,
+            lowercase: true
         },
         cohort: {
             // Khóa sinh viên nhập học (Ví Dụ: K17, K18,...)
@@ -54,8 +58,14 @@ const UserSchema = new Schema(
             type: Boolean,
             default: true
         },
-        email: String,
-        phone: String
+        email: {
+            type: String,
+            lowercase: true
+        },
+        phone: {
+            type: String,
+            lowercase: true
+        }
     },
     {
         collection: COL,
@@ -77,6 +87,6 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-const User = model(DOC, UserSchema);
+const User = talentESConn.model(DOC, UserSchema);
 
 module.exports = User;

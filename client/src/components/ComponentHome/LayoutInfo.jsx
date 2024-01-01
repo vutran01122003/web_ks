@@ -8,6 +8,13 @@ const LayoutInfo = ({ auth }) => {
 		auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003')
 			? 'Thông tin giảng viên'
 			: 'Thông tin sinh viên'
+
+    function capitalizeFirstLetter(str) {
+        return str.replace(/^.|\s\S/g, function (match) {
+            return match.toUpperCase();
+        });
+    }
+    
 	return (
 		<div className="container__info">
 			<header className="heading-4">{heading}</header>
@@ -19,29 +26,13 @@ const LayoutInfo = ({ auth }) => {
 					</Link>
 				</div>
 				<div className="info__text">
-					{auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003') ? (
-						<div>
-							<LineItem info="Mã giảng viên" text={auth?.user?.studentId || 'Chưa cập nhật'} />
-							<LineItem info="Họ và tên" text={auth?.user?.fullName || 'Chưa cập nhật'} />
-							<LineItem
-								info="Ngày sinh"
-								text={new Date(auth?.user.birthday).toLocaleDateString('en-GB') || 'Chưa cập nhật'}
-							/>
-							<LineItem info="Khoa" text={auth?.user?.faculty || 'Chưa cập nhật'} />
-						</div>
-					) : (
-						<div>
-							<LineItem info="Mã sinh viên" text={auth?.user?.studentId || 'Chưa cập nhật'} />
-							<LineItem info="Họ và tên" text={auth?.user?.fullName || 'Chưa cập nhật'} />
-							<LineItem
-								info="Ngày sinh"
-								text={new Date(auth?.user.birthday).toLocaleDateString('en-GB') || 'Chưa cập nhật'}
-							/>
-							<LineItem info="Khoa" text={auth?.user?.faculty || 'Chưa cập nhật'} />
-                            <LineItem info="Chuyên Ngành" text={auth?.user?.major || 'Chưa cập nhật'} />
-
-						</div>
-					)}
+                    <LineItem info={auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003') ? "Mã giảng viên" : "Mã sinh viên"} 
+                        text={auth?.user?.studentId || 'Chưa cập nhật'} />
+                    <LineItem info="Họ và tên" text={auth?.user?.fullName ? capitalizeFirstLetter(auth?.user?.fullName) : 'Chưa cập nhật'} />
+                    <LineItem info="Ngày sinh" text={new Date(auth?.user.birthday).toLocaleDateString('en-GB') || 'Chưa cập nhật'} />
+                    <LineItem info="Khoa" text={auth?.user?.faculty ? capitalizeFirstLetter(auth?.user?.faculty) : 'Chưa cập nhật'} />
+                    {auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003') &&
+                    <LineItem info="Chuyên Ngành" text={auth?.user?.major || 'Chưa cập nhật'} />}
 				</div>
 			</div>
 		</div>

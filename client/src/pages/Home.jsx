@@ -12,6 +12,8 @@ const Home = ({ auth }) => {
     const progress = useSelector((state) => state.progress);
     const [chartData, setChartData] = useState([]);
     const [goalsInfo, setGoalInfo] = useState([]);
+    
+    const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003');
 
     useEffect(() => {
         if (auth?.user && auth?.user.roles.includes("0002")) {
@@ -34,7 +36,8 @@ const Home = ({ auth }) => {
 
     return (
         <div className="pageHome ">
-            <Quantity/>
+            {determineAuth ? <Quantity/> : ""}
+            
             <div className="container__top transform__animation--top">
                 <LayoutInfo auth={auth} />
                 <>

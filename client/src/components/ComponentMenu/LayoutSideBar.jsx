@@ -19,6 +19,10 @@ const LayoutSideBar = ({ auth }) => {
 	const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'))
 	const [subMenu, setSubMenu] = useState(ARRAY_LIST_MENU.map(() => false))
 
+    // console.log(heightBoxSub);
+    // console.log(subMenu);
+    // console.log(refBoxSubs);
+
 	const handleSubMenu = (index) => {
 		const newSubMenuState = [...subMenu]
 		newSubMenuState[index] = !newSubMenuState[index]
@@ -133,7 +137,7 @@ const LayoutSideBar = ({ auth }) => {
 
 	return (
 		<div
-			className={`container__menu ${determineAuth ? 'background_admin ' : ''} 
+			className={`container__menu ${determineAuth ? 'sidebar_admin ' : ''} 
 		${toggleMenu ? "active_toggle" : ""}`}
 		>
 			<div className={`menu_wrapper ${toggleMenu ? "active_toggle" : ""}`}>

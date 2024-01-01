@@ -1,4 +1,3 @@
-require("./dbs/init.mongodb");
 // require('./dbs/init.redis');
 const express = require("express");
 const createError = require("http-errors");

@@ -62,9 +62,53 @@
 		}
 
 		.table__items {
-			
 			min-height: 100px;
 			overflow-y: auto;
+
+            .button_wrapper {
+                display: flex;
+                justify-content: center;
+                gap: 6px;
+            
+                .row_button_wrapper {
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+
+                    .row_button {
+                        box-shadow: 0 0 3px rgb(208, 206, 206);
+                        transition: 0.1s linear;
+                        font-size: 25px;
+                        
+                        &.reject_button {
+                            color: #f0635c;
+                            
+                            &:hover {
+                                color: #f24c44;
+                            }
+
+                            &:active {
+                                color: red;
+                            }
+                        }
+
+                        &.accpect_button {
+                            color: #1677ff;
+
+                            &:hover {
+                                color: #0d6cf3;
+                            }
+
+                            &:active {
+                                color: #0055cc;
+                            }
+                        }
+
+                      
+                    }
+                }
+            }
 
 			.table__line__item {
 				width: 100%;

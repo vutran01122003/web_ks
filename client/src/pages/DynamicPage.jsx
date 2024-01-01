@@ -21,7 +21,7 @@ const DynamicPage = () => {
     }, [pathName]);
 
     useEffect(() => {
-        if (page?.tables && page.pageType === "Chỉ Tiêu") {
+        if (page?.tables && page.pageType === "chỉ tiêu") {
             const arr = page.tables.map((table) => {
                 return renderTable({table});
             });
@@ -32,7 +32,7 @@ const DynamicPage = () => {
     return (
         <div className="dynamic_page_container">
             {page?.pageType &&
-                page?.pageType === "Chỉ Tiêu" &&
+                page?.pageType === "chỉ tiêu" &&
                 tables.map((table) => {
                     return (
                         <LayoutTable
@@ -42,7 +42,7 @@ const DynamicPage = () => {
                         ></LayoutTable>
                     );
                 })}
-            {page?.pageType && page?.pageType === "Tin Tức" && <News />}
+            {page?.pageType && page?.pageType === "tin tức" && <News />}
         </div>
     );
 };

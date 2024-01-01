@@ -8,4 +8,7 @@ export const tableSelector = (state) => state.table;
 
 export const rowSelector = (state) => state.row;
 
-export const newsSelector = (state) => state.news
+export const newsSelector = (state) => state.news;
+
+export const chatbotSelector = (state) => state.chatbot;
+    

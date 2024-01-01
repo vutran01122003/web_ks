@@ -37,7 +37,7 @@ export const addRow = ({formData}) => async (dispatch) => {
     }
 }
 
-export const getPendingRows = ({ page, limit, currentPendingRows}) => async (dispatch) => {
+export const getDynamicRows = ({ tab, studentData, page, limit, currentRows}) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ROW.LOADING_PENDING_ROWS,
@@ -46,12 +46,20 @@ export const getPendingRows = ({ page, limit, currentPendingRows}) => async (dis
             }
         })
 
-        const res = await getDataApi(`/pending_rows?page=${page || 1}&limit=${limit || 3}&current_pedding_rows=${currentPendingRows}`);
+        const res = await getDataApi('/dynamic_rows', {
+            page: page || 1,
+            limit: limit || 3,
+            current_rows: currentRows,
+            rows_type: tab,
+            student_id: studentData?.studentId || null,
+            major: studentData?.major || null
+        })
   
         dispatch({
-            type: GLOBALTYPES.ROW.GET_PENDING_ROWS,
+            type: GLOBALTYPES.ROW.GET_DYNAMIC_ROWS,
             payload: {
-                pendingRows: res.data.data,
+                rowsType: tab,
+                dynamicRows: res.data.data,
                 page
             }
         })
@@ -81,7 +89,7 @@ export const getPendingRows = ({ page, limit, currentPendingRows}) => async (dis
     }
 }
 
-export const updatePendingRowStatus = ({ rowListId, contentIdList, status }) => async (dispatch) => {
+export const updateRowsStatus = ({rowsType, rowListId, contentIdList, status }) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -92,12 +100,25 @@ export const updatePendingRowStatus = ({ rowListId, contentIdList, status }) => 
 
         const res = await patchDataApi('/pending_rows/update', { rowListId, contentIdList, status });
         
-        dispatch({
-            type: GLOBALTYPES.ROW.REMOVE_PENDING_ROW,
-            payload: {
-                pendingRowId: rowListId
-            }
-        });
+        if(contentIdList.length === 1) {
+            dispatch({
+                type: GLOBALTYPES.ROW.REMOVE_ROW,
+                payload: {
+                    rowsType,
+                    rowId: rowListId,
+                    contentId: contentIdList[0]
+                }
+            });
+        } else {
+            dispatch({
+                type: GLOBALTYPES.ROW.REMOVE_ALL_ROW,
+                payload: {
+                    rowsType,
+                    pendingRowId: rowListId
+                }
+            });
+        }
+      
 
         dispatch({
             type: GLOBALTYPES.ALERT,

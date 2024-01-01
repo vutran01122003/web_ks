@@ -69,7 +69,7 @@ function ManagePagesPage() {
                         menuItem =  {
                             ...menuItem, 
                             sub_menu_item: page.pages.reduce((initialArr, page) => {
-                                if(page.pageType === "Chỉ Tiêu") {
+                                if(page.pageType === "chỉ tiêu") {
                                     return [    
                                         ...initialArr,
                                         {

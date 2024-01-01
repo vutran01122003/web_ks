@@ -1,36 +1,39 @@
-const mongoose = require("mongoose");
-const { model, Schema } = mongoose;
+const talentESConn = require('../dbs/init.mongodb');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const [DOC, COL] = ["faculty", "faculties"];
+const [DOC, COL] = ['faculty', 'faculties'];
 
 const FacultySchema = new Schema(
     {
         facultyName: {
             type: String,
+            lowercase: true,
             required: true,
             unique: true,
-            collation: { locale: "vi", strength: 2 },
+            collation: { locale: 'vi', strength: 2 }
         },
         isActive: {
             type: Schema.Types.Boolean,
-            required: true,
+            required: true
         },
         majors: [
             {
                 majorName: {
                     type: String,
+                    lowercase: true,
                     unique: true,
-                    collation: { locale: "vi", strength: 2 },
+                    collation: { locale: 'vi', strength: 2 }
                 },
-                isActive: Schema.Types.Boolean,
-            },
-        ],
+                isActive: Schema.Types.Boolean
+            }
+        ]
     },
     {
-        collection: COL,
+        collection: COL
     }
 );
 
-const Faculty = model(DOC, FacultySchema);
+const Faculty = talentESConn.model(DOC, FacultySchema);
 
 module.exports = Faculty;

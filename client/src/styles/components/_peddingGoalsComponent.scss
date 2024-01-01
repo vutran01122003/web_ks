@@ -1,12 +1,12 @@
 .pedding_goals_container {
     margin-bottom: 40px;
-    padding: 20px;
+    padding: 20px 10px;
     border-bottom: 1px solid gray;
 
     .pedding_goals_wrapper {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 10px;
 
         .student_wrapper {
             display: flex;
@@ -33,14 +33,16 @@
             .pedding_goals_btn_wrapper {
                 display: flex;
                 gap: 10px;
+                justify-content: center;
                 flex-wrap: wrap;
                 margin-top: 10px;
 
                 button {
+                    white-space: nowrap;
                     color: #fff;
-                    width: 100px;
-                    padding: 8px 12px;
+                    padding: 8px 16px;
                     font-weight: 600;
+                    width: 200px;
                     max-width: 100%;
                     outline: none;
                     border: none;
@@ -59,7 +61,7 @@
                 }
 
                 .confirmation_btn {
-                    background: #059b05;
+                    background: #1677ff;
                 }
             }
         }
@@ -69,7 +71,8 @@
 // testing
 .container__tables {
     height: calc(100vh - 65px);
-    padding: 20px;
+    padding: 10px;
+    min-width: 720px;
     background-color: #F5F5F5;
 
     .body__tables {

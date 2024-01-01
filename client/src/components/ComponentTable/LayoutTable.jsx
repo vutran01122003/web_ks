@@ -1,8 +1,20 @@
 import React, { useState } from 'react'
-import ComponentModal from '../ComponentModal/TableModal'
+import TableModal from '../ComponentModal/TableModal'
 import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
+import ConfirmModal from '../ComponentModal/ConfirmModal';
+import { CheckSquareFilled , CloseSquareFilled } from '@ant-design/icons';
 
 const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
+    const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
+    const [modalData, setModalData] = useState({});
+
+    const handleVisibleConfirmModal = () => {
+        setVisibleConfirmModal(true);
+    }
+
+    const handleHiddenConfirmModal = () => {
+        setVisibleConfirmModal(false);
+    }
 
 	return (
 		<tr className="table__line__item">
@@ -38,6 +50,59 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                             {item?.statusLabel}
                         </td>
                     )
+                } else if (item?.buttonNameLabel) {
+                    return (
+                            item?.textHeadingExists ? 
+                            <td key={index} className="line__item" >
+                                {
+                                    visibleConfirmModal &&
+                                    <ConfirmModal 
+                                        rowsType={item.rowsType}
+                                        isOpen={visibleConfirmModal}
+                                        title={modalData.title}
+                                        content={modalData.content}
+                                        status={modalData.status}
+                                        rowInfoData={item.rowInfoData}
+                                        handleHiddenConfirmModal={handleHiddenConfirmModal}
+                                    />
+                                }
+                                <div className='button_wrapper'>
+                                    {
+                                        ["rejectedRows", "pendingRows"].includes(item.rowsType) &&
+                                        <button 
+                                            className="row_button_wrapper" 
+                                            onClick={() => {
+                                                handleVisibleConfirmModal();
+                                                setModalData({
+                                                    title: 'Chấp Nhận Chỉ Tiêu',
+                                                    content: 'Bạn đã đọc kỹ minh chứng và chắc chắn chấp nhận chỉ tiêu này',
+                                                    status: true,
+                                                })
+                                            }}
+                                        >
+                                            <CheckSquareFilled className='row_button accpect_button' />
+                                        </button> 
+                                    }
+
+                                    {   
+                                         ["acceptedRows", "pendingRows"].includes(item.rowsType) &&
+                                        <button 
+                                            className='row_button_wrapper'
+                                            onClick={() => {
+                                                handleVisibleConfirmModal();
+                                                setModalData({
+                                                    title: 'Từ Chối Chỉ Tiêu',
+                                                    content: 'Bạn đã đọc kỹ minh chứng và chắc chắn từ chối chỉ tiêu này',
+                                                    status: false,
+                                                })
+                                            }}    
+                                        >
+                                            <CloseSquareFilled className='row_button reject_button' />
+                                        </button>
+                                    }
+                                </div>
+                            </td> : null
+                    )
                 }
 
 				return <td className="line__item" key={index}>{item}</td>
@@ -71,7 +136,7 @@ const LayoutTable = ({ table, page, pendingTable }) => {
                         <>
                             {
                                 useStateModal && 
-                                <ComponentModal
+                                <TableModal
                                         stateModal={useStateModal}
                                         setStateModal={setUseStateModal}
                                         title={table?.title}
