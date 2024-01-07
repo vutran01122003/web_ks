@@ -46,7 +46,7 @@ export const ARRAY_LIST_MENU =  [
             roles: ['0004'],
             name_menu: 'Quản Lý Trang',
             icon_before: <CgBrowser />,
-            to_link: '/manage_pages',
+            to_link: '/manage_pages2',
             submenu: false,
             list:"Chỉ tiêu"
         },

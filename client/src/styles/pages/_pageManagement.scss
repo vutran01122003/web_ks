@@ -7,9 +7,9 @@
         padding: 20px 10px;
         align-items: center;
         font-weight: 700;
-        border-style: solid ;
+        border-style: solid;
         border-width: 1px;
-        border-color:rgb(209, 207, 207);
+        border-color: rgb(209, 207, 207);
 
         .menu_item_label {
             display: flex;
@@ -49,7 +49,7 @@
             padding: 15px;
             font-weight: 600;
             border-bottom: 1px solid rgb(210, 209, 209);
-            
+
             button {
                 color: white;
                 font-weight: 600;
@@ -61,7 +61,7 @@
                 padding: 10px 14px;
                 transition: 0.1s linear;
                 cursor: pointer;
-    
+
                 &:active {
                     transform: scale(0.9);
                 }
@@ -82,20 +82,98 @@
             .watch_table_btn {
                 background: #0ca379;
             }
-    
+
             .sub_menu_item_btn_wrapper {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 20px;
             }
-    
+
             .sub_menu_item_name {
                 display: inline-block;
                 min-width: 220px;
             }
-            
+
         }
     }
 }
+
 // GIAO DIỆN BẢN V2
+.container_page__manager {
+    width: 100%;
+    padding: 20px;
+    background-color: #F5F5F5;
+
+    .body__data--pages {
+        border-top: 2px solid #1c7ae6;
+        background-color: #fff;
+        .line__sort{
+            padding: 10px 10px;
+        }
+        table {
+            width: 100%;
+            border-top: 2px solid #a5a5a5;
+            border-collapse: collapse;
+            tbody > tr{
+                border-top: 1px solid #dddddd;
+                height: 50px;
+            }
+            tr:hover{
+                background-color: #f3f3f3d7;
+                transition: all 0.15s;
+            }
+            th{
+                padding: 10px;
+                text-align: left;
+                font-size: 15px;
+                color: #424242;
+            }
+            td:first-child{
+                font-weight: 700;
+            }
+            td{
+                padding:12px 10px;
+                font-size: 16px;
+            }
+            .name_menu{
+                color: #1c7ae6;
+                font-weight: 650;
+            }
+            .tr__sub_menu{
+                cursor: pointer;
+            }
+            .name_sub_menu{
+                padding-left:40px;
+                font-weight: 500;
+                color: #1c7ae6;
+                .icon__vol{
+                    padding-right: 10px;
+                }
+            }
+            .icon__show{
+                width: max-content;
+                background-color: #0ca379;
+                padding:2px 5px;
+                color: #fff;
+                border-radius: 3px;
+                font-size: 15px;
+                cursor: pointer;
+            }
+            .remove_page_btn{
+                color: #F0635C;
+            }
+
+        }
+    }
+
+}
+
+.heading_text--pages {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #1c7ae6;
+    padding-left: 10px;
+    border-left: 5px solid;
+}
