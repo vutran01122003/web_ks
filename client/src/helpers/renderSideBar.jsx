@@ -1,6 +1,6 @@
 import { ARRAY_LIST_MENU } from '../assets/data/menu';
 
-export const renderSideBar = ({auth, page}) => {
+export const renderSideBar = ({auth, page, levelYear}) => {
     ARRAY_LIST_MENU.forEach((menuItem) => {
         if(menuItem.dynamicPage && menuItem.dynamicPage === 'news') {
             menuItem.sub_menu_item = page.pages.reduce((intialArr, page) => {
@@ -25,7 +25,8 @@ export const renderSideBar = ({auth, page}) => {
                 if (page.pageType === "chỉ tiêu" &&
                     page.pageStudentCohort === auth?.user.cohort &&
                     page.pageFaculty === auth?.user.faculty &&
-                    page.pageStudentMajor ===  auth?.user.major    
+                    page.pageStudentMajor ===  auth?.user.major && 
+                    page.pageStudentLevelYear === Number.parseInt(levelYear)
                 ) {
                     return [
                         ...intialArr,

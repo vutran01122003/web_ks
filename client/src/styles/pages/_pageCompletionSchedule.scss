@@ -1,0 +1,146 @@
+.completion_shedule_wrapper {
+    padding: 10px;
+
+    .completion_shedule_search_wrapper {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 8px;
+
+        .completion_shedule_search {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            input, select, .search_btn {
+                font-weight: 600;
+                height: 40px;
+                outline: none;
+                padding: 8px 12px;
+                border-radius: 2px;
+                width: 200px;
+                border: 1px solid #333;
+            }
+
+            .search_btn  {
+                border: unset;
+                box-shadow: 0 0 3px rgb(193, 192, 192);
+            }
+        }
+    }
+
+    .completion_shedule_filter {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+
+        select, input, 
+        .filter_btn, .refresh_btn,
+        .end_progress_btn {
+            font-weight: 600;
+            height: 40px;
+            outline: none;
+            padding: 4px 8px;
+            width: 200px;
+            border-radius: 2px;
+            border: 1px solid #333;
+        }
+
+        .btn_group {
+            display: flex;
+            gap: 1px;
+
+            .filter_btn, .refresh_btn {
+                width: 100px;
+            }
+        }
+        
+        .end_progress_btn {
+            border: unset;
+            box-shadow: 0 0 3px rgb(193, 192, 192);
+        }
+    }
+
+    .completion_shedule_body {
+        table, td, th {  
+            border: 1px solid rgb(215, 213, 213);
+            text-align: center;
+        }
+
+        .completion_shedule_table {
+            border-collapse: collapse;
+            width: 100%;
+
+            caption {
+                margin: 15px 0;
+                font-size: 20px;
+                font-weight: 700;
+                color: #0153b1;
+                user-select: none;
+                text-transform: uppercase;
+
+                .download_icon {
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    position: relative;
+                    top: 8px;
+                    float: right;
+                    font-size: 12px;
+                    cursor: pointer;
+                    text-transform: none;
+                    transition: 0.1s linear;
+
+                    &:hover {
+                        border-bottom: 1px solid rgb(63, 151, 252);
+                        color: rgb(63, 151, 252);
+                    }
+                }
+            }
+
+            td, th {
+                padding: 8px 12px;
+            }
+
+            th {
+                user-select: none;
+            }
+
+            tbody {
+                font-weight: 500;
+            }
+
+            .progress_header {
+                .progress_header_fiter {
+                    margin-left: 8px;
+                    cursor: pointer;
+                    position: relative;
+                    bottom: -2px;
+                    color: #308efa;
+                }
+            }
+        }
+
+        .active_user {
+            font-weight: 600;
+            color: #308efa;
+        }
+
+        .inactive_user {
+            font-weight: 600;
+            color: #ed5047;
+        }
+
+        .no_search_result_img {
+            opacity: 0.6;
+            display: block;
+            width: 350px;
+            margin: 80px auto;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+    }
+}

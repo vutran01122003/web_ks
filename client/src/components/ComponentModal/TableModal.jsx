@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { IoCloseOutline } from 'react-icons/io5'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addRow } from '../../redux/actions/rowAction'
-import { authSelector } from '../../redux/selector'
 import ComponentProofFile from '../ComponentProofFile/ComponentProofFile'
 import GLOBALTYPES from '../../redux/actions/globalTypes'
 import FormControl from '../ComponentForm/FormControl'
 
-const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page }) => {
+const ComponentModal = ({auth, stateModal, setUseStateModal, tableId, title, thead, page }) => {
     const dispatch = useDispatch();
-    const auth = useSelector(authSelector);
     const [row, setRow] = useState({});
     const [files, setFiles] = useState([]);
+
     const handleChangeRow = (e) => {
         setRow({...row, [e.target.name]: e.target.value});
     }
@@ -50,7 +49,7 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
             formData.append('files', file, file.name); 
         })
 
-        setStateModal(false);
+        setUseStateModal(false);
         dispatch(addRow({
             formData
         }))
@@ -58,7 +57,7 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
 
     const handleCloseModal = (e) => {
         if(e.currentTarget === e.target) {
-            setStateModal(false);     
+            setUseStateModal(false);     
         }
     }
 
@@ -70,7 +69,7 @@ const ComponentModal = ({stateModal, setStateModal, tableId, title, thead, page 
 			<form className={`modal`} >
 				<div className="head__modal">
 					<div className="head__modal__title ">{title}</div>
-					<button type="button" className="btn__close" onClick={() => setStateModal(false)}>
+					<button type="button" className="btn__close" onClick={() => setUseStateModal(false)}>
 						<IoCloseOutline />
 					</button>
 				</div>

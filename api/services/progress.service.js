@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Page = require('../models/page.model');
+const UserService = require('./user.service');
+const PageService = require('./page.service');
 
 class ProgressService {
     static getProgressByYear = async ({
@@ -8,59 +9,45 @@ class ProgressService {
         pageStudentCohort,
         userId
     }) => {
+        const filterArr = [
+            { $in: ['$_id', '$$rowIds'] },
+            { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }
+        ];
+
+        if (!userId) filterArr.splice(1, 1);
+
         try {
-            const pageDetailsList = await Page.aggregate([
-                {
-                    $match: {
-                        pageStudentMajor,
-                        pageStudentLevelYear: pageStudentLevelYear * 1,
-                        pageStudentCohort: pageStudentCohort * 1
-                    }
-                },
-                {
-                    $unwind: '$tables'
-                },
-                {
-                    $lookup: {
-                        from: 'rows',
-                        let: { rowIds: '$tables.rowValueList' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $and: [
-                                            { $in: ['$_id', '$$rowIds'] },
-                                            { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }
-                                        ]
-                                    }
-                                }
-                            }
-                        ],
-                        as: 'tables.rowValueList'
-                    }
-                },
-                {
-                    $group: {
-                        _id: '$_id',
-                        pageName: { $first: '$pageName' },
-                        pageType: { $first: '$pageType' },
-                        pageFaculty: { $first: '$pageFaculty' },
-                        pageStudentMajor: { $first: '$pageStudentMajor' },
-                        pageStudentCohort: { $first: '$pageStudentCohort' },
-                        pageStudentLevelYear: { $first: '$pageStudentLevelYear' },
-                        tables: {
-                            $push: '$tables'
-                        }
-                    }
-                },
-                {
-                    $sort: {
-                        pageName: 1
-                    }
-                }
-            ]);
+            const pageDetailsList = await PageService.getPageDetailsList({
+                pageStudentMajor,
+                pageStudentLevelYear,
+                pageStudentCohort,
+                filterArr
+            });
 
             return pageDetailsList;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
+    static getAllProgress = async ({
+        major,
+        cohort,
+        levelYear,
+        filterCompletedTaskProgress,
+        sortProgress
+    }) => {
+        try {
+            const studentList = await UserService.getAnnualTaskProgress({
+                major,
+                cohort,
+                levelYear,
+                filterCompletedTaskProgress,
+                sortProgress
+            });
+
+            return studentList;
         } catch (error) {
             throw error;
         }

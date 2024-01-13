@@ -7,10 +7,45 @@ class RowService {
     static addRow = async ({ data }) => {
         try {
             const { user, table, page, content } = data;
+            const contentObj = JSON.parse(content);
+
             let rowList = await Row.findOne({ user, table, page });
             let rowItemId = null;
+            let totalScore = 0;
 
             const pageData = await Page.findById(page);
+            for (let tableItem of pageData.tables) {
+                if (
+                    JSON.stringify(tableItem._id) ===
+                    JSON.stringify(new mongoose.Types.ObjectId(table))
+                ) {
+                    if (tableItem.fixedScore) {
+                        totalScore = tableItem.fixedScore;
+                        break;
+                    } else {
+                        tableItem.rowTitleList.forEach((rowTitleItem) => {
+                            Object.keys(contentObj).forEach((key) => {
+                                if (
+                                    rowTitleItem.fixedValue.length > 0 &&
+                                    key === rowTitleItem.titleValue
+                                ) {
+                                    contentObj[key] = {
+                                        value: contentObj[key],
+                                        score: rowTitleItem.fixedValue.find((fixedValueItem) => {
+                                            if (fixedValueItem.value === contentObj[key]) {
+                                                totalScore += fixedValueItem.score;
+                                                return true;
+                                            }
+                                        }).score
+                                    };
+                                }
+                            });
+                        });
+                        break;
+                    }
+                }
+            }
+
             if (!pageData) throw createError.NotFound('Trang Không Tồn Tại');
 
             if (!rowList) {
@@ -20,8 +55,8 @@ class RowService {
                     page
                 });
 
-                rowList.content.push({ rowValue: JSON.parse(content) });
-
+                rowList.content.push({ rowValue: contentObj });
+                rowList.content[0].totalScore = totalScore;
                 rowItemId = rowList.content[rowList.content.length - 1]._id;
 
                 await rowList.save();
@@ -76,23 +111,10 @@ class RowService {
                 )
                     throw createError.BadRequest('Số Lượng Hoạt Động Đã Đạt Tối Đa');
 
-                rowList = await Row.findOneAndUpdate(
-                    {
-                        user,
-                        table,
-                        page
-                    },
-                    {
-                        $push: {
-                            content: {
-                                rowValue: JSON.parse(content)
-                            }
-                        }
-                    },
-                    { new: true }
-                ).lean();
-
+                rowList.content.push({ rowValue: contentObj });
                 rowItemId = rowList?.content[rowList.content.length - 1]._id;
+                rowList.content[rowList.content.length - 1].totalScore = totalScore;
+                await rowList.save();
             }
 
             return {
@@ -217,20 +239,20 @@ class RowService {
         }
     };
 
-    static updateRowStatus = async ({ noteValue, rowListId, contentIdList, status }) => {
+    static updateRowStatus = async ({ noteValue, rowListId, contentIdList, status, deadline }) => {
         try {
-            const updatedRow = await Row.updateMany(
-                { _id: rowListId },
-                {
-                    'content.$[element].status':
-                        status === null ? 'Chờ Duyệt' : status ? 'Đã Duyệt' : 'Từ Chối'
-                },
-                {
-                    multi: true,
-                    arrayFilters: [{ 'element._id': { $in: contentIdList } }],
-                    upsert: true
-                }
-            );
+            const setDocument = {
+                'content.$[element].status': status,
+                'content.$[element].deadline': deadline
+            };
+
+            if (!deadline) delete setDocument['content.$[element].deadline'];
+
+            const updatedRow = await Row.updateMany({ _id: rowListId }, setDocument, {
+                multi: true,
+                arrayFilters: [{ 'element._id': { $in: contentIdList } }],
+                upsert: true
+            });
 
             if (noteValue) {
                 await Row.findOneAndUpdate(
@@ -247,11 +269,16 @@ class RowService {
 
             return {
                 code: 200,
-                msg: `Bạn đã ${status ? 'duyệt' : 'từ chối'} chỉ tiêu`,
+                msg: `Bạn đã ${
+                    status === 'Phải Nộp Lại'
+                        ? 'cho sinh viên nộp lại'
+                        : status === 'Đã Duyệt'
+                        ? 'duyệt'
+                        : 'từ chối'
+                } chỉ tiêu`,
                 data: updatedRow
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

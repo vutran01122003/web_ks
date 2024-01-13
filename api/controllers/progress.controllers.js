@@ -61,6 +61,41 @@ class ProgressControllers {
             next(error);
         }
     };
+
+    getAllProgress = async (req, res, next) => {
+        try {
+            const { major, cohort, levelYear, isCompleted, studentId, sortProgress } = req.query;
+
+            const filterCompletedTaskProgress = {
+                'completedTaskProgress.completedTaskPrecent':
+                    isCompleted.toLowerCase() === ''
+                        ? { $lte: 100 }
+                        : isCompleted.toLowerCase() === 'true'
+                        ? 100
+                        : {
+                              $lt: 100
+                          }
+            };
+
+            if (studentId) filterCompletedTaskProgress.studentId = { $regex: studentId };
+
+            const studentList = await ProgressService.getAllProgress({
+                major,
+                cohort,
+                levelYear,
+                filterCompletedTaskProgress,
+                sortProgress
+            });
+
+            res.status(200).json({
+                msg: 'Lấy danh sách sinh viên thành công',
+                data: studentList
+            });
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    };
 }
 
 module.exports = new ProgressControllers();

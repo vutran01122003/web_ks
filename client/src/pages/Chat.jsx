@@ -1,63 +1,68 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IoSend } from "react-icons/io5";
-import { RiBubbleChartFill } from 'react-icons/ri';
-import { sendChat } from '../redux/actions/chatbotAction';
-import { Button } from 'antd';
-import { FaArrowDown } from 'react-icons/fa6';
-import { chatbotSelector } from '../redux/selector';
-import GLOBALTYPES from '../redux/actions/globalTypes';
-
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { IoSend } from 'react-icons/io5'
+import { RiBubbleChartFill } from 'react-icons/ri'
+import { sendChat, getTypeChat } from '../redux/actions/chatbotAction'
+import { Button } from 'antd'
+import { FaArrowDown } from 'react-icons/fa6'
+import { chatbotSelector } from '../redux/selector'
+import GLOBALTYPES from '../redux/actions/globalTypes'
+import Markdown from 'react-markdown'
 const Chat = () => {
-	const dispatch = useDispatch();
-	const chatbot = useSelector(chatbotSelector);
-	const chatContainerRef = useRef(null);
-	const [question, setQuestion] = useState('');
-    const [showScrollButton, setShowScrollButton] = useState(false);
+	const dispatch = useDispatch()
+	const chatbot = useSelector(chatbotSelector)
+	const chatContainerRef = useRef(null)
+	const [question, setQuestion] = useState('')
+	const [showScrollButton, setShowScrollButton] = useState(false)
+	const [typeChat, setTypeChat] = useState(null)
+	useEffect(() => {
+		dispatch(getTypeChat())
+	}, [])
 
 	useEffect(() => {
-		scrollToBottom();
+		scrollToBottom()
 	}, [JSON.stringify(chatbot.data)])
-
-    useEffect(() => {
-		const chatContainer = chatContainerRef.current;
+	useEffect(() => {
+		const chatContainer = chatContainerRef.current
 		if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+			chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight
 			const handleScroll = () => {
-				setShowScrollButton(chatContainer.scrollTop < chatContainer.scrollHeight - chatContainer.clientHeight - 200);
+				setShowScrollButton(
+					chatContainer.scrollTop < chatContainer.scrollHeight - chatContainer.clientHeight - 200
+				)
 			}
-			chatContainer.addEventListener('scroll', handleScroll);
+			chatContainer.addEventListener('scroll', handleScroll)
 			return () => {
-				chatContainer.removeEventListener('scroll', handleScroll);
+				chatContainer.removeEventListener('scroll', handleScroll)
 			}
 		}
 	}, [chatContainerRef?.current])
 
-    const sendQuestion = (e) => {
-		e.preventDefault();
+	const sendQuestion = (e) => {
+		e.preventDefault()
 		if (question && !chatbot.isLoading) {
-            dispatch({
-                type: GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA,
-                payload: {
-                    key: 'question',
-                    data: question
-                }
-            })
-			dispatch(sendChat(question, 'INNOGREEN'));
-			setQuestion('');
+			dispatch({
+				type: GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA,
+				payload: {
+					key: 'question',
+					data: question,
+				},
+			})
+			dispatch(sendChat(question, typeChat))
+			setQuestion('')
 		}
-        return;
+		return
 	}
 
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
-            sendQuestion(event);
+			sendQuestion(event)
 		}
-        return;
+		return
 	}
 
 	const scrollToBottom = () => {
-		const chatContainer = chatContainerRef.current;
+		const chatContainer = chatContainerRef.current
 		if (chatContainer) {
 			chatContainer.scrollTo({
 				top: chatContainer.scrollHeight,
@@ -65,11 +70,39 @@ const Chat = () => {
 			})
 		}
 	}
-	
+
+	//Bắt liên kết văn bản trả về từ chatbot
+	const TextLink = ({ text }) => {
+		const regex = /(https?:\/\/[^\s]+)/g
+		const matches = text.split(regex)
+		return (
+			<div className="chat-text">
+				{matches.map((part, index) =>
+					index % 2 === 0 ? (
+						// Phần tử có chỉ số chẵn là văn bản
+						<div key={index}>
+							<Markdown>{part}</Markdown>
+						</div>
+					) : (
+						// Phần tử có chỉ số lẻ là liên kết
+						<a key={index} href={part} target="_blank">
+							{part}
+						</a>
+					)
+				)}
+			</div>
+		)
+	}
+	console.log(typeChat)
+	const handleTypeChat =
+		({ item }) =>
+		() => {
+			setTypeChat(item)
+		}
 	return (
 		<div className="pageChatbot">
 			<div className="chat-content" ref={chatContainerRef}>
-				{chatbot.data.length > 0 &&
+				{chatbot.data.length > 0 ? (
 					chatbot.data.map((item, index) => (
 						<div key={index}>
 							<div className="user-question">
@@ -77,12 +110,31 @@ const Chat = () => {
 							</div>
 							{item.answer ? (
 								<div className="chat-answer">
-									<div className="chat-info"> <RiBubbleChartFill /> </div>
-									<div className="chat-text"> {item?.answer} </div>
+									<div className="chat-info">
+										<RiBubbleChartFill />{' '}
+									</div>
+									<TextLink text={item?.answer} />
 								</div>
-							) : <img src={import.meta.env.VITE_APP_CHATBOT_LOADING} className="chatbot-loading" alt="loading"/>}
+							) : (
+								<img
+									src={import.meta.env.VITE_APP_CHATBOT_LOADING}
+									className="chatbot-loading"
+									alt="loading"
+								/>
+							)}
 						</div>
-					))}
+					))
+				) : (
+					<div className="choice-type">
+						{chatbot.typeChat &&
+							!typeChat &&
+							chatbot.typeChat.map((item, index) => (
+								<div key={index} className="choice-type__item" onClick={handleTypeChat({ item })}>
+									{item}
+								</div>
+							))}
+					</div>
+				)}
 			</div>
 
 			<div className="chat-box">
@@ -110,7 +162,6 @@ const Chat = () => {
 						{!chatbot.isLoading && <IoSend />}
 					</Button>
 				</div>
-				
 				<div className="chat-warning">
 					Thông tin của IUH chat có thể còn chưa chính xác do còn trong quá trình thử nghiệm
 				</div>

@@ -96,7 +96,7 @@ const ListGoals = () => {
     const RenderListGoas = useCallback(() => {
         return (
             <div className="container__center">
-                {auth?.user.roles.includes('0004') && row[tab].data.length > 0 ? (
+                {auth?.user.roles.includes('0004') && row[tab].data.length > 0 && (
                     <>
                         {row[tab].data.map((dynamicRows, index) => {
                             if(index === row[tab].data.length - 1 && row[tab].data.length != 0) {
@@ -121,11 +121,16 @@ const ListGoals = () => {
                             </div>
                         }
                     </>
-                ) : 
-                <div className='notify_nothing'>
+                )}
+
+                {
+                    !row.loading && row[tab].data.length == 0 &&
+                    <div className='notify_nothing'>
                         <span className='notify_nothing_content'>KHÔNG CÓ HOẠT ĐỘNG</span>
                         <span className='notify_nothing_sub'>(LÀM MỚI ĐỂ KIỂM TRA LẠI)</span>
-                </div>}
+                    </div>
+                }
+                
 			</div>
         )
     }, [nextPage[tab], tab, refreshTabTrigger, JSON.stringify(row)]);

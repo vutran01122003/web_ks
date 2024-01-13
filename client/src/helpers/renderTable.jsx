@@ -23,7 +23,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
         }
     }
 
-    TABLE.tableId = table ? table._id : dynamicTable.table;
+    TABLE.tableId = table ? table._id : dynamicTable._id;
     TABLE.title = table ? table.tableName : dynamicTable.tableName;
     const rowTitleList = table ? table.rowTitleList : dynamicTable.rowTitleList;
     
@@ -77,12 +77,20 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
     ];
 
     if(!table) {
-        TABLE.thead.push({
+        TABLE.thead.push(
+            {
+                textHeading: "Xem Chi Tiết",
+                typeInput: "text",
+                requiredHeading: true,
+                isShow: false,
+            },
+            {
             textHeading: buttonNameLabel,
             typeInput: "text",
             requiredHeading: true,
             isShow: false,
-        });
+            }
+        );
     } else {
         TABLE.thead.push({
             textHeading: "Trạng Thái",
@@ -91,6 +99,11 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
             isShow: false,
         }, {
             textHeading: "Ghi Chú",
+            typeInput: "text",
+            requiredHeading: true,
+            isShow: false,
+        },{
+            textHeading: "Sửa",
             typeInput: "text",
             requiredHeading: true,
             isShow: false,
@@ -115,12 +128,12 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
                 } else {
                     rowValueItemArr = thead.reduce(
                         (arr, headingItem) => {
-                            if (table && !thead.requiredHeading && rowValueItem.rowValue[headingItem.textHeading])
+                            if (table && !thead?.requiredHeading && rowValueItem?.rowValue[headingItem?.textHeading])
                                 return [
                                     ...arr,
-                                    rowValueItem.rowValue[
-                                        headingItem.textHeading
-                                    ],
+                                    typeof rowValueItem.rowValue[headingItem.textHeading] === "object" ? 
+                                    rowValueItem.rowValue[headingItem.textHeading].value : 
+                                    rowValueItem.rowValue[headingItem.textHeading],
                                 ];
                             else 
                             return arr;
@@ -130,12 +143,12 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
                 }
                 
                 const tbody = [...rowValueItemArr, {
-                    proofNameLabel: "Xem Minh Chứng",
+                    proofNameLabel: "Tải Xuống",
                     proofFiles: rowValueItem.proofFilesList,
                 }];
 
                 dynamicRowsInfo ? 
-                tbody.push({
+                tbody.push("Chi Tiết", {
                     buttonNameLabel: true,
                     rowsType,
                     rowInfoData: {
@@ -144,12 +157,14 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType}) => {
                     }
                 }) : 
                 tbody.push({
-                    statusLabel: rowValueItem.status,
-                    statusValue: rowValueItem.status === "Chờ Duyệt" ? null : 
-                        rowValueItem.status === "Đã Duyệt" ? true : false,
+                    statusLabel: rowValueItem.status || "Lỗi Trạng Thái",
+                    statusValue: rowValueItem.status
                 }, {
                     noteLabel: "Xem Ghi Chú",
                     noteValue: rowValueItem.note
+                }, {
+                    editLabel: "Sửa",
+                    editValue: rowValueItem.status === "Phải Nộp Lại" ? true : false
                 })
                 return tbody;
             }

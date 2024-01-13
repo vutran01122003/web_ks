@@ -24,6 +24,8 @@ class AccessControllers {
 
             if (checkLogin.isSuccessLogin) {
                 if (checkLogin.typePassword === 'password') {
+                    if (!checkLogin.user.isActive)
+                        throw createError.BadRequest('Tài khoản đã bị khóa');
                     const accessToken = await jwtService.signAccessToken({
                         userData: checkLogin.user
                     });

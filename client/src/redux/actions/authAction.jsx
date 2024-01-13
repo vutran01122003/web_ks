@@ -34,7 +34,7 @@ export const login = ({
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error:  error.reponse?.data.msg || 'Đăng Nhập Thất Bại'
+                error:  error.response?.data.msg || 'Đăng Nhập Thất Bại'
             }
         })
     }

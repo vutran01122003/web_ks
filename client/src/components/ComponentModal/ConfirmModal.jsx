@@ -1,21 +1,53 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateRowsStatus } from "../../redux/actions/rowAction";
 import {AiOutlineClose} from 'react-icons/ai';
 import { useState } from "react";
+import { authSelector } from "../../redux/selector";
+import GLOBALTYPES from "../../redux/actions/globalTypes";
 
 function ConfirmModal({ content, title, status, rowInfoData, handleHiddenConfirmModal, rowsType}) {
     const dispatch = useDispatch();
+    const auth = useSelector(authSelector);
     const [noteValue, setNoteValue] = useState("");
+    const [visibleDateInput, setVisibleDateInput] = useState(false);
+    const [datetimeValue, setDateTimeValue] = useState("");
 
     const handleUpdateRowsStatus = () => {
+        if(visibleDateInput === true && !datetimeValue) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: "Chưa nhập hạn cuối nộp lại"
+                }
+            })
+            return;
+        }
+
         dispatch(updateRowsStatus({
+            pageInfo: {
+                userId: auth.user?._id,
+                pageStudentCohort: auth.user?.cohort,
+                pageStudentMajor: auth.user?.major,
+                pageStudentLevelYear: auth.user?.levelYear
+            },
             noteValue,
             rowsType,
             status,
             rowListId: rowInfoData.rowListId, 
-            contentIdList: rowInfoData.contentIdList
+            contentIdList: rowInfoData.contentIdList,
+            deadline: datetimeValue
         }));
         handleHiddenConfirmModal();
+    }
+
+    const handleChangeDatetimeValue = (e) => {
+        setDateTimeValue(e.target.value);
+    }
+
+
+    const handleChangeVisiableStatusDateInput = (e) => {
+        const boolean = e.target.value === "true";
+        setVisibleDateInput(boolean);
     }
 
     const handleChangeNoteValue = (e) => {
@@ -45,6 +77,46 @@ function ConfirmModal({ content, title, status, rowInfoData, handleHiddenConfirm
                         {content}
                         <span>(Kiểm tra thật kỹ minh chứng trước khi đồng ý)</span>
                     </p>
+                    {   
+                        status === "Phải Nộp Lại" &&
+                        <div className="deadline_submit">
+                            <div className="deadline_submit_radio_group">
+                                <label>Tạo Thời Hạn:</label>
+
+                                <div className="deadline_submit_radio_item">
+                                    <input 
+                                        type="radio" 
+                                        name="deadline_submit_radio" 
+                                        onChange={handleChangeVisiableStatusDateInput} 
+                                        id="deadline_submit_radio_optional" 
+                                        defaultChecked 
+                                        value={false}
+                                    />
+                                    <label htmlFor="deadline_submit_radio_optional">Không bắt buộc</label>
+                                </div>
+                                
+                                <div className="deadline_submit_radio_item">
+                                    <input 
+                                        type="radio" 
+                                        onChange={handleChangeVisiableStatusDateInput} 
+                                        name="deadline_submit_radio" 
+                                        id="required_deadline_submit" 
+                                        value={true}
+                                    />
+                                    <label htmlFor="required_deadline_submit">Bắt buộc</label>
+                                </div>
+                            </div>
+
+                            {
+                                visibleDateInput === true &&
+                                <div className="deadline_submit_input_wrapper">
+                                    <label htmlFor="deadline_submit_input">Nhập Thời Gian:</label>
+                                    <input type="datetime-local" onChange={handleChangeDatetimeValue} id="deadline_submit_input" />
+                                </div>
+                            }
+
+                        </div>
+                    }
                     <div className="confirm_modal_body_note">
                         <textarea 
                             placeholder="Nhập ghi chú cho hoạt động (nếu có)"

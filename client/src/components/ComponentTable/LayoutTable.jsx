@@ -3,10 +3,13 @@ import TableModal from '../ComponentModal/TableModal'
 import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
 import ConfirmModal from '../ComponentModal/ConfirmModal';
 import { CheckSquareFilled , CloseSquareFilled, MinusSquareFilled } from '@ant-design/icons';
+import { FaEdit } from "react-icons/fa";
 import NoteModal from '../ComponentModal/NoteModal';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../../redux/selector';
 
-const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
+const MainItem = ({ auth, stateModal, setUseStateModal, useStateModal, handleOpenModal, editingContentData, row, handleOpenPreviewFilesModal }) => {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
     const [modalData, setModalData] = useState({});
@@ -42,7 +45,7 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                             {item?.proofNameLabel}
                         </td> : 
                         <td 
-                            key={item?.proofFiles[0]?._id} 
+                            key={index + item?.proofFiles[0]?._id} 
                             className="line__item" 
                         >
                            <a
@@ -54,9 +57,30 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                         </td>
                     )
                 } else if (item?.statusLabel) {
+                    let statusValue = "";
+                    
+                    switch (item?.statusValue) {
+                        case "Chờ Duyệt":
+                            statusValue = 'wating_status';
+                            break;
+                        case "Đã Duyệt":
+                            statusValue = 'accept_status';
+                            break;
+                        case "Từ Chối":
+                            statusValue = 'deny_status';
+                            break;
+                        case "Phải Nộp Lại":
+                            statusValue = 'resubmit_status';
+                            break;
+                        case "Hết Hạn":
+                            statusValue = 'expired_status';
+                            break;
+                        default:
+                            break;
+                    }
                     return (
                         <td 
-                            className={`line__item row_status ${item?.statusValue === null ? 'wating_status' : (item?.statusValue ? 'accept_status' : 'deny_status')}`}
+                            className={`line__item row_status ${statusValue}`}
                             key={index}
                         >
                             {item?.statusLabel}
@@ -78,23 +102,6 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                                 />
                             }
                             <div className='button_wrapper'>
-                                {   
-                                    !["pendingRows"].includes(item.rowsType) &&
-                                    <button 
-                                        className='row_button_wrapper'
-                                        onClick={() => {
-                                            handleVisibleConfirmModal();
-                                            setModalData({
-                                                title: 'Thông Báo',
-                                                content: 'Bạn muốn hoạt động về trạng thái chưa duyệt ?',
-                                                status:  null,
-                                            })
-                                        }}    
-                                    >
-                                        <MinusSquareFilled className='row_button pending_button'/>
-                                    </button>
-                                }
-
                                 {
                                     ["rejectedRows", "pendingRows"].includes(item.rowsType) &&
                                     <button 
@@ -103,8 +110,8 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content: 'Bạn chắc chắn chấp nhận hoạt động này',
-                                                status: true,
+                                                content: 'Bạn chắc chắn chấp nhận hoạt động này ?',
+                                                status: "Đã Duyệt",
                                             })
                                         }}
                                     >
@@ -120,12 +127,29 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content: 'Bạn chắc chắn từ chối hoạt động này',
-                                                status: false,
+                                                content: 'Bạn chắc chắn từ chối hoạt động này ?',
+                                                status: 'Từ Chối',
                                             })
                                         }}    
                                     >
                                         <CloseSquareFilled className='row_button reject_button' />
+                                    </button>
+                                }
+
+                                {   
+                                    ["pendingRows", "rejectedRows", "acceptedRows"].includes(item.rowsType) &&
+                                    <button 
+                                        className='row_button_wrapper'
+                                        onClick={() => {
+                                            handleVisibleConfirmModal();
+                                            setModalData({
+                                                title: 'Thông Báo',
+                                                content: 'Bạn chắc chắn muốn sinh viên nộp lại hoạt động này ?',
+                                                status:  'Phải Nộp Lại',
+                                            })
+                                        }}    
+                                    >
+                                        <MinusSquareFilled className='row_button pending_button'/>
                                     </button>
                                 }
                             </div>
@@ -149,6 +173,27 @@ const MainItem = ({ row, handleOpenPreviewFilesModal }) => {
                             </span>
                         </td>
                     )
+                } else if(item?.editLabel) {
+                    return (
+                        <td className="line__item" key={index} onClick={() => {if(item.editValue) handleOpenModal()}}>   
+                            {
+                                // useStateModal && 
+                                // <TableModal
+                                //     auth={auth}
+                                //     stateModal={stateModal}
+                                //     setUseStateModal={setUseStateModal}
+                                //     handleOpenModal={handleOpenModal}
+                                //     title={editingContentData?.title}
+                                //     thead={editingContentData?.thead}
+                                //     tableId={editingContentData?.tableId}
+                                //     page={editingContentData?.page}
+                                // />
+                            }
+                            <span className={`edit_row ${item.editValue ? "active" : "inactive"}`}>
+                                <FaEdit />
+                            </span>
+                        </td>
+                    )
                 }
 
 				return <td className="line__item" key={index}>{item}</td>
@@ -161,6 +206,7 @@ const LayoutTable = ({ index, table, page, pendingTable, isDynamicRows}) => {
 	const [useStateModal, setUseStateModal] = useState(false);
     const [openPreviewModal, setOpenPreviewModal] = useState(false);
     const [proofFilesData, setProofFilesData] = useState(null);
+    const auth = useSelector(authSelector);
 
     const handleOpenPreviewFilesModal = ({proofData}) => {
         setProofFilesData(proofData);
@@ -168,6 +214,9 @@ const LayoutTable = ({ index, table, page, pendingTable, isDynamicRows}) => {
     }
 
     const handleOpenModal = () => {
+        // if(page.pageLevelYear !== auth.user.levelYear) {
+        //     return;
+        // }
         setUseStateModal(true)
     }
 
@@ -180,13 +229,15 @@ const LayoutTable = ({ index, table, page, pendingTable, isDynamicRows}) => {
                     {
                         !pendingTable && 
                         <div className="modal">
-                            <button className="modal_btn_open" onClick={handleOpenModal}>Thêm hoạt động</button>
+                            <button className={`modal_btn_open ${page.pageLevelYear === auth.user.levelYear ? "active" : "inactive"}`} onClick={handleOpenModal}>Thêm hoạt động</button>
                             <>
                                 {
                                     useStateModal && 
                                     <TableModal
+                                            auth={auth}
                                             stateModal={useStateModal}
-                                            setStateModal={setUseStateModal}
+                                            setUseStateModal={setUseStateModal}
+                                            handleOpenModal={handleOpenModal}
                                             title={table?.title}
                                             thead={table?.thead}
                                             tableId={table?.tableId}
@@ -198,7 +249,6 @@ const LayoutTable = ({ index, table, page, pendingTable, isDynamicRows}) => {
                     }
 			    </header>
             }
-           
 			<table className={`table ${isDynamicRows ? 'margin-0' : ''}`}>
                 {
                   table?.thead && (!isDynamicRows || index === 0) &&
@@ -216,13 +266,28 @@ const LayoutTable = ({ index, table, page, pendingTable, isDynamicRows}) => {
                 {
                     table?.tbody && 
                     <tbody className="table__items">
-                        {table.tbody.map((row, index) => (
-                            <MainItem 
-                                handleOpenPreviewFilesModal={handleOpenPreviewFilesModal} 
-                                row={row} 
-                                key={index} 
-                            />
-                        ))}
+                        {table.tbody.map((row, index) => {
+                            const editingContentData = {
+                                title: table?.title,
+                                thead: table?.thead,
+                                tableId: table?.tableId,
+                                page: page
+                            }
+
+                            return (
+                                <MainItem 
+                                    auth={auth}
+                                    stateModal={useStateModal}
+                                    setUseStateModal={setUseStateModal}
+                                    handleOpenModal={handleOpenModal}
+                                    useStateModal={useStateModal}
+                                    editingContentData={editingContentData}
+                                    handleOpenPreviewFilesModal={handleOpenPreviewFilesModal} 
+                                    row={row} 
+                                    key={index} 
+                                />
+                            )
+                        })}
 				    </tbody>
                 }		
 			</table>

@@ -131,7 +131,7 @@ Content-Type: application/json
 GET {{url}}/api/pending_rows?limit=3&page=2
 
 ### update status row
-PATCH {{url}}/api/pending_rows/update
+PATCH {{url}}/api/dynamic_rows/update
 Content-Type: application/json
 
 {
@@ -256,3 +256,17 @@ Content-Type: application/json
 
 ### get progress
 GET {{url}}/api/progress?pageStudentMajor=Kỹ thuật phần mềm&pageStudentLevelYear=1&pageStudentCohort=17
+
+### get all student's progress
+GET {{url}}/api/progress/all?major=kỹ thuật phần mềm&cohort=17&levelYear=1&isCompleted=false
+
+### remove students if they don't pass 
+POST {{url}}/api/progress/updatedUsers
+Content-Type: application/json
+
+{
+    "cohort": 17,
+    "levelYear": 1,
+    "major": "kỹ thuật phần mềm",
+    "minimunPercentage": 25
+}

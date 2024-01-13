@@ -1,6 +1,8 @@
 const RowService = require('../services/row.service');
 const UploadService = require('../services/upload.service');
 const createError = require('http-errors');
+const ProgressService = require('../services/progress.service');
+const User = require('../models/user.model');
 
 class RowControllers {
     addRow = async (req, res, next) => {
@@ -26,8 +28,8 @@ class RowControllers {
             });
 
             res.status(200).json({
-                status: 'Thêm Thông Tin Thành Công'
-                // data: rowList
+                status: 'Thêm Thông Tin Thành Công',
+                data: rowList
             });
         } catch (error) {
             next(error);
@@ -67,7 +69,6 @@ class RowControllers {
                 data: peddingRow.data
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -76,20 +77,65 @@ class RowControllers {
         try {
             if (!res.locals.roles.includes('0004'))
                 throw createError.Forbidden('Không đủ quyền cập nhật trạng thái chỉ tiêu');
-            const { rowListId, contentIdList, status, noteValue } = req.body;
+            const { rowListId, contentIdList, status, noteValue, pageInfo, deadline } = req.body;
+
+            const deadlineDatetime = deadline ? new Date(`${deadline}:00.000Z`) : deadline;
+            const currentDatetime = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
+
+            if (deadline && currentDatetime.getTime() > deadlineDatetime.getTime())
+                throw createError.BadRequest('Hạn nộp phải lớn hơn ngày giờ hiện tại');
 
             const updatedRow = await RowService.updateRowStatus({
                 rowListId,
                 contentIdList,
                 status,
-                noteValue
+                noteValue,
+                deadline: deadlineDatetime
             });
+
+            const pages = await ProgressService.getProgressByYear(pageInfo);
+
+            let quantityDemanded = 0;
+            let completedTask = 0;
+            let score = 0;
+            pages.forEach((page) => {
+                page.tables.forEach((table) => {
+                    quantityDemanded += table.quantityDemanded;
+                    table.rowValueList[0]?.content.forEach((content) => {
+                        if (content.status === 'Đã Duyệt') {
+                            ++completedTask;
+                            score += content.totalScore;
+                        }
+                    });
+                });
+            });
+
+            await User.findByIdAndUpdate(
+                pageInfo.userId,
+                {
+                    $set: {
+                        [`annualTaskProgress.${pageInfo.pageStudentLevelYear}`]: {
+                            completedTaskPrecent: Number.parseFloat(
+                                ((completedTask / quantityDemanded) * 100).toFixed(2)
+                            ),
+                            totalScore: score,
+                            quantityDemanded: quantityDemanded,
+                            completedTasksNum: completedTask,
+                            updatedAt: new Date()
+                        }
+                    }
+                },
+                {
+                    new: true
+                }
+            );
 
             res.status(200).json({
                 code: updatedRow.code,
                 msg: updatedRow.msg
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

@@ -2,7 +2,7 @@
     margin: 10px;
 	width: 100%;
 	position: relative;
-
+    
     &.margin-0 {
         margin: 0;
     }
@@ -19,7 +19,13 @@
         transition: 0.1s linear;
         cursor: pointer;
         
-        &:active {
+        &.inactive {
+            background: #006fee;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &:not(.inactive):active {
             transform: scale(0.9);
         }
     }
@@ -36,7 +42,6 @@
 		border: 1px solid $line_color;
 		margin: 10px 0px;
 		width: 100%;
-        min-height: 120px;
 
         &.margin-0 {
             margin: 0;
@@ -161,12 +166,36 @@
                     color: red;
                 }
 
+                .resubmit_status {
+                    color: rgb(203 27 27);
+                }
+
+                .expired_status {
+                    color: red;
+                }
+
                 .note_row {
                     color: #006fee;
                     cursor: pointer;
 
                     &:hover {
                         text-decoration: underline;
+                    }
+                }
+
+                .edit_row {
+                    color: #006fee;
+                    cursor: pointer;
+                    font-size: 20px; 
+                    transition: 0.1s linear;
+
+                    &.inactive {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                    }
+
+                    &.active:hover {
+                        color: #1c86ff;
                     }
                 }
 			}

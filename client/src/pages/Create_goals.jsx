@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import ComponentButton from '../components/ComponentButton/ComponentButton';
-import { BiSolidAddToQueue } from "react-icons/bi"
-import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from "react-icons/ai"
+import { BiSolidAddToQueue } from "react-icons/bi";
+import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from "react-icons/ai";
 import { FaCaretRight } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
-import { MdOutlineAddCircle } from "react-icons/md"
+import { MdOutlineAddCircle } from "react-icons/md";
 import { useDispatch } from 'react-redux';
 import { createPage } from '../redux/actions/pageAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
@@ -22,7 +22,7 @@ const CreateGoals = ({handleAddTable}) => {
     const [visibleModal, setVisibleModal] = useState(false);
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
-
+   
     const [tables, setTables] = useState([
         {
             tableName: "",
@@ -32,7 +32,9 @@ const CreateGoals = ({handleAddTable}) => {
                 titleValue: "",
                 fixedValue: []
             }],
-            rowValueList: []
+            rowValueList: [],
+            fixedScore: "",
+            scoreSelectBoxStatus: null
         }
     ]);
 
@@ -45,7 +47,9 @@ const CreateGoals = ({handleAddTable}) => {
                 titleValue: "",
                 fixedValue: []
             }],
-            rowValueList: []
+            rowValueList: [],
+            fixedScore: "",
+            scoreSelectBoxStatus: null
         }]);
     };
 
@@ -55,7 +59,11 @@ const CreateGoals = ({handleAddTable}) => {
 
     const updateTable = (index, key, value) => {
         const updatedTables = [...tables];
-        updatedTables[index][key] = value;
+        if(key === "scoreSelectBoxStatus") {
+            updatedTables[index][key] = value === "" ? null : (value === "true" ? true : false)
+        } else {
+            updatedTables[index][key] = value;
+        }
         setTables(updatedTables);
     };
 
@@ -131,7 +139,9 @@ const CreateGoals = ({handleAddTable}) => {
                     titleValue: "",
                     fixedValue: []
                 }],
-                rowValueList: []
+                rowValueList: [],
+                fixedScore: "",
+                scoreSelectBoxStatus: null
             }
         ])
     }
@@ -147,9 +157,28 @@ const CreateGoals = ({handleAddTable}) => {
             return;
         }
 
-        const checkDuplicate = tables.some((table) => table.rowTitleList.length !== (new Set(table.rowTitleList)).size);
+        let notifyValue = "";
 
-        if(!checkDuplicate) {
+        const checkError = tables.some((table) => {
+            if(table.rowTitleList.length !== (new Set(table.rowTitleList)).size) {
+                notifyValue = "Các Cột Không Được Trùng Tên";
+                return true;
+            } 
+
+            if(table.scoreSelectBoxStatus === true && !table.fixedScore) {
+                notifyValue = "Chưa Nhập Điểm Cho Chỉ Tiêu";
+                return true;
+            } 
+            
+            if (
+                table.scoreSelectBoxStatus === null && table.rowTitleList.every(rowTitleList => rowTitleList.fixedValue.length === 0)
+            ) {
+                notifyValue = "Chưa Nhập Điểm Cho Chỉ Tiêu";
+                return true;
+            };
+        });
+        
+        if(!checkError) {
             const pageData = {
                 pageName,
                 pageType: "chỉ tiêu",
@@ -157,12 +186,19 @@ const CreateGoals = ({handleAddTable}) => {
                 pageStudentCohort,
                 pageStudentMajor,
                 pageStudentLevelYear,
-                tables: tables.map((table) => ({
-                    tableName: table.tableName,
-                    quantityDemanded: table.quantityDemanded,
-                    description: table.description,
-                    rowTitleList: table.rowTitleList
-                }))
+                tables: tables.map((table) => {
+                   const tableData = {
+                        tableName: table.tableName,
+                        quantityDemanded: table.quantityDemanded,
+                        description: table.description,
+                        rowTitleList: table.rowTitleList,
+                        fixedScore: table.fixedScore
+                    }
+
+                    if(!table.fixedScore) delete tableData.fixedScore;
+
+                    return tableData;
+                })
             };
 
             dispatch(createPage({pageData, resetAllData}));
@@ -170,7 +206,7 @@ const CreateGoals = ({handleAddTable}) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: "Các Cột Không Được Trùng Tên"
+                    error: notifyValue
                 }
             })
         }
@@ -236,7 +272,7 @@ const CreateGoals = ({handleAddTable}) => {
                     <input
                         type="text"
                         id="name__chi_tieu"
-                        placeholder=''
+                        placeholder='Nhập Tên Nhóm Chỉ Tiêu'
                         value={pageName}
                         onChange={(e) => setPageName(e.target.value)}
                     />
@@ -246,7 +282,6 @@ const CreateGoals = ({handleAddTable}) => {
                     {tables.map((table, tableIndex) => {
                         return (
                             <div key={tableIndex} className="box__table">
-
                                 <div className="flex__hLine">
                                     <div className="text__heading_fw">
                                         <div className="text__length">Tên Chỉ Tiêu:</div>
@@ -290,10 +325,40 @@ const CreateGoals = ({handleAddTable}) => {
                                     />
                                 </div>
 
+                                <div className="flex__line_lable">
+                                    <label>Loại Điểm Số:</label>
+                                    <select onChange={(e) => {
+                                        updateTable(tableIndex, 'scoreSelectBoxStatus', e.target.value);
+                                    }}>
+                                        <option value="">Điểm số không cố định</option>
+                                        <option value={true}>Điểm số cố định</option>
+                                        <option value={false}>Không bắt buộc</option>
+                                    </select>
+                                </div>
+
+                                {
+                                    table.scoreSelectBoxStatus !== null && 
+                                    <div className="flex__line_lable">
+                                        <label htmlFor="score_input">Nhập Điểm:</label>
+                                        <input 
+                                            className={`score_input ${table.scoreSelectBoxStatus === false ? "not_allow": ""}`} 
+                                            type="text" 
+                                            placeholder='Nhập điểm số chỉ tiêu'
+                                            value={table.scoreSelectBoxStatus === false ? 0 : table.fixedScore}
+                                            id="score_input"
+                                            readOnly={table.scoreSelectBoxStatus === false}
+                                            onChange={(e) => updateTable(tableIndex, 'fixedScore', /^\d*\.?\d*$/.test(e.target.value) ? e.target.value : "")}
+                                        />
+                                    </div>
+                                }
+
                                 <div className="table__col--target">
                                     <div className="flex__line">
-                                        <ComponentButton onClick={() => addRowValue(tableIndex)} textButton="Thêm Cột"
-                                            className="btn__add-col" icon_before={<MdOutlineAddCircle />} />
+                                        <ComponentButton 
+                                            onClick={() => addRowValue(tableIndex)} 
+                                            textButton="Thêm Cột"
+                                            className="btn__add-col" icon_before={<MdOutlineAddCircle />} 
+                                        />
                                     </div>
 
                                     <div className='tr__line--cols'>
@@ -309,12 +374,15 @@ const CreateGoals = ({handleAddTable}) => {
                                                         />
                                                         {
                                                             table.rowTitleList.length > 1 && 
-                                                            <div onClick={() => deleteRowValue(tableIndex, rowIndex)} className="del__col">
+                                                            <div onClick={() => deleteRowValue(tableIndex, rowIndex)} className={`del__col ${table.scoreSelectBoxStatus !== null ? "top" : ""}`}>
                                                                 <abbr title="Xóa cột">
                                                                     <AiFillCloseCircle />
                                                                 </abbr>
                                                             </div>
                                                         }
+
+                                                        {
+                                                            table.scoreSelectBoxStatus === null &&
                                                             <Tippy
                                                                 interactive
                                                                 placement= 'top'
@@ -401,6 +469,7 @@ const CreateGoals = ({handleAddTable}) => {
                                                                     </abbr>
                                                                 </div>
                                                             </Tippy>
+                                                        }
                                                         
                                                     </div>
                                                 )

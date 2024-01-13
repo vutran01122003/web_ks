@@ -4,9 +4,9 @@ import { CgBrowser } from 'react-icons/cg';
 import { BiBookBookmark } from 'react-icons/bi';
 import { HiOutlineNewspaper } from 'react-icons/hi'
 import { BsTags } from 'react-icons/bs';
-
 import { RiHome3Fill } from 'react-icons/ri';
-import { FaClipboardList } from "react-icons/fa6";
+import { BsFillClipboard2CheckFill } from "react-icons/bs";
+import { FaClipboardList } from "react-icons/fa";
 
 export const ARRAY_LIST_MENU =  [
         {
@@ -20,46 +20,54 @@ export const ARRAY_LIST_MENU =  [
         {
             id: 1,
             roles: ['0004'],
-            name_menu: 'Xét Duyệt Chỉ Tiêu',
+            name_menu: 'Xét Duyệt Hoạt Động',
             icon_before: <FaClipboardList />,
-            to_link: '/listGoals',
+            to_link: '/ListGoals',
             submenu: false,
         },
         {
             id: 2,
             roles: ['0004'],
-            name_menu: 'Thêm Nhóm Chỉ Tiêu',
-            icon_before: <TbTargetArrow />,
-            to_link: '/create_goals',
+            name_menu: 'Thống Kê Tiến Độ Hoàn Thành',
+            icon_before: <BsFillClipboard2CheckFill />,
+            to_link: '/CompletionShedule',
             submenu: false,
         },
         {
             id: 3,
             roles: ['0004'],
-            name_menu: 'Thêm Loại Tin Tức',
-            icon_before: <BsTags />,
-            to_link: '/create_news_type',
-            submenu: false
+            name_menu: 'Thêm Nhóm Chỉ Tiêu',
+            icon_before: <TbTargetArrow />,
+            to_link: '/Create_goals',
+            submenu: false,
         },
         {
             id: 4,
             roles: ['0004'],
+            name_menu: 'Thêm Loại Tin Tức',
+            icon_before: <BsTags />,
+            to_link: '/Create_news_type',
+            submenu: false
+        },
+        {
+            id: 5,
+            roles: ['0004'],
             name_menu: 'Quản Lý Trang',
             icon_before: <CgBrowser />,
-            to_link: '/manage_pages',
+            to_link: '/Manage_pages',
             submenu: false,
             list:"Chỉ tiêu"
         },
         {
-            id: 5,
+            id: 6,
             roles: ['0003'],
             name_menu: 'Tạo Tin Tức',
             icon_before: <MdOutlineCreate />,
-            to_link: '/create_news',
+            to_link: '/Create_news',
             submenu: false
         },
         {
-            id: 6,
+            id: 7,
             name_menu: 'Tin Tức',
             allow: true,
             icon_before: <HiOutlineNewspaper />,
@@ -68,8 +76,8 @@ export const ARRAY_LIST_MENU =  [
             sub_menu_item: []
         },
         {
-            id: 7,
-            name_menu: 'Nhóm Chỉ Tiêu',
+            id: 8,
+            name_menu: 'Nhóm Chỉ Tiêu Năm',
             roles: ['0002'],
             icon_before: <BiBookBookmark />,
             dynamicPage: 'goals',
@@ -77,10 +85,10 @@ export const ARRAY_LIST_MENU =  [
             sub_menu_item: [],
         },
         {
-            id: 8,
+            id: 9,
             allow: true,
             name_menu: 'Forum',
-            to_link: '/forum',
+            to_link: '/Forum',
             icon_before: <MdOutlineForum />,
             submenu: false,
         }

@@ -4,9 +4,11 @@
     position: sticky;
     top: 0px;
     left: 0px;
-    background-color: #1c2741;
+    // background-color: #1c2741;
+    background-color: #ffffff;
     // border-bottom: 1px dotted $line_color;
     z-index: 10;
+    box-shadow: 0 0 3px rgba(173, 171, 171, 0.686);
 
     .tr__header {
         height: 100%;
@@ -24,10 +26,10 @@
 
                 .khoa_style {
                     text-transform: uppercase;
-                    color: #fff;
+                    color: #000000;
                     font-weight: 500;
                     font-size: 16px;
-                    border-left: 5px solid #f0635c;
+                    border-left: 5px solid #3e97ff;
                     padding-left: 15px;
                 }
 
@@ -60,7 +62,7 @@
                     background-color: #efece8e8;
                     font-size: 25px;
                     position: relative;
-                    border-radius: 3px;
+                    border-radius: 5px;
 
                     .flex__center {
                         width: 100%;
@@ -147,7 +149,7 @@
                 }
 
                 .border__account {
-                    border-left: 1px solid #868585;
+                    border-left: 1px solid #e0dede;
                     padding-left: 20px;
 
                     .btn_dropdown {
@@ -160,18 +162,18 @@
                         .info__user {
                             margin-right: 15px;
                             user-select: none;
-                            color: #fff !important;
 
                             #name__user {
                                 font-size: 14px;
                                 font-weight: 500;
                                 text-transform: uppercase;
                                 margin-bottom: 2px;
+                                color: #000000;
                             }
 
                             #studentId__user {
                                 font-size: 11px;
-                                color: #d8d8d8;
+                                color: #706f6f;
                                 font-weight: 600;
                             }
                         }
@@ -193,7 +195,7 @@
                         background-color: #fafafa;
                         border: 1px solid #cecece;
                         box-shadow: 3px 2px 8px 0 #0000002c;
-                        border-radius: 3px;
+                        border-radius: 5px;
 
                         .pd__select {
                             padding: 0px 10px;
@@ -226,7 +228,7 @@
                             font-weight: 600;
                             transition: background-color 0.35s;
                             margin: 8px 0px;
-                            border-radius: 3px;
+                            border-radius: 5px;
 
                             &:hover {
                                 background-color: $color_white_hover;

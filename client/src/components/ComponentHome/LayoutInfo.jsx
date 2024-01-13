@@ -7,8 +7,8 @@ import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
 const LayoutInfo = ({ auth }) => {
 	const heading =
 		auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003')
-			? 'Thông tin giảng viên'
-			: 'Thông tin sinh viên'
+			? 'Thông Tin Giảng Viên'
+			: 'Thông Tin Sinh Viên'
     
 	return (
 		<div className="container__info">

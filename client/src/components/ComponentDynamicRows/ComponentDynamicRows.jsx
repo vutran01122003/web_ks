@@ -4,7 +4,7 @@ import { renderTable } from '../../helpers/renderTable';
 
 function ComponentDynamicRows({ index, rowsType, dynamicRows }) {
     const [table, setTable] = useState(null);
-    
+
     useEffect(() => {
        if(rowsType) {
             setTable(renderTable({dynamicRowsInfo: dynamicRows, rowsType}));

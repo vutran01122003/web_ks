@@ -65,6 +65,9 @@ const UserSchema = new Schema(
         phone: {
             type: String,
             lowercase: true
+        },
+        annualTaskProgress: {
+            // Tiến độ hoàn thành nhiệm vụ mỗi năm
         }
     },
     {

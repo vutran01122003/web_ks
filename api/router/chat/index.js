@@ -1,7 +1,6 @@
-const chatControllers = require('../../controllers/chat.controllers');
-const router = require('express').Router();
-// const { auth } = require('../../middleware/auth');
+const chatControllers = require('../../controllers/chat.controllers')
+const router = require('express').Router()
+const { auth } = require('../../middleware/auth')
 
-router.route('/chat').post(chatControllers.handleChat);
-
-module.exports = router;
+router.route('/chat').get(auth, chatControllers.getTypeChat).post(auth, chatControllers.handleChat)
+module.exports = router

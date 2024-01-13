@@ -21,7 +21,7 @@ const RowSchema = new Schema(
                         rowId: Schema.Types.ObjectId,
                         status: {
                             type: String,
-                            enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối'],
+                            enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối', 'Phải Nộp Lại', 'Hết Hạn'],
                             default: 'Chờ Duyệt'
                         },
                         proofFilesList: {
@@ -34,9 +34,7 @@ const RowSchema = new Schema(
                             ],
                             default: []
                         },
-                        rowValue: {
-                            type: {}
-                        },
+                        rowValue: {},
                         note: {
                             type: [
                                 new mongoose.Schema(
@@ -47,7 +45,12 @@ const RowSchema = new Schema(
                                 )
                             ],
                             default: []
-                        }
+                        },
+                        totalScore: {
+                            type: Number,
+                            default: 0
+                        },
+                        deadline: Schema.Types.Date
                     },
                     {
                         timestamps: true

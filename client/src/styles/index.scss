@@ -25,10 +25,9 @@ a {
 }
 
 .heading-4 {
-    font-size: 25px;
+    font-size: 16px;
     font-weight: 500;
     margin-bottom: 20px;
-    margin-left: 10px;
 }
 
 .text-danger {
@@ -185,6 +184,7 @@ a {
 @import "./layout/index";
 @import "./pages/pageLogin";
 @import "./pages/pageChatbot";
+@import "./pages/pageCompletionSchedule";
 
 // Component
 @import "./components/modalComponent";

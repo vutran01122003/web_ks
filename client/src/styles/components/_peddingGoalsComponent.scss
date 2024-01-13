@@ -2,8 +2,10 @@
     height: calc(100vh - 65px);
     padding: 10px;
     background-color: #F5F5F5;
+    min-width: 800px;
 
     .body__tables {
+
         .tab__tables--goal {
             height: 100%;
 
@@ -25,8 +27,6 @@
         }
 
         .pedding_goals_container {
-            min-height: 73vh;
-            
             .pedding_item {
                 width: 100%;
                 cursor: pointer;
@@ -79,5 +79,37 @@
                 }
             }
         }
+    }
+}
+
+.container__center {
+	background-color: $color_white;
+	border-radius: 3px;
+    height: 73vh;
+    .notify_nothing {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+        min-height: 73vh;
+        flex-direction: column;
+        color: #333333ad;
+        font-weight: 600;
+
+        .notify_nothing_content {
+            font-size: 16px;
+        }
+
+        .notify_nothing_sub {
+            font-size: 12px;
+            font-weight: 400;
+        }
+    }
+
+    .loading_rows_pendding {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 20px;
     }
 }

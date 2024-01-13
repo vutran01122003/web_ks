@@ -2,9 +2,35 @@
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 3px rgb(194, 193, 193);
+
+    .notify_empty {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+        min-height: 300px;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            display: block;
+            width: 200px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        span {
+            color: gray;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+    }
+
     .goals_info_container_heading {
-        padding: 10px 20px;
-        font-size: 25px;
+        padding: 10px 30px;
+        font-size: 16px;
+        text-transform: uppercase;
         font-weight: 500;
         border-bottom: 1px solid rgb(229, 227, 227);
     }

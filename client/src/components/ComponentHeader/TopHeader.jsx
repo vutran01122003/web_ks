@@ -9,7 +9,6 @@ import ImageMessenger from "../../assets/images/image_messenger.png";
 import ImageTask from "../../assets/images/image_task.png";
 import ImageNote from "../../assets/images/image_note.png";
 import { Tooltip } from 'antd';
-import { useMemo } from 'react';
 
 const TopHeader = ({ auth }) => {
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
@@ -78,21 +77,8 @@ const TopHeader = ({ auth }) => {
         )
     });
 
-    const [arrow, setArrow] = useState('Show');
-    const mergedArrow = useMemo(() => {
-        if (arrow === 'Hide') {
-            return false;
-        }
-        if (arrow === 'Show') {
-            return true;
-        }
-        return {
-            pointAtCenter: true,
-        };
-    }, [arrow]);
-
     return (
-        <div className='container__header'>
+        <div className={`container__header ${determineAuth ? "header_admin" : ""}`}>
             <div className="tr__header">
                 <div className="flex__line">
                     <div className="line__firts">
@@ -104,16 +90,14 @@ const TopHeader = ({ auth }) => {
 
                         {determineAuth ?
                             <Tooltip 
-                            placement="bottom" 
-                            title="ĐANG TƯ CÁCH QUYỀN QUẢN TRỊ HỆ THỐNG" 
-                            arrow={mergedArrow}
+                                placement="bottom" 
+                                title="QUẢN TRỊ HỆ THỐNG" 
                             >
                                 <div className='border__text--role '>
                                     <RiAdminFill />
                                 </div>
-                            </Tooltip>
-
-                            : ""}
+                            </Tooltip> : null
+                        }
 
                         <div className="btn__border" ref={refBoxProductList}>
                             <div

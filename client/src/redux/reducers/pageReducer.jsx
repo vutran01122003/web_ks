@@ -7,6 +7,7 @@ const initialState = {
     pageId: '',
     pageName: '',
     pageType: '',
+    pageLevelYear: 0,
     tables: []
 };
 
@@ -25,6 +26,7 @@ function pageReducer(state = initialState, action) {
                 pageId: action.payload.pageId,
                 pageName: action.payload.pageName,
                 pageType: action.payload.pageType,
+                pageLevelYear: action.payload.pageLevelYear,
                 tables: [...action.payload.tables]
             };
         case GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE: 

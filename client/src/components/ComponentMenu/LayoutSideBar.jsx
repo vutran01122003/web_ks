@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FaAngleRight, FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import { IoMdArrowDropright } from "react-icons/io";
 import Logo_IUH from '../../assets/images/logo_iuh.png'
 import Logo_IUH_color_w from '../../assets/images/logo_iuh_color_w.png'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,14 +15,11 @@ const LayoutSideBar = ({ auth }) => {
 	const page = useSelector(pageSelector);
 	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003');
 	const [toggleMenu, setToggleMenu] = useState(false);
-
+    const [levelYearList, setLevelYearList] = useState(Array.from(Array(auth?.user?.levelYear || 1).keys()).map(x => x + 1));
+    const [levelYear, setLevelYear] = useState(auth.user.levelYear);
 	const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null))
 	const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'))
 	const [subMenu, setSubMenu] = useState(ARRAY_LIST_MENU.map(() => false))
-
-    // console.log(heightBoxSub);
-    // console.log(subMenu);
-    // console.log(refBoxSubs);
 
 	const handleSubMenu = (index) => {
 		const newSubMenuState = [...subMenu]
@@ -35,6 +33,13 @@ const LayoutSideBar = ({ auth }) => {
 		setToggleMenu(false);
 	}
 
+    const handleRefreshSubMenu = (index) => {
+		const newSubMenuState = [...subMenu]
+		newSubMenuState[index] = false;
+		setSubMenu(newSubMenuState)
+		setToggleMenu(false);
+	}
+
 	const hanleToggleMenu = () => {
 		setToggleMenu(!toggleMenu);
 		const newSubMenu = subMenu.map(() => false);
@@ -44,6 +49,10 @@ const LayoutSideBar = ({ auth }) => {
 	const handleGetPage = async ({ pathName }) => {
         if(pathName) dispatch(getPage({pathName}));
 	}
+
+    const handleChangeLevelYear = (e) => {
+        setLevelYear(e.target.value);
+    }
 
 	useEffect(() => {
 		refBoxSubs.forEach((ref, index) => {
@@ -60,14 +69,14 @@ const LayoutSideBar = ({ auth }) => {
 	}, [refBoxSubs, subMenu])
 
 	useEffect(() => {
-		dispatch(getPages())
+		dispatch(getPages());
 	}, [dispatch])
 
 	useEffect(() => {
 		if (page?.pages) {
-           renderSideBar({auth, page});
+           renderSideBar({auth, page, levelYear});
         }
-	}, [JSON.stringify(page.pages)])
+	}, [JSON.stringify(page.pages), levelYear])
 
 	const renderArrMenu = ARRAY_LIST_MENU.map((item) => {
 		return (
@@ -78,18 +87,38 @@ const LayoutSideBar = ({ auth }) => {
 							<div
 								key={item.id}
 								className={`item_menu_a ${subMenu[item.id] ? "active_item" : "unactive_item"} `}
-								onClick={() => handleSubMenu(item.id)}>
-								<span>
-									{item.icon_before}
-									<span className={toggleMenu ? "none_text__menu--item" : ""}>{item.name_menu}</span>
-								</span>
+								onClick={(e) => {
+                                    if(e.target.name !== "level_year_list") handleSubMenu(item.id);
+                                }}
+                            >
+								<div className='item_menu_contain_submenu'>
+                                    <span>
+                                        {item.icon_before}
+                                        <span className={toggleMenu ? "none_text__menu--item" : ""}>{item.name_menu}</span>
+                                    </span>
+                                    {
+                                        item.dynamicPage === 'goals' &&
+                                        <select 
+                                            name="level_year_list" 
+                                            value={levelYear} 
+                                            onChange={(e) => {
+                                                handleChangeLevelYear(e);
+                                                handleRefreshSubMenu(item.id);
+                                            }}
+                                        >
+                                            {levelYearList.map((levelYearItem)=> {
+                                                return <option value={levelYearItem} key={levelYearItem}>{levelYearItem}</option>
+                                            })}
+                                        </select>
+                                    }
+                                </div>
 								{
 									toggleMenu ? "" :
 										<div
 											className={`icon_active_sub ${subMenu[item.id] ? 'active_icon' : 'unactive_icon'
 												}`}
 										>
-											<FaAngleRight />
+											<IoMdArrowDropright />
 										</div>
 								}
 
@@ -137,7 +166,7 @@ const LayoutSideBar = ({ auth }) => {
 
 	return (
 		<div
-			className={`container__menu ${determineAuth ? 'background_admin ' : ''} 
+			className={`container__menu ${determineAuth ? 'sidebar_admin ' : ''} 
 		${toggleMenu ? "active_toggle" : ""}`}
 		>
 			<div className={`menu_wrapper ${toggleMenu ? "active_toggle" : ""}`}>

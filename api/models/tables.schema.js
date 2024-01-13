@@ -34,6 +34,7 @@ const TableSchema = new Schema({
         type: [{ type: Schema.Types.ObjectId, ref: 'row' }],
         default: []
     },
+    fixedScore: Number,
     isActive: {
         type: Schema.Types.Boolean,
         default: true

@@ -1,12 +1,14 @@
 import { IoMdArrowDropright } from "react-icons/io";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 import { Link } from "react-router-dom";
+import search from '../../assets/images/search.png';
 
-function GoalsInfo({goalsInfo}) {
+function GoalsInfo({ levelYear, goalsInfo }) {
     return ( 
         <div className="goals_info_container">
-            <h2 className="goals_info_container_heading">Thông Tin Nhóm Chỉ Tiêu</h2>
-           {
+            <h2 className="goals_info_container_heading">Các Nhóm Chỉ Tiêu Năm {levelYear}</h2>
+           {    
+                goalsInfo.length > 0 ?
                 goalsInfo.map((goals) => 
                     <div className="goals_info_wrapper" key={goals.pageId}>  
                         <Link to={`/page/${goals.pageName}`} className="goals_info_heading_wrapper">
@@ -65,7 +67,11 @@ function GoalsInfo({goalsInfo}) {
                         }
                     </div>
                    
-                )
+                ) : 
+                <div className="notify_empty">
+                    <img src={search} alt="no_data"/>
+                    <span>Các nhóm chỉ tiêu chưa được tạo</span>
+                </div>
            } 
         </div> 
     );

@@ -89,7 +89,7 @@ export const getDynamicRows = ({ tab, studentData, page, limit, currentRows}) =>
     }
 }
 
-export const updateRowsStatus = ({noteValue, rowsType, rowListId, contentIdList, status }) => async (dispatch) => {
+export const updateRowsStatus = ({pageInfo, noteValue, rowsType, rowListId, contentIdList, status, deadline }) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -98,7 +98,7 @@ export const updateRowsStatus = ({noteValue, rowsType, rowListId, contentIdList,
             }
         })
 
-        const res = await patchDataApi('/pending_rows/update', { rowListId, contentIdList, status, noteValue});
+        const res = await patchDataApi('/dynamic_rows/update', { pageInfo, rowListId, contentIdList, status, noteValue, deadline});
         
         if(contentIdList.length === 1) {
             dispatch({

@@ -85,7 +85,8 @@ export const getPage = ({pathName}) => async (dispatch) => {
                     pageType: res?.data.data?.pageType,
                     pageId: res?.data.data?._id,
                     pageName: res?.data.data?.pageName,
-                    tables: res?.data.data.tables
+                    tables: res?.data.data.tables,
+                    pageLevelYear: res?.data.data.pageStudentLevelYear
                 }
             });
 
