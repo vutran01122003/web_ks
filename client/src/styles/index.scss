@@ -28,6 +28,7 @@ a {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 .text-danger {
@@ -68,6 +69,35 @@ a {
             font-weight: 500;
             color: $color_gray-500;
         }
+    }
+}
+
+// Empty Data Notification
+.no_search_result_img_wrapper {
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .no_search_result_img {
+        opacity: 0.6;
+        display: block;
+        width: 260px;
+        height: 220px;
+        object-fit: cover;
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+    }
+
+    span {
+        display: block;
+        color: gray;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
     }
 }
 
@@ -163,9 +193,6 @@ a {
         transform: rotate(360deg);
     }
 }
-
-
-
 
 // Pages
 @import "./pages/pageAdmin";

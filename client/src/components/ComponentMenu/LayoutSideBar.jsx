@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { FaAngleRight, FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import { IoMdArrowDropright } from "react-icons/io";
 import Logo_IUH from '../../assets/images/logo_iuh.png'
 import Logo_IUH_color_w from '../../assets/images/logo_iuh_color_w.png'
@@ -15,7 +15,7 @@ const LayoutSideBar = ({ auth }) => {
 	const page = useSelector(pageSelector);
 	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003');
 	const [toggleMenu, setToggleMenu] = useState(false);
-    const [levelYearList, setLevelYearList] = useState(Array.from(Array(auth?.user?.levelYear || 1).keys()).map(x => x + 1));
+    const levelYearList = Array.from(Array(auth?.user?.levelYear || 1).keys()).map(x => x + 1);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
 	const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null))
 	const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'))

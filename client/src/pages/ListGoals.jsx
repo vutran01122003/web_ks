@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Select, Tabs, Input } from 'antd';
+import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, rowSelector } from '../redux/selector';
 import { getDynamicRows } from '../redux/actions/rowAction';
-import { ReloadOutlined } from "@ant-design/icons";
 import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDynamicRows';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Button, Select, Tabs} from 'antd';
-import { Input } from 'antd';
 import GLOBALTYPES from '../redux/actions/globalTypes';
+import no_search_result from '../assets/images/no_search_result.png';
 
 const ListGoals = () => {
     const auth = useSelector(authSelector);
@@ -30,29 +30,29 @@ const ListGoals = () => {
     const limit = 10;
 
     useEffect(() => {
-        if (auth?.user && auth?.user.roles.includes("0004") && nextPage[tab] > row[tab]?.page) {
-            dispatch(getDynamicRows(
-                {   
+        if (auth?.user && auth?.user.roles.includes('0004') && nextPage[tab] > row[tab]?.page) {
+            dispatch(
+                getDynamicRows({
                     tab,
                     studentData,
                     page: nextPage[tab],
                     currentRows: row[tab]?.currentRows,
                     limit
-                }
-            ))
+                })
+            );
         }
     }, [nextPage[tab], auth?.user, tab, refreshTabTrigger]);
-    
+
     const handleRefreshTab = () => {
         dispatch({
             type: GLOBALTYPES.ROW.REFRESH_TAB,
             payload: {
                 rowsType: tab
             }
-        })
-        setRefreshTabTrigger(prev => !prev);
-        setNextPage(prev => ({...prev, [tab]: 1}));
-    }
+        });
+        setRefreshTabTrigger((prev) => !prev);
+        setNextPage((prev) => ({ ...prev, [tab]: 1 }));
+    };
 
     const handleChangeTabValue = (tabValue) => {
         setStudentData({
@@ -61,31 +61,35 @@ const ListGoals = () => {
         });
 
         setTab(tabValue);
-    }
+    };
 
     const handleRelativeSearchByStudentId = (e) => {
-        setStudentData(prev => ({...prev, studentId: e.target.value}));
-    }
+        setStudentData((prev) => ({ ...prev, studentId: e.target.value }));
+    };
 
     const handleSearchByStudentMajor = (major) => {
-        setStudentData(prev => ({...prev, major: major.value}));
-    }
+        setStudentData((prev) => ({ ...prev, major: major.value }));
+    };
 
     const handleRelativeSearch = () => {
         handleRefreshTab();
-    }
+    };
 
     const lastPostElementRef = useCallback(
         (elem) => {
             if (row.loading) return;
             if (observer.current) observer.current.disconnect();
             observer.current = new IntersectionObserver((entries) => {
-                if(entries[0].isIntersecting && nextPage[tab] === 1 && row.pendingRows.data.length === limit) {
-                    setNextPage((prev) => ({...prev, tab: prev.tab + 1}));
-                } 
-                
+                if (
+                    entries[0].isIntersecting &&
+                    nextPage[tab] === 1 &&
+                    row.pendingRows.data.length === limit
+                ) {
+                    setNextPage((prev) => ({ ...prev, tab: prev.tab + 1 }));
+                }
+
                 if (entries[0].isIntersecting && nextPage[tab] > 1 && !row.pendingRows.maxPage) {
-                    setNextPage((prev) => ({...prev, tab: prev.tab + 1}));
+                    setNextPage((prev) => ({ ...prev, tab: prev.tab + 1 }));
                 }
             });
             if (elem) observer.current.observe(elem);
@@ -95,44 +99,56 @@ const ListGoals = () => {
 
     const RenderListGoas = useCallback(() => {
         return (
-            <div className="container__center">
+            <div className='container__center'>
                 {auth?.user.roles.includes('0004') && row[tab].data.length > 0 && (
                     <>
                         {row[tab].data.map((dynamicRows, index) => {
-                            if(index === row[tab].data.length - 1 && row[tab].data.length != 0) {
+                            if (index === row[tab].data.length - 1 && row[tab].data.length != 0) {
                                 return (
-                                    <div ref={lastPostElementRef} key={dynamicRows?.table + index} >
-                                        <ComponentDynamicRows index={index} rowsType={tab} dynamicRows={dynamicRows} />
+                                    <div ref={lastPostElementRef} key={dynamicRows?.table + index}>
+                                        <ComponentDynamicRows
+                                            index={index}
+                                            rowsType={tab}
+                                            dynamicRows={dynamicRows}
+                                        />
                                     </div>
-                                )
+                                );
                             }
-                            
+
                             return (
-                                <div key={dynamicRows?.table + index} >
-                                    <ComponentDynamicRows index={index} rowsType={tab} dynamicRows={dynamicRows} />
+                                <div key={dynamicRows?.table + index}>
+                                    <ComponentDynamicRows
+                                        index={index}
+                                        rowsType={tab}
+                                        dynamicRows={dynamicRows}
+                                    />
                                 </div>
-                            )
+                            );
                         })}
 
-                        {
-                            row?.loading && 
+                        {row?.loading && (
                             <div className='loading_rows_pendding'>
                                 <CircularProgress />
                             </div>
-                        }
+                        )}
                     </>
                 )}
 
-                {
-                    !row.loading && row[tab].data.length == 0 &&
-                    <div className='notify_nothing'>
-                        <span className='notify_nothing_content'>KHÔNG CÓ HOẠT ĐỘNG</span>
-                        <span className='notify_nothing_sub'>(LÀM MỚI ĐỂ KIỂM TRA LẠI)</span>
+                {!row.loading && row[tab].data.length == 0 && (
+                    <div className='no_search_result_img_wrapper'>
+                        <img
+                            className='no_search_result_img'
+                            src={no_search_result}
+                            alt='nothing'
+                            draggable='false'
+                        />
+                        <span className='notify_nothing_content'>
+                            KHÔNG CÓ HOẠT ĐỘNG (LÀM MỚI ĐỂ KIỂM TRA LẠI)
+                        </span>
                     </div>
-                }
-                
-			</div>
-        )
+                )}
+            </div>
+        );
     }, [nextPage[tab], tab, refreshTabTrigger, JSON.stringify(row)]);
 
     const items = [
@@ -150,61 +166,60 @@ const ListGoals = () => {
             key: 'rejectedRows',
             label: 'Hoạt Động Đã Từ Chối',
             children: null
-        },
+        }
     ];
 
-    return ( 
+    return (
         <>
-            {
-                auth?.user && 
-                <div className="container__tables">          
-                    <div className="body__tables">
+            {auth?.user && (
+                <div className='container__tables'>
+                    <div className='body__tables'>
                         <Tabs
                             onChange={handleChangeTabValue}
-                            defaultActiveKey="1"
+                            defaultActiveKey='1'
                             items={items}
                             className='tab__tables--goal'
                         />
-                        <div className="line__sort">
+                        <div className='line__sort'>
                             <div className='box__left'>
                                 <Select
                                     labelInValue
                                     onChange={handleSearchByStudentMajor}
                                     defaultValue={{
                                         value: '',
-                                        label: 'Chọn Chuyên Ngành',
+                                        label: 'Chọn Chuyên Ngành'
                                     }}
                                     style={{
-                                        width: '20%',
+                                        width: '20%'
                                     }}
                                     options={[
                                         {
                                             value: '',
-                                            label: 'Chọn Chuyên Ngành',
+                                            label: 'Chọn Chuyên Ngành'
                                         },
                                         {
                                             value: 'Kỹ Thuật Phần Mềm',
-                                            label: 'Kỹ Thuật Phần Mềm',
+                                            label: 'Kỹ Thuật Phần Mềm'
                                         },
                                         {
                                             value: 'Khoa Học Máy Tính',
-                                            label: 'Khoa Học Máy Tính',
-                                        },
+                                            label: 'Khoa Học Máy Tính'
+                                        }
                                     ]}
                                 />
-                                
+
                                 <Input
-                                    placeholder="Mã sinh viên"
+                                    placeholder='Mã sinh viên'
                                     onChange={handleRelativeSearchByStudentId}
                                     value={studentData.studentId}
                                     style={{
-                                        width: 220,
+                                        width: 220
                                     }}
-                                /> 
+                                />
 
-                                <Button 
+                                <Button
                                     onClick={handleRelativeSearch}
-                                    type="primary" 
+                                    type='primary'
                                     style={{
                                         fontWeight: 600
                                     }}
@@ -212,12 +227,12 @@ const ListGoals = () => {
                                     Tìm Kiếm
                                 </Button>
                             </div>
-                            
+
                             <div className='box__right'>
-                                <Button 
-                                    type="primary" 
-                                    icon={<ReloadOutlined />} 
-                                    className="btn__refresh"
+                                <Button
+                                    type='primary'
+                                    icon={<ReloadOutlined />}
+                                    className='btn__refresh'
                                     onClick={() => {
                                         handleRefreshTab();
                                         setStudentData({
@@ -229,14 +244,13 @@ const ListGoals = () => {
                                     Làm Mới
                                 </Button>
                             </div>
-
                         </div>
                         <RenderListGoas />
                     </div>
                 </div>
-            }
+            )}
         </>
-    )
-}
+    );
+};
 
-export default ListGoals
+export default ListGoals;

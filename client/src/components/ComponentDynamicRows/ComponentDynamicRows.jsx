@@ -6,18 +6,17 @@ function ComponentDynamicRows({ index, rowsType, dynamicRows }) {
     const [table, setTable] = useState(null);
 
     useEffect(() => {
-       if(rowsType) {
-            setTable(renderTable({dynamicRowsInfo: dynamicRows, rowsType}));
+        if (rowsType) {
+            setTable(renderTable({ dynamicRowsInfo: dynamicRows, rowsType }));
         }
     }, []);
 
     return (
-        rowsType &&
-        <div className='pedding_goals_container'>
-            <div className='pedding_goals_wrapper'>
+        rowsType && (
+            <div className='dynamic_goals_container'>
                 <LayoutTable isDynamicRows index={index} table={table} pendingTable={true} />
             </div>
-        </div>
+        )
     );
 }
 

@@ -22,6 +22,7 @@
             align-items: center;
             padding: 9px 20px;
             border-bottom: 1px dashed #d4d4d4;
+    
             img {
                 width: 90px;
             }
@@ -37,20 +38,15 @@
             .flex__box {
                 display: flex;
                 flex-direction: column;
-                padding: 0px 20px;
-
-                // BOX CHỨA LISS MENU
-                .list__hanle--menu {
-                    border-left: 1px solid #797878;
-                }
-
+                padding: 0px 15px;
+    
                 .item_menu_a {
                     justify-content: left;
                     padding: 13px 10px;
                     padding-right: 0px;
                     color: $color_black;
-                    font-size: 13.5px;
-                    font-weight: 600;
+                    font-size: 13px;
+                    font-weight: 700;
                     cursor: pointer;
                     @include flex_center;
                     justify-content: space-between;
@@ -62,8 +58,37 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     text-transform: uppercase;
+                    
+                    .item_menu_contain_submenu {
+                        display: flex;
+                        align-items: center;
 
-                    >span {
+                        > span {
+                            @include flex_center;
+                            > span {
+                                margin-left: 15px;
+                            }
+                        }
+
+                        select {
+                            background: transparent;
+                            outline: none;
+                            border: none;
+                            color: #8d98af;
+                            font-size: 13px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+
+                            &:focus {
+                                background: #1c2741;
+                                color: white;
+                                outline: none;
+                                box-shadow: 0 0 2px #333;
+                            }
+                        }
+                    }
+
+                    > span {
                         @include flex_center;
 
                         >span {
@@ -121,9 +146,8 @@
                 .box_sub_menu_item {
                     overflow: hidden;
                     transition: height 0.25s;
-
+                    
                     .box__select--year {
-                            // position: relative;
                         .set__year--item {
                             display: block;
                             background-color: #f7f7f7;
@@ -166,13 +190,14 @@
                     }
 
                     .sub_menu_item {
+                        text-transform: uppercase;
                         display: block;
                         background-color: #f7f7f7;
                         padding: 10px 0px;
                         padding-left: 30px;
                         color: $color_black;
                         font-weight: 500;
-                        font-size: 15px;
+                        font-size: 12px;
                         transition: all 0.35s;
                         border-bottom: 1px solid #ececec;
                         border-radius: 3px;
@@ -229,9 +254,4 @@
 .modal_list_goast{
     width: 100px;
     left: 10px !important;
-    .ant-modal-content{
-        // background-color: red !important;
-        // position: fixed;
-        // left: 0px;
-    }
 }

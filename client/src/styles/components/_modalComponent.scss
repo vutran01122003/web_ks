@@ -98,12 +98,13 @@
             width: 250px;
             max-width: 100%;
             padding: 12px 20px;
-            border-radius: 10px;
+            border-radius: 5px;
             background: #006fee;
             outline: none;
             border: none;
             box-shadow: 0 0 2px gray;
-            font-size: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
             color: #fff;
             font-weight: 600;
             transition: 0.1s linear;
@@ -116,31 +117,18 @@
     }
 
     .modal {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 600px;
         max-width: 100%;
         background-color: $color_white;
-        margin: 60px auto;
         border: 1px solid #cecece;
-        border-radius: 10px;
+        border-radius: 5px;
         padding: 15px 30px;
-        box-shadow: 3px 2px 8px 0 #0000002c;
-        animation: ani_box_modal 0.4s forwards;
+        box-shadow: 0 0 5px #858484;
 
-        @keyframes ani_box_modal {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-                transition: 0.2s ease;
-                visibility: hidden;
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-                transition: 0.3s ease;
-                visibility: visible;
-            }
-        }
 
         .head__modal {
             display: flex;
@@ -151,9 +139,10 @@
             border-bottom: 1px solid $line_color;
 
             &__title {
-                font-size: 20px;
-                font-weight: 500;
-                color: $color_gray-500;
+                font-size: 18px;
+                font-weight: 700;
+                color: #0153b1;
+                text-transform: uppercase;
             }
 
             .btn__close {
@@ -706,6 +695,10 @@
         justify-content: space-between;
         border-bottom: 1px solid rgb(197, 194, 194);
         font-size: 14px;
+        
+        h3 {
+            text-transform: uppercase;
+        }
 
         .note_modal_close_btn {
             height: 30px;
