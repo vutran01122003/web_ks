@@ -54,7 +54,7 @@ export const ARRAY_LIST_MENU =  [
             roles: ['0004'],
             name_menu: 'Quản Lý Trang',
             icon_before: <CgBrowser />,
-            to_link: '/Manage_pages',
+            to_link: '/manage_pages2',
             submenu: false,
             list:"Chỉ tiêu"
         },
@@ -82,6 +82,46 @@ export const ARRAY_LIST_MENU =  [
             icon_before: <BiBookBookmark />,
             dynamicPage: 'goals',
             submenu: true,
+            isSetYear:true,
+            setSubMenuYear:[
+                {
+                    id: 0,
+                    name:"Năm 1",
+                    sub_menu_item_goast:[
+                        {
+                            id:0,
+                            name_goast:"goast 1"
+                        },
+                        {
+                            id:1,
+                            name_goast:"goast 2"
+                        },
+                    ]
+                },
+                {
+                    id: 1,
+                    name:"Năm 2",
+                    sub_menu_item_goast:[
+                        {
+                            id:0,
+                            name_goast:"goast 1"
+                        },
+                    ]
+                },
+                {
+                    id: 2,
+                    name:"Năm 3",
+                },
+                {
+                    id: 3,
+                    name:"Năm 4",
+                },
+                {
+                    id: 4,
+                    name:"Năm 5",
+                },
+                
+            ],
             sub_menu_item: [],
         },
         {

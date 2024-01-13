@@ -30,6 +30,34 @@
         }
     }
 
+    // HEADING TITLE MENU
+    .heading__title--menu {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-wrap: nowrap;
+        // transition: all 0.35s;
+    }
+
+    .set__toggleMenu {
+        .heading__title--menu {
+            display: none;
+        }
+
+        .list__hanle--menu {
+            border: none !important;
+            border-bottom: 1px solid #797878 !important;
+        }
+
+        .item_menu_a {
+            margin-left: 0px !important;
+        }
+    }
+
+
     .item_menu_a {
         background-color: transparent !important;
         color: #8d98af !important;
@@ -72,6 +100,24 @@
     }
 
     .box_sub_menu_item {
+        .box__select--year {
+            .set__year--item {
+                background-color: transparent !important;
+                color: #8d98af !important;
+                &:hover {
+                    color: #fff !important;
+                }
+    
+                &::before {
+                    background-color: #8d98af;
+                }
+            }
+            .set__year--item.active {
+                background-color: #3e97ff !important;
+                color: #fff !important;
+            }
+        }
+
         .sub_menu_item {
             background-color: transparent !important;
             border-bottom: none !important;
@@ -158,15 +204,19 @@
     #studentId__user {
         color: #d8d8d8 !important;
     }
-    .btn__border{
+
+    .btn__border {
         border-radius: 3px !important;
     }
-    .border__account{
+
+    .border__account {
         border-left: 1px solid #868585 !important;
     }
-    .box__drop--account{
+
+    .box__drop--account {
         border-radius: 3px !important;
-        .item_btn_control{
+
+        .item_btn_control {
             border-radius: 3px !important;
         }
     }
