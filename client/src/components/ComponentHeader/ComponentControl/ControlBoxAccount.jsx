@@ -30,7 +30,7 @@ const ControlBoxAccount = ({ setState }) => {
     const LIST_CONTROL_ACCOUNT = [
         {
             id: 0,
-            name_select: "Cập nhật thông tin",
+            name_select: "Thông tin cá nhân",
             icon_before: <PiUserCircleGear />,
             toLink: "/profile",
         },

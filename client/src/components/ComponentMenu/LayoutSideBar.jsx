@@ -99,6 +99,7 @@ const LayoutSideBar = ({ auth }) => {
                                     {
                                         item.dynamicPage === 'goals' &&
                                         <select 
+											className={toggleMenu ? "none_text__menu--item" : ""}
                                             name="level_year_list" 
                                             value={levelYear} 
                                             onChange={(e) => {

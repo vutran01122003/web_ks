@@ -7,6 +7,7 @@ import { BsTags } from 'react-icons/bs';
 import { RiHome3Fill } from 'react-icons/ri';
 import { BsFillClipboard2CheckFill } from "react-icons/bs";
 import { FaClipboardList } from "react-icons/fa";
+import { MdManageAccounts } from "react-icons/md";
 
 export const ARRAY_LIST_MENU =  [
         {
@@ -124,8 +125,18 @@ export const ARRAY_LIST_MENU =  [
             ],
             sub_menu_item: [],
         },
+        // cái qlsv này chỉ có trong 004 thôi nhé
         {
             id: 9,
+            allow: true,
+            name_menu: 'Quản Lý Sinh Viên',
+            roles: ['0004'],
+            to_link: '/manage_student',
+            icon_before: <MdManageAccounts />,
+            submenu: false,
+        },
+        {
+            id: 10,
             allow: true,
             name_menu: 'Forum',
             to_link: '/Forum',

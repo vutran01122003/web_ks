@@ -108,6 +108,7 @@
     .body__data--pages {
         border-top: 2px solid #1c7ae6;
         background-color: #fff;
+        margin-top: 15px;
         .line__sort{
             padding: 10px 10px;
         }
@@ -172,8 +173,10 @@
 .heading_text--pages {
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
     color: #1c7ae6;
     padding-left: 10px;
     border-left: 5px solid;
+    display: flex;
+    align-items: center;
 }
