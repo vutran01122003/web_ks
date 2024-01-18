@@ -9,6 +9,7 @@ import { pageSelector } from '../../redux/selector'
 import { getPage, getPages } from '../../redux/actions/pageAction'
 import { ARRAY_LIST_MENU } from '../../assets/data/menu'
 import { renderSideBar } from '../../helpers/renderSideBar';
+import { MdChevronRight } from "react-icons/md";
 
 const LayoutSideBar = ({ auth }) => {
 	const dispatch = useDispatch()
@@ -119,7 +120,7 @@ const LayoutSideBar = ({ auth }) => {
 											className={`icon_active_sub ${subMenu[item.id] ? 'active_icon' : 'unactive_icon'
 												}`}
 										>
-											<IoMdArrowDropright />
+											<MdChevronRight />
 										</div>
 								}
 
@@ -175,7 +176,8 @@ const LayoutSideBar = ({ auth }) => {
                     {
                         toggleMenu ? "" :
                             <a href="/">
-                                <img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" />
+                                {/* <img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" /> */}
+                                <img src={Logo_IUH} alt="logo_iuh" />
                             </a>
                     }
 

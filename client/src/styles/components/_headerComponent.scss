@@ -1,19 +1,31 @@
 .container__header {
-    width: 100%;
-    height: 63px;
+    // width: 100%;
+    // height: 63px;
     position: sticky;
     top: 0px;
     left: 0px;
     // background-color: #1c2741;
-    background-color: #ffffff;
-    // border-bottom: 1px dotted $line_color;
+    background-color: #F5F5F5;
     z-index: 10;
-    box-shadow: 0 0 3px rgba(173, 171, 171, 0.686);
+    padding: 10px 15px;
+    padding-bottom: 0px;
 
     .tr__header {
         height: 100%;
-        padding: 5px 20px;
+        padding: 5px 15px;
+        // margin:0px 15px;
+        box-shadow: 1px 1px 3px rgba(150, 149, 149, 0.774);
+        border-radius: 8px;
         // border-bottom: 1px solid rgb(240, 240, 240);
+        animation: animation_header 0.35s;
+        @keyframes animation_header{
+            from{
+                transform: translateY(-10px);
+            }
+            to{
+                transform: translateY(0px);
+            }
+        }
 
         .flex__line {
             height: 100%;
@@ -29,8 +41,8 @@
                     color: #000000;
                     font-weight: 500;
                     font-size: 16px;
-                    border-left: 5px solid #3e97ff;
-                    padding-left: 15px;
+                    // border-left: 5px solid #3e97ff;
+                    // padding-left: 15px;
                 }
 
                 .box_search {
@@ -53,16 +65,15 @@
                 align-items: center;
 
                 >div {
-                    margin-left: 20px;
+                    margin-left: 15px;
                 }
 
                 .btn__border {
-                    width: 35px;
-                    height: 35px;
-                    background-color: #efece8e8;
-                    font-size: 25px;
+                    width: 38px;
+                    height: 38px;
+                    background-color: #e6e2ded8;
+                    font-size: 22px;
                     position: relative;
-                    border-radius: 5px;
 
                     .flex__center {
                         width: 100%;
@@ -79,34 +90,43 @@
 
                     .length__noti {
                         top: -2px;
-                        right: -5px;
+                        right: -10px;
                         position: absolute;
 
                         .dots__color {
-                            display: block;
-                            width: 10px;
-                            height: 10px;
-                            border-radius: 100%;
-                            background-color: red;
+                            width: 19px;
+                            height: 18px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 10px;
+                            color: #fff;
+                            border-radius: 5px;
+                            background-color: #F0635C;
                         }
                     }
 
                     .box__drop--notification {
-                        width: 400px;
+                        width: 450px;
                         height: 100px;
-                        background-color: #fafafa;
+                        background-color: #ffffff;
                         border: 1px solid #cecece;
                         border-radius: 4px;
                         box-shadow: 3px 2px 8px 0 #0000002c;
                         position: absolute;
                         right: 0px;
                         top: 55px;
+                        padding: 10px;
+                        .heading__text_nof{
+                            font-size: 20px;
+                            font-weight: 600;
+                        }
                     }
                 }
 
                 .box__drop--product-list {
                     width: max-content;
-                    background-color: #fafafa;
+                    background-color: #ffffff;
                     border: 1px solid #cecece;
                     border-radius: 4px;
                     box-shadow: 3px 2px 8px 0 #0000002c;
@@ -165,7 +185,7 @@
 
                             #name__user {
                                 font-size: 14px;
-                                font-weight: 500;
+                                font-weight: 600;
                                 text-transform: uppercase;
                                 margin-bottom: 2px;
                                 color: #000000;
@@ -192,7 +212,7 @@
                         position: absolute;
                         top: 70px;
                         right: 20px;
-                        background-color: #fafafa;
+                        background-color: #ffffff;
                         border: 1px solid #cecece;
                         box-shadow: 3px 2px 8px 0 #0000002c;
                         border-radius: 5px;
@@ -249,7 +269,7 @@
 
     .active_drop_box {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0px);
         transition: 0.3s ease;
         visibility: visible;
     }

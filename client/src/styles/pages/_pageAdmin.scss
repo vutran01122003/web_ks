@@ -3,7 +3,7 @@
     height: 35px;
     background-color: #f0635c;
     color: #fff;
-    border-radius: 3px;
+    border-radius: 5px;
     font-weight: 500;
     font-size: 24px;
     display: flex;
@@ -18,15 +18,17 @@
 
 .container__menu.sidebar_admin {
     .menu_wrapper {
-        background-color: #1c2741;
+        // background-color: #1c2741;
+        background-color: #fff;
     }
 }
 
 .sidebar_admin {
     .menu_wrapper {
-        border-right: 1px solid #747474 !important;
+        // border-right: 1px solid #747474 !important;
+
         .img__logo {
-            border-bottom: 1px dashed #363636 !important;
+            // border-bottom: 1px dashed #363636 !important;
         }
     }
 
@@ -60,18 +62,18 @@
 
     .item_menu_a {
         background-color: transparent !important;
-        color: #8d98af !important;
-        border-radius: 3px !important;
+        color: #424449 !important;
+        border-radius: 8px !important;
 
         svg {
-            color: #c9d0dd !important;
+            color: #484849 !important;
         }
 
         &:hover {
-            color: #fff !important;
+            background-color: #e2e2e2 !important;
 
             svg {
-                color: #fff !important;
+                color: #37373a !important;
             }
         }
 
@@ -91,7 +93,7 @@
     }
 
     .item_menu_a.active {
-        background-color: #3e97ff !important;
+        background-color: #676AF8 !important;
         color: $color_white !important;
 
         svg {
@@ -104,14 +106,16 @@
             .set__year--item {
                 background-color: transparent !important;
                 color: #8d98af !important;
+
                 &:hover {
                     color: #fff !important;
                 }
-    
+
                 &::before {
                     background-color: #8d98af;
                 }
             }
+
             .set__year--item.active {
                 background-color: #3e97ff !important;
                 color: #fff !important;
@@ -149,15 +153,15 @@
     }
 
     .btn__toggle--menu {
-        width: 40px;
+        width: 35px;
         height: 35px;
-        color: #afb8cc;
-        font-size: 17px;
-        background-color: #323c55;
-        border-radius: 3px;
+        color: #fff;
+        background-color: #8284e6;
+        border-radius: 12px;
         cursor: pointer;
         text-align: center;
         overflow: hidden;
+        box-shadow: 0 0 3px rgba(185, 183, 183, 0.686);
 
         .line__flex_icon {
             width: 80px;
@@ -168,7 +172,7 @@
             transition: all 0.5s;
 
             svg {
-                font-size: 25px;
+                font-size: 18px;
                 transform: translateX(0px);
             }
 
@@ -180,7 +184,7 @@
 
     .active_icon_toggle--menu {
         .line__flex_icon {
-            transform: translateX(-48px);
+            transform: translateX(-37px);
 
             svg {
                 color: #fff;
@@ -190,23 +194,32 @@
 }
 
 .header_admin {
-    background-color: #1c2741 !important;
+
+    // background-color: #1c2741 !important;
+    .tr__header {
+        background-color: #ffffff !important;
+    }
+
 
     .khoa_style {
-        border-left: 5px solid #f0635c !important;
-        color: #ffffff !important;
+        // border-left: 5px solid #f0635c !important;
+        border: none;
+        // color: #ffffff !important;
+        color: #222222 !important;
     }
 
     #name__user {
-        color: #ffffff !important;
+        // color: #ffffff !important;
+        color: #222222 !important;
     }
 
     #studentId__user {
-        color: #d8d8d8 !important;
+        // color: #d8d8d8 !important;
+        color: #222222 !important;
     }
 
     .btn__border {
-        border-radius: 3px !important;
+        border-radius: 100% !important;
     }
 
     .border__account {

@@ -8,6 +8,8 @@ import { RiHome3Fill } from 'react-icons/ri';
 import { BsFillClipboard2CheckFill } from "react-icons/bs";
 import { FaClipboardList } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
+import { FaListCheck } from "react-icons/fa6";
+import { HiOutlineClipboardList } from "react-icons/hi";
 
 export const ARRAY_LIST_MENU =  [
         {
@@ -22,7 +24,7 @@ export const ARRAY_LIST_MENU =  [
             id: 1,
             roles: ['0004'],
             name_menu: 'Xét Duyệt Hoạt Động',
-            icon_before: <FaClipboardList />,
+            icon_before: <FaListCheck />,
             to_link: '/ListGoals',
             submenu: false,
         },
@@ -30,7 +32,7 @@ export const ARRAY_LIST_MENU =  [
             id: 2,
             roles: ['0004'],
             name_menu: 'Thống Kê Tiến Độ Hoàn Thành',
-            icon_before: <BsFillClipboard2CheckFill />,
+            icon_before: <HiOutlineClipboardList />,
             to_link: '/CompletionShedule',
             submenu: false,
         },

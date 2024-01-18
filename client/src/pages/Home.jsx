@@ -7,6 +7,7 @@ import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo';
 import { getProgressByYear } from '../redux/actions/progressAction';
 import Quantity from '../components/ComponentQuantity/Quantity';
 import { progressSelector } from '../redux/selector';
+import { RiErrorWarningLine } from "react-icons/ri";
 
 const Home = ({ auth }) => {
     const dispatch = useDispatch();
@@ -45,10 +46,18 @@ const Home = ({ auth }) => {
 
     return (
         <div className='pageHome '>
+            <div className="noti__wn">
+                <RiErrorWarningLine />
+                Website đang trong quá trình phát triển nên có thể phát sinh lỗi !
+            </div>
+            <div className="information__wecome">
+                <div className="wecome__name">Xin chào, {auth?.user?.fullName} !</div>
+                <div className="bio__user"> "Khi gặp khó khăn đừng chỉ ngồi than thở mà hãy tìm cách giải quyết"</div>
+            </div>
             {determineAuth ? <Quantity /> : ''}
 
             <div className='container__top transform__animation--top'>
-                <LayoutInfo auth={auth} />
+                {/* <LayoutInfo auth={auth} /> */}
                 <>
                     {(auth?.user.roles.includes('0001') && auth?.user.roles.length === 1) ||
                         (auth?.user.roles.length === 0 && <ApplyComponent />)}
