@@ -9,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import no_search_result from '../assets/images/no_search_result.png';
 
+import { VscLayersActive } from "react-icons/vsc";
+
 const ListGoals = () => {
     const auth = useSelector(authSelector);
     const row = useSelector(rowSelector);
@@ -174,6 +176,10 @@ const ListGoals = () => {
             {auth?.user && (
                 <div className='container__tables'>
                     <div className='body__tables'>
+                        <div className="heading__text_lg">
+                            {/* <VscLayersActive /> */}
+                            Danh Sách Xét Duyệt Hoạt Động
+                        </div>
                         <Tabs
                             onChange={handleChangeTabValue}
                             defaultActiveKey='1'

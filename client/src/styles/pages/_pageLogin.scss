@@ -1,6 +1,8 @@
 .container__login {
     width: 100%;
     position: relative;
+    background-color: #f5f5f5;
+
     .header__box_introduce {
         width: 100%;
         height: 80px;
@@ -9,32 +11,84 @@
 
     .flex__layout {
         display: flex;
+        justify-content: space-between;
         height: 100vh;
         overflow: hidden;
-        > div {
+
+        .box__introducation {
             width: 100%;
+            // background: linear-gradient(90deg, #8082e7ea 0%, #5b96da 100%);
+            // background-color:#8082e7bb;
+            padding: 20px;
+
+            .img_logo_header {
+                width: 120px;
+            }
+
+            .box_text_present {
+                width: 100%;
+                color: #676AF8;
+                // color: #fff;
+                margin-top: 50px;
+                text-align: center;
+
+                .text_heading_prt {
+                    font-size: 28px;
+                    font-weight: 700;
+                }
+            }
+
+            .box__image_intro {
+                width: 100%;
+                height: calc(100% - 100px);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                .image_intro {
+                    width: 440px;
+                }
+            }
+
         }
+
         .box__form {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            // height: 100%;
+            background-color: #fff;
+            box-shadow: 0px 3px 6px #5e5a5a69;
+            // margin: 30px;
+            // border-radius: 10px;
+
+            .container__form--login {
+                width: 470px;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
             .footer__form {
                 text-align: center;
-                > div:first-child {
+
+                >div:first-child {
                     @include flex_center;
                     flex-direction: column;
                 }
+
                 .text_name_sl {
                     font-weight: 600;
                 }
+
                 .text_heading_prt {
                     display: none;
                 }
+
                 .img_intro {
                     display: none;
                 }
             }
+
             .set__size__header {
                 width: 100%;
                 background-color: #f8f8f8;
@@ -43,6 +97,7 @@
                 justify-content: space-between;
                 align-items: center;
             }
+
             .form_group {
                 max-width: 500px;
                 height: 100%;
@@ -50,30 +105,98 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                form > div {
+
+                form>div {
                     margin-bottom: 10px;
                 }
+
                 .heading_text--login {
                     font-size: 27px;
                     font-weight: 600;
                     margin: 10px 0 40px 0px;
                     text-align: center;
                 }
+
+                .tr_line-captcha {
+                    display: flex;
+                    height: 40px;
+                    justify-content: space-between;
+                    margin-top: 20px;
+
+                    input {
+                        margin-right: 10px;
+                        padding-left: 10px;
+                    }
+
+                    .text__catpcha {
+                        width: 140px;
+                        display: flex;
+                        border: 1px solid #969595;
+
+                        .text__render--captcha {
+                            width: 100%;
+                            font-weight: 600;
+                            font-size: 20px;
+                            padding: 7px;
+                            letter-spacing: 4.5px;
+                            user-select: none;
+                            display: inline;
+
+                            span {
+                                display: inline-block;
+                            }
+
+                            span:nth-child(1) {
+                                transform: rotate(30deg);
+                            }
+
+                            span:nth-child(2) {
+                                transform: rotate(20deg);
+                            }
+
+                            span:nth-child(3) {
+                                transform: rotate(-30deg);
+                            }
+
+                            span:nth-child(4) {
+                                transform: rotate(20deg);
+                            }
+                        }
+
+                        .btn_refresh_catcha {
+                            width: 50px;
+                            height: 100%;
+                            cursor: pointer;
+                            font-size: 17px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            svg {
+                                color: #bb433d;
+                            }
+                        }
+                    }
+                }
+
                 .tr__flex {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+
                     .check__box--remb {
                         @include flex_center;
                         font-weight: 600;
                         font-size: 15px;
                         color: #282c52;
-                        > input {
+
+                        >input {
                             margin-right: 5px;
                             position: relative;
                             top: 1px;
                         }
                     }
+
                     .btn_prm_password {
                         color: $main_color;
                         margin-left: 20px;
@@ -81,27 +204,6 @@
                 }
             }
         }
-        .box_intro {
-            .width__img--intro {
-                width: 100%;
-                height: 100%;
-                position: relative;
-                > img {
-                    width: 100%;
-                    height: 100%;
-                }
-                .box_text_present {
-                    height: 100%;
-                    position: absolute;
-                    top: 0px;
-                    left: 0px;
-                    padding: 50px;
-                    .text_heading_prt {
-                        font-size: 34px;
-                        font-weight: 700;
-                    }
-                }
-            }
-        }
+
     }
 }

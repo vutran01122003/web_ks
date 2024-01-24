@@ -15,7 +15,7 @@ const LayoutSideBar = ({ auth }) => {
 	const dispatch = useDispatch()
 	const page = useSelector(pageSelector);
 	const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003');
-	const [toggleMenu, setToggleMenu] = useState(false);
+	const [toggleMenu, setToggleMenu] = useState(true);
     const levelYearList = Array.from(Array(auth?.user?.levelYear || 1).keys()).map(x => x + 1);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
 	const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null))
@@ -75,7 +75,7 @@ const LayoutSideBar = ({ auth }) => {
 
 	useEffect(() => {
 		if (page?.pages) {
-           renderSideBar({auth, page, levelYear});
+        	renderSideBar({auth, page, levelYear});
         }
 	}, [JSON.stringify(page.pages), levelYear])
 

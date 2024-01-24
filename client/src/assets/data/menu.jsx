@@ -39,7 +39,7 @@ export const ARRAY_LIST_MENU =  [
         {
             id: 3,
             roles: ['0004'],
-            name_menu: 'Thêm Nhóm Chỉ Tiêu',
+            name_menu: 'Quản lý Chỉ Tiêu',
             icon_before: <TbTargetArrow />,
             to_link: '/Create_goals',
             submenu: false,
@@ -47,7 +47,7 @@ export const ARRAY_LIST_MENU =  [
         {
             id: 4,
             roles: ['0004'],
-            name_menu: 'Thêm Loại Tin Tức',
+            name_menu: 'Quản lý Tin Tức',
             icon_before: <BsTags />,
             to_link: '/Create_news_type',
             submenu: false
@@ -55,7 +55,7 @@ export const ARRAY_LIST_MENU =  [
         {
             id: 5,
             roles: ['0004'],
-            name_menu: 'Quản Lý Trang',
+            name_menu: 'x',
             icon_before: <CgBrowser />,
             to_link: '/manage_pages2',
             submenu: false,
@@ -64,7 +64,7 @@ export const ARRAY_LIST_MENU =  [
         {
             id: 6,
             roles: ['0003'],
-            name_menu: 'Tạo Tin Tức',
+            name_menu: 'x',
             icon_before: <MdOutlineCreate />,
             to_link: '/Create_news',
             submenu: false

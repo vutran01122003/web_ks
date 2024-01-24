@@ -9,6 +9,7 @@ import { logout } from '../../../redux/actions/authAction';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { CiDark } from "react-icons/ci";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 import { Modal } from 'antd';
 import { useState } from 'react';
 
@@ -96,7 +97,7 @@ const ControlBoxAccount = ({ setState }) => {
             <div className="border__collpe"></div>
             <React.Fragment >
                 <div className='item_btn_control' onClick={() => { setState(false); handleLogout() }}>
-                    {<HiOutlineLogout />}
+                    {<RiLogoutCircleRLine />}
                     {"Đăng xuất"}
                 </div>
             </React.Fragment>

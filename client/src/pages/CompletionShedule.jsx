@@ -102,29 +102,30 @@ function CompletionShedule() {
 
 
     return (
-        <div className='completion_shedule_wrapper'>
-            {vissibleModal && (
-                <StopSubmittingProofModal
-                    cohort={cohort}
-                    major={major}
-                    levelYear={levelYear}
-                    handleHiddenStopSubmittingProofModal={handleHiddenStopSubmittingProofModal}
-                />
-            )}
-            <div className="line__flex">
-                <div className="heading_text--pages">
-                    THỐNG KẾ TIẾN ĐỘ HOÀN THÀNH
+        <div className="completion_shedule_container">
+            <div className='completion_shedule_wrapper'>
+                {vissibleModal && (
+                    <StopSubmittingProofModal
+                        cohort={cohort}
+                        major={major}
+                        levelYear={levelYear}
+                        handleHiddenStopSubmittingProofModal={handleHiddenStopSubmittingProofModal}
+                    />
+                )}
+                <div className="line__flex">
+                    <div className="heading_text--pages">
+                        Danh Sách Tiến Độ Hoàn Thành
+                    </div>
+                    <button
+                        className='btn__end_progress_btn'
+                        onClick={handleVissbleStopSubmittingProofModal}
+                    >
+                        <LuTimerReset />
+                        Kết Thúc Nộp Minh Chứng
+                    </button>
                 </div>
-                <button
-                    className='btn__end_progress_btn'
-                    onClick={handleVissbleStopSubmittingProofModal}
-                >
-                    <LuTimerReset />
-                    Kết Thúc Nộp Minh Chứng
-                </button>
-            </div>
 
-            {/* <div className='btn_group'>
+                {/* <div className='btn_group'>
                     <Button onClick={handleSearchAnnualTaskProgress} className='filter_btn'>
                         Lọc dữ liệu
                     </Button>
@@ -135,141 +136,142 @@ function CompletionShedule() {
                 </div> */}
 
 
-            <div className='completion_shedule_body'>
+                <div className='completion_shedule_body'>
 
-                <div className="line__sort__completion-Shedule">
-                    <div className='line__search'>
-                        <div>
-                            <input
-                                type='text'
-                                placeholder='Nhập Khóa Sinh Viên'
-                                onChange={(e) => {
-                                    setCohort(e.target.value);
-                                }}
-                                value={cohort}
-                            />
-                            <select
-                                onChange={(e) => {
-                                    setFaculty(e.target.value);
-                                }}
-                                value={faculty}
+                    <div className="line__sort__completion-Shedule">
+                        <div className='line__search'>
+                            <div>
+                                <input
+                                    type='text'
+                                    placeholder='Nhập Khóa Sinh Viên'
+                                    onChange={(e) => {
+                                        setCohort(e.target.value);
+                                    }}
+                                    value={cohort}
+                                />
+                                <select
+                                    onChange={(e) => {
+                                        setFaculty(e.target.value);
+                                    }}
+                                    value={faculty}
+                                >
+                                    <option value=''>Chọn Khoa</option>
+                                    <option value='Công nghệ thông tin'>Công Nghệ Thông Tin</option>
+                                </select>
+                                <select
+                                    onChange={(e) => {
+                                        setMajor(e.target.value);
+                                    }}
+                                    value={major}
+                                >
+                                    <option value=''>Chọn Chuyên Ngành</option>
+                                    <option value='Kỹ thuật phần mềm'>Kỹ Thuật Phần Mềm</option>
+                                    <option value='Khoa học máy tính'>khoa Học Máy Tính</option>
+                                </select>
+                                <select
+                                    onChange={(e) => setLevelYear(Number.parseInt(e.target.value))}
+                                    value={levelYear}
+                                >
+                                    <option value=''>Chọn Năm Học</option>
+                                    <option value='1'>Năm 1</option>
+                                    <option value='2'>Năm 2</option>
+                                    <option value='3'>Năm 3</option>
+                                    <option value='4'>Năm 4</option>
+                                    <option value='5'>Năm 5</option>
+                                </select>
+
+                            </div>
+                            <button
+                                className='search_btn'
+                                onClick={handleSearchAnnualTaskProgress}
                             >
-                                <option value=''>Chọn Khoa</option>
-                                <option value='Công nghệ thông tin'>Công Nghệ Thông Tin</option>
-                            </select>
-                            <select
-                                onChange={(e) => {
-                                    setMajor(e.target.value);
-                                }}
-                                value={major}
-                            >
-                                <option value=''>Chọn Chuyên Ngành</option>
-                                <option value='Kỹ thuật phần mềm'>Kỹ Thuật Phần Mềm</option>
-                                <option value='Khoa học máy tính'>khoa Học Máy Tính</option>
-                            </select>
-                            <select
-                                onChange={(e) => setLevelYear(Number.parseInt(e.target.value))}
-                                value={levelYear}
-                            >
-                                <option value=''>Chọn Năm Học</option>
-                                <option value='1'>Năm 1</option>
-                                <option value='2'>Năm 2</option>
-                                <option value='3'>Năm 3</option>
-                                <option value='4'>Năm 4</option>
-                                <option value='5'>Năm 5</option>
-                            </select>
+                                <IoSearch />
+                                Tìm Kiếm
+                            </button>
 
                         </div>
-                        <button
-                            className='search_btn'
-                            onClick={handleSearchAnnualTaskProgress}
-                        >
-                            <IoSearch />
-                            Tìm Kiếm
-                        </button>
+                        <div>
+                            <input
+                                placeholder='Theo Mã Sinh Viên'
+                                onChange={handleChangeStudentId}
+                                value={studentId}
+                            />
+
+                            <select value={isCompleted} onChange={handleChangeStatusAnnualTaskProgress}>
+                                <option value={''}>Trạng thái tiến độ</option>
+                                <option value={true}>Đã hoàn thành</option>
+                                <option value={false}>Chưa hoàn thành</option>
+                            </select>
+                        </div>
 
                     </div>
-                    <div>
-                        <input
-                            placeholder='Theo Mã Sinh Viên'
-                            onChange={handleChangeStudentId}
-                            value={studentId}
-                        />
 
-                        <select value={isCompleted} onChange={handleChangeStatusAnnualTaskProgress}>
-                            <option value={''}>Trạng thái tiến độ</option>
-                            <option value={true}>Đã hoàn thành</option>
-                            <option value={false}>Chưa hoàn thành</option>
-                        </select>
-                    </div>
-
-                </div>
-
-                {/* <div className='line__btn_down'>
+                    {/* <div className='line__btn_down'>
                     <button className='download_icon'>
                         <MdDownload /> Download
                     </button>
                 </div> */}
-                <table className='completion_shedule_table'>
+                    <table className='completion_shedule_table'>
 
-                    <thead className='completion_shedule_header'>
-                        <tr>
-                            <th>#</th>
-                            <th>Mã Sinh Viên</th>
-                            <th>Tên Sinh Viên</th>
-                            <th>Chuyên Ngành</th>
-                            <th className='progress_header'>
-                                <span>Tiến Độ</span>
-                                <span
-                                    className='progress_header_fiter'
-                                    onClick={handleToggleSortProgress}
-                                >
-                                    <abbr
-                                        title={
-                                            sortProgress ? 'Sắp xếp tăng dần' : 'Sắp xếp giảm dần'
-                                        }
+                        <thead className='completion_shedule_header'>
+                            <tr>
+                                <th>#</th>
+                                <th>Mã Sinh Viên</th>
+                                <th>Tên Sinh Viên</th>
+                                <th>Chuyên Ngành</th>
+                                <th className='progress_header'>
+                                    <span>Tiến Độ</span>
+                                    <span
+                                        className='progress_header_fiter'
+                                        onClick={handleToggleSortProgress}
                                     >
-                                        {sortProgress ? (
-                                            <FaSortNumericUpAlt />
-                                        ) : (
-                                            <FaSortNumericDownAlt />
-                                        )}
-                                    </abbr>
-                                </span>
-                            </th>
-                            <th>Điểm</th>
-                        </tr>
-                    </thead>
-
-                    <tbody >
-                        {progress.annualTaskProgress.data.map((progressItem, index) => (
-                            <tr key={progressItem?.studentId}>
-                                <td>{index}.</td>
-                                <td>{progressItem?.studentId}</td>
-                                <td>{capitalizeFirstLetter(progressItem?.fullName)}</td>
-                                <td>{capitalizeFirstLetter(progressItem?.major)}</td>
-                                <td>
-                                    {progressItem.completedTaskProgress?.completedTaskPrecent.toFixed(
-                                        2
-                                    ) + '%'}
-                                </td>
-                                <td>{progressItem.completedTaskProgress?.totalScore}</td>
+                                        <abbr
+                                            title={
+                                                sortProgress ? 'Sắp xếp tăng dần' : 'Sắp xếp giảm dần'
+                                            }
+                                        >
+                                            {sortProgress ? (
+                                                <FaSortNumericUpAlt />
+                                            ) : (
+                                                <FaSortNumericDownAlt />
+                                            )}
+                                        </abbr>
+                                    </span>
+                                </th>
+                                <th>Điểm</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
 
-                {progress.annualTaskProgress.data.length === 0 && (
-                    <div className='no_search_result_img_wrapper'>
-                        <img
-                            className='no_search_result_img'
-                            src={no_search_result}
-                            alt='nothing'
-                            draggable='false'
-                        />
-                        <span>Dữ liệu thống kê chưa có</span>
-                    </div>
-                )}
+                        <tbody >
+                            {progress.annualTaskProgress.data.map((progressItem, index) => (
+                                <tr key={progressItem?.studentId}>
+                                    <td>{index}.</td>
+                                    <td>{progressItem?.studentId}</td>
+                                    <td>{capitalizeFirstLetter(progressItem?.fullName)}</td>
+                                    <td>{capitalizeFirstLetter(progressItem?.major)}</td>
+                                    <td>
+                                        {progressItem.completedTaskProgress?.completedTaskPrecent.toFixed(
+                                            2
+                                        ) + '%'}
+                                    </td>
+                                    <td>{progressItem.completedTaskProgress?.totalScore}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    {progress.annualTaskProgress.data.length === 0 && (
+                        <div className='no_search_result_img_wrapper'>
+                            <img
+                                className='no_search_result_img'
+                                src={no_search_result}
+                                alt='nothing'
+                                draggable='false'
+                            />
+                            <span>Dữ liệu thống kê chưa có</span>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

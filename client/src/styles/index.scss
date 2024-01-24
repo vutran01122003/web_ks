@@ -194,6 +194,11 @@ a {
     }
 }
 
+.toast{
+    top:70px !important;
+    right: 15px !important;
+  }
+
 // Pages
 @import "./pages/pageAdmin";
 @import "./pages/pageGoals";
