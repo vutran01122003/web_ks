@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FaAnglesLeft, FaAnglesRight } from 'react-icons/fa6';
 import { IoMdArrowDropright } from 'react-icons/io';
 import Logo_IUH from '../../assets/images/logo_iuh.png';
-import Logo_IUH_color_w from '../../assets/images/logo_iuh_color_w.png';
+import Logo_IUH_color_w from '../../assets/images/logo_iuh.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../../redux/selector';
 import { getPage, getPages } from '../../redux/actions/pageAction';

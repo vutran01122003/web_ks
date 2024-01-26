@@ -79,7 +79,7 @@ function CreateNew() {
                         <option value=''>Không Xác Định</option>
                         {page?.pages &&
                             page.pages.map((page, index) => {
-                                if (page.pageType === 'Tin Tức') {
+                                if (page.pageType === 'tin tức') {
                                     return (
                                         <option value={page.pageName} key={index}>
                                             {page.pageName}

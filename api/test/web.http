@@ -53,7 +53,7 @@ Content-Type: application/json
 
 {
     "pageName": "Tin Tức Khoa Học", 
-    "pageType": "Tin Tức"
+    "pageType": "tin tức"
 }
 
 ### Create News Page 

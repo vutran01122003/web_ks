@@ -1,10 +1,31 @@
 .container__tables {
-    height: calc(100vh - 65px);
-    padding: 10px;
+    width: 100%;
     background-color: #F5F5F5;
-    min-width: 800px;
+    padding: 5px;
+
+    .heading__text_lg {
+        font-size: 20px;
+		font-weight: 600;
+		color: #3f3f3f;
+		display: flex;
+		align-items: center;
+        padding: 15px;
+
+		svg {
+			font-size: 35px;
+			padding-right: 10px;
+		}
+    }
+
+    .ant-tabs-nav-list {
+        justify-content: center;
+    }
 
     .body__tables {
+        background-color: #ffffff;
+        box-shadow: 0px 0px 5px #dad8d869;
+        border-radius: 3px;
+
         .tab__tables--goal {
             height: 100%;
 
@@ -16,6 +37,8 @@
                     padding: 15px;
                     font-weight: 600;
                     font-size: 17px;
+                    min-width: 220px;
+                    justify-content: center;
                 }
             }
 
@@ -30,28 +53,26 @@
                 table {
                     border: unset;
                     border-bottom: 1px solid #E7ECF0;
-                   
                 }
             }
-            
+
             .pedding_item {
                 width: 100%;
                 cursor: pointer;
                 background-color: #ffffff;
                 transition: all 0.35s;
-                
-               
 
                 td {
                     padding: 15px;
-                    border-bottom:1px solid #c4c4c4;
+                    border-bottom: 1px solid #c4c4c4;
                     font-size: 15.5px;
                     font-weight: 500;
                 }
-                .true__date{
+
+                .true__date {
                     color: #059b05;
                 }
-    
+
                 &:hover {
                     background-color: #fafafa;
                 }
@@ -62,16 +83,19 @@
             width: 100%;
             background: #fff;
             margin-top: -15px;
-            padding: 10px 15px;
             display: flex;
             border-bottom: 1px solid #eceaea;
-    
-            .box__left{
+            padding: 15px;
+
+            .box__left {
                 display: flex;
                 width: 100%;
-               gap: 15px;
+                gap: 10px;
+                > div{
+                    margin-right: 15px;
+                }
             }
-    
+
             .box__right {
                 flex: 1;
 
@@ -82,7 +106,8 @@
                     justify-content: center;
                     font-size: 16px;
                     font-weight: 500;
-                    svg{
+
+                    svg {
                         font-size: 18px;
                     }
                 }
@@ -92,8 +117,8 @@
 }
 
 .container__center {
-	background-color: $color_white;
-	border-radius: 3px;
+    background-color: $color_white;
+    border-radius: 3px;
     height: 73vh;
     overflow-y: scroll;
 

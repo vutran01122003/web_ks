@@ -50,6 +50,7 @@ app.use('/api', require('./router/access'));
 app.use('/api', require('./router/table'));
 app.use('/api', require('./router/news'));
 app.use('/api', require('./router/row'));
+app.use('/api', require('./router/chat'));
 app.use('/api', require('./router/faculty'));
 app.use('/api', require('./router/progress'));
 app.use('/api', require('./router/excel'));

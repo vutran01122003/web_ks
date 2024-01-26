@@ -15,6 +15,7 @@ const Chat = () => {
     const [question, setQuestion] = useState('');
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [typeChat, setTypeChat] = useState(null);
+    const [showOption, setShowOption] = useState(false);
     useEffect(() => {
         dispatch(getTypeChat());
     }, []);
@@ -77,7 +78,7 @@ const Chat = () => {
         const regex = /(https?:\/\/[^\s]+)/g;
         const matches = text.split(regex);
         return (
-            <div className='chat-text'>
+            <div className='chat-message__content'>
                 {matches.map((part, index) =>
                     index % 2 === 0 ? (
                         // Phần tử có chỉ số chẵn là văn bản
@@ -94,23 +95,25 @@ const Chat = () => {
             </div>
         );
     };
-    console.log(typeChat);
     const handleTypeChat =
         ({ item }) =>
         () => {
-            setTypeChat(item);
+            if (item !== typeChat) {
+                setTypeChat(item);
+                chatbot.data = [];
+            }
         };
     return (
         <div className='pageChatbot'>
             <div className='chat-content' ref={chatContainerRef}>
-                {chatbot.data.length > 0 ? (
+                {chatbot.typeChat && typeChat ? (
                     chatbot.data.map((item, index) => (
                         <div key={index}>
-                            <div className='user-question'>
-                                <div className='user-text'>{item.question}</div>
+                            <div className='user-message'>
+                                <div className='user-message__content'>{item.question}</div>
                             </div>
                             {item.answer ? (
-                                <div className='chat-answer'>
+                                <div className='chat-message'>
                                     <div className='chat-info'>
                                         <RiBubbleChartFill />{' '}
                                     </div>
@@ -127,51 +130,82 @@ const Chat = () => {
                     ))
                 ) : (
                     <div className='choice-type'>
-                        {chatbot.typeChat &&
-                            !typeChat &&
-                            chatbot.typeChat.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className='choice-type__item'
-                                    onClick={handleTypeChat({ item })}
-                                >
-                                    {item}
-                                </div>
-                            ))}
+                        <div className='choice-type__container'>
+                            {chatbot.typeChat && !typeChat && (
+                                <div className='choice-type__title'>Vui lòng chọn loại chatbot</div>
+                            )}
+                            <div className='choice-type__list'>
+                                {chatbot.typeChat &&
+                                    !typeChat &&
+                                    chatbot.typeChat.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className='choice-type__item'
+                                            onClick={handleTypeChat({ item })}
+                                        >
+                                            {item}
+                                        </div>
+                                    ))}
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
 
-            <div className='chat-box'>
-                {showScrollButton && (
-                    <button className='scroll-to-bottom-button' onClick={scrollToBottom}>
-                        <FaArrowDown />
-                    </button>
-                )}
-                <div className='chat-func'>
-                    <input
-                        type='text'
-                        value={question}
-                        onChange={(e) => setQuestion(e.target.value)}
-                        className='chat-input'
-                        placeholder='Nhập câu hỏi của bạn tại đây'
-                        onKeyDown={handleKeyPress}
-                    />
-                    <Button
-                        type='primary'
-                        loading={chatbot.isLoading}
-                        onClick={sendQuestion}
-                        className={`btn-chat ${!question && 'input-empty'}`}
-                        disabled={chatbot.isLoading || !question}
-                    >
-                        {!chatbot.isLoading && <IoSend />}
-                    </Button>
+            {chatbot.typeChat && typeChat && (
+                <div className='chat-box'>
+                    {showScrollButton && (
+                        <button className='scroll-to-bottom-button' onClick={scrollToBottom}>
+                            <FaArrowDown />
+                        </button>
+                    )}
+                    <div className='chat-box__container'>
+                        <div className='chat-input__container'>
+                            <input
+                                type='text'
+                                value={question}
+                                onChange={(e) => {
+                                    setQuestion(e.target.value);
+                                    setShowOption(false);
+                                }}
+                                className='user-input-field'
+                                placeholder='Nhập câu hỏi của bạn tại đây'
+                                onKeyDown={handleKeyPress}
+                            />
+                            <Button
+                                type='primary'
+                                loading={chatbot.isLoading}
+                                onClick={(e) => {
+                                    question != '' ? sendQuestion(e) : setShowOption(!showOption);
+                                }}
+                                className={`chat-button ${!question && 'input-empty'}`}
+                                disabled={chatbot.isLoading || !question}
+                            >
+                                {!chatbot.isLoading && <IoSend />}
+
+                                {/* {showOption && (
+									<div className="option-type">
+										{chatbot.typeChat.map((item, index) => (
+											<div
+												key={index}
+												className={`option-type__item`}
+												onClick={handleTypeChat({ item })}
+											>
+												<div className="number">{index + 1} </div>
+												<div className="text">{item}</div>
+											</div>
+										))}
+									</div>
+								)} */}
+                            </Button>
+                        </div>
+                    </div>
+                    <div className='chat-warning'>
+                        Thông tin của IUH chat có thể còn chưa chính xác do còn trong quá trình thử
+                        nghiệm
+                    </div>
                 </div>
-                <div className='chat-warning'>
-                    Thông tin của IUH chat có thể còn chưa chính xác do còn trong quá trình thử
-                    nghiệm
-                </div>
-            </div>
+            )}
         </div>
     );
 };

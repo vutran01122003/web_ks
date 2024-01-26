@@ -1,134 +1,165 @@
-.completion_shedule_wrapper {
-    padding: 10px;
+.completion_shedule_container {
+    padding: 5px;
+    background-color: #F5F5F5;
 
-    .completion_shedule_search_wrapper {
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 8px;
+    .completion_shedule_wrapper {
+        background-color: #ffffff;
+        box-shadow: 0px 0px 5px #dad8d869;
+        border-radius: 3px;
+        padding: 15px;
+        height: calc(100vh - 70px - 10px);
 
-        .completion_shedule_search {
+        .line__flex {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            justify-content: space-between;
 
-            input, select, .search_btn {
+            .btn__end_progress_btn {
+                background-color: #F0635C;
+                font-size: 15px;
+                padding: 8px;
+                border: none;
+                border-radius: 3px;
+                color: #fff;
                 font-weight: 600;
-                height: 40px;
-                outline: none;
-                padding: 8px 12px;
-                border-radius: 2px;
-                width: 200px;
-                border: 1px solid #333;
-            }
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-            .search_btn  {
-                border: unset;
-                box-shadow: 0 0 3px rgb(193, 192, 192);
+                svg {
+                    font-size: 17px !important;
+                    margin-right: 5px;
+                }
             }
         }
-    }
 
-    .completion_shedule_filter {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 10px;
+        .completion_shedule_body {
+            border-top: 2px solid #1c7ae6;
+            background-color: #fff;
+            margin-top: 10px;
+            padding-bottom: 20px;
 
-        select, input, 
-        .filter_btn, .refresh_btn,
-        .end_progress_btn {
-            font-weight: 600;
-            height: 40px;
-            outline: none;
-            padding: 4px 8px;
-            width: 200px;
-            border-radius: 2px;
-            border: 1px solid #333;
-        }
+            .line__sort__completion-Shedule {
+                padding: 10px 0px;
 
-        .btn_group {
-            display: flex;
-            gap: 1px;
+                input,
+                select {
+                    padding: 5px;
+                    border-radius: 3px;
+                    border: 1px solid #c9c9c9;
+                    margin-right: 8px;
+                    font-size: 15px;
+                }
 
-            .filter_btn, .refresh_btn {
-                width: 100px;
+                input {
+                    width: 170px
+                }
+
+                select {
+                    width: 180px;
+                }
+
+                .line__search {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 8px;
+
+                    .search_btn {
+                        background-color: #1c7ae6;
+                        font-size: 15px;
+                        padding: 8px 12px;
+                        border: none;
+                        border-radius: 3px;
+                        color: #fff;
+                        font-weight: 600;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        svg {
+                            font-size: 17px !important;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+
             }
-        }
-        
-        .end_progress_btn {
-            border: unset;
-            box-shadow: 0 0 3px rgb(193, 192, 192);
-        }
-    }
 
-    .completion_shedule_body {
-        table, td, th {  
-            border: 1px solid rgb(215, 213, 213);
-            text-align: center;
-        }
-
-        .completion_shedule_table {
-            border-collapse: collapse;
-            width: 100%;
-
-            caption {
-                margin: 15px 0;
-                font-size: 20px;
-                font-weight: 700;
-                color: #0153b1;
-                user-select: none;
-                text-transform: uppercase;
+            .line__btn_down {
+                display: flex;
+                justify-content: right;
+                padding: 0px 10px;
+                padding-bottom: 10px;
 
                 .download_icon {
+                    background-color: #1c7ae6;
+                    font-size: 15px;
+                    padding: 5px 8px;
+                    border: none;
+                    border-radius: 3px;
+                    color: #fff;
+                    font-weight: 600;
+                    cursor: pointer;
                     display: flex;
                     align-items: center;
-                    gap: 3px;
-                    position: relative;
-                    top: 8px;
-                    float: right;
-                    font-size: 12px;
-                    cursor: pointer;
-                    text-transform: none;
-                    transition: 0.1s linear;
+                    justify-content: center;
 
-                    &:hover {
-                        border-bottom: 1px solid rgb(63, 151, 252);
-                        color: rgb(63, 151, 252);
+                    svg {
+                        font-size: 17px !important;
+                        margin-right: 5px;
                     }
                 }
             }
 
-            td, th {
-                padding: 8px 12px;
-            }
+            .completion_shedule_table {
+                width: 100%;
+                border-top: 2px solid #a5a5a5;
+                border-collapse: collapse;
 
-            th {
-                user-select: none;
-            }
+                .completion_shedule_header {
 
-            tbody {
-                font-weight: 500;
-            }
+                    .progress_header_fiter {
+                        margin-left: 5px;
+                        svg {
+                            position: relative;
+                            top: 2px
+                        }
+                    }
+                }
 
-            .progress_header {
-                .progress_header_fiter {
-                    margin-left: 8px;
-                    cursor: pointer;
-                    position: relative;
-                    bottom: -2px;
-                    color: #308efa;
+                tbody>tr {
+                    border-top: 1px solid #dddddd;
+                    height: 50px;
+                }
+
+                tr:hover {
+                    background-color: #f3f3f35e;
+                    transition: all 0.15s;
+                }
+
+                th {
+                    padding: 10px;
+                    text-align: left;
+                    font-size: 15px;
+                    color: #000;
+                }
+
+                td:first-child {
+                    font-weight: 700;
+                }
+
+                td {
+                    padding: 12px 10px;
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+
+                th,td {
+                    text-align: center;
                 }
             }
         }
-
-        .active_user {
-            font-weight: 600;
-            color: #308efa;
-        }
-
-        .inactive_user {
-            font-weight: 600;
-            color: #ed5047;
-        }
     }
+
 }

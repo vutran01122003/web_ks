@@ -249,7 +249,7 @@ const Manage_pages2 = () => {
                                                                 ) && (
                                                                     <div className='sub_menu_item_btn_wrapper'>
                                                                         {sub_menu_item?.sub_page_type ===
-                                                                            'Chỉ Tiêu' && (
+                                                                            'chỉ tiêu' && (
                                                                             <>
                                                                                 <div
                                                                                     className='btn_man-pages watch_table_btn'
@@ -279,21 +279,6 @@ const Manage_pages2 = () => {
                                                                                 >
                                                                                     Thêm Chỉ Tiêu
                                                                                 </div>
-
-                                                                                <div
-                                                                                    className='btn_man-pages remove_table_btn'
-                                                                                    onClick={() => {
-                                                                                        handleOpenRemoveTableModal(
-                                                                                            {
-                                                                                                pageId: sub_menu_item.id,
-                                                                                                pageName:
-                                                                                                    sub_menu_item?.sub_name_menu
-                                                                                            }
-                                                                                        );
-                                                                                    }}
-                                                                                >
-                                                                                    <ImBin2 />
-                                                                                </div>
                                                                             </>
                                                                         )}
                                                                         <div
@@ -308,7 +293,7 @@ const Manage_pages2 = () => {
                                                                                 );
                                                                             }}
                                                                         >
-                                                                            <ImBin2 />
+                                                                            <ImBin2 /> Xóa chỉ tiêu
                                                                         </div>
                                                                     </div>
                                                                 )}

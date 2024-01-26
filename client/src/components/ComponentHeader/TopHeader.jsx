@@ -9,6 +9,8 @@ import ImageMessenger from "../../assets/images/image_messenger.png";
 import ImageTask from "../../assets/images/image_task.png";
 import ImageNote from "../../assets/images/image_note.png";
 import { Tooltip } from 'antd';
+import { RiAdminLine } from "react-icons/ri";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 const TopHeader = ({ auth }) => {
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
@@ -94,7 +96,7 @@ const TopHeader = ({ auth }) => {
                                 title="QUẢN TRỊ HỆ THỐNG" 
                             >
                                 <div className='border__text--role '>
-                                    <RiAdminFill />
+                                    <RiAdminLine />
                                 </div>
                             </Tooltip> : null
                         }
@@ -115,13 +117,18 @@ const TopHeader = ({ auth }) => {
 
                         <div className="btn__border" ref={refBoxNotification}>
                             <div className="flex__center" onClick={() => setDropBoxNotification(!dropBoxNotification)}>
-                                <IoNotificationsSharp />
+                                <IoNotificationsOutline />
                                 <div className="length__noti">
-                                    <span className='dots__color'></span>
+                                    <span className='dots__color'>9+</span>
                                 </div>
                             </div>
                             <div className={`box__drop--notification ${dropBoxNotification ? "active_drop_box" : "unactive_drop_box"}`}>
+                                <div className="heading__text_nof">
+                                    Thông báo
+                                </div>
+                                <div>
 
+                                </div>
                             </div>
                         </div>
 

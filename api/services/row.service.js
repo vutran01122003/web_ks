@@ -107,7 +107,7 @@ class RowService {
                 {
                     'content.$': {
                         _id: contentId,
-                        status: 'Chờ Duyệt',
+                        status: 'chờ duyệt',
                         rowValue: content,
                         totalScore,
                         note: contentData.note,

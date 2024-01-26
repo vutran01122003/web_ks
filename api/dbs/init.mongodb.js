@@ -4,7 +4,7 @@ const {
     mongodb: { port, host, database }
 } = require('../config/config');
 
-const uri = `mongodb://${host}:${port}/${database}`;
+const uri = `mongodb+srv://iuhKSTN:MyyBPqtCha697cfI@kstndb.ugt1lgh.mongodb.net/`;
 const conn = mongoose.createConnection(uri);
 
 // mongoose.set('debug', true);

@@ -21,7 +21,9 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
         },
         {
             label: 'Ngày sinh',
-            value: new Date(user.birthday).toLocaleDateString('en-GB') || 'Chưa cập nhật',
+            value: user?.birthday
+                ? new Date(user?.birthday).toLocaleDateString('en-GB')
+                : 'Chưa cập nhật',
             isShow: isDetailedRow ? false : true
         },
         {
@@ -32,7 +34,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
         },
         {
             label: 'Ngành',
-            value: capitalizeFirstLetter(user?.major) || 'Chưa cập nhật',
+            value: user?.major ? capitalizeFirstLetter(user?.major) : 'Chưa cập nhật',
             role: '0002',
             isShow: isDetailedRow ? false : true
         }
