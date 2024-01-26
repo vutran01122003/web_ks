@@ -1,12 +1,12 @@
-import GLOBALTYPES from "../actions/globalTypes";
-import removeElem from '../../utils/removeElem';
+import GLOBALTYPES from '../actions/globalTypes';
+
 const initialState = {
     loading: false,
     pendingRows: {
         data: [],
         page: 0,
         maxPage: false,
-        currentRows: 0,
+        currentRows: 0
     },
     acceptedRows: {
         data: [],
@@ -19,8 +19,14 @@ const initialState = {
         page: 0,
         maxPage: false,
         currentRows: 0
+    },
+    resubmitedRows: {
+        data: [],
+        page: 0,
+        maxPage: false,
+        currentRows: 0
     }
-}
+};
 
 function rowReducer(state = initialState, action) {
     switch (action.type) {
@@ -28,59 +34,43 @@ function rowReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: action.payload.loading
-            }
-        case GLOBALTYPES.ROW.GET_DYNAMIC_ROWS:          
-            return {
-                ...state,
-                [action.payload.rowsType]: {
-                    ...state[action.payload.rowsType],
-                    data: action.payload.page === 1 ?  action.payload.dynamicRows : [...state[action.payload.rowsType].data, ...action.payload.dynamicRows],
-                    page: action.payload?.page || 1,
-                    maxPage: action.payload.dynamicRows.length === 0 ? true : false,
-                    currentRows: action.payload?.page === 1 ? 
-                        action.payload.dynamicRows.length : 
-                        state[action.payload.rowsType].data.length + action.payload.dynamicRows.length
-                }
-            }
-        case GLOBALTYPES.ROW.REMOVE_ALL_ROW: {
-            const newArr = removeElem([...state[action.payload.rowsType].data], action.payload.rowId);
+            };
+        case GLOBALTYPES.ROW.GET_DYNAMIC_ROWS:
+            const rowsType = action.payload.rowsType;
+            const dynamicRows = action.payload.dynamicRows;
+            const rowData = state[rowsType].data;
+            const page = action.payload?.page;
 
             return {
                 ...state,
-                [action.payload.rowsType]: {
-                    ...state[action.payload.rowsType],
-                    data: newArr
+                [rowsType]: {
+                    ...state[rowsType],
+                    data: action.payload.page === 1 ? dynamicRows : [...rowData, ...dynamicRows],
+                    page: page || 1,
+                    maxPage: dynamicRows.length === 0 ? true : false,
+                    currentRows:
+                        page === 1 ? dynamicRows.length : rowData.length + dynamicRows.length
                 }
-            }
-        }
-               
+            };
+
         case GLOBALTYPES.ROW.REMOVE_ROW: {
-            const rowList = [...state[action.payload.rowsType].data];
-            let flat = null;
-
-            for(let i = 0; i < state[action.payload.rowsType].data.length; i++) {
-                if(state[action.payload.rowsType].data[i]._id === action.payload.rowId) {
-                    flat = i;
-                    for(let j = 0; j < state[action.payload.rowsType].data[i].content.length; j++) {
-                        if(state[action.payload.rowsType].data[i].content[j]._id === action.payload.contentId) {
-                            rowList[i].content.splice(j, 1);
-                            if(rowList[i].content.length === 0) rowList.splice(i, 1); 
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-
+            const rowsType = action.payload.rowsType;
             return {
                 ...state,
-                [action.payload.rowsType]: {
-                    ...state[action.payload.rowsType],
-                    data: rowList,
-                    currentRows: rowList[flat]?.content ? 
-                    state.currentRows : state.currentRows - 1
+                [rowsType]: {
+                    ...state[rowsType],
+                    data: [
+                        ...state[rowsType].data.filter(
+                            (row) =>
+                                !(
+                                    row._id === action.payload.rowId &&
+                                    row.content[0]._id === action.payload.contentId
+                                )
+                        )
+                    ],
+                    currentRows: state.currentRows
                 }
-            }
+            };
         }
         case GLOBALTYPES.ROW.REFRESH_TAB: {
             return {
@@ -91,7 +81,7 @@ function rowReducer(state = initialState, action) {
                     maxPage: false,
                     currentRows: 0
                 }
-            }
+            };
         }
         default:
             return state;

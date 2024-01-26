@@ -1,10 +1,20 @@
 .container__table {
-    margin: 10px 10px 60px 10px;
 	width: 100%;
 	position: relative;
-    
+
+    &+.container__table {
+        margin-top: 30px;
+    }
     &.margin-0 {
         margin: 0;
+    }
+
+    &.detailed_table {
+        margin: 0 !important;
+
+        table {
+            border: 1px solid $line_color !important;
+        }
     }
     
 	header {
@@ -46,6 +56,11 @@
         }
 	}
 
+    .table_description {
+        color: gray;
+        font-weight: 400;
+        padding-left: 10px;
+    }
 	.table {
 		border: 1px solid $line_color;
 		margin: 10px 0px;
@@ -77,6 +92,10 @@
 				font-weight: 700;
 				margin: 0 auto;
 				width: 100%;
+                text-transform: uppercase;
+                font-size: 13.5px;
+                user-select: none;
+                color: #333;
 			}
 		}
 
@@ -94,6 +113,24 @@
                     outline: none;
                     cursor: pointer;
 
+                    &.more_time_btn {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 30px;
+                        height: 30px;
+                        color: #fff;
+                        border: 2px solid #fff;
+                        box-shadow: 0 0 3px rgb(208, 206, 206);
+                        font-size: 20px;
+                        background-color: rgb(35, 205, 200);
+                        border-radius: 3px;
+
+                        &:hover {
+                            background-color: rgb(39, 230, 223);
+                        }
+                    }
+
                     .row_button {
                         box-shadow: 0 0 3px rgb(208, 206, 206);
                         transition: 0.1s linear;
@@ -110,7 +147,6 @@
                                 color: rgb(255, 177, 33);
                             }
                         }
-
 
                         &.reject_button {
                             color: #f0635c;
@@ -145,17 +181,21 @@
 				width: 100%;
 
 				.line__item {
+                    font-size: 14px;
+                    font-weight: 500;
 					padding: 10px;
 					width: 100%;
 					color: $color_gray-500;
 				}
 
-                .preview_proof_files {
+                .preview_proof_files, .detailed_row > span{
                     color: #006fee;
                     cursor: pointer;
                     &:hover {
                         text-decoration: underline;
                     }
+
+                    user-select: none;
                 }
 
                 .row_status {

@@ -23,14 +23,15 @@ const ListGoals = () => {
     const [nextPage, setNextPage] = useState({
         pendingRows: 1,
         acceptedRows: 1,
-        rejectedRows: 1
+        rejectedRows: 1,
+        resubmitedRows: 1
     });
 
     const [tab, setTab] = useState('pendingRows');
     const limit = 10;
 
     useEffect(() => {
-        if (auth?.user && auth?.user.roles.includes('0004') && nextPage[tab] > row[tab]?.page) {
+        if (auth?.user && auth?.user.roles.includes('0004')) {
             dispatch(
                 getDynamicRows({
                     tab,
@@ -83,73 +84,17 @@ const ListGoals = () => {
                 if (
                     entries[0].isIntersecting &&
                     nextPage[tab] === 1 &&
-                    row.pendingRows.data.length === limit
+                    row[tab]?.data.length === limit
                 ) {
-                    setNextPage((prev) => ({ ...prev, tab: prev.tab + 1 }));
-                }
-
-                if (entries[0].isIntersecting && nextPage[tab] > 1 && !row.pendingRows.maxPage) {
-                    setNextPage((prev) => ({ ...prev, tab: prev.tab + 1 }));
+                    setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
+                } else if (entries[0].isIntersecting && nextPage[tab] > 1 && !row[tab]?.maxPage) {
+                    setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
                 }
             });
             if (elem) observer.current.observe(elem);
         },
         [row.loading]
     );
-
-    const RenderListGoas = useCallback(() => {
-        return (
-            <div className='container__center'>
-                {auth?.user.roles.includes('0004') && row[tab].data.length > 0 && (
-                    <>
-                        {row[tab].data.map((dynamicRows, index) => {
-                            if (index === row[tab].data.length - 1 && row[tab].data.length != 0) {
-                                return (
-                                    <div ref={lastPostElementRef} key={dynamicRows?.table + index}>
-                                        <ComponentDynamicRows
-                                            index={index}
-                                            rowsType={tab}
-                                            dynamicRows={dynamicRows}
-                                        />
-                                    </div>
-                                );
-                            }
-
-                            return (
-                                <div key={dynamicRows?.table + index}>
-                                    <ComponentDynamicRows
-                                        index={index}
-                                        rowsType={tab}
-                                        dynamicRows={dynamicRows}
-                                    />
-                                </div>
-                            );
-                        })}
-
-                        {row?.loading && (
-                            <div className='loading_rows_pendding'>
-                                <CircularProgress />
-                            </div>
-                        )}
-                    </>
-                )}
-
-                {!row.loading && row[tab].data.length == 0 && (
-                    <div className='no_search_result_img_wrapper'>
-                        <img
-                            className='no_search_result_img'
-                            src={no_search_result}
-                            alt='nothing'
-                            draggable='false'
-                        />
-                        <span className='notify_nothing_content'>
-                            KHÔNG CÓ HOẠT ĐỘNG (LÀM MỚI ĐỂ KIỂM TRA LẠI)
-                        </span>
-                    </div>
-                )}
-            </div>
-        );
-    }, [nextPage[tab], tab, refreshTabTrigger, JSON.stringify(row)]);
 
     const items = [
         {
@@ -165,6 +110,11 @@ const ListGoals = () => {
         {
             key: 'rejectedRows',
             label: 'Hoạt Động Đã Từ Chối',
+            children: null
+        },
+        {
+            key: 'resubmitedRows',
+            label: 'Hoạt Động Phải Nộp Lại',
             children: null
         }
     ];
@@ -245,7 +195,60 @@ const ListGoals = () => {
                                 </Button>
                             </div>
                         </div>
-                        <RenderListGoas />
+                        <div className='container__center'>
+                            <>
+                                {row[tab].data.map((dynamicRows, index) => {
+                                    if (
+                                        index === row[tab].data.length - 1 &&
+                                        row[tab].data.length != 0
+                                    ) {
+                                        return (
+                                            <div
+                                                ref={lastPostElementRef}
+                                                className='last'
+                                                key={dynamicRows?.table + index}
+                                            >
+                                                <ComponentDynamicRows
+                                                    index={index}
+                                                    rowsType={tab}
+                                                    dynamicRows={dynamicRows}
+                                                />
+                                            </div>
+                                        );
+                                    }
+
+                                    return (
+                                        <div key={dynamicRows?.table + index}>
+                                            <ComponentDynamicRows
+                                                index={index}
+                                                rowsType={tab}
+                                                dynamicRows={dynamicRows}
+                                            />
+                                        </div>
+                                    );
+                                })}
+
+                                {row?.loading && (
+                                    <div className='loading_rows_pendding'>
+                                        <CircularProgress />
+                                    </div>
+                                )}
+                            </>
+
+                            {!row.loading && row[tab].data.length == 0 && (
+                                <div className='no_search_result_img_wrapper'>
+                                    <img
+                                        className='no_search_result_img'
+                                        src={no_search_result}
+                                        alt='nothing'
+                                        draggable='false'
+                                    />
+                                    <span className='notify_nothing_content'>
+                                        KHÔNG CÓ HOẠT ĐỘNG (LÀM MỚI ĐỂ KIỂM TRA LẠI)
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

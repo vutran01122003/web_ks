@@ -21,15 +21,18 @@ const RowSchema = new Schema(
                         rowId: Schema.Types.ObjectId,
                         status: {
                             type: String,
-                            enum: ['Đã Duyệt', 'Chờ Duyệt', 'Từ Chối', 'Phải Nộp Lại', 'Hết Hạn'],
-                            default: 'Chờ Duyệt'
+                            enum: ['đã duyệt', 'chờ duyệt', 'từ chối', 'phải nộp lại', 'hết hạn'],
+                            lowercase: true,
+                            default: 'chờ duyệt'
                         },
                         proofFilesList: {
                             type: [
                                 {
                                     originalName: String,
                                     fileUrl: String,
-                                    fileType: String
+                                    fileType: String,
+                                    Key: String,
+                                    Bucket: String
                                 }
                             ],
                             default: []
@@ -41,7 +44,7 @@ const RowSchema = new Schema(
                                     {
                                         value: String
                                     },
-                                    { timestamps: true }
+                                    { timestamps: { createdAt: true, updatedAt: false } }
                                 )
                             ],
                             default: []
@@ -52,9 +55,7 @@ const RowSchema = new Schema(
                         },
                         deadline: Schema.Types.Date
                     },
-                    {
-                        timestamps: true
-                    }
+                    { timestamps: { createdAt: true, updatedAt: false } }
                 )
             ],
             default: []

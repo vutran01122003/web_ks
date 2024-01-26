@@ -1,46 +1,45 @@
-import { getDataApi, postDataApi } from "../../utils/fetchData"
-import { getLogged, removeLogged, setLogged } from "../../utils/handleLogged";
-import GLOBALTYPES from "./globalTypes";
+import { getDataApi, postDataApi } from '../../utils/fetchData';
+import { getLogged, removeLogged, setLogged } from '../../utils/handleLogged';
+import GLOBALTYPES from './globalTypes';
 
-export const login = ({
-    studentId,
-    password
-}) => async (dispatch) => {
-    try {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                loading: true
-            }
-        })
+export const login =
+    ({ studentId, password }) =>
+    async (dispatch) => {
+        try {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    loading: true
+                }
+            });
 
-        const res = await postDataApi('/login', {
-            studentId,
-            password
-        });
+            const res = await postDataApi('/login', {
+                studentId,
+                password
+            });
 
-        dispatch({
-            type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
-            payload: res.data.data
-        })
+            dispatch({
+                type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
+                payload: res.data.data
+            });
 
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {success: res.data.status}
-        })
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: { success: res.data.status }
+            });
 
-        setLogged();
-    } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:  error.response?.data.msg || 'Đăng Nhập Thất Bại'
-            }
-        })
-    }
-}
+            setLogged();
+        } catch (error) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: error.response?.data.msg || 'Đăng Nhập Thất Bại'
+                }
+            });
+        }
+    };
 
-export const register = (data) => async(dispatch) => {
+export const register = (data) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -53,7 +52,7 @@ export const register = (data) => async(dispatch) => {
 
         dispatch({
             type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
-            payload:  res.data.data
+            payload: res.data.data
         });
 
         dispatch({
@@ -63,16 +62,16 @@ export const register = (data) => async(dispatch) => {
             }
         });
         setLogged();
-    } catch (error) { 
+    } catch (error) {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || "Cập Nhật Thông Tin Không Thành Công"
+                error: error?.response?.data.msg || 'Cập Nhật Thông Tin Không Thành Công'
             }
         });
     }
-}
-export const logout = () => async(dispatch) => {
+};
+export const logout = () => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -100,32 +99,33 @@ export const logout = () => async(dispatch) => {
             }
         });
     }
-}
+};
 
 export const verifyAccessToken = () => async (dispatch) => {
     try {
-        if(document.cookie.split(';').some((cookie) => cookie.includes('accessToken')) || getLogged()) {
+        if (
+            document.cookie.split(';').some((cookie) => cookie.includes('accessToken')) ||
+            getLogged()
+        ) {
             const res = await getDataApi('/access_token');
-        
+
             dispatch({
                 type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
                 payload: res.data
             });
-            
+
             setLogged();
         }
-         
+
         return;
     } catch (error) {
-        if(getLogged()) {
+        if (getLogged()) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
                     error: error.response?.data?.msg || 'Hết Phiên Đăng Nhập'
                 }
-            })
+            });
         }
     }
-}
-
-
+};

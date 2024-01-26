@@ -48,7 +48,7 @@ const Home = ({ auth }) => {
             {determineAuth ? <Quantity /> : ''}
 
             <div className='container__top transform__animation--top'>
-                <LayoutInfo auth={auth} />
+                <LayoutInfo user={auth?.user} />
                 <>
                     {(auth?.user.roles.includes('0001') && auth?.user.roles.length === 1) ||
                         (auth?.user.roles.length === 0 && <ApplyComponent />)}

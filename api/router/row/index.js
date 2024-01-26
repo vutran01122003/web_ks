@@ -1,28 +1,13 @@
-const multer = require('multer');
 const router = require('express').Router();
+const multerMidleware = require('../../config/multer.config');
 const rowControllers = require('../../controllers/row.controllers');
 const { auth } = require('../../middleware/auth');
 
-const upload = multer({
-    storage: multer.memoryStorage(),
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype.split('/')[0] === 'image') cb(null, true);
-        else if (
-            file.mimetype === 'application/msword' ||
-            file.mimetype ===
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        )
-            cb(null, true);
-        else if (file.mimetype === 'application/pdf') cb(null, true);
-        else cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
-    },
-    limits: {
-        fileSize: 10000000,
-        files: 10
-    }
-});
+const upload = multerMidleware;
 
 router.post('/row', auth, upload.array('files'), rowControllers.addRow);
+
+router.post('/row/update', auth, upload.array('files'), rowControllers.resubmitRow);
 
 router.get('/dynamic_rows', auth, rowControllers.getDynamicRows);
 

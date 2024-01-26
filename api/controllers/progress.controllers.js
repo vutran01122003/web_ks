@@ -30,10 +30,10 @@ class ProgressControllers {
                     };
 
                     table.rowValueList[0]?.content.forEach((content) => {
-                        if (content.status === 'Đã Duyệt') {
+                        if (content.status === 'đã duyệt') {
                             completedTasksNum += 1;
                             tables[table.tableName].completedTasksNum += 1;
-                        } else if (content.status === 'Từ Chối') {
+                        } else if (content.status === 'từ chối') {
                             tables[table.tableName].rejectedTasksNum += 1;
                         }
                     });

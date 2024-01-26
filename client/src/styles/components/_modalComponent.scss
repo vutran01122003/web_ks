@@ -354,24 +354,6 @@
         justify-content: space-between;
         border-bottom: 1px solid rgb(197, 194, 194);
         font-size: 14px;
-
-        .confirm_modal_close_btn {
-            height: 30px;
-            width: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            color: rgb(229, 81, 81);
-            cursor: pointer;
-            transition: 0.1s linear;
-            background: rgb(231, 229, 229);
-
-            &:hover {
-                color: red;
-                background: rgb(205, 203, 203);
-            }
-        }
     }
 
     .confirm_modal_body {
@@ -418,6 +400,7 @@
         }
 
         .deadline_submit_input_wrapper {
+            margin-top: 10px;
             display: flex;
             gap: 10px;
 
@@ -698,24 +681,7 @@
         
         h3 {
             text-transform: uppercase;
-        }
-
-        .note_modal_close_btn {
-            height: 30px;
-            width: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            color: rgb(229, 81, 81);
-            cursor: pointer;
-            transition: 0.1s linear;
-            background: rgb(231, 229, 229);
-
-            &:hover {
-                color: red;
-                background: rgb(205, 203, 203);
-            }
+            color: #0153b1;
         }
     }
 
@@ -828,7 +794,7 @@
     }
 }
 
-// remove page modal
+// Remove page modal
 .remove_page_modal {
     padding: 20px;
     width: 450px;
@@ -871,7 +837,111 @@
         }
     }
 }
-// modal
+
+// Detailed row modal
+.detailed_row_modal {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px gray;
+    padding: 10px 15px;
+    height: 600px;
+    width: 950px;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+   
+    .detailed_row_modal_header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 10px;
+
+        h3 {
+            text-transform: uppercase;
+            color: #0153b1;
+            margin-bottom: 10px;
+        }
+    }
+
+    .detailed_row_modal_content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        
+        >h4 {
+            text-align: left;
+            padding: 10px;
+            color: #0055cc;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .detailed_row_modal_body {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview_PDF_wrapper {
+            box-shadow: 0 0 5px rgb(198, 197, 197);
+            overflow: hidden;
+            border-radius: 3px;
+            margin: 0 auto;
+            height: 100%;
+            min-width: 612px;
+            .preview_PDF {
+                height: 550px;
+
+                &.multiPDF {
+                    height: 550px;
+                }
+
+                overflow: auto;
+                .react-pdf__Page__canvas {
+                    margin: 0 auto;
+                    width: 100% !important;
+                }
+            }
+
+            .preview_PDF_pagination {
+                border-top: 1px solid gray;
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+                background: #000;
+                
+               .pagination_pdf {
+                    &.active {
+                        color: #1677ff;
+                    }
+               }
+            }
+           
+        }
+    }
+   
+}
+
+// Modal close button
+.modal_close_btn {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: rgb(229, 81, 81);
+    cursor: pointer;
+    transition: 0.1s linear;
+    background: rgb(231, 229, 229);
+
+    &:hover {
+        color: red;
+        background: rgb(205, 203, 203);
+    }
+}
+
+// Modal
 .modal__container{
     width: 100%;
     height: 100%;

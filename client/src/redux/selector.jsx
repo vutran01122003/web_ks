@@ -11,5 +11,5 @@ export const rowSelector = (state) => state.row;
 export const newsSelector = (state) => state.news;
 
 export const chatbotSelector = (state) => state.chatbot;
-    
+
 export const progressSelector = (state) => state.progress;

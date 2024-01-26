@@ -1,5 +1,5 @@
 import { Alert, Snackbar } from '@mui/material';
-import {AiOutlineClose} from 'react-icons/ai'
+import { AiOutlineClose } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { alertSelector } from '../../redux/selector';
@@ -25,7 +25,7 @@ function Toast({ status, msg }) {
                 }}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Alert severity={status} sx={{ width: '100%' }} >
+                <Alert severity={status} sx={{ width: '100%' }}>
                     {msg}
                 </Alert>
             </Snackbar>

@@ -6,13 +6,17 @@ import ComponentProofFile from '../ComponentProofFile/ComponentProofFile';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import FormControl from '../ComponentForm/FormControl';
 
-const ComponentModal = ({ auth, stateModal, setUseStateModal, tableId, title, thead, page }) => {
+const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead, page }) => {
     const dispatch = useDispatch();
-    const [row, setRow] = useState({});
+    const [row, setRow] = useState(rowInfo?.rowValue ?? {});
     const [files, setFiles] = useState([]);
 
     const handleChangeRow = (e) => {
         setRow({ ...row, [e.target.name]: e.target.value });
+    };
+
+    const handleUpdateRow = (e) => {
+        handleAddRow(e);
     };
 
     const handleAddRow = (e) => {
@@ -35,53 +39,48 @@ const ComponentModal = ({ auth, stateModal, setUseStateModal, tableId, title, th
 
         const formData = new FormData();
 
-        formData.set(
-            'rowData',
-            JSON.stringify({
-                user: auth?.user._id,
-                studentId: auth?.user.studentId,
-                faculty: auth?.user.faculty,
-                major: auth?.user.major,
-                cohort: auth?.user.cohort,
-                tableName: title,
-                page: page.pageId,
-                table: tableId,
-                path: page.pathName,
-                content: JSON.stringify(row)
-            })
-        );
+        let rowData = {
+            user: auth?.user._id,
+            studentId: auth?.user.studentId,
+            faculty: auth?.user.faculty,
+            major: auth?.user.major,
+            cohort: auth?.user.cohort,
+            tableName: title,
+            page: page.pageId,
+            table: tableId,
+            path: page.pathName,
+            content: JSON.stringify(row)
+        };
+
+        if (rowInfo) rowData = { ...rowData, rowListId: rowInfo.rowListId, contentId: rowInfo._id };
+
+        formData.set('rowData', JSON.stringify(rowData));
 
         files.forEach((file) => {
             formData.append('files', file, file.name);
         });
 
-        setUseStateModal(false);
         dispatch(
             addRow({
                 formData
             })
         );
+
+        handleHideModal();
     };
 
     const handleCloseModal = (e) => {
         if (e.currentTarget === e.target) {
-            setUseStateModal(false);
+            handleHideModal();
         }
     };
 
     return (
-        <div
-            className={`wrap__modal ${stateModal ? 'active__modal' : 'unactive__modal'}`}
-            onMouseUp={handleCloseModal}
-        >
+        <div className={`wrap__modal`} onMouseUp={handleCloseModal}>
             <form className={`modal`}>
                 <div className='head__modal'>
                     <div className='head__modal__title '>{title}</div>
-                    <button
-                        type='button'
-                        className='btn__close'
-                        onClick={() => setUseStateModal(false)}
-                    >
+                    <button type='button' className='btn__close' onClick={() => handleHideModal()}>
                         <IoCloseOutline />
                     </button>
                 </div>
@@ -99,9 +98,7 @@ const ComponentModal = ({ auth, stateModal, setUseStateModal, tableId, title, th
                                         key={item.textHeading + index}
                                     />
                                 );
-                            }
-
-                            if (item.typeInput === 'text') {
+                            } else if (item.typeInput === 'text') {
                                 return (
                                     <FormControl
                                         key={item.textHeading + index}
@@ -110,15 +107,13 @@ const ComponentModal = ({ auth, stateModal, setUseStateModal, tableId, title, th
                                         className='input__modal'
                                         type={item.typeInput}
                                         disabled={item.disabled}
-                                        value={item.value}
+                                        value={row[item.textHeading] ? row[item.textHeading] : ''}
                                         name={item.textHeading}
                                         onChange={handleChangeRow}
                                         classNameInputItem={item.classNameInputItem}
                                     />
                                 );
-                            }
-
-                            if (item.typeInput === 'select') {
+                            } else if (item.typeInput === 'select') {
                                 return (
                                     <div
                                         className='select_modal_wrapper'
@@ -127,7 +122,7 @@ const ComponentModal = ({ auth, stateModal, setUseStateModal, tableId, title, th
                                         <label>{item.textHeading}</label>
                                         <select
                                             className='select_modal'
-                                            defaultValue=''
+                                            defaultValue={row[item.textHeading] || ''}
                                             name={item.textHeading}
                                             onChange={handleChangeRow}
                                         >
@@ -152,8 +147,8 @@ const ComponentModal = ({ auth, stateModal, setUseStateModal, tableId, title, th
                 </div>
 
                 <div className='button_add_row'>
-                    <button type='button' onClick={handleAddRow}>
-                        Thêm Hoạt Động
+                    <button type='button' onClick={rowInfo ? handleUpdateRow : handleAddRow}>
+                        {rowInfo ? 'Nộp Lại Hoạt Động' : 'Thêm Hoạt Động'}
                     </button>
                 </div>
             </form>

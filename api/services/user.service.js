@@ -46,6 +46,32 @@ class UserService {
         }
     };
 
+    static setAnnualTaskProgress = async ({ pageInfo, completedTask, quantityDemanded, score }) => {
+        try {
+            await User.findByIdAndUpdate(
+                pageInfo.userId,
+                {
+                    $set: {
+                        [`annualTaskProgress.${pageInfo.pageStudentLevelYear}`]: {
+                            completedTaskPrecent: Number.parseFloat(
+                                ((completedTask / quantityDemanded) * 100).toFixed(2)
+                            ),
+                            totalScore: score,
+                            quantityDemanded: quantityDemanded,
+                            completedTasksNum: completedTask,
+                            updatedAt: new Date()
+                        }
+                    }
+                },
+                {
+                    new: true
+                }
+            );
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static getAnnualTaskProgress = async ({
         major,
         cohort,

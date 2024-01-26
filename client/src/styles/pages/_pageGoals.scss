@@ -236,6 +236,7 @@
                                 .score_value_input,
                                 .fixed_value_input {
                                     width: 160px;
+                                    flex: 1;
                                     padding: 8px 12px;
                                     height: 40px;
                                     outline: none;
@@ -251,7 +252,7 @@
 
                                 .add_fixed_value_btn {
                                     width: 120px;
-                                    border-radius: 5px;
+                                    border-radius: 3px;
                                     background: #006fee;
                                     font-weight: 600;
                                     font-size: 15px;
@@ -330,6 +331,7 @@
                             font-weight: 500;
                             outline: none;
                         }
+
                         .del__col {
                             display: flex;
                             justify-content: center;

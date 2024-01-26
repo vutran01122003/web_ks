@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
 const ComponentSelectOption = ({
     id,
@@ -11,27 +11,25 @@ const ComponentSelectOption = ({
 }) => {
     const [optionData, setOptionData] = useState([]);
 
-
     useEffect(() => {
         setOptionData(options);
     }, [options]);
-    
 
     return (
         <div className='component__input'>
             <label htmlFor={id}>{label}</label>
             <select name={name} id={id} onChange={onChange}>
-                <option value="" >{labelOptionNull}</option>
+                <option value=''>{labelOptionNull}</option>
                 {optionData.map((option, item) => {
                     return (
                         <option value={option.value} key={item}>
                             {option.labelOption}
                         </option>
-                    )
+                    );
                 })}
             </select>
         </div>
-    )
-}
+    );
+};
 
-export default ComponentSelectOption
+export default ComponentSelectOption;

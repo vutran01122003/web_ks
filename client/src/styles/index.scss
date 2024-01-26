@@ -51,27 +51,6 @@ a {
     content: "/";
 }
 
-.info__text {
-    .line {
-        height: 35px;
-        display: flex;
-        align-items: center;
-        gap: 0px 5px;
-
-        span {
-            white-space: nowrap;
-            font-weight: 700;
-        }
-
-        p {
-            white-space: nowrap;
-            flex: 1;
-            font-weight: 500;
-            color: $color_gray-500;
-        }
-    }
-}
-
 // Empty Data Notification
 .no_search_result_img_wrapper {
     padding-top: 80px;
@@ -101,7 +80,21 @@ a {
     }
 }
 
-// loading
+// Dynamic page
+.dynamic_page_container {
+    padding: 10px;
+}
+
+// Table
+.container__table {
+    &:not(.margin-0) {
+        table {
+            min-height: 150px;
+        }
+    }
+}
+
+// Loading
 .mesh-loader {
     overflow: hidden;
     height: 100%;

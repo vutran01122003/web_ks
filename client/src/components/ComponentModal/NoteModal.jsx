@@ -13,7 +13,7 @@ function NoteModal({ handleHiddenNoteModal, noteList }) {
             <div className='note_modal'>
                 <div className='note_modal_header'>
                     <h3>{'Lịch sử ghi chú của hoạt động'}</h3>
-                    <div className='note_modal_close_btn' onClick={handleHiddenNoteModal}>
+                    <div className='modal_close_btn' onClick={handleHiddenNoteModal}>
                         <AiOutlineClose />
                     </div>
                 </div>

@@ -23,11 +23,16 @@
 .container__menu .wrap__menu::-webkit-scrollbar {
     width: 4px;
 }
-.container__menu .wrap__menu::-webkit-scrollbar-thumb   {
-    border-radius:5px ;
+
+.container__menu .wrap__menu::-webkit-scrollbar-thumb {
+    border-radius: 5px;
 }
 
 .container__menu .wrap__menu::-webkit-scrollbar-track {
     background: transparent;
 }
 
+.detailed_row_modal::-webkit-scrollbar-thumb,
+.detailed_row_modal::-webkit-scrollbar-track {
+    border-radius: 5px;
+}

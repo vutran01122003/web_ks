@@ -6,12 +6,7 @@ export function checkFilesUpload(file) {
         };
     }
 
-    if (!(
-        file.type.split('/')[0] === 'image' ||
-        file.type === 'application/msword' ||
-        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-        file.type === 'application/pdf'
-    )) {
+    if (!(file.type === 'application/pdf')) {
         return {
             inValid: true,
             msg: 'Định dạng file không hợp lệ'
@@ -25,7 +20,7 @@ export function checkFilesUpload(file) {
 }
 
 export const encodeFileName = (file) => {
-    const blob = file.slice(0, file.size, file.type); 
-    const newFile = new File([blob], encodeURI(file.name), {type: file.type});
+    const blob = file.slice(0, file.size, file.type);
+    const newFile = new File([blob], encodeURI(file.name), { type: file.type });
     return newFile;
-}
+};

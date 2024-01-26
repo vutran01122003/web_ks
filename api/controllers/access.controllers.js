@@ -69,6 +69,7 @@ class AccessControllers {
             const accessToken = await jwtService.signAccessToken({
                 userData: createdUser
             });
+
             res.status(201)
                 .cookie('accessToken', accessToken, {
                     sameSite: 'none',
@@ -84,6 +85,7 @@ class AccessControllers {
                     }
                 });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

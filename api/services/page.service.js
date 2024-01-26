@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const Page = require('../models/page.model');
 const UserService = require('./user.service');
+const mongoose = require('mongoose');
 
 class PageService {
     static createPage = async (data) => {
@@ -17,15 +18,10 @@ class PageService {
             } = data;
 
             const isExists = await Page.findOne({
-                pageName,
-                pageFaculty,
-                pageStudentCohort,
-                pageStudentMajor,
-                pageStudentLevelYear
+                pageName
             }).lean();
 
             if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
-
             if (pageType === 'tin tức') {
                 createdPage = await Page.create({
                     pageName,
@@ -54,15 +50,14 @@ class PageService {
                     pageStudentLevelYear,
                     quantityDemanded
                 });
-
-                return {
-                    status: 201,
-                    msg: `Tạo ${pageType === 'chỉ tiêu' ? 'Trang' : 'Loại Tin Tức'} Thành Công`,
-                    data: createdPage
-                };
             }
+
+            return {
+                status: 201,
+                msg: `Tạo ${pageType === 'chỉ tiêu' ? 'Trang' : 'Loại Tin Tức'} Thành Công`,
+                data: createdPage
+            };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };
@@ -71,6 +66,74 @@ class PageService {
         try {
             const pages = await Page.find();
             return pages;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getPageById = async ({ page }) => {
+        try {
+            const pageInfo = await Page.findById(page);
+            return pageInfo;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static calculateTotalScoreOfRow = async ({ pageId, content, tableId }) => {
+        try {
+            let totalScore = 0;
+            const pageData = await this.getPageById({ page: pageId });
+            if (!pageData) throw createError.NotFound('Trang Không Tồn Tại');
+
+            for (let tableItem of pageData.tables) {
+                if (
+                    JSON.stringify(tableItem._id) ===
+                    JSON.stringify(new mongoose.Types.ObjectId(tableId))
+                ) {
+                    if (tableItem.fixedScore) {
+                        totalScore = tableItem.fixedScore;
+                        break;
+                    } else {
+                        tableItem.rowTitleList.forEach((rowTitleItem) => {
+                            Object.keys(content).forEach((key) => {
+                                if (
+                                    rowTitleItem.fixedValue.length > 0 &&
+                                    key === rowTitleItem.titleValue
+                                ) {
+                                    content[key] = {
+                                        value: content[key],
+                                        score: rowTitleItem.fixedValue.find((fixedValueItem) => {
+                                            if (fixedValueItem.value === content[key]) {
+                                                totalScore += fixedValueItem.score;
+                                                return true;
+                                            }
+                                        }).score
+                                    };
+                                }
+                            });
+                        });
+                        break;
+                    }
+                }
+            }
+
+            return totalScore;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static addRowIntoTableOfPage = async ({ page, table, rowList }) => {
+        try {
+            await Page.findOneAndUpdate(
+                { _id: page, 'tables._id': table },
+                {
+                    $push: {
+                        'tables.$.rowValueList': rowList._id
+                    }
+                }
+            );
         } catch (error) {
             throw error;
         }

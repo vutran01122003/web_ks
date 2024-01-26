@@ -2,7 +2,8 @@ const RowService = require('../services/row.service');
 const UploadService = require('../services/upload.service');
 const createError = require('http-errors');
 const ProgressService = require('../services/progress.service');
-const User = require('../models/user.model');
+const UserService = require('../services/user.service');
+const { getLocalDatetime, toISOString } = require('../utils/getDatetime');
 
 class RowControllers {
     addRow = async (req, res, next) => {
@@ -28,8 +29,35 @@ class RowControllers {
             });
 
             res.status(200).json({
-                status: 'Thêm Thông Tin Thành Công',
+                msg: 'Thêm Thông Tin Thành Công',
                 data: rowList
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    resubmitRow = async (req, res, next) => {
+        try {
+            const rowData = JSON.parse(req.body.rowData);
+            rowData.content = JSON.parse(rowData.content);
+
+            const updatedRow = await RowService.resubmitRow({ rowData });
+
+            const uploadedFiles = await UploadService.uploadFilesToS3({
+                files: req.files,
+                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.studentId}/${rowData.tableName}`
+            });
+
+            await RowService.addProofFiles({
+                data: req.body,
+                uploadedFiles,
+                rowListId: rowData.rowListId,
+                rowItemId: rowData.contentId
+            });
+
+            res.status(200).json({
+                msg: updatedRow?.msg
             });
         } catch (error) {
             next(error);
@@ -77,20 +105,31 @@ class RowControllers {
         try {
             if (!res.locals.roles.includes('0004'))
                 throw createError.Forbidden('Không đủ quyền cập nhật trạng thái chỉ tiêu');
-            const { rowListId, contentIdList, status, noteValue, pageInfo, deadline } = req.body;
-
-            const deadlineDatetime = deadline ? new Date(`${deadline}:00.000Z`) : deadline;
-            const currentDatetime = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
-
-            if (deadline && currentDatetime.getTime() > deadlineDatetime.getTime())
-                throw createError.BadRequest('Hạn nộp phải lớn hơn ngày giờ hiện tại');
-
-            const updatedRow = await RowService.updateRowStatus({
+            const {
                 rowListId,
                 contentIdList,
                 status,
                 noteValue,
-                deadline: deadlineDatetime
+                pageInfo,
+                deadline,
+                isTimedExtension
+            } = req.body;
+
+            const deadlineDatetime = toISOString(deadline);
+
+            if (isTimedExtension && !deadline)
+                throw createError.BadRequest('Chưa nhập thời gian hạn gia');
+
+            if (deadline && getLocalDatetime().getTime() > deadlineDatetime.getTime())
+                throw createError.BadRequest('Hạn nộp phải lớn hơn ngày giờ hiện tại');
+
+            const { code, msg } = await RowService.updateRowStatus({
+                rowListId,
+                contentIdList,
+                status,
+                noteValue,
+                deadline: deadlineDatetime,
+                isTimedExtension
             });
 
             const pages = await ProgressService.getProgressByYear(pageInfo);
@@ -98,11 +137,12 @@ class RowControllers {
             let quantityDemanded = 0;
             let completedTask = 0;
             let score = 0;
+
             pages.forEach((page) => {
                 page.tables.forEach((table) => {
                     quantityDemanded += table.quantityDemanded;
                     table.rowValueList[0]?.content.forEach((content) => {
-                        if (content.status === 'Đã Duyệt') {
+                        if (content.status === 'đã duyệt') {
                             ++completedTask;
                             score += content.totalScore;
                         }
@@ -110,32 +150,18 @@ class RowControllers {
                 });
             });
 
-            await User.findByIdAndUpdate(
-                pageInfo.userId,
-                {
-                    $set: {
-                        [`annualTaskProgress.${pageInfo.pageStudentLevelYear}`]: {
-                            completedTaskPrecent: Number.parseFloat(
-                                ((completedTask / quantityDemanded) * 100).toFixed(2)
-                            ),
-                            totalScore: score,
-                            quantityDemanded: quantityDemanded,
-                            completedTasksNum: completedTask,
-                            updatedAt: new Date()
-                        }
-                    }
-                },
-                {
-                    new: true
-                }
-            );
+            await UserService.setAnnualTaskProgress({
+                quantityDemanded,
+                completedTask,
+                score,
+                pageInfo
+            });
 
             res.status(200).json({
-                code: updatedRow.code,
-                msg: updatedRow.msg
+                code,
+                msg
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

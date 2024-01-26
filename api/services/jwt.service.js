@@ -8,7 +8,7 @@ class JwtService {
                 { userId: userData._id, roles: userData.roles },
                 ACCESS_TOKEN_SECRET,
                 {
-                    expiresIn: '1h'
+                    expiresIn: '5h'
                 },
                 (err, data) => {
                     if (err) {

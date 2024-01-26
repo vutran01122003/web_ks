@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react';
 
 export const ContextFromWindowResize = createContext();
 
@@ -21,13 +21,13 @@ const RenderGetSizeWindow = ({ children }) => {
         };
     }, []);
 
-    const getWidthWindow = windowSize.innerWidth
+    const getWidthWindow = windowSize.innerWidth;
     const valueWindowSize = { getWidthWindow };
 
     return (
         <ContextFromWindowResize.Provider value={valueWindowSize}>
             {children}
         </ContextFromWindowResize.Provider>
-    )
-}
+    );
+};
 export default RenderGetSizeWindow;

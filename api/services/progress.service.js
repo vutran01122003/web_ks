@@ -26,7 +26,6 @@ class ProgressService {
 
             return pageDetailsList;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

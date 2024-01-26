@@ -1,18 +1,17 @@
-import React from "react";
-import { Modal } from "antd";
+import React from 'react';
+import { Modal } from 'antd';
 
-function PreviewFilesModal({proofFilesData, openPreviewModal, setOpenPreviewModal}) {
-
+function PreviewFilesModal({ proofFilesData, openPreviewModal, setOpenPreviewModal }) {
     const {
-            VITE_APP_IMG_FILE_ICON_URL, 
-            VITE_APP_DOC_FILE_ICON_URL, 
-            VITE_APP_PDF_FILE_ICON_URL, 
-            VITE_APP_INVAILD_FILE_ICON_URL
-        } = import.meta.env;
+        VITE_APP_IMG_FILE_ICON_URL,
+        VITE_APP_DOC_FILE_ICON_URL,
+        VITE_APP_PDF_FILE_ICON_URL,
+        VITE_APP_INVAILD_FILE_ICON_URL
+    } = import.meta.env;
 
     return (
         <Modal
-            title={"Danh Sách Minh Chứng"}
+            title={'Danh Sách Minh Chứng'}
             centered
             open={openPreviewModal}
             footer={null}
@@ -20,65 +19,61 @@ function PreviewFilesModal({proofFilesData, openPreviewModal, setOpenPreviewModa
                 setOpenPreviewModal(false);
             }}
         >
-            <div className='files_preview_wrapper'>    
-                {
-                    proofFilesData.map((proofFiles) => {
-                        let src = '';
-                        let alt = '';
+            <div className='files_preview_wrapper'>
+                {proofFilesData.map((proofFiles) => {
+                    let src = '';
+                    let alt = '';
 
-                        switch (proofFiles?.fileType.toLowerCase()) {
-                            case 'jpg':
-                            case 'jpeg':
-                            case 'png':
-                                src = VITE_APP_IMG_FILE_ICON_URL;
-                                alt = "image file";
-                                break;
-                            case 'doc':
-                            case 'docx':
-                                src = VITE_APP_DOC_FILE_ICON_URL;
-                                alt = "document file";
-                                break;
-                            case 'pdf':
-                                src = VITE_APP_PDF_FILE_ICON_URL;
-                                alt = "document file";
-                                break;
-                            default:
-                                src = VITE_APP_INVAILD_FILE_ICON_URL;
-                                alt = "invaild file";
-                                break;
-                        }
+                    switch (proofFiles?.fileType.toLowerCase()) {
+                        case 'jpg':
+                        case 'jpeg':
+                        case 'png':
+                            src = VITE_APP_IMG_FILE_ICON_URL;
+                            alt = 'image file';
+                            break;
+                        case 'doc':
+                        case 'docx':
+                            src = VITE_APP_DOC_FILE_ICON_URL;
+                            alt = 'document file';
+                            break;
+                        case 'pdf':
+                            src = VITE_APP_PDF_FILE_ICON_URL;
+                            alt = 'document file';
+                            break;
+                        default:
+                            src = VITE_APP_INVAILD_FILE_ICON_URL;
+                            alt = 'invaild file';
+                            break;
+                    }
 
-                        return (
-                            <a 
-                                key={proofFiles?._id} 
-                                href={proofFiles?.fileUrl} 
-                                className="file_item_link_wrapper"
-                                download 
-                            >   
-                                <img className="file_item_link_icon" src={src} alt={alt}/>
-                                <span className="file_item_link">
-                                    {proofFiles?.originalName}
-                                </span>
-                            </a>
-                        )
-                    })
-                }
+                    return (
+                        <a
+                            key={proofFiles?._id}
+                            href={proofFiles?.fileUrl}
+                            className='file_item_link_wrapper'
+                            download
+                        >
+                            <img className='file_item_link_icon' src={src} alt={alt} />
+                            <span className='file_item_link'>{proofFiles?.originalName}</span>
+                        </a>
+                    );
+                })}
             </div>
         </Modal>
-    )
+    );
 
-    // return ( 
+    // return (
 
-    //     <div 
+    //     <div
     //         className="modal_overlap"
     //         onMouseUp={handleHidePreviewFilesModal}
-    //     >   
-    //         <div className='files_preview_wrapper'>    
+    //     >
+    //         <div className='files_preview_wrapper'>
     //         <div className='files_preview_title'>
     //             <h3>Danh Sách Minh Chứng</h3>
     //             <button type="button" className="files_preview_close_btn" onClick={() => setOpenPreviewModal(false)}>
-	// 					<MdClose />
-	// 			</button> 
+    // 					<MdClose />
+    // 			</button>
     //         </div>
 
     //             {
@@ -109,12 +104,12 @@ function PreviewFilesModal({proofFilesData, openPreviewModal, setOpenPreviewModa
     //                     }
 
     //                     return (
-    //                         <a 
-    //                             key={proofFiles?._id} 
-    //                             href={proofFiles?.fileUrl} 
+    //                         <a
+    //                             key={proofFiles?._id}
+    //                             href={proofFiles?.fileUrl}
     //                             className="file_item_link_wrapper"
-    //                             download 
-    //                         >   
+    //                             download
+    //                         >
     //                             <img className="file_item_link_icon" src={src} alt={alt}/>
     //                             <span className="file_item_link">
     //                                 {proofFiles?.originalName}
@@ -124,7 +119,7 @@ function PreviewFilesModal({proofFilesData, openPreviewModal, setOpenPreviewModa
     //                 })
     //             }
     //         </div>
-    //     </div> 
+    //     </div>
     // );
 }
 

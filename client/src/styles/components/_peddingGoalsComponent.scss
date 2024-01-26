@@ -30,6 +30,7 @@
                 table {
                     border: unset;
                     border-bottom: 1px solid #E7ECF0;
+                   
                 }
             }
             
@@ -94,6 +95,7 @@
 	background-color: $color_white;
 	border-radius: 3px;
     height: 73vh;
+    overflow-y: scroll;
 
     .notify_nothing {
         display: flex;
