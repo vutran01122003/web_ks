@@ -64,7 +64,7 @@ class PageService {
 
     static getAllPage = async () => {
         try {
-            const pages = await Page.find();
+            const pages = await Page.find().lean();
             return pages;
         } catch (error) {
             throw error;
@@ -118,7 +118,10 @@ class PageService {
                 }
             }
 
-            return totalScore;
+            return {
+                pageData,
+                totalScore
+            };
         } catch (error) {
             throw error;
         }

@@ -80,10 +80,17 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
         '#bc2b4d',
         '#f91190'
     ];
-    const dataValue = chartData.map((item) => parseFloat(item.value.toFixed(2)));
+
+    let totalQuantityDemanded = 0;
+    let totalProgress = 0;
+
+    const dataValue = chartData.map((item) => {
+        totalQuantityDemanded += item.quantityDemanded;
+        totalProgress += item.value * item.quantityDemanded;
+        return parseFloat(item.value.toFixed(2));
+    });
     const dataCategory = chartData.map((item) => capitalizeFirstLetter(item.caterogy));
-    const sum = dataValue.reduce((total, num) => total + num, 0);
-    const average = (sum / dataValue.length).toFixed(2);
+    const average = (totalProgress / totalQuantityDemanded).toFixed(2);
     const [yearList, setYearList] = useState([]);
 
     const statistical = {

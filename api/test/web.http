@@ -203,18 +203,16 @@ POST {{url}}/api/faculty
 Content-Type: application/json
 
 {
-    "facultyName": "Điện tử máy tính",
-    "isActive": true,
-    "majors": [
-        {
-            "majorName": "Kỹ thuật điện tử",
-            "isActive": true
-        },
-        {
-            "majorName": "Hệ thống mạch dẫn",
-            "isActive": false
-        }
-    ]
+    "facultyName": "Công nghệ thông tin"
+}
+
+### Create major
+POST {{url}}/api/faculty/major
+Content-Type: application/json
+
+{
+    "majorName": "Kỹ Thuật Phầm Mềm",
+    "facultyId": "65d06d587dfae12606aceb91"
 }
 
 ### Update Faculty
@@ -242,7 +240,7 @@ DELETE {{url}}/api/faculty
 Content-Type: application/json
 
 {
-    "facultyId": "655625fc62e1cd4fa44e4ff7"
+    "facultyId": "65d0614690292bb5fe432401"
 }
 
 ### Login
@@ -270,3 +268,65 @@ Content-Type: application/json
     "major": "kỹ thuật phần mềm",
     "minimunPercentage": 25
 }
+
+### Create updated activity notification v1
+POST {{url}}/api/notification
+Content-Type: application/json
+
+{
+    "title": "Thông báo về cuộc thi lập trình 2024 và chi tiết giải thưởng",
+    "content": "",
+    "senderId": "65a64bab4d293481a51f9c63"
+}
+
+### Create updated activity notification v2
+POST {{url}}/api/notification
+Content-Type: application/json
+
+{
+    "title": "Thông báo về cuộc thi lập trình 2024 do nhà trường tổ chức",
+    "recipientId": "65a64bab4d293481a51f9c63",
+    "content": "",
+    "senderId": "65a64bab4d293481a51f9c63"
+}
+
+### Get updated activity notifications
+GET {{url}}/api/notification/updated_activity/65a64bab4d293481a51f9c63
+
+### Update the reading status of the notification
+PATCH {{url}}/api/notification/read_status
+Content-Type: application/json
+
+{
+    "notificationId": "65bfd1263db3c47b27ddfc5f",
+    "status": false,
+    "recipientId": "65a64bab4d293481a51f9c63"
+}
+
+### Delete notification
+DELETE {{url}}/api/notification/delete
+Content-Type: application/json
+
+{
+    "notificationId": "65c8c05b0a04abe6791c1179",
+     "recipientId": "65a64bab4d293481a51f9c63"
+}
+
+### Mark read all notification
+PATCH {{url}}/api/notification/read_status_all
+Content-Type: application/json
+
+{
+    "recipientId": "65a64bab4d293481a51f9c63"
+}
+
+### Delete all notification
+DELETE  {{url}}/api/notification/delete_all
+Content-Type: application/json
+
+{
+    "recipientId": "65a64bab4d293481a51f9c63"
+}
+
+### Get the number of unread notifications
+GET {{url}}/api/notification/num_unread_notification/65a64bab4d293481a51f9c63

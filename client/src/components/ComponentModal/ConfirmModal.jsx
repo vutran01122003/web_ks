@@ -3,8 +3,11 @@ import { updateRowsStatus } from '../../redux/actions/rowAction';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useState } from 'react';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import { createUpdatedActivityNotification } from '../../redux/actions/notifyAction';
+import { getLocalDatetime } from '../../utils/formatDatetime';
 
 function ConfirmModal({
+    auth,
     userData,
     content,
     title,
@@ -12,10 +15,8 @@ function ConfirmModal({
     rowInfoData,
     handleHiddenConfirmModal,
     rowsType,
-    isTimedExtension,
-    isResubmitedRow
+    isTimedExtension
 }) {
-    console.log('>>>>' + rowInfoData.contentIdList[0]);
     const dispatch = useDispatch();
     const [noteValue, setNoteValue] = useState('');
     const [visibleDateInput, setVisibleDateInput] = useState(false);
@@ -30,6 +31,28 @@ function ConfirmModal({
                 }
             });
             return;
+        }
+
+        let title = '';
+        switch (status) {
+            case 'từ chối':
+                title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn đã bị từ chối.`;
+                break;
+            case 'đã duyệt':
+                title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn đã được chấp nhận.`;
+                break;
+            case 'phải nộp lại':
+                title = isTimedExtension
+                    ? `Hoạt động ${
+                          rowInfoData.tableInfo.tableName
+                      } của bạn đã được gia hạn thời gian nộp lại. Hạn cuối là ${getLocalDatetime(
+                          datetimeValue
+                      )}.`
+                    : `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn cần phải nộp lại.`;
+                break;
+            default:
+                title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn đã xảy ra lỗi.`;
+                break;
         }
 
         dispatch(
@@ -47,6 +70,16 @@ function ConfirmModal({
                 contentIdList: rowInfoData.contentIdList,
                 deadline: datetimeValue,
                 isTimedExtension
+            })
+        );
+
+        dispatch(
+            createUpdatedActivityNotification({
+                title,
+                content: noteValue,
+                senderId: auth.user._id,
+                recipientId: userData?._id,
+                pageId: rowInfoData.pageInfo.pageId
             })
         );
         handleHiddenConfirmModal();

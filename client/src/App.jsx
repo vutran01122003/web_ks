@@ -1,18 +1,20 @@
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom/dist';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Apply from './pages/Apply';
+import SocketIO from './Socket.io';
+import NotFound from './pages/NotFound';
+import Alert from './components/ComponentToast/Alert';
 import PageRender from './config/routes/PageRender';
-import { useEffect } from 'react';
 import { authSelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
-import Alert from './components/ComponentToast/Alert';
-import FirstLogin from './components/ComponentFirstLogin/FirstLogin';
-import NotFound from './pages/NotFound';
 import { getPage } from './redux/actions/pageAction';
-import Apply from './pages/Apply';
+import FirstLogin from './components/ComponentFirstLogin/FirstLogin';
+import { getNumUnreadNotification } from './redux/actions/notifyAction';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -22,8 +24,17 @@ const App = () => {
 
     useEffect(() => {
         dispatch(verifyAccessToken());
-        dispatch(getPage({ pathName }));
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getPage({ pathName }));
+    }, [dispatch, pathName]);
+
+    useEffect(() => {
+        if (auth?.user) {
+            dispatch(getNumUnreadNotification({ userId: auth?.user._id }));
+        }
+    }, [auth]);
 
     return (
         <>
@@ -35,7 +46,10 @@ const App = () => {
                     path='/'
                     element={
                         auth?.user ? (
-                            <Layout auth={auth} />
+                            <>
+                                <Layout auth={auth} />
+                                <SocketIO auth={auth} />
+                            </>
                         ) : auth?.firstLogin ? (
                             <FirstLogin
                                 studentId={auth.firstLogin.studentId}

@@ -1,4 +1,4 @@
-const talentESConn = require('../dbs/init.mongodb');
+const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const TableSchema = require('./tables.schema');
@@ -12,12 +12,16 @@ const PageSchema = new Schema(
             lowercase: true,
             trim: true
         },
+        // Thuộc tính pageType quy định loại page của hệ thống.
+        // Trong hệ thống chỉ có 2 loại page động là page "chỉ tiêu" và page "tin tức".
+        // Định nghĩa: Page động là page có thể thêm, sửa, xóa và cập nhật thay vì phải fix cứng vào code front-end.
         pageType: {
             type: String,
             lowercase: true,
             enum: ['chỉ tiêu', 'tin tức'],
             default: 'chỉ tiêu'
         },
+        // Thuộc tính pageFaculty ràng buộc page chỉ xuất hiện ở trong khoa (Faculty) được chỉ định
         pageFaculty: {
             type: String,
             lowercase: true,
@@ -28,6 +32,7 @@ const PageSchema = new Schema(
                 message: 'pageFaculty is required when pageType is "Chỉ Tiêu".'
             }
         },
+        // Thuộc tính pageStudentMajor ràng buộc page chỉ xuất hiện ở trong chuyên ngành (Major) được chỉ định
         pageStudentMajor: {
             type: String,
             lowercase: true,
@@ -38,6 +43,7 @@ const PageSchema = new Schema(
                 message: 'pageStudentMajor is required when pageType is "Chỉ Tiêu".'
             }
         },
+        // Thuộc tính pageStudentCohort ràng buộc page chỉ xuất hiện ở trong khóa sinh viên (Cohort) được chỉ định
         pageStudentCohort: {
             type: Number,
             validate: {
@@ -47,6 +53,8 @@ const PageSchema = new Schema(
                 message: 'pageStudentCohort is required when pageType is "Chỉ Tiêu".'
             }
         },
+        // Thuộc tính pageStudentLevelYear ràng buộc page chỉ xuất hiện ở trong năm học (LevelYear) được chỉ định
+        // EX: Một sinh viên có ít nhất 4 năm học, mỗi năm học sẽ có các page ứng với các năm học của sinh viên
         pageStudentLevelYear: {
             type: Number,
             validate: {
@@ -57,6 +65,8 @@ const PageSchema = new Schema(
             }
         },
         tables: [TableSchema],
+        // Thuộc tính isActive có chức năng cho phép người dùng tương tác với page nếu là isActive là true và ngược lại
+        // Mặc định giá trị của isActive là true
         isActive: {
             type: Boolean,
             default: true
@@ -114,6 +124,6 @@ PageSchema.pre('findOneAndUpdate', async function (next) {
     }
 });
 
-const Page = talentESConn.model(DOC, PageSchema);
+const Page = conn.model(DOC, PageSchema);
 
 module.exports = Page;

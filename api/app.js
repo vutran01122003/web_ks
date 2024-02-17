@@ -1,27 +1,20 @@
-// require('./dbs/init.redis');
+require('./dbs/init.redis');
+require('./dbs/init.mongodb');
 const express = require('express');
+const { MulterError } = require('multer');
 const createError = require('http-errors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const test = require('./dbs/init.mongodb');
-const mongoose = require('mongoose');
+const app = express();
 
 const {
     morganType,
     app: { clientDomain_v1, clientDomain_v2 }
 } = require('./config/config');
-const { MulterError } = require('multer');
 
-const app = express();
-
-const testSchema = new mongoose.Schema({ name: { type: String, expireAfterSeconds: '10s' } });
-const TEST = test.model('Test', testSchema);
-TEST.create({
-    name: 'Tran Duc Vu'
-});
 // CORS config
 const whitelist = [clientDomain_v1, clientDomain_v2];
 const corsOptions = {
@@ -36,7 +29,7 @@ const corsOptions = {
 };
 
 // MiddleWare
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
 app.use(morgan(morganType));
@@ -54,6 +47,7 @@ app.use('/api', require('./router/chat'));
 app.use('/api', require('./router/faculty'));
 app.use('/api', require('./router/progress'));
 app.use('/api', require('./router/excel'));
+app.use('/api', require('./router/notification'));
 
 // Catch NotFound
 app.use((req, res, next) => {

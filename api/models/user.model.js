@@ -1,4 +1,4 @@
-const talentESConn = require('../dbs/init.mongodb');
+const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
@@ -30,19 +30,19 @@ const UserSchema = new Schema(
             type: Schema.Types.Date,
             required: true
         },
+        // Thuộc tính faculty cho biết khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
         faculty: {
-            // Khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
             type: String,
             lowercase: true,
             required: true
         },
+        // Thuộc tính major cho biết chuyên ngành của sinh viên (Ví Dụ: Kỹ Thuật Phần Mềm,...)
         major: {
-            // Chuyên ngành của sinh viên (Ví Dụ: Kỹ Thuật Phần Mềm,...)
             type: String,
             lowercase: true
         },
+        // Thuộc tính cohort cho biết Khóa sinh viên nhập học (Ví Dụ: 17, 18, 19, 20,...)
         cohort: {
-            // Khóa sinh viên nhập học (Ví Dụ: K17, K18,...)
             type: Number,
             required: true
         },
@@ -66,9 +66,8 @@ const UserSchema = new Schema(
             type: String,
             lowercase: true
         },
-        annualTaskProgress: {
-            // Tiến độ hoàn thành nhiệm vụ mỗi năm
-        }
+        // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
+        annualTaskProgress: {}
     },
     {
         collection: COL,
@@ -90,6 +89,6 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-const User = talentESConn.model(DOC, UserSchema);
+const User = conn.model(DOC, UserSchema);
 
 module.exports = User;

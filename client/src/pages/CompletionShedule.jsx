@@ -198,7 +198,7 @@ function CompletionShedule() {
                     <table className='completion_shedule_table'>
                         <thead className='completion_shedule_header'>
                             <tr>
-                                <th>#</th>
+                                <th>STT</th>
                                 <th>Mã Sinh Viên</th>
                                 <th>Tên Sinh Viên</th>
                                 <th>Chuyên Ngành</th>
@@ -224,13 +224,14 @@ function CompletionShedule() {
                                     </span>
                                 </th>
                                 <th>Điểm</th>
+                                <th>Tình trạng</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {progress.annualTaskProgress.data.map((progressItem, index) => (
                                 <tr key={progressItem?.studentId}>
-                                    <td>{index}.</td>
+                                    <td>{index + 1}</td>
                                     <td>{progressItem?.studentId}</td>
                                     <td>{capitalizeFirstLetter(progressItem?.fullName)}</td>
                                     <td>{capitalizeFirstLetter(progressItem?.major)}</td>

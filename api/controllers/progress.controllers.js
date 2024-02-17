@@ -92,7 +92,6 @@ class ProgressControllers {
                 data: studentList
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

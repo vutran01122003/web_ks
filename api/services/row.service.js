@@ -2,7 +2,6 @@ const Row = require('../models/row.model');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const PageService = require('./page.service');
-const { getLocalDatetime } = require('../utils/getDatetime');
 
 class RowService {
     static addRow = async ({ data }) => {
@@ -47,6 +46,7 @@ class RowService {
                 rowItemId
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };
@@ -93,7 +93,7 @@ class RowService {
     static resubmitRow = async ({ rowData }) => {
         try {
             const { table, page, content, contentId, rowListId } = rowData;
-            const totalScore = await PageService.calculateTotalScoreOfRow({
+            const { totalScore } = await PageService.calculateTotalScoreOfRow({
                 pageId: page,
                 tableId: table,
                 content
@@ -102,27 +102,26 @@ class RowService {
             const row = await Row.findById(rowListId);
             const contentData = row.content.id(contentId);
 
+            contentData.status = 'chờ duyệt';
+            contentData.addProofFiles = [];
+            contentData.rowValue = content;
+            contentData.totalScore = totalScore;
+            contentData.createdAt = new Date();
+
             const updatedRow = await Row.findOneAndUpdate(
                 { _id: rowListId, 'content._id': contentId },
                 {
-                    'content.$': {
-                        _id: contentId,
-                        status: 'chờ duyệt',
-                        rowValue: content,
-                        totalScore,
-                        note: contentData.note,
-                        createdAt: getLocalDatetime(),
-                        proofFilesList: []
-                    }
+                    'content.$': contentData
                 },
                 { new: true }
             );
 
             return {
                 msg: 'Nộp lại thành công',
-                data: updatedRow
+                data: updatedRow ? updatedRow : null
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };
@@ -219,6 +218,7 @@ class RowService {
                         user: 1,
                         table: 1,
                         'page.pageName': 1,
+                        'page._id': 1,
                         'page.tables._id': 1,
                         'page.tables.tableName': 1,
                         'page.tables.rowTitleList': 1,
@@ -293,10 +293,8 @@ class RowService {
             return {
                 code: 200,
                 msg: content
-                // data: updatedRow
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

@@ -1,4 +1,4 @@
-const talentESConn = require('../dbs/init.mongodb');
+const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -10,22 +10,35 @@ const FacultySchema = new Schema(
             type: String,
             lowercase: true,
             required: true,
-            unique: true,
-            collation: { locale: 'vi', strength: 2 }
+            unique: true
         },
         isActive: {
-            type: Schema.Types.Boolean,
-            required: true
+            type: Boolean,
+            default: true
         },
         majors: [
             {
                 majorName: {
                     type: String,
                     lowercase: true,
-                    unique: true,
-                    collation: { locale: 'vi', strength: 2 }
+                    unique: true
                 },
-                isActive: Schema.Types.Boolean
+                isActive: {
+                    type: Boolean,
+                    default: true
+                },
+                cohort: [
+                    {
+                        cohortName: {
+                            type: Number,
+                            required: true
+                        },
+                        currentLevelYear: {
+                            type: Number,
+                            default: 1
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -34,6 +47,6 @@ const FacultySchema = new Schema(
     }
 );
 
-const Faculty = talentESConn.model(DOC, FacultySchema);
+const Faculty = conn.model(DOC, FacultySchema);
 
 module.exports = Faculty;

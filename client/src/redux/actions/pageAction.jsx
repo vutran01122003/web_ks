@@ -77,13 +77,6 @@ export const getPage =
     async (dispatch) => {
         try {
             if (pathName.includes('/page/')) {
-                dispatch({
-                    type: GLOBALTYPES.ALERT,
-                    payload: {
-                        loading: true
-                    }
-                });
-
                 const res = await getDataApi(pathName);
 
                 dispatch({
@@ -95,13 +88,6 @@ export const getPage =
                         pageName: res?.data.data?.pageName,
                         tables: res?.data.data.tables,
                         pageLevelYear: res?.data.data.pageStudentLevelYear
-                    }
-                });
-
-                dispatch({
-                    type: GLOBALTYPES.ALERT,
-                    payload: {
-                        loading: false
                     }
                 });
             }

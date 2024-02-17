@@ -7,7 +7,6 @@ import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo';
 import { getProgressByYear } from '../redux/actions/progressAction';
 import Quantity from '../components/ComponentQuantity/Quantity';
 import { progressSelector } from '../redux/selector';
-import { RiErrorWarningLine } from 'react-icons/ri';
 import { TbCheckupList } from 'react-icons/tb';
 import { GoArrowRight } from 'react-icons/go';
 import { Link } from 'react-router-dom';
@@ -41,7 +40,11 @@ const Home = ({ auth }) => {
             setGoalInfo(progress.goalsInfoData[levelYear]);
             setChartData(
                 progress.goalsInfoData[levelYear].map((elemProgress) => {
-                    return { caterogy: elemProgress.pageName, value: elemProgress.percent };
+                    return {
+                        caterogy: elemProgress.pageName,
+                        value: elemProgress.percent,
+                        quantityDemanded: elemProgress.quantityDemanded
+                    };
                 })
             );
         }
@@ -49,7 +52,7 @@ const Home = ({ auth }) => {
 
     return (
         <div className='pageHome '>
-            <div className='information__wecome'>
+            <div className='information__welcome'>
                 <div className='wecome__name'>
                     <span>Xin chào, {auth?.user?.fullName} !</span>
                     <div className='to__profile'>
@@ -59,7 +62,6 @@ const Home = ({ auth }) => {
                     </div>
                 </div>
                 <div className='bio__user'>
-                    {' '}
                     "Khi gặp khó khăn đừng chỉ ngồi than thở mà hãy tìm cách giải quyết"
                 </div>
             </div>

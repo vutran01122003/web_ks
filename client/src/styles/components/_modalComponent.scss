@@ -951,3 +951,35 @@
     z-index: 99;
     background: rgba(163, 0, 0, 0.356)000;
 }
+
+// More modal
+.more_modal {
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 3px gray;
+    font-size: 14px;
+    overflow: hidden;
+    user-select: none;
+
+    &.notification_item_more_modal {
+        position: absolute;
+        top: -200%;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .more_modal_item {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px;
+        cursor: pointer;
+
+        span {
+            white-space: nowrap;
+        }
+        &:hover {
+            background: #faf9f9;
+        }
+    }
+}

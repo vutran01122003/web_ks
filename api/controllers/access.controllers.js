@@ -32,8 +32,8 @@ class AccessControllers {
 
                     res.status(200)
                         .cookie('accessToken', accessToken, {
-                            sameSite: 'none',
-                            secure: true
+                            // sameSite: 'none',
+                            // secure: true
                         })
                         .send({
                             status: 'Đăng nhập thành công',
@@ -85,7 +85,6 @@ class AccessControllers {
                     }
                 });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

@@ -11,6 +11,7 @@ import DetailedRowModal from '../ComponentModal/DetailedRowModal';
 import { MdOutlineMoreTime } from 'react-icons/md';
 
 const MainItem = ({
+    auth,
     setRowInfo,
     isDetailedRow,
     handleOpenModal,
@@ -106,6 +107,7 @@ const MainItem = ({
                         <td key={index} className='line__item'>
                             {visibleConfirmModal && (
                                 <ConfirmModal
+                                    auth={auth}
                                     rowsType={item.rowsType}
                                     isOpen={visibleConfirmModal}
                                     title={modalData.title}
@@ -348,6 +350,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                         {table.tbody.map((row, index) => {
                             return (
                                 <MainItem
+                                    auth={auth}
                                     setRowInfo={setRowInfo}
                                     isDetailedRow={isDetailedRow}
                                     isDynamicRows={isDynamicRows}

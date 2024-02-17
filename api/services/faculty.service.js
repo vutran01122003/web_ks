@@ -1,41 +1,52 @@
-const { default: mongoose } = require("mongoose");
-const Faculty = require("../models/faculty.model");
+const Faculty = require('../models/faculty.model');
 
 class FacultyService {
-    static createFaculty = async (data) => {
+    static createFaculty = async ({ facultyName }) => {
         try {
-            const { facultyName, isActive, majors } = data;
+            const isExists = await Faculty.findOne({ facultyName }).lean();
 
-            if (!facultyName || !isActive)
-                return {
-                    code: 400,
-                    status: "failed",
-                    msg: "Thiếu trường facultyName",
-                };
-
-            const isExists = await Faculty.findOne({ facultyName })
-                .collation({ locale: "en", strength: 2 })
-                .lean();
             if (isExists)
                 return {
-                    code: 400,
-                    status: "failed",
-                    msg: "facultyName đã tồn tại",
+                    code: 409,
+                    msg: 'Tên khoa đã tồn tại',
+                    data: null
                 };
 
             const faculty = await Faculty.create({
-                facultyName,
-                isActive,
-                majors,
+                facultyName
             });
 
-            if (faculty) return faculty;
-            else
-                return {
-                    code: 400,
-                    status: "failed",
-                    msg: "Thêm faculty thất bại",
-                };
+            return {
+                code: 200,
+                data: faculty,
+                msg: `Khoa ${facultyName} đã được tạo`
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static createMajor = async ({ majorName, facultyId }) => {
+        try {
+            const updatedFaculty = await Faculty.findByIdAndUpdate(
+                facultyId,
+                {
+                    $push: {
+                        majors: {
+                            majorName
+                        }
+                    }
+                },
+                {
+                    new: true
+                }
+            );
+
+            return {
+                msg: `Chuyên ngành ${majorName} đã được tạo thành công`,
+                code: 201,
+                data: updatedFaculty.majors[updatedFaculty.majors.length - 1]
+            };
         } catch (error) {
             throw error;
         }
@@ -48,8 +59,8 @@ class FacultyService {
             if (!facultyId)
                 return {
                     code: 400,
-                    status: "failed",
-                    msg: "Không có facultyId để cập nhật",
+                    status: 'failed',
+                    msg: 'Không có facultyId để cập nhật'
                 };
 
             const faculty = await Faculty.findByIdAndUpdate(
@@ -61,14 +72,14 @@ class FacultyService {
             if (!faculty)
                 return {
                     code: 400,
-                    status: "failed",
-                    msg: "Cập nhật thất bại",
+                    status: 'failed',
+                    msg: 'Cập nhật thất bại'
                 };
 
             return {
                 code: 201,
-                status: "success",
-                data: faculty,
+                status: 'success',
+                data: faculty
             };
         } catch (error) {
             throw error;
@@ -80,8 +91,8 @@ class FacultyService {
             if (!facultyId)
                 return {
                     code: 400,
-                    status: "failed",
-                    msg: "Không có facultyId để xóa",
+                    status: 'failed',
+                    msg: 'Không có facultyId để xóa'
                 };
 
             const faculty = await Faculty.findByIdAndDelete(facultyId);
@@ -89,14 +100,14 @@ class FacultyService {
             if (!faculty)
                 return {
                     code: 400,
-                    status: "failed",
-                    msg: "Xóa thất bại",
+                    status: 'failed',
+                    msg: 'Xóa thất bại'
                 };
 
             return {
                 code: 200,
-                status: "success",
-                data: faculty,
+                status: 'success',
+                data: faculty
             };
         } catch (error) {
             throw error;
@@ -105,13 +116,9 @@ class FacultyService {
 
     static getAllFaculties = async () => {
         try {
-            const faculties = await Faculty.find({ isActive: true })
-                .populate("majors")
-                .lean();
+            const faculties = await Faculty.find({ isActive: true }).populate('majors').lean();
 
-            const availableFaculties = faculties.filter(
-                (faculty) => faculty.isActive === true
-            );
+            const availableFaculties = faculties.filter((faculty) => faculty.isActive === true);
 
             return availableFaculties;
         } catch (error) {
@@ -122,15 +129,11 @@ class FacultyService {
     static getAllMajorsOfFaculty = async (facultyId) => {
         console.log(facultyId);
         try {
-            const faculties = await Faculty.findById(facultyId).populate(
-                "majors"
-            );
+            const faculties = await Faculty.findById(facultyId).populate('majors');
 
             console.log(faculties);
 
-            const majors = faculties.majors.filter(
-                (major) => major.isActive === true
-            );
+            const majors = faculties.majors.filter((major) => major.isActive === true);
 
             return majors;
         } catch (error) {

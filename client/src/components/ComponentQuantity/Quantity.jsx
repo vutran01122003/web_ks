@@ -9,32 +9,33 @@ const Quantity = () => {
     const LIST_QUANTITY_OVERVIEW = [
         {
             id: 0,
-            text_heading: 'Số lượng đơn chờ duyệt',
-            quantity: 99,
+            text_heading: 'Số lượng hoạt động chờ duyệt',
+            quantity: 9,
             icon_after: <LuListRestart />,
             color_border: '#f0635c',
             link: '/listGoals'
         },
         {
             id: 1,
-            text_heading: 'Số lượng kĩ sư tài năng',
-            quantity: 99,
+            text_heading: 'Số lượng hoạt động bị từ chối',
+            quantity: 1,
             icon_after: <MdPeopleAlt />,
             color_border: '#3E97FF',
             link: '#'
         },
         {
             id: 2,
-            text_heading: 'Tổng toàn bộ chỉ tiêu',
-            quantity: 99,
+            text_heading: 'Số lượng hoạt động phải nộp lại',
+            quantity: 2,
             icon_after: <RiNumbersFill />,
             color_border: '#6E6E6E',
             link: '#'
         },
         {
             id: 3,
-            text_heading: 'Tổng tin tức công khai',
-            quantity: 99,
+            text_heading: 'Tổng điểm đã đạt',
+            isTotalScore: true,
+            quantity: 10,
             icon_after: <ImNewspaper />,
             color_border: '#6E6E6E',
             link: '#'
@@ -44,11 +45,13 @@ const Quantity = () => {
     const returnListQuantity = LIST_QUANTITY_OVERVIEW.map((QUANTITY_OVERVIEW) => {
         return (
             <Link to={QUANTITY_OVERVIEW.link} key={QUANTITY_OVERVIEW.id} className='item__quantity'>
+                <div className='icon_size'>{QUANTITY_OVERVIEW.icon_after}</div>
                 <div className='quantily__number'>
                     <div className='text__heading'>{QUANTITY_OVERVIEW.text_heading}</div>
-                    <div className='number__quntity'>{QUANTITY_OVERVIEW.quantity}</div>
+                    <div className='number__quantity'>{`${
+                        QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'
+                    }: ${QUANTITY_OVERVIEW.quantity}`}</div>
                 </div>
-                <div className='icon_size'>{QUANTITY_OVERVIEW.icon_after}</div>
             </Link>
         );
     });

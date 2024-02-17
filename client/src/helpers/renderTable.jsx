@@ -195,6 +195,14 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                       buttonNameLabel: true,
                       rowsType,
                       rowInfoData: {
+                          tableInfo: {
+                              tableId: dynamicTable._id,
+                              tableName: dynamicTable.tableName
+                          },
+                          pageInfo: {
+                              pageId: dynamicRowsInfo.page[0]._id,
+                              pageName: dynamicRowsInfo.page[0].pageName
+                          },
                           rowListId: dynamicRowsInfo?._id,
                           contentIdList: [rowValueItem?._id]
                       },
