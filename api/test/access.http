@@ -1,0 +1,29 @@
+@url=http://localhost:4000
+
+### Register
+POST {{url}}/api/register 
+Content-Type: application/json
+
+{
+    "studentId": "21013481",
+    "fullName": "Trần Đức Vũ",
+    "birthday": "19-05-2003",
+    "cohort": 17,
+    "faculty": "Công nghệ thông tin",
+    "major": "Kỹ thuật phần mềm",
+    "password": "1111",
+    "email": "tranducvu234@gmail.com",
+    "phone": "0943608225"
+}
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "studentId": "21013481",
+    "password": "1111"
+}
+
+### Get access token
+GET {{url}}/api/access_token

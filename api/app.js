@@ -29,7 +29,7 @@ const corsOptions = {
 };
 
 // MiddleWare
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
 app.use(morgan(morganType));

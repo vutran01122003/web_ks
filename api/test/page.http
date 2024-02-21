@@ -1,0 +1,143 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "studentId": "21013481",
+    "password": "1111"
+}
+
+### Create Page and mutiple tables
+POST {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageName": "Hoạt động Nghien Cuu", 
+    "pageType": "chỉ tiêu",
+    "tables": [
+        {
+            "tableName": "Nghiên cứu tuyen sinh",
+            "description": "Description 1",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        },
+        {
+            "tableName": "Hoạt động sinh tuyen",
+            "description": "Description 3",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        },
+        {
+            "tableName": "Hoạt động tuyen tuyen",
+            "description": "Description 3",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        },
+        {
+            "tableName": "Hoạt động sinh sinh 2",
+            "description": "Description 3",
+            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
+            "rowValueList": []
+        }
+    ] 
+}
+
+### Create Page and mutiple tables
+POST {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageName": "Tin Tức Khoa Học", 
+    "pageType": "tin tức"
+}
+
+### Create News Page 
+POST {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageName": "Hoạt động Nghien Cuu"
+}
+
+### Remove page
+DELETE {{url}}/api/page
+Content-Type: application/json
+
+{
+    "pageId": "654903da5fc9d102a4430fb7"
+}
+### Get all table
+GET {{url}}/api/page
+
+### Add table
+POST {{url}}/api/table
+Content-Type: application/json
+
+{
+    "pageId": "6548965e36bbd99ed5fffffd",
+    "tables": [
+        {
+            "tableName": "Hoc Tap V2",
+            "description": "La Mo Ta Bang Hoc Tap V2",
+            "rowTitleList": ["Ten Mon", "So Tin Chi", "Xep Loai", "Thuc Hanh", "Tinh Trang"],
+            "rowValueList": []
+        }
+    ] 
+}
+
+### Remove table
+DELETE {{url}}/api/table
+Content-Type: application/json
+
+{
+    "pageId": "6548965e36bbd99ed5fffffd",
+    "tableId": "6548b5ef623b01bd37769cb2"
+}
+
+### Update table
+PATCH {{url}}/api/table
+Content-Type: application/json
+
+{
+    "pageId": "6549076834040537486db1c5",
+    "tableData": {
+        "tableName": "Hoc Tap Nghien Cuu",
+        "rowTitleList": [
+            "Ten Mon",
+            "So Tin Chi",
+            "Xep Loai",
+            "Thuc Hanh",
+            "Tinh Trang"
+        ]
+    },
+    "tableId": "6549076834040537486db1c6"
+}
+### Add row
+POST {{url}}/api/row
+Content-Type: application/json
+
+{   
+    "page": "65570d108e800ae7c5adeace",
+    "user": "65570c9b8e800ae7c5adeac7",
+    "table": "65570d108e800ae7c5adeacf"
+}
+### Get pedding row
+GET {{url}}/api/pending_rows?limit=3&page=2
+
+### Update status row
+PATCH {{url}}/api/dynamic_rows/update
+Content-Type: application/json
+
+{
+    "status": true,
+    "contentIdList": ["654bb94335ed023d2c710209", "654bb94f35ed023d2c710218", "654bba2e35ed023d2c710249"],
+    "rowListId": "654bb94335ed023d2c710208"
+}
+
+###
+GET {{url}}/api/row
+Content-Type: application/json
+
+

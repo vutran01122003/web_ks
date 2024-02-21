@@ -1,0 +1,111 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "studentId": "21013481",
+    "password": "1111"
+}
+
+### Create faculty
+POST {{url}}/api/faculty
+Content-Type: application/json
+
+{
+    "facultyName": "Ke toan 2"
+}
+
+### Get faculties
+GET {{url}}/api/faculty
+
+### Update faculty by id
+PATCH {{url}}/api/faculty
+Content-Type: application/json
+
+{
+   "facultyId": "65d4b6c7145a0ed78a37d7d7",
+   "data": {
+        "facultyName": "2222a"
+   }
+}
+
+### Delete faculty by id
+DELETE {{url}}/api/faculty
+Content-Type: application/json
+
+{
+    "facultyId": "65d4b6c7145a0ed78a37d7d7"
+}
+
+### Create major
+POST {{url}}/api/faculty/major
+Content-Type: application/json
+
+{
+    "majorName": "Quản lý khách sạn 2",
+    "facultyId": "65d4b757145a0ed78a37d800"
+}
+
+### Get major by id
+GET {{url}}/api/faculty/major/65d45973394cbd205db3343f?facultyId=65d4595a394cbd205db3343c
+
+### Update major
+PATCH {{url}}/api/faculty/major
+Content-Type: application/json
+
+{
+    "majorId": "65d45973394cbd205db3343f",
+    "facultyId": "65d4595a394cbd205db3343c",
+    "data": {
+        "isActive": false
+    }
+}
+
+### Delete major
+DELETE {{url}}/api/faculty/major
+Content-Type: application/json
+
+{
+    "majorId": "65d388892f3ab7e70db35eb3",
+    "facultyId": "65d4b757145a0ed78a37d800"
+}
+
+
+### Create cohort
+POST {{url}}/api/faculty/major/cohort
+Content-Type: application/json
+
+{
+    "majorId": "65d4b760145a0ed78a37d803",
+    "facultyId": "65d4b757145a0ed78a37d800",
+    "cohortName": 16
+}
+
+### Get all cohort by id
+GET {{url}}/api/faculty/major/cohort/65d3242093997a45edad46ff?majorId=65d2c49410af83ae6105cbc0&facultyId=65d2c47910af83ae6105cbbc
+
+### Delete cohort
+DELETE {{url}}/api/faculty/major/cohort
+Content-Type: application/json
+
+{
+    "majorId": "65d2c49410af83ae6105cbc0",
+    "facultyId": "65d2c47910af83ae6105cbbc",
+    "cohortId": "65d35a42e895cf7a820ac4af"
+}
+
+
+### Update cohort
+PATCH {{url}}/api/faculty/major/cohort
+Content-Type: application/json
+
+{
+    "majorId": "65d478a91c49beaab1ec0e7c",
+    "facultyId": "65d4788f1c49beaab1ec0e79",
+    "cohortId": "65d47908a62393cbf105f4fe",
+    "data": {
+        "currentLevelYear": 2
+    }
+}

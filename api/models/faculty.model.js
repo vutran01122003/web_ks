@@ -9,7 +9,6 @@ const FacultySchema = new Schema(
         facultyName: {
             type: String,
             lowercase: true,
-            required: true,
             unique: true
         },
         isActive: {
@@ -20,31 +19,33 @@ const FacultySchema = new Schema(
             {
                 majorName: {
                     type: String,
-                    lowercase: true,
-                    unique: true
+                    lowercase: true
                 },
                 isActive: {
                     type: Boolean,
                     default: true
                 },
-                cohort: [
-                    {
-                        cohortName: {
-                            type: Number,
-                            required: true
+                cohortList: [
+                    new mongoose.Schema(
+                        {
+                            cohortName: {
+                                type: Number,
+                                unique: true
+                            },
+                            currentLevelYear: {
+                                type: Number,
+                                default: 1
+                            }
                         },
-                        currentLevelYear: {
-                            type: Number,
-                            default: 1
+                        {
+                            timestamps: true
                         }
-                    }
+                    )
                 ]
             }
         ]
     },
-    {
-        collection: COL
-    }
+    { timestamps: true, collection: COL }
 );
 
 const Faculty = conn.model(DOC, FacultySchema);

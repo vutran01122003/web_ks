@@ -9,8 +9,14 @@ router
     .patch(auth, facultyController.updateFaculty)
     .delete(auth, facultyController.deleteFaculty);
 
-router.get('/faculty/:id', auth, facultyController.getAllMajorsOfFaculty);
-
 router.post('/faculty/major', auth, facultyController.createMajor);
+router.get('/faculty/major/:majorId', auth, facultyController.getMajorById);
+router.patch('/faculty/major', auth, facultyController.updateMajor);
+router.delete('/faculty/major', auth, facultyController.deleteMajor);
+
+router.post('/faculty/major/cohort', auth, facultyController.createCohort);
+router.get('/faculty/major/cohort/:cohortId', auth, facultyController.getCohortById);
+router.delete('/faculty/major/cohort', auth, facultyController.deleteCohortById);
+router.patch('/faculty/major/cohort', auth, facultyController.updateCohortById);
 
 module.exports = router;
