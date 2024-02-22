@@ -5,7 +5,7 @@ export const createUpdatedActivityNotification =
     ({ title, content, senderId, recipientId, pageId }) =>
     async (dispatch) => {
         try {
-            await postDataApi('/notification', {
+            await postDataApi('/notifications', {
                 title,
                 content,
                 senderId,
@@ -29,11 +29,11 @@ export const getNumUnreadNotification =
     ({ userId }) =>
     async (dispatch) => {
         try {
-            const res = await getDataApi(`/notification/num_unread_notification/${userId}`);
+            const res = await getDataApi(`/notifications/${userId}/unread-notifications`);
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.GET_NUM_UNREAD_NOTIFICATION,
                 payload: {
-                    numUnreadNotification: res.data.data.numUnreadNotification
+                    numUnreadNotifications: res.data.data.numUnreadNotifications
                 }
             });
         } catch (error) {
@@ -50,7 +50,7 @@ export const getNumUnreadNotification =
     };
 
 export const getNotifications =
-    ({ userId, page, limit, currentNumNotifications }) =>
+    ({ recipientId, page, limit, currentNumNotifications }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -61,14 +61,14 @@ export const getNotifications =
             });
 
             const res = await getDataApi(
-                `/notification/${userId}?page=${page}&limit=${limit}&currentNumNotifications=${currentNumNotifications}`
+                `/notifications/${recipientId}?page=${page}&limit=${limit}&currentNumNotifications=${currentNumNotifications}`
             );
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS,
                 payload: {
                     data: res.data.data,
-                    recipientId: userId,
+                    recipientId: recipientId,
                     page
                 }
             });
@@ -96,8 +96,7 @@ export const updateReadStatus =
     ({ notificationId, status, recipientId }) =>
     async (dispatch) => {
         try {
-            await patchDataApi('/notification/read_status', {
-                notificationId,
+            await patchDataApi(`/notifications/${notificationId}/updated-status`, {
                 status,
                 recipientId
             });
@@ -127,8 +126,7 @@ export const deleteNotification =
     ({ notificationId, recipientId }) =>
     async (dispatch) => {
         try {
-            await deleteDataApi('/notification', {
-                notificationId,
+            await deleteDataApi(`/notifications/${notificationId}`, {
                 recipientId
             });
 
@@ -155,13 +153,11 @@ export const markAllAsRead =
     ({ recipientId }) =>
     async (dispatch) => {
         try {
-            await patchDataApi('/notification/read_status_all', {
+            await patchDataApi('/notifications/updated-status', {
                 recipientId
             });
 
-            const res = await getDataApi(
-                `/notification/${recipientId}?page=1&limit=5&currentNumNotifications=0`
-            );
+            const res = await getDataApi(`/notifications/${recipientId}?page=1&limit=5&currentNumNotifications=0`);
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS,
@@ -192,7 +188,7 @@ export const deleteAllNotification =
     ({ recipientId }) =>
     async (dispatch) => {
         try {
-            await deleteDataApi('/notification/all', {
+            await deleteDataApi('/notifications', {
                 recipientId
             });
 

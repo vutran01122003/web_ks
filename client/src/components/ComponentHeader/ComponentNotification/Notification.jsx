@@ -32,7 +32,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                 if (entries[0].isIntersecting && !notification.maxPage) {
                     dispatch(
                         getNotifications({
-                            userId: auth?.user._id,
+                            recipientId: auth?.user._id,
                             page: notification.page + 1,
                             limit: 5,
                             currentNumNotifications: notification.currentNumNotifications
@@ -42,12 +42,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
             });
             if (elem) observer.current.observe(elem);
         },
-        [
-            notification.isLoading,
-            notification.page,
-            notification.maxPage,
-            notification.currentNumNotifications
-        ]
+        [notification.isLoading, notification.page, notification.maxPage, notification.currentNumNotifications]
     );
 
     const setCurrentElemRef = (e) => {
@@ -75,14 +70,12 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
     };
 
     const handleMarkAllAsRead = () => {
-        if (notification.unreadNotificationNum !== 0)
-            dispatch(markAllAsRead({ recipientId: auth?.user._id }));
+        if (notification.unreadNotificationNum !== 0) dispatch(markAllAsRead({ recipientId: auth?.user._id }));
         handleToggleVisibleMoreModal();
     };
 
     const handleDeleteAllNotification = () => {
-        if (notification.data.length !== 0)
-            dispatch(deleteAllNotification({ recipientId: auth?.user._id }));
+        if (notification.data.length !== 0) dispatch(deleteAllNotification({ recipientId: auth?.user._id }));
         handleToggleVisibleMoreModal();
     };
 
@@ -119,7 +112,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
         if (notification.data.length === 0 && !notification.maxPage)
             dispatch(
                 getNotifications({
-                    userId: auth?.user._id,
+                    recipientId: auth?.user._id,
                     limit: 5,
                     page: 1,
                     currentNumNotifications: 0
@@ -141,10 +134,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                                 <FaCheck />
                                 <span> Đánh dấu đã đọc tất cả</span>
                             </div>
-                            <div
-                                className='more_modal_item del_btn'
-                                onClick={handleDeleteAllNotification}
-                            >
+                            <div className='more_modal_item del_btn' onClick={handleDeleteAllNotification}>
                                 <AiFillDelete />
                                 <span>Xóa tất cả thông báo</span>
                             </div>
@@ -164,9 +154,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                             if (notificationItem.recipient) {
                                 isRead = notificationItem.isRead ? true : false;
                             } else {
-                                isRead = notificationItem.readedUserList.includes(auth?.user._id)
-                                    ? true
-                                    : false;
+                                isRead = notificationItem.readedUserList.includes(auth?.user._id) ? true : false;
                             }
 
                             return (
@@ -183,9 +171,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                                 >
                                     <Link
                                         to={`${
-                                            notificationItem?.page
-                                                ? 'page/' + notificationItem.page.pageName
-                                                : null
+                                            notificationItem?.page ? 'page/' + notificationItem.page.pageName : null
                                         }`}
                                         className='notification_item_content_wrapper'
                                         onClick={() => {
@@ -198,15 +184,10 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                                         }}
                                     >
                                         <div className='notification_item_img_wrapper'>
-                                            <img
-                                                src={notificationItem.sender.avatar}
-                                                alt='avatar'
-                                            />
+                                            <img src={notificationItem.sender?.avatar} alt='avatar' />
                                         </div>
                                         <div className='notification_item_content'>
-                                            <div className='notification_item_title'>
-                                                {notificationItem.title}
-                                            </div>
+                                            <div className='notification_item_title'>{notificationItem.title}</div>
                                             <div className='notification_item_note'>
                                                 {`Ghi chú: ${
                                                     notificationItem.content
@@ -231,9 +212,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                                             className='notification_item_more'
                                             onClick={(e) => {
                                                 setCurrentElemRef(e);
-                                                handleSetCurrentNotificationId(
-                                                    notificationItem._id
-                                                );
+                                                handleSetCurrentNotificationId(notificationItem._id);
                                             }}
                                         >
                                             <IoMdMore />
@@ -244,23 +223,17 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                                                             <FaCheck />
                                                             <span
                                                                 onClick={() => {
-                                                                    updateReadStatusNotificationItem(
-                                                                        {
-                                                                            notificationId:
-                                                                                notificationItem._id,
-                                                                            status: notificationItem.recipient
-                                                                                ? !notificationItem.isRead
-                                                                                : !notificationItem.readedUserList.includes(
-                                                                                      auth?.user
-                                                                                          ?._id
-                                                                                  )
-                                                                        }
-                                                                    );
+                                                                    updateReadStatusNotificationItem({
+                                                                        notificationId: notificationItem._id,
+                                                                        status: notificationItem.recipient
+                                                                            ? !notificationItem.isRead
+                                                                            : !notificationItem.readedUserList.includes(
+                                                                                  auth?.user?._id
+                                                                              )
+                                                                    });
                                                                 }}
                                                             >
-                                                                {isRead
-                                                                    ? 'Đánh dấu chưa đọc'
-                                                                    : 'Đánh dấu đã đọc'}
+                                                                {isRead ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'}
                                                             </span>
                                                         </div>
                                                         <div className='more_modal_item del_btn'>
@@ -269,8 +242,7 @@ function notification({ notification, auth, handleToggleVisibleNotificationModal
                                                             <span
                                                                 onClick={() => {
                                                                     deleteNotificationItem({
-                                                                        notificationId:
-                                                                            notificationItem._id
+                                                                        notificationId: notificationItem._id
                                                                     });
                                                                 }}
                                                             >

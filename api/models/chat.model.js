@@ -1,4 +1,4 @@
-const chatbotConn = require('../dbs/init.atlas');
+const { chatbotConn } = require('../dbs/init.atlas');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 

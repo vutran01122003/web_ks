@@ -1,13 +1,9 @@
 const PageService = require('../services/page.service');
 const pageService = require('../services/page.service');
-const createError = require('http-errors');
 
 class PageControllers {
     createPage = async (req, res, next) => {
         try {
-            if (!res.locals.roles.includes('0004'))
-                throw createError.Forbidden('Không đủ quyền tạo trang');
-
             const createdPage = await pageService.createPage(req.body);
 
             res.status(201).json({
@@ -34,7 +30,7 @@ class PageControllers {
 
     getPage = async (req, res, next) => {
         const page = await pageService.getPage({
-            pageName: req.params?.page,
+            pageName: req.params?.name,
             userId: res.locals.userId
         });
 

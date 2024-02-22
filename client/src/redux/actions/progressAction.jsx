@@ -88,7 +88,7 @@ export const stopSubmittingProof =
                 }
             });
 
-            const res = await postDataApi('/progress/updatedUsers', {
+            await postDataApi('/progress/updated-users', {
                 progressPercentage,
                 score,
                 major,
@@ -109,8 +109,7 @@ export const stopSubmittingProof =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response.data?.msg ||
-                              'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
+                            : error?.response.data?.msg || 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
                 }
             });
         }

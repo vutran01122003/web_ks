@@ -1,14 +1,27 @@
 const mongoose = require('mongoose');
-const { ATLAS_URI } = process.env;
 
-const conn = mongoose.createConnection(ATLAS_URI);
+const chatbotConn = mongoose.createConnection(process.env.ATLAS_URI);
+const permissionConn = mongoose.createConnection(
+    'mongodb+srv://te_permission:DK3Qbbs05nJDMs4z@permission.xclliqj.mongodb.net/permission?retryWrites=true&w=majority'
+);
 
-mongoose.connection.on('connected', function () {
-    console.log('Mongodb:::connected:::', this.name);
+chatbotConn.on('connected', function () {
+    console.log('Connect to a MongoDB successful:::', this.name);
 });
 
-mongoose.connection.on('error', function (e) {
-    console.log('Mongodb:::error:::', JSON.stringify(e));
+chatbotConn.on('error', function (e) {
+    console.log('Connect to a MongoDB successful:::', JSON.stringify(e));
 });
 
-module.exports = conn;
+permissionConn.on('connected', function () {
+    console.log('Connect to a MongoDB successful:::', this.name);
+});
+
+permissionConn.on('error', function (e) {
+    console.log('Connect to a MongoDB successful:::', JSON.stringify(e));
+});
+
+module.exports = {
+    chatbotConn,
+    permissionConn
+};

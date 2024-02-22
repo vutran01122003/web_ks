@@ -8,6 +8,6 @@ router.get('/progress', auth, progressControllers.getProgressByYear);
 
 router.get('/progress/all', auth, progressControllers.getAllProgress);
 
-router.post('/progress/updatedUsers', auth, userControllers.updateActiveUsers);
+router.post('/progress/updated-users', auth, userControllers.updateUserActivityStatusByMajor);
 
 module.exports = router;

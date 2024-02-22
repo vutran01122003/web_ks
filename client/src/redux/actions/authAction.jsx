@@ -103,11 +103,8 @@ export const logout = () => async (dispatch) => {
 
 export const verifyAccessToken = () => async (dispatch) => {
     try {
-        if (
-            document.cookie.split(';').some((cookie) => cookie.includes('accessToken')) ||
-            getLogged()
-        ) {
-            const res = await getDataApi('/access_token');
+        if (document.cookie.split(';').some((cookie) => cookie.includes('accessToken')) || getLogged()) {
+            const res = await getDataApi('/access-token');
 
             dispatch({
                 type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,

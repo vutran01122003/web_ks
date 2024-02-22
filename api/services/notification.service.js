@@ -1,5 +1,6 @@
+const createError = require('http-errors');
 const Notification = require('../models/notification.model');
-const Pagination = require('../utils/handlePagination');
+const Pagination = require('../utils/Pagination');
 const client = require('../dbs/init.redis');
 
 class NotificationService {
@@ -60,17 +61,14 @@ class NotificationService {
         }
     }
 
-    static async getNotifications({ userId, queryString }) {
+    static async getNotifications({ recipientId, queryString }) {
         try {
             const pagination = new Pagination(
                 Notification.find({
                     $or: [
-                        { recipient: userId },
+                        { recipient: recipientId },
                         {
-                            $and: [
-                                { recipient: { $exists: false } },
-                                { banedUserList: { $nin: [userId] } }
-                            ]
+                            $and: [{ recipient: { $exists: false } }, { banedUserList: { $nin: [recipientId] } }]
                         }
                     ]
                 })
@@ -102,8 +100,10 @@ class NotificationService {
     static async updateReadStatus({ notificationId, status, recipientId }) {
         try {
             const notification = await Notification.findById(notificationId);
+            if (!notification) throw createError.NotFound('Thông báo không tồn tại');
+
             let updatedNotification = null;
-            if (notification.recipient) {
+            if (notification?.recipient) {
                 updatedNotification = await Notification.findOneAndUpdate(
                     {
                         _id: notificationId
@@ -114,8 +114,10 @@ class NotificationService {
                     { new: true }
                 );
             } else {
-                if (status) notification.readedUserList.push(recipientId);
-                else notification.readedUserList.pull(recipientId);
+                if (status) {
+                    if (notification.readedUserList.includes(recipientId)) return;
+                    notification.readedUserList.push(recipientId);
+                } else notification.readedUserList.pull(recipientId);
                 updatedNotification = await notification.save();
             }
 
@@ -164,6 +166,7 @@ class NotificationService {
                     _id: notificationId
                 });
             } else {
+                if (notification.banedUserList.includes(recipientId)) return;
                 notification.banedUserList.push(recipientId);
                 await notification.save();
             }
@@ -193,9 +196,10 @@ class NotificationService {
         }
     }
 
-    static async getNumUnreadNotification({ recipientId }) {
+    static async getNumUnreadNotifications({ recipientId }) {
         try {
-            const numUnreadNotification = await Notification.find({
+            console.log(recipientId);
+            const numUnreadNotifications = await Notification.find({
                 $or: [
                     { recipient: recipientId, isRead: false },
                     {
@@ -206,7 +210,7 @@ class NotificationService {
                 ]
             }).count();
 
-            return numUnreadNotification;
+            return numUnreadNotifications;
         } catch (error) {
             throw error;
         }

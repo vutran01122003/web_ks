@@ -10,51 +10,49 @@ Content-Type: application/json
 }
 
 
-### Create updated activity notification v1
-POST {{url}}/api/notification
+### Create notification v1
+POST {{url}}/api/notifications
 Content-Type: application/json
 
 {
     "title": "Thông báo về cuộc thi lập trình 2024 và chi tiết giải thưởng",
     "content": "",
-    "senderId": "65a64bab4d293481a51f9c63"
+    "senderId": "65d4b6bd145a0ed78a37d7d3"
 }
 
-### Create updated activity notification v2
-POST {{url}}/api/notification
+### Create notification v2
+POST {{url}}/api/notifications
 Content-Type: application/json
 
 {
     "title": "Thông báo về cuộc thi lập trình 2024 do nhà trường tổ chức",
-    "recipientId": "65a64bab4d293481a51f9c63",
+    "recipientId": "65d4b6bd145a0ed78a37d7d3",
     "content": "",
-    "senderId": "65a64bab4d293481a51f9c63"
+    "senderId": "65d4b6bd145a0ed78a37d7d3"
 }
 
-### Get updated activity notifications
-GET {{url}}/api/notification/updated_activity/65a64bab4d293481a51f9c63
+### Get notifications
+GET {{url}}/api/notifications/65d4b6bd145a0ed78a37d7d3?page=2&limit=5&currentNumNotifications=5
 
 ### Update the reading status of the notification
-PATCH {{url}}/api/notification/read_status
+PATCH {{url}}/api/notifications/65d704e9bff7d8ecdaf45ff2/updated-status
 Content-Type: application/json
 
 {
-    "notificationId": "65bfd1263db3c47b27ddfc5f",
-    "status": false,
+    "status": true,
     "recipientId": "65a64bab4d293481a51f9c63"
 }
 
 ### Delete notification
-DELETE {{url}}/api/notification/delete
+DELETE {{url}}/api/notifications/65d704e9bff7d8ecdaf45ff2
 Content-Type: application/json
 
 {
-    "notificationId": "65c8c05b0a04abe6791c1179",
-     "recipientId": "65a64bab4d293481a51f9c63"
+    "recipientId": "65a64bab4d293481a51f9c63"
 }
 
 ### Mark read all notification
-PATCH {{url}}/api/notification/read_status_all
+PATCH {{url}}/api/notifications/updated-status
 Content-Type: application/json
 
 {
@@ -62,7 +60,7 @@ Content-Type: application/json
 }
 
 ### Delete all notification
-DELETE  {{url}}/api/notification/delete_all
+DELETE  {{url}}/api/notifications
 Content-Type: application/json
 
 {
@@ -70,4 +68,4 @@ Content-Type: application/json
 }
 
 ### Get the number of unread notifications
-GET {{url}}/api/notification/num_unread_notification/65a64bab4d293481a51f9c63
+GET {{url}}/api/notifications/65d4b6bd145a0ed78a37d7d3/unread-notifications

@@ -127,7 +127,7 @@ Content-Type: application/json
 GET {{url}}/api/pending_rows?limit=3&page=2
 
 ### Update status row
-PATCH {{url}}/api/dynamic_rows/update
+PATCH {{url}}/api/dynamic-rows/update
 Content-Type: application/json
 
 {

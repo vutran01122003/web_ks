@@ -7,7 +7,7 @@ router.post('/page', auth, pageControllers.createPage);
 
 router.get('/page', auth, pageControllers.getAllPage);
 
-router.get('/page/:page', auth, pageControllers.getPage);
+router.get('/page/:name', auth, pageControllers.getPage);
 
 router.delete('/page', auth, pageControllers.removePage);
 

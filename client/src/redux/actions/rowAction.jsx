@@ -12,9 +12,10 @@ export const addRow =
                 }
             });
 
-            const res = JSON.parse(formData.get('rowData'))?.contentId
-                ? await postDataApi('/row/update', formData)
-                : await postDataApi('/row', formData);
+            const parsedFormData = JSON.parse(formData.get('rowData'));
+            const res = parsedFormData?.contentId
+                ? await patchDataApi(`/rows/${parsedFormData.rowListId}`, formData)
+                : await postDataApi('/rows', formData);
 
             const newPage = await getDataApi(JSON.parse(formData.get('rowData')).path);
 
@@ -55,7 +56,7 @@ export const getDynamicRows =
                 }
             });
 
-            const res = await getDataApi('/dynamic_rows', {
+            const res = await getDataApi('/dynamic-rows', {
                 page: page || 1,
                 limit: limit || 3,
                 current_rows: currentRows,
@@ -100,16 +101,7 @@ export const getDynamicRows =
     };
 
 export const updateRowsStatus =
-    ({
-        pageInfo,
-        noteValue,
-        rowsType,
-        rowListId,
-        contentIdList,
-        status,
-        deadline,
-        isTimedExtension
-    }) =>
+    ({ pageInfo, noteValue, rowsType, rowListId, contentIdList, status, deadline, isTimedExtension }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -119,9 +111,8 @@ export const updateRowsStatus =
                 }
             });
 
-            const res = await patchDataApi('/dynamic_rows/update', {
+            const res = await patchDataApi(`/dynamic-rows/${rowListId}`, {
                 pageInfo,
-                rowListId,
                 contentIdList,
                 status,
                 noteValue,

@@ -19,7 +19,7 @@ function notificationReducer(state = initialState, action) {
         case GLOBALTYPES.NOTIFICATION.GET_NUM_UNREAD_NOTIFICATION:
             return {
                 ...state,
-                unreadNotificationNum: action.payload.numUnreadNotification
+                unreadNotificationNum: action.payload.numUnreadNotifications
             };
         case GLOBALTYPES.NOTIFICATION.ADD_NOTIFICATION:
             return {
@@ -31,10 +31,7 @@ function notificationReducer(state = initialState, action) {
         case GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS:
             return {
                 ...state,
-                data:
-                    action.payload.page === 1
-                        ? [...action.payload.data]
-                        : [...state.data, ...action.payload.data],
+                data: action.payload.page === 1 ? [...action.payload.data] : [...state.data, ...action.payload.data],
                 page: action.payload.page,
                 maxPage: action.payload.data.length === 0 ? true : false,
                 currentNumNotifications:
@@ -55,10 +52,7 @@ function notificationReducer(state = initialState, action) {
                         const readedUserList = notificationList[i].readedUserList;
                         status
                             ? readedUserList.push(action.payload.recipientId)
-                            : readedUserList.splice(
-                                  readedUserList.indexOf(action.payload.recipientId),
-                                  1
-                              );
+                            : readedUserList.splice(readedUserList.indexOf(action.payload.recipientId), 1);
                     }
                     break;
                 }
@@ -67,9 +61,7 @@ function notificationReducer(state = initialState, action) {
             return {
                 ...state,
                 data: notificationList,
-                unreadNotificationNum: status
-                    ? unreadNotificationNum - 1
-                    : unreadNotificationNum + 1
+                unreadNotificationNum: status ? unreadNotificationNum - 1 : unreadNotificationNum + 1
             };
 
         case GLOBALTYPES.NOTIFICATION.DELETE_NOTIFICATION:

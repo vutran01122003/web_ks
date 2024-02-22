@@ -9,9 +9,6 @@ class RowControllers {
     addRow = async (req, res, next) => {
         try {
             const rowData = JSON.parse(req.body.rowData);
-            if (!res.locals.roles.includes('0002'))
-                throw createError.Forbidden('Chỉ có kỹ sư tài năng mới thêm được chỉ tiêu');
-
             const { rowList, rowItemId } = await RowService.addRow({
                 data: rowData
             });
@@ -66,9 +63,6 @@ class RowControllers {
 
     getDynamicRows = async (req, res, next) => {
         try {
-            if (!res.locals.roles.includes('0004'))
-                throw createError.Forbidden('Không đủ quyền lấy dữ liệu chỉ tiêu chờ duyệt');
-
             const { page, limit, current_rows, rows_type } = req.query;
 
             const userFilterConditions = {
@@ -84,17 +78,18 @@ class RowControllers {
                 if (!userFilterConditions[key]) delete userFilterConditions[key];
             });
 
-            const peddingRow = await RowService.getDynamicRows({
+            const dynamicRows = await RowService.getDynamicRows({
                 page,
                 limit,
                 userFilterConditions,
                 currentRows: current_rows,
                 rowsType: rows_type
             });
+
             res.status(200).json({
-                code: peddingRow.code,
-                msg: peddingRow.msg,
-                data: peddingRow.data
+                code: dynamicRows.code,
+                msg: dynamicRows.msg,
+                data: dynamicRows.data
             });
         } catch (error) {
             next(error);
@@ -103,22 +98,12 @@ class RowControllers {
 
     updateRowStatus = async (req, res, next) => {
         try {
-            if (!res.locals.roles.includes('0004'))
-                throw createError.Forbidden('Không đủ quyền cập nhật trạng thái chỉ tiêu');
-            const {
-                rowListId,
-                contentIdList,
-                status,
-                noteValue,
-                pageInfo,
-                deadline,
-                isTimedExtension
-            } = req.body;
+            const rowListId = req.params.rowId;
+            const { contentIdList, status, noteValue, pageInfo, deadline, isTimedExtension } = req.body;
 
             const deadlineDatetime = toISOString(deadline);
 
-            if (isTimedExtension && !deadline)
-                throw createError.BadRequest('Chưa nhập thời gian hạn gia');
+            if (isTimedExtension && !deadline) throw createError.BadRequest('Chưa nhập thời gian hạn gia');
 
             if (deadline && getLocalDatetime().getTime() > deadlineDatetime.getTime())
                 throw createError.BadRequest('Hạn nộp phải lớn hơn ngày giờ hiện tại');

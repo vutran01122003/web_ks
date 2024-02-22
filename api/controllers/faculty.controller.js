@@ -19,7 +19,9 @@ class FacultyController {
 
     updateFaculty = async (req, res, next) => {
         try {
-            const { facultyId, data } = req.body;
+            const facultyId = req.params.facultyId;
+            const data = req.body.data;
+
             const updatedFaculty = await FacultyService.updateFaculty({ facultyId, data });
 
             res.status(200).json({
@@ -34,7 +36,9 @@ class FacultyController {
 
     deleteFaculty = async (req, res, next) => {
         try {
-            const deletedFaculty = await FacultyService.deleteFaculty(req.body);
+            const facultyId = req.params.facultyId;
+
+            const deletedFaculty = await FacultyService.deleteFaculty({ facultyId });
 
             return res.status(200).json({
                 code: deletedFaculty.code,
@@ -57,8 +61,8 @@ class FacultyController {
 
     createMajor = async (req, res, next) => {
         try {
-            const { majorName, facultyId } = req.body;
-
+            const facultyId = req.params.facultyId;
+            const { majorName } = req.body;
             const createdMajor = await FacultyService.createMajor({ majorName, facultyId });
 
             return res.status(201).json({
@@ -74,8 +78,8 @@ class FacultyController {
 
     getMajorById = async (req, res, next) => {
         try {
-            const majorId = req.params.majorId;
-            const { facultyId } = req.query;
+            const { majorId, facultyId } = req.params;
+            console.log(req.route.path);
 
             const major = await FacultyService.getMajorById({ majorId, facultyId });
 
@@ -85,14 +89,15 @@ class FacultyController {
                 data: major
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
 
     updateMajor = async (req, res, next) => {
         try {
-            const { majorId, facultyId, data } = req.body;
+            const { majorId, facultyId } = req.params;
+            const data = req.body;
+
             const updatedMajor = await FacultyService.updateMajor({ majorId, facultyId, data });
 
             res.status(200).json({
@@ -107,7 +112,7 @@ class FacultyController {
 
     deleteMajor = async (req, res, next) => {
         try {
-            const { majorId, facultyId } = req.body;
+            const { facultyId, majorId } = req.params;
             const deletedMajor = await FacultyService.deleteMajor({ majorId, facultyId });
 
             res.status(200).json({
@@ -123,7 +128,8 @@ class FacultyController {
 
     createCohort = async (req, res, next) => {
         try {
-            const { facultyId, majorId, cohortName } = req.body;
+            const { facultyId, majorId } = req.params;
+            const { cohortName } = req.body;
 
             const createdCohort = await FacultyService.createCohort({
                 facultyId,
@@ -144,8 +150,7 @@ class FacultyController {
 
     getCohortById = async (req, res, next) => {
         try {
-            const cohortId = req.params.cohortId;
-            const { facultyId, majorId } = req.query;
+            const { facultyId, majorId, cohortId } = req.params;
 
             const cohort = await FacultyService.getCohortById({ facultyId, majorId, cohortId });
 
@@ -161,7 +166,7 @@ class FacultyController {
 
     deleteCohortById = async (req, res, next) => {
         try {
-            const { majorId, facultyId, cohortId } = req.body;
+            const { facultyId, majorId, cohortId } = req.params;
 
             const deletedCohort = await FacultyService.deleteCohortById({
                 majorId,
@@ -181,7 +186,8 @@ class FacultyController {
 
     updateCohortById = async (req, res, next) => {
         try {
-            const { majorId, facultyId, cohortId, data } = req.body;
+            const { facultyId, majorId, cohortId } = req.params;
+            const data = req.body;
 
             const updatedCohort = await FacultyService.updateCohortById({
                 majorId,
@@ -196,7 +202,6 @@ class FacultyController {
                 data: updatedCohort
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

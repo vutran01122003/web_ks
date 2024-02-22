@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Create faculty
-POST {{url}}/api/faculty
+POST {{url}}/api/faculties
 Content-Type: application/json
 
 {
@@ -18,10 +18,10 @@ Content-Type: application/json
 }
 
 ### Get faculties
-GET {{url}}/api/faculty
+GET {{url}}/api/faculties
 
 ### Update faculty by id
-PATCH {{url}}/api/faculty
+PATCH {{url}}/api/faculties
 Content-Type: application/json
 
 {
@@ -32,80 +32,48 @@ Content-Type: application/json
 }
 
 ### Delete faculty by id
-DELETE {{url}}/api/faculty
-Content-Type: application/json
-
-{
-    "facultyId": "65d4b6c7145a0ed78a37d7d7"
-}
+DELETE {{url}}/api/faculties/65d6e123530e21efa2dafe6c
 
 ### Create major
-POST {{url}}/api/faculty/major
+POST {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors
 Content-Type: application/json
 
 {
-    "majorName": "Quản lý khách sạn 2",
-    "facultyId": "65d4b757145a0ed78a37d800"
+    "majorName": "Quản lý khách sạn 3"
 }
 
 ### Get major by id
-GET {{url}}/api/faculty/major/65d45973394cbd205db3343f?facultyId=65d4595a394cbd205db3343c
+GET {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
 
 ### Update major
-PATCH {{url}}/api/faculty/major
+PATCH {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
 Content-Type: application/json
 
 {
-    "majorId": "65d45973394cbd205db3343f",
-    "facultyId": "65d4595a394cbd205db3343c",
-    "data": {
-        "isActive": false
-    }
+    "isActive": false
 }
 
 ### Delete major
-DELETE {{url}}/api/faculty/major
-Content-Type: application/json
-
-{
-    "majorId": "65d388892f3ab7e70db35eb3",
-    "facultyId": "65d4b757145a0ed78a37d800"
-}
-
+DELETE {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
 
 ### Create cohort
-POST {{url}}/api/faculty/major/cohort
+POST {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts
 Content-Type: application/json
 
 {
-    "majorId": "65d4b760145a0ed78a37d803",
-    "facultyId": "65d4b757145a0ed78a37d800",
-    "cohortName": 16
+    "cohortName": 18
 }
 
 ### Get all cohort by id
-GET {{url}}/api/faculty/major/cohort/65d3242093997a45edad46ff?majorId=65d2c49410af83ae6105cbc0&facultyId=65d2c47910af83ae6105cbbc
+GET {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts/65d6f1ea525026bb0202a421
 
 ### Delete cohort
-DELETE {{url}}/api/faculty/major/cohort
-Content-Type: application/json
-
-{
-    "majorId": "65d2c49410af83ae6105cbc0",
-    "facultyId": "65d2c47910af83ae6105cbbc",
-    "cohortId": "65d35a42e895cf7a820ac4af"
-}
-
+DELETE {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts/65d6f1ea525026bb0202a421
 
 ### Update cohort
-PATCH {{url}}/api/faculty/major/cohort
+PATCH {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts/65d6f1d5525026bb0202a417
 Content-Type: application/json
 
 {
-    "majorId": "65d478a91c49beaab1ec0e7c",
-    "facultyId": "65d4788f1c49beaab1ec0e79",
-    "cohortId": "65d47908a62393cbf105f4fe",
-    "data": {
-        "currentLevelYear": 2
-    }
+    "currentLevelYear": 2
 }

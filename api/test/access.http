@@ -26,4 +26,4 @@ Content-Type: application/json
 }
 
 ### Get access token
-GET {{url}}/api/access_token
+GET {{url}}/api/access-token

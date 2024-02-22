@@ -1,7 +1,7 @@
 const User = require('../models/user.model');
 
 class UserService {
-    static updateActiveUsers = async ({ progressPercentage, score, major, cohort, levelYear }) => {
+    static updateUserActivityStatusByMajor = async ({ progressPercentage, score, major, cohort, levelYear }) => {
         try {
             const filterUser = {
                 major: major.toLowerCase(),
@@ -14,8 +14,7 @@ class UserService {
                 }
             };
 
-            if (!progressPercentage)
-                delete filterUser[`annualTaskProgress.${levelYear}.completedTaskPrecent`];
+            if (!progressPercentage) delete filterUser[`annualTaskProgress.${levelYear}.completedTaskPrecent`];
             if (!score) delete filterUser[`annualTaskProgress.${levelYear}.totalScore`];
 
             if (score || progressPercentage) {
@@ -72,13 +71,7 @@ class UserService {
         }
     };
 
-    static getAnnualTaskProgress = async ({
-        major,
-        cohort,
-        levelYear,
-        filterCompletedTaskProgress,
-        sortProgress
-    }) => {
+    static getAnnualTaskProgress = async ({ major, cohort, levelYear, filterCompletedTaskProgress, sortProgress }) => {
         try {
             const studentList = await User.aggregate([
                 {
@@ -104,8 +97,7 @@ class UserService {
                 },
                 {
                     $sort: {
-                        'completedTaskProgress.completedTaskPrecent':
-                            sortProgress === 'true' ? 1 : -1,
+                        'completedTaskProgress.completedTaskPrecent': sortProgress === 'true' ? 1 : -1,
                         'completedTaskProgress.totalScore': sortProgress === 'true' ? 1 : -1,
                         'completedTaskProgress.updatedAt:': 1
                     }

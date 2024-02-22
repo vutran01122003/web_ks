@@ -24,11 +24,11 @@ class NotificationControllers {
 
     async getNotifications(req, res, next) {
         try {
-            const userId = req.params.userId;
+            const recipientId = req.params.recipientId;
             const queryString = req.query;
 
             const notifications = await NotificationService.getNotifications({
-                userId,
+                recipientId,
                 queryString
             });
 
@@ -38,13 +38,15 @@ class NotificationControllers {
                 data: notifications
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }
 
     async updateReadStatus(req, res, next) {
         try {
-            const { notificationId, status, recipientId } = req.body;
+            const notificationId = req.params.notificationId;
+            const { status, recipientId } = req.body;
 
             const updatedNotification = await NotificationService.updateReadStatus({
                 notificationId,
@@ -81,7 +83,8 @@ class NotificationControllers {
 
     async deleteNotification(req, res, next) {
         try {
-            const { notificationId, recipientId } = req.body;
+            const notificationId = req.params.notificationId;
+            const { recipientId } = req.body;
 
             const deletedNotifications = await NotificationService.deleteNotification({
                 notificationId,
@@ -115,11 +118,11 @@ class NotificationControllers {
         }
     }
 
-    async getNumUnreadNotification(req, res, next) {
+    async getNumUnreadNotifications(req, res, next) {
         try {
-            const recipientId = req.params.userId;
+            const recipientId = req.params.recipientId;
 
-            const numUnreadNotification = await NotificationService.getNumUnreadNotification({
+            const numUnreadNotifications = await NotificationService.getNumUnreadNotifications({
                 recipientId
             });
 
@@ -127,10 +130,11 @@ class NotificationControllers {
                 code: 200,
                 msg: 'Lấy số lượng bài viết chưa đọc thành công',
                 data: {
-                    numUnreadNotification
+                    numUnreadNotifications
                 }
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }
