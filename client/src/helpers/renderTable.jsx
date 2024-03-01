@@ -134,8 +134,8 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
 
             if (dynamicRowsInfo) {
                 rowValueItemArr = [
-                    dynamicRowsInfo?.user[0].studentId,
-                    capitalizeFirstLetter(dynamicRowsInfo?.user[0].fullName),
+                    dynamicRowsInfo?.user[0]?.userId,
+                    capitalizeFirstLetter(dynamicRowsInfo?.user[0]?.fullName),
                     capitalizeFirstLetter(TABLE.title),
                     rowValueItem?.createdAt
                         ? new Date(rowValueItem.createdAt).toLocaleDateString('en-GB')

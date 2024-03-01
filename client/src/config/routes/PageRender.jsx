@@ -10,7 +10,7 @@ function PageRender() {
     const pathName = location.pathname;
     const [PageComponent, setPageComponent] = useState(null);
     const [notFound, setNotFound] = useState(false);
-    const privatePages = ['create_goals', 'create_news', 'manage_pages'];
+    const privatePages = ['goals', 'create-news', 'manage_pages'];
 
     const auth = useSelector(authSelector);
     const pageName = id

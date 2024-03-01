@@ -7,20 +7,13 @@ const EducationInfo = ({ auth }) => {
         <div className='education__info'>
             <div className='info__text'>
                 <ComponentAvatar size='large' />
-                <LineItem
-                    info='Mã sinh viên'
-                    text={auth?.user?.studentId || 'Chưa cập nhật'}
-                    className='id__info'
-                />
+                <LineItem info='Mã sinh viên' text={auth?.user?.userId || 'Chưa cập nhật'} className='id__info' />
             </div>
             <div className='main__info'>
                 <div className='heading-4 info__title'>Thông tin học vấn</div>
                 <div className='info__items'>
                     <div className='info__text'>
-                        <LineItem
-                            info='Tên sinh viên'
-                            text={auth?.user?.fullName || 'Chưa cập nhật'}
-                        />
+                        <LineItem info='Tên sinh viên' text={auth?.user?.fullName || 'Chưa cập nhật'} />
 
                         <LineItem info='Giới tính' text='Chưa cập nhật' />
                         <LineItem info='Trạng thái' text={'Chưa cập nhật'} />

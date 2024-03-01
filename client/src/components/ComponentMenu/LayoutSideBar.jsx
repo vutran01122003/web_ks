@@ -81,14 +81,12 @@ const LayoutSideBar = ({ auth }) => {
     const renderArrMenu = ARRAY_LIST_MENU.map((item) => {
         return (
             <React.Fragment key={item.id}>
-                {item.allow || item.roles.some((role) => auth.user.roles.includes(role)) ? (
+                {item.allow || item.role === auth?.user.group.groupCode ? (
                     <>
                         {item.submenu ? (
                             <div
                                 key={item.id}
-                                className={`item_menu_a ${
-                                    subMenu[item.id] ? 'active_item' : 'unactive_item'
-                                } `}
+                                className={`item_menu_a ${subMenu[item.id] ? 'active_item' : 'unactive_item'} `}
                                 onClick={(e) => {
                                     if (e.target.name !== 'level_year_list') handleSubMenu(item.id);
                                 }}
@@ -111,10 +109,7 @@ const LayoutSideBar = ({ auth }) => {
                                         >
                                             {levelYearList.map((levelYearItem) => {
                                                 return (
-                                                    <option
-                                                        value={levelYearItem}
-                                                        key={levelYearItem}
-                                                    >
+                                                    <option value={levelYearItem} key={levelYearItem}>
                                                         {levelYearItem}
                                                     </option>
                                                 );
@@ -138,9 +133,7 @@ const LayoutSideBar = ({ auth }) => {
                             <NavLink key={item.id} className='item_menu_a' to={item.to_link}>
                                 <span>
                                     {item.icon_before}
-                                    <span className={toggleMenu ? 'none_text__menu--item' : ''}>
-                                        {item.name_menu}
-                                    </span>
+                                    <span className={toggleMenu ? 'none_text__menu--item' : ''}>{item.name_menu}</span>
                                 </span>
                             </NavLink>
                         )}
@@ -193,9 +186,7 @@ const LayoutSideBar = ({ auth }) => {
 
                     {determineAuth ? (
                         <div
-                            className={`btn__toggle--menu ${
-                                toggleMenu ? 'active_icon_toggle--menu' : ''
-                            }`}
+                            className={`btn__toggle--menu ${toggleMenu ? 'active_icon_toggle--menu' : ''}`}
                             onClick={hanleToggleMenu}
                         >
                             <div className='line__flex_icon'>

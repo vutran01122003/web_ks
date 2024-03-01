@@ -5,29 +5,30 @@ const createError = require('http-errors');
 class NewsControllers {
     createNews = async (req, res, next) => {
         try {
-            if (req.files.length <= 0) throw createError.BadRequest('Bài viết không có ảnh bìa');
+            if (req.files.length <= 0) throw createError.BadRequest('Bài viết không có ảnh thu gọn');
 
             const userId = res.locals.userId;
 
-            const uploadedCover = await UploadService.uploadImageFromFiles({
+            const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `${process.env.CLOUDINARY_ROOT_FOLDER}/news_images/user_${userId}`
+                folderName: `news_images`
             });
 
             const createdNews = await NewsService.createNews({
                 newsData: {
                     ...req.body,
                     author: userId,
-                    cover: uploadedCover.results[0]
+                    cover: uploadedFiles[0].Location
                 }
             });
 
             res.status(201).json({
-                status: createdNews.status,
-                msg: createdNews.msg,
-                data: createdNews.data
+                status: 201,
+                msg: 'Tạo tin tức thành công',
+                data: createdNews
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

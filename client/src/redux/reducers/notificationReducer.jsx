@@ -31,7 +31,7 @@ function notificationReducer(state = initialState, action) {
         case GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS:
             return {
                 ...state,
-                data: action.payload.page === 1 ? [...action.payload.data] : [...state.data, ...action.payload.data],
+                data: [...state.data, ...action.payload.data],
                 page: action.payload.page,
                 maxPage: action.payload.data.length === 0 ? true : false,
                 currentNumNotifications:
@@ -93,9 +93,19 @@ function notificationReducer(state = initialState, action) {
                 currentNumNotifications: 0
             };
         case GLOBALTYPES.NOTIFICATION.MARK_ALL_AS_READ:
+            let _ntfList = [...state.data];
+            const _recipientId = action.payload.recipientId;
+
+            for (let i = 0; i < _ntfList.length; i++) {
+                if (_ntfList[i].recipient && !_ntfList[i].isRead) _ntfList[i].isRead = true;
+                else if (!_ntfList[i].recipient && !_ntfList[i].readedUserList.includes(_recipientId)) {
+                    _ntfList[i].readedUserList.push(_recipientId);
+                }
+            }
+
             return {
                 ...state,
-                unreadNotificationNum: 0
+                data: _ntfList
             };
         default:
             return state;

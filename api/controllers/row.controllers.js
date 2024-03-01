@@ -15,7 +15,7 @@ class RowControllers {
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.studentId}/${rowData.tableName}`
+                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.userId}/${rowData.tableName}`
             });
 
             await RowService.addProofFiles({
@@ -43,7 +43,7 @@ class RowControllers {
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.studentId}/${rowData.tableName}`
+                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.userId}/${rowData.tableName}`
             });
 
             await RowService.addProofFiles({
@@ -54,6 +54,7 @@ class RowControllers {
             });
 
             res.status(200).json({
+                status: 200,
                 msg: updatedRow?.msg
             });
         } catch (error) {
@@ -67,7 +68,7 @@ class RowControllers {
 
             const userFilterConditions = {
                 ['user.major']: req.query?.major ? req.query?.major.toLowerCase() : null,
-                ['user.studentId']: req.query?.student_id
+                ['user.userId']: req.query?.student_id
                     ? {
                           ['$regex']: new RegExp(`^${req.query?.student_id}`)
                       }
@@ -87,7 +88,7 @@ class RowControllers {
             });
 
             res.status(200).json({
-                code: dynamicRows.code,
+                status: dynamicRows.status,
                 msg: dynamicRows.msg,
                 data: dynamicRows.data
             });
@@ -143,7 +144,7 @@ class RowControllers {
             });
 
             res.status(200).json({
-                code,
+                status: code,
                 msg
             });
         } catch (error) {

@@ -46,7 +46,6 @@ class RowService {
                 rowItemId
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };
@@ -78,10 +77,7 @@ class RowService {
                 }
             ]);
 
-            if (
-                quantityDemanded[0] &&
-                quantityDemanded[0].count === pageData.tables.id(table).quantityDemanded
-            )
+            if (quantityDemanded[0] && quantityDemanded[0].count === pageData.tables.id(table).quantityDemanded)
                 throw createError.BadRequest('Số Lượng Đã Đạt Tối Đa');
 
             return quantityDemanded;
@@ -117,11 +113,11 @@ class RowService {
             );
 
             return {
+                status: 200,
                 msg: 'Nộp lại thành công',
                 data: updatedRow ? updatedRow : null
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };
@@ -147,13 +143,7 @@ class RowService {
         }
     };
 
-    static getDynamicRows = async ({
-        page,
-        limit,
-        userFilterConditions,
-        currentRows,
-        rowsType
-    }) => {
+    static getDynamicRows = async ({ page, limit, userFilterConditions, currentRows, rowsType }) => {
         let rowStatus = null;
         let skip = (page - 1) * limit;
         const removedDynamicRows = skip - currentRows;
@@ -228,8 +218,7 @@ class RowService {
             ]);
 
             return {
-                code: 200,
-                status: 'success',
+                status: 200,
                 msg: `Lấy dữ liệu chỉ tiêu ${rowStatus.toLowerCase()} thành công`,
                 data: dynamicRows
             };
@@ -238,21 +227,12 @@ class RowService {
         }
     };
 
-    static updateRowStatus = async ({
-        noteValue,
-        rowListId,
-        contentIdList,
-        status,
-        deadline,
-        isTimedExtension
-    }) => {
+    static updateRowStatus = async ({ noteValue, rowListId, contentIdList, status, deadline, isTimedExtension }) => {
         try {
             let content = '';
             switch (status) {
                 case 'phải nộp lại':
-                    content = `${
-                        isTimedExtension ? 'Gia hạn thành công' : 'Cho phép nộp lại thành công'
-                    } `;
+                    content = `${isTimedExtension ? 'Gia hạn thành công' : 'Cho phép nộp lại thành công'} `;
                     break;
                 case 'đã duyệt':
                     content = 'Duyệt thành công';

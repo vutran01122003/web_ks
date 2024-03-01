@@ -9,7 +9,8 @@ class Pagination {
         const limit = this.queryString.limit * 1;
         const currentNumNotifications = this.queryString.currentNumNotifications;
 
-        const skip = (page - 1) * limit + ((page - 1) * limit - currentNumNotifications);
+        let skip = (page - 1) * limit + ((page - 1) * limit - currentNumNotifications);
+        if (skip < 0) skip = -skip;
         return await this.query.limit(limit).skip(skip);
     };
 }

@@ -1,6 +1,6 @@
 const UserService = require('../services/user.service');
 
-class UserControlers {
+class UserControllers {
     updateUserActivityStatusByMajor = async (req, res, next) => {
         try {
             const updatedUsers = await UserService.updateUserActivityStatusByMajor(req.body);
@@ -13,7 +13,37 @@ class UserControlers {
         }
     };
 
-    updateTask;
+    addGroupForUser = async (req, res, next) => {
+        try {
+            const { groupId, userId } = req.params;
+
+            const updatedUser = await UserService.addGroupForUser({ groupId, userId });
+
+            res.status(200).json({
+                msg: 'Thêm chức vụ cho người dùng thành công',
+                status: 200,
+                data: updatedUser
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getUserByUserId = async (req, res, next) => {
+        try {
+            const userId = req.params.userId;
+
+            const user = await UserService.findUserByUserId({ userId });
+
+            res.status(200).json({
+                msg: 'Lấy dữ liệu người dùng thành công',
+                status: 200,
+                data: user
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
-module.exports = new UserControlers();
+module.exports = new UserControllers();

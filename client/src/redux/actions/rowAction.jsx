@@ -46,7 +46,7 @@ export const addRow =
     };
 
 export const getDynamicRows =
-    ({ tab, studentData, page, limit, currentRows }) =>
+    ({ tab, userData, page, limit, currentRows }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -61,8 +61,8 @@ export const getDynamicRows =
                 limit: limit || 3,
                 current_rows: currentRows,
                 rows_type: tab,
-                student_id: studentData?.studentId || null,
-                major: studentData?.major || null
+                student_id: userData?.userId || null,
+                major: userData?.major || null
             });
 
             dispatch({
@@ -71,13 +71,6 @@ export const getDynamicRows =
                     rowsType: tab,
                     dynamicRows: res.data.data,
                     page
-                }
-            });
-
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    success: res?.data.status
                 }
             });
         } catch (error) {

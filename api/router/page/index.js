@@ -1,14 +1,14 @@
 const router = require('express').Router();
-const fetch = require('node-fetch');
 const pageControllers = require('../../controllers/page.controllers');
 const { auth } = require('../../middleware/auth');
+const { checkPermission } = require('../../middleware/permission');
 
-router.post('/page', auth, pageControllers.createPage);
+router.post('/page', auth, checkPermission, pageControllers.createPage);
 
-router.get('/page', auth, pageControllers.getAllPage);
+router.get('/page', auth, checkPermission, pageControllers.getAllPage);
 
-router.get('/page/:name', auth, pageControllers.getPage);
+router.get('/page/:name', auth, checkPermission, pageControllers.getPage);
 
-router.delete('/page', auth, pageControllers.removePage);
+router.delete('/page', auth, checkPermission, pageControllers.removePage);
 
 module.exports = router;

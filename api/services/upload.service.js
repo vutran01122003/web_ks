@@ -30,7 +30,7 @@ class UploadService {
             }
 
             return {
-                code: 200,
+                status: 200,
                 results,
                 msg: 'Lưu minh chứng thành công'
             };

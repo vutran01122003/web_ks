@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import ComponentButton from '../components/ComponentButton/ComponentButton';
+import React, { useEffect, useRef, useState } from 'react';
 import { BiSolidAddToQueue } from 'react-icons/bi';
+import Tippy from '@tippyjs/react/headless';
 import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from 'react-icons/ai';
 import { FaCaretRight } from 'react-icons/fa';
 import { IoIosAddCircle } from 'react-icons/io';
 import { MdOutlineAddCircle } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createPage } from '../redux/actions/pageAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import Tippy from '@tippyjs/react/headless';
+import { facultySelector } from '../redux/selector';
+import ComponentButton from '../components/ComponentButton/ComponentButton';
+import { getAllFaculties } from '../redux/actions/facultyAction';
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
 const CreateGoals = ({ handleAddTable }) => {
     const dispatch = useDispatch();
+    const selectRef = useRef();
+    const faculty = useSelector(facultySelector);
     const [pageName, setPageName] = useState('');
     const [pageFaculty, setPageFaculty] = useState('');
     const [pageStudentCohort, setPageStudentCohort] = useState('');
@@ -39,6 +44,20 @@ const CreateGoals = ({ handleAddTable }) => {
             scoreSelectBoxStatus: null
         }
     ]);
+
+    const handleChangeFacultySelect = (e) => {
+        setPageFaculty(JSON.parse(e.target.value));
+    };
+
+    const handleChangeMajorSelect = (e) => {
+        setPageStudentMajor(JSON.parse(e.target.value));
+    };
+
+    const handleChangeCohortSelect = (e) => {
+        const cohortInfo = JSON.parse(e.target.value);
+        setPageStudentCohort(cohortInfo);
+        setPageStudentLevelYear(cohortInfo.currentLevelYear);
+    };
 
     const addTable = () => {
         setTables([
@@ -166,13 +185,7 @@ const CreateGoals = ({ handleAddTable }) => {
     };
 
     const handleCreatePage = async () => {
-        if (
-            !pageName ||
-            !pageStudentCohort ||
-            !pageStudentMajor ||
-            !pageFaculty ||
-            !pageStudentLevelYear
-        ) {
+        if (!pageName || !pageStudentCohort || !pageStudentMajor || !pageFaculty || !pageStudentLevelYear) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -185,7 +198,10 @@ const CreateGoals = ({ handleAddTable }) => {
         let notifyValue = '';
 
         const checkError = tables.some((table) => {
-            if (table.rowTitleList.length !== new Set(table.rowTitleList).size) {
+            if (
+                table.rowTitleList.length !==
+                new Set(table.rowTitleList.map((rowTitle) => JSON.stringify(rowTitle))).size
+            ) {
                 notifyValue = 'Các Cột Không Được Trùng Tên';
                 return true;
             }
@@ -208,9 +224,9 @@ const CreateGoals = ({ handleAddTable }) => {
             const pageData = {
                 pageName,
                 pageType: 'chỉ tiêu',
-                pageFaculty,
-                pageStudentCohort,
-                pageStudentMajor,
+                pageFaculty: pageFaculty.facultyName,
+                pageStudentCohort: pageStudentCohort.cohortName,
+                pageStudentMajor: pageStudentMajor.majorName,
                 pageStudentLevelYear,
                 tables: tables.map((table) => {
                     const tableData = {
@@ -238,6 +254,23 @@ const CreateGoals = ({ handleAddTable }) => {
         }
     };
 
+    useEffect(() => {
+        if (faculty.facultyData.length === 0) dispatch(getAllFaculties());
+    }, []);
+
+    // Reset filter
+    useEffect(() => {
+        if (selectRef.current) {
+            if (!pageFaculty) {
+                selectRef.current.value = '';
+                setPageStudentMajor('');
+                setPageStudentCohort('');
+            } else if (!pageStudentMajor) {
+                setPageStudentCohort('');
+            }
+        }
+    }, [pageFaculty, pageStudentMajor, pageStudentCohort, selectRef.current]);
+
     return (
         <div className='wrap__goals'>
             <div className='body__goals'>
@@ -247,49 +280,87 @@ const CreateGoals = ({ handleAddTable }) => {
 
                 {!handleAddTable && (
                     <div className='goals_info_wrapper'>
-                        <input
-                            type='text'
-                            placeholder='Nhập Khóa Sinh Viên'
-                            onChange={(e) => {
-                                setPageStudentCohort(e.target.value);
-                            }}
-                            value={pageStudentCohort}
-                        />
-                        <div>
+                        <div className='faculty_info'>
                             <select
+                                ref={selectRef}
+                                defaultValue={''}
                                 onChange={(e) => {
-                                    setPageFaculty(e.target.value);
+                                    if (!e.target.value) {
+                                        setPageFaculty('');
+                                        return;
+                                    }
+                                    handleChangeFacultySelect(e);
                                 }}
-                                value={pageFaculty}
                             >
                                 <option value=''>Chọn Khoa</option>
-                                <option value='Công nghệ thông tin'>Công nghệ thông tin</option>
+                                {faculty.facultyData.map((facultyItem) => (
+                                    <option key={facultyItem._id} value={JSON.stringify(facultyItem)}>
+                                        {capitalizeFirstLetter(facultyItem.facultyName)}
+                                    </option>
+                                ))}
                             </select>
 
                             <select
+                                defaultValue={''}
                                 onChange={(e) => {
-                                    setPageStudentMajor(e.target.value);
+                                    if (!e.target.value) {
+                                        setPageStudentMajor('');
+                                        return;
+                                    }
+                                    handleChangeMajorSelect(e);
                                 }}
-                                value={pageStudentMajor}
                             >
-                                <option value=''>Chọn Chuyên Ngành</option>
-                                <option value='Kỹ thuật phần mềm'>Kỹ thuật phần mềm</option>
-                                <option value='Khoa học máy tính'>Khoa học máy tính</option>
+                                {pageFaculty && pageFaculty?.majors ? (
+                                    <>
+                                        <option value=''>Chọn Chuyên Ngành</option>
+
+                                        {pageFaculty.majors.map((majorItem) => (
+                                            <option key={majorItem._id} value={JSON.stringify(majorItem)}>
+                                                {capitalizeFirstLetter(majorItem?.majorName)}
+                                            </option>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <option value=''>Chưa Chọn Khoa</option>
+                                )}
                             </select>
 
                             <select
-                                onChange={(e) =>
-                                    setPageStudentLevelYear(Number.parseInt(e.target.value))
-                                }
-                                value={pageStudentLevelYear}
+                                defaultValue={''}
+                                onChange={(e) => {
+                                    if (!e.target.value) {
+                                        setPageStudentCohort('');
+                                        return;
+                                    }
+                                    handleChangeCohortSelect(e);
+                                }}
                             >
-                                <option value=''>Chọn Năm Học</option>
-                                <option value='1'>Năm 1</option>
-                                <option value='2'>Năm 2</option>
-                                <option value='3'>Năm 3</option>
-                                <option value='4'>Năm 4</option>
-                                <option value='5'>Năm 5</option>
+                                {(pageStudentMajor || pageFaculty) && pageStudentMajor?.cohortList ? (
+                                    <>
+                                        <option value=''>Chọn Khóa</option>
+
+                                        {pageStudentMajor.cohortList.map((cohort) => (
+                                            <option key={cohort._id} value={JSON.stringify(cohort)}>
+                                                {capitalizeFirstLetter(cohort?.cohortName)}
+                                            </option>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <option value=''>Chưa Chọn Ngành</option>
+                                )}
                             </select>
+
+                            <input
+                                className='year_info_input'
+                                type='text'
+                                readOnly
+                                placeholder='Năm Học'
+                                value={
+                                    pageStudentCohort.currentLevelYear
+                                        ? `Năm ${pageStudentCohort.currentLevelYear}`
+                                        : ''
+                                }
+                            />
                         </div>
                     </div>
                 )}
@@ -317,9 +388,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                             type='text'
                                             value={table.tableName}
                                             placeholder='Nhập tiêu đề chỉ tiêu'
-                                            onChange={(e) =>
-                                                updateTable(tableIndex, 'tableName', e.target.value)
-                                            }
+                                            onChange={(e) => updateTable(tableIndex, 'tableName', e.target.value)}
                                             className='input_title--chi_tieu'
                                         />
                                     </div>
@@ -338,9 +407,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                         type='text'
                                         value={table.description}
                                         placeholder='Nhập mô tả chỉ tiêu'
-                                        onChange={(e) =>
-                                            updateTable(tableIndex, 'description', e.target.value)
-                                        }
+                                        onChange={(e) => updateTable(tableIndex, 'description', e.target.value)}
                                         id='mo_ta_chi_tieu'
                                     />
                                 </div>
@@ -354,9 +421,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                             updateTable(
                                                 tableIndex,
                                                 'quantityDemanded',
-                                                Number.parseInt(e.target.value)
-                                                    ? Number.parseInt(e.target.value)
-                                                    : ''
+                                                Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : ''
                                             );
                                         }}
                                         id='mo_ta_chi_tieu'
@@ -367,11 +432,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                     <label>Loại Điểm Số:</label>
                                     <select
                                         onChange={(e) => {
-                                            updateTable(
-                                                tableIndex,
-                                                'scoreSelectBoxStatus',
-                                                e.target.value
-                                            );
+                                            updateTable(tableIndex, 'scoreSelectBoxStatus', e.target.value);
                                         }}
                                     >
                                         <option value=''>Điểm số không cố định</option>
@@ -385,26 +446,18 @@ const CreateGoals = ({ handleAddTable }) => {
                                         <label htmlFor='score_input'>Nhập Điểm:</label>
                                         <input
                                             className={`score_input ${
-                                                table.scoreSelectBoxStatus === false
-                                                    ? 'not_allow'
-                                                    : ''
+                                                table.scoreSelectBoxStatus === false ? 'not_allow' : ''
                                             }`}
                                             type='text'
                                             placeholder='Nhập điểm số chỉ tiêu'
-                                            value={
-                                                table.scoreSelectBoxStatus === false
-                                                    ? 0
-                                                    : table.fixedScore
-                                            }
+                                            value={table.scoreSelectBoxStatus === false ? 0 : table.fixedScore}
                                             id='score_input'
                                             readOnly={table.scoreSelectBoxStatus === false}
                                             onChange={(e) =>
                                                 updateTable(
                                                     tableIndex,
                                                     'fixedScore',
-                                                    /^\d*\.?\d*$/.test(e.target.value)
-                                                        ? e.target.value
-                                                        : ''
+                                                    /^\d*\.?\d*$/.test(e.target.value) ? e.target.value : ''
                                                 )
                                             }
                                         />
@@ -431,21 +484,12 @@ const CreateGoals = ({ handleAddTable }) => {
                                                             value={rowTitle?.titleValue || ''}
                                                             placeholder={`Cột ${rowIndex + 1}`}
                                                             onChange={(e) =>
-                                                                updateRowTitle(
-                                                                    tableIndex,
-                                                                    rowIndex,
-                                                                    e.target.value
-                                                                )
+                                                                updateRowTitle(tableIndex, rowIndex, e.target.value)
                                                             }
                                                         />
                                                         {table.rowTitleList.length > 1 && (
                                                             <div
-                                                                onClick={() =>
-                                                                    deleteRowValue(
-                                                                        tableIndex,
-                                                                        rowIndex
-                                                                    )
-                                                                }
+                                                                onClick={() => deleteRowValue(tableIndex, rowIndex)}
                                                                 className={`del__col`}
                                                             >
                                                                 <abbr title='Xóa cột'>
@@ -454,7 +498,6 @@ const CreateGoals = ({ handleAddTable }) => {
                                                             </div>
                                                         )}
 
-                                                        {/* {table.scoreSelectBoxStatus === null && ( */}
                                                         <Tippy
                                                             interactive
                                                             placement='top'
@@ -463,22 +506,14 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                 tableIndex === indexTableValue &&
                                                                 rowIndex === indexRowValue
                                                             }
-                                                            onClickOutside={
-                                                                handleCloseModelAddFixedValue
-                                                            }
+                                                            onClickOutside={handleCloseModelAddFixedValue}
                                                             render={(attrs) => (
-                                                                <div
-                                                                    className='add_value_col'
-                                                                    tabIndex='-1'
-                                                                    {...attrs}
-                                                                >
+                                                                <div className='add_value_col' tabIndex='-1' {...attrs}>
                                                                     <h3 className='add_fixed_heading'>
                                                                         Thêm Giá Trị Cố Định{' '}
                                                                         <span>
                                                                             {rowTitle?.titleValue
-                                                                                ? '(' +
-                                                                                  rowTitle?.titleValue +
-                                                                                  ')'
+                                                                                ? '(' + rowTitle?.titleValue + ')'
                                                                                 : rowTitle?.titleValue}
                                                                         </span>
                                                                     </h3>
@@ -488,32 +523,22 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                             placeholder='Nhập giá trị'
                                                                             className='fixed_value_input'
                                                                             onChange={(e) => {
-                                                                                setFixedValue(
-                                                                                    e.target.value
-                                                                                );
+                                                                                setFixedValue(e.target.value);
                                                                             }}
                                                                             value={fixedValue}
                                                                         />
-                                                                        {table.scoreSelectBoxStatus ===
-                                                                            null && (
+                                                                        {table.scoreSelectBoxStatus === null && (
                                                                             <input
                                                                                 type='text'
                                                                                 placeholder='Điểm'
                                                                                 className='score_value_input'
                                                                                 onChange={(e) => {
                                                                                     setScoreValue(
-                                                                                        Number.parseInt(
-                                                                                            e.target
-                                                                                                .value
-                                                                                        )
+                                                                                        Number.parseInt(e.target.value)
                                                                                     );
                                                                                 }}
                                                                                 value={
-                                                                                    isNaN(
-                                                                                        scoreValue
-                                                                                    )
-                                                                                        ? ''
-                                                                                        : scoreValue
+                                                                                    isNaN(scoreValue) ? '' : scoreValue
                                                                                 }
                                                                             />
                                                                         )}
@@ -524,8 +549,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                                     tableIndex,
                                                                                     rowIndex,
                                                                                     fixedValue,
-                                                                                    table.scoreSelectBoxStatus !==
-                                                                                        null
+                                                                                    table.scoreSelectBoxStatus !== null
                                                                                         ? 0
                                                                                         : scoreValue
                                                                                 );
@@ -535,13 +559,8 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                         </button>
                                                                     </div>
                                                                     <ul>
-                                                                        {table.rowTitleList[
-                                                                            rowIndex
-                                                                        ].fixedValue.map(
-                                                                            (
-                                                                                fixedValueObj,
-                                                                                index
-                                                                            ) => (
+                                                                        {table.rowTitleList[rowIndex].fixedValue.map(
+                                                                            (fixedValueObj, index) => (
                                                                                 <li
                                                                                     key={index}
                                                                                     className='fixed_value_item'
@@ -551,9 +570,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                                             <FaCaretRight />
                                                                                         </span>
                                                                                         <span className='fixed_value'>
-                                                                                            {
-                                                                                                fixedValueObj.value
-                                                                                            }
+                                                                                            {fixedValueObj.value}
                                                                                         </span>
                                                                                         {table.scoreSelectBoxStatus ===
                                                                                             null && (
@@ -585,10 +602,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                             <div
                                                                 className='add__col'
                                                                 onClick={() => {
-                                                                    handleOpenModalAddFixedValue(
-                                                                        tableIndex,
-                                                                        rowIndex
-                                                                    );
+                                                                    handleOpenModalAddFixedValue(tableIndex, rowIndex);
                                                                 }}
                                                             >
                                                                 <abbr title='Thêm giá trị cố định'>

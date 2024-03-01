@@ -13,7 +13,7 @@ const Quantity = () => {
             quantity: 9,
             icon_after: <LuListRestart />,
             color_border: '#f0635c',
-            link: '/listGoals'
+            link: '/activity-approval'
         },
         {
             id: 1,
@@ -48,9 +48,9 @@ const Quantity = () => {
                 <div className='icon_size'>{QUANTITY_OVERVIEW.icon_after}</div>
                 <div className='quantily__number'>
                     <div className='text__heading'>{QUANTITY_OVERVIEW.text_heading}</div>
-                    <div className='number__quantity'>{`${
-                        QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'
-                    }: ${QUANTITY_OVERVIEW.quantity}`}</div>
+                    <div className='number__quantity'>{`${QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'}: ${
+                        QUANTITY_OVERVIEW.quantity
+                    }`}</div>
                 </div>
             </Link>
         );

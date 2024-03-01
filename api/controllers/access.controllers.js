@@ -20,44 +20,43 @@ class AccessControllers {
 
     login = async (req, res, next) => {
         try {
-            const checkLogin = await accessService.login(req.body);
+            const loggedUser = await accessService.login(req.body);
 
-            if (checkLogin.isSuccessLogin) {
-                if (checkLogin.typePassword === 'password') {
-                    if (!checkLogin.user.isActive)
-                        throw createError.BadRequest('Tài khoản đã bị khóa');
-                    const accessToken = await jwtService.signAccessToken({
-                        userData: checkLogin.user
-                    });
+            if (!loggedUser.isSuccessLogin) throw createError.Unauthorized('Đăng nhập không thành công');
 
-                    res.status(200)
-                        .cookie('accessToken', accessToken, {
-                            // sameSite: 'none',
-                            // secure: true
-                        })
-                        .send({
-                            status: 'Đăng nhập thành công',
-                            data: {
-                                user: checkLogin.user,
-                                token: {
-                                    accessToken
-                                }
-                            }
-                        });
-                } else {
-                    res.status(200).send({
-                        status: 'Đăng nhập thành công',
-                        data: {
-                            firstLogin: {
-                                studentId: req.body.studentId,
-                                birthday: req.body.password
-                            }
+            if (loggedUser.typePassword !== 'password') {
+                res.status(200).send({
+                    status: 'Đăng nhập thành công',
+                    data: {
+                        firstLogin: {
+                            userId: req.body.userId,
+                            birthday: req.body.password
                         }
-                    });
-                }
-            } else {
-                throw createError.Unauthorized('Đăng nhập không thành công');
+                    }
+                });
+                next();
             }
+
+            if (loggedUser?.data && !loggedUser?.data.isActive) throw createError.BadRequest('Tài khoản đã bị khóa');
+
+            const accessToken = await jwtService.signAccessToken({
+                userData: loggedUser?.data
+            });
+
+            res.status(200)
+                .cookie('accessToken', accessToken, {
+                    // httpOnly: true,
+                    // secure: true
+                })
+                .send({
+                    status: 'Đăng nhập thành công',
+                    data: {
+                        user: loggedUser?.data,
+                        token: {
+                            accessToken
+                        }
+                    }
+                });
         } catch (error) {
             next(error);
         }

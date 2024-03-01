@@ -32,6 +32,11 @@
 
         .select_new_type_wrapper {
             display: flex;
+            position: relative;
+
+            #tippy-1 {
+                width: 100%;
+            }
 
             .select_new_type {
                 flex: 1;
@@ -47,7 +52,76 @@
                 color: gray;
                 width: 160px;
             }
+
+            .select_new_type_modal {
+                box-shadow: 0 0 5px gray;
+                border-radius: 3px;
+                width: 100%;
+                background: #fff;
+
+                .news_type_item {
+                    padding: 8px 12px;
+                    transition: 0.1s linear;
+                    cursor: pointer;
+                    font-weight: 600;
+                    padding: 10px;
+                    border-bottom: 1px solid rgb(241, 238, 238);
+                    
+                    &:hover {
+                        background: rgb(243, 242, 242);
+                    }
+                }
+
+                .add_news_type_wrapper {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+    
+                    .add_news_type_input {
+                        flex: 1;
+                    }
+    
+                    .add_news_type_label {
+                        color: gray;
+                    }
+    
+                    .add_news_type_input,
+                    .add_news_type_label {
+                        font-weight: 600;
+                        height: 40px;
+                        padding: 8px 12px;
+                        outline: none;
+                        border: 1px solid rgb(225, 222, 222);
+                    }
+                }
+
+                .add_news_type_container {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    padding: 10px;
+                    
+                    .add_news_type_btn {
+                        padding: 8px 20px;
+                        font-weight: 600;
+                        height: 40px;
+                        background: #1c7ae6;
+                        border-radius: 3px;
+                        color: #fff;
+                        cursor: pointer;
+                        outline: none;
+                        border: none;
+                        transition: 0.1s linear;
+                        
+                        &:active {
+                            transform: scale(0.9);
+                        }
+                    }
+                }
+            }
         }
+
+       
 
         .label_new_type {
             color: gray;

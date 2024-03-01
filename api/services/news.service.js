@@ -6,11 +6,7 @@ class NewsService {
         try {
             const createdNews = await News.create(newsData);
 
-            return {
-                status: 201,
-                msg: 'Tạo bài viết thành công',
-                data: createdNews
-            };
+            return createdNews;
         } catch (error) {
             throw error;
         }

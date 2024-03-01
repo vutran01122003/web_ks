@@ -198,7 +198,6 @@ class NotificationService {
 
     static async getNumUnreadNotifications({ recipientId }) {
         try {
-            console.log(recipientId);
             const numUnreadNotifications = await Notification.find({
                 $or: [
                     { recipient: recipientId, isRead: false },

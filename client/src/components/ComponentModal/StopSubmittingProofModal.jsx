@@ -4,12 +4,14 @@ import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { stopSubmittingProof } from '../../redux/actions/progressAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import { updateLevelYearOfCohort } from '../../redux/actions/facultyAction';
 
 function StopSubmittingProofModal({
     cohort,
     major,
     levelYear,
-    handleHiddenStopSubmittingProofModal
+    handleHiddenStopSubmittingProofModal,
+    updatedCohortData
 }) {
     const dispatch = useDispatch();
 
@@ -78,6 +80,8 @@ function StopSubmittingProofModal({
                     levelYear
                 })
             );
+
+            dispatch(updateLevelYearOfCohort(updatedCohortData));
             handleHiddenStopSubmittingProofModal();
         } else {
             dispatch({
@@ -94,10 +98,7 @@ function StopSubmittingProofModal({
             <div className='stop_submitting_proof_modal'>
                 <div className='stop_submitting_proof_header'>
                     <h2>Kết thúc hoạt động nộp minh chứng</h2>
-                    <div
-                        className='stop_submitting_proof_close_btn'
-                        onClick={handleHiddenStopSubmittingProofModal}
-                    >
+                    <div className='stop_submitting_proof_close_btn' onClick={handleHiddenStopSubmittingProofModal}>
                         <AiOutlineClose />
                     </div>
                 </div>
@@ -133,10 +134,7 @@ function StopSubmittingProofModal({
                                 ref={progressPercentageInputRef}
                             />
                             <span className='input_checkbox_item'>
-                                <input
-                                    type='checkbox'
-                                    onClick={handleChangeProgressPercentageCheckboxValue}
-                                />
+                                <input type='checkbox' onClick={handleChangeProgressPercentageCheckboxValue} />
                                 <span>Không bắt buộc</span>
                             </span>
                         </div>
@@ -170,9 +168,7 @@ function StopSubmittingProofModal({
 
                     <button
                         className={`btn_accept ${
-                            confirmValue.trim().toLowerCase() === 'tôi đồng ý'
-                                ? 'active'
-                                : 'inactive'
+                            confirmValue.trim().toLowerCase() === 'tôi đồng ý' ? 'active' : 'inactive'
                         }`}
                         onClick={handleStopSubmittingProof}
                     >

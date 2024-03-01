@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "studentId": "21013481",
+    "userId": "21013481",
     "password": "1111"
 }
 
@@ -14,7 +14,9 @@ POST {{url}}/api/faculties
 Content-Type: application/json
 
 {
-    "facultyName": "Ke toan 2"
+    "facultyName": "CNTT",
+    "managerIdList": ["65e06f20580884a201b801d7"],
+    "majorList": ["CNTT", "KTPM", "KHMT"]
 }
 
 ### Get faculties
@@ -46,7 +48,7 @@ Content-Type: application/json
 GET {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
 
 ### Update major
-PATCH {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
+PATCH {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803
 Content-Type: application/json
 
 {

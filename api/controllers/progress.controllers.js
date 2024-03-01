@@ -64,26 +64,12 @@ class ProgressControllers {
 
     getAllProgress = async (req, res, next) => {
         try {
-            const { major, cohort, levelYear, isCompleted, studentId, sortProgress } = req.query;
-
-            const filterCompletedTaskProgress = {
-                'completedTaskProgress.completedTaskPrecent':
-                    isCompleted.toLowerCase() === ''
-                        ? { $lte: 100 }
-                        : isCompleted.toLowerCase() === 'true'
-                        ? 100
-                        : {
-                              $lt: 100
-                          }
-            };
-
-            if (studentId) filterCompletedTaskProgress.studentId = { $regex: studentId };
+            const { major, cohort, levelYear, sortProgress } = req.query;
 
             const studentList = await ProgressService.getAllProgress({
                 major,
                 cohort,
                 levelYear,
-                filterCompletedTaskProgress,
                 sortProgress
             });
 

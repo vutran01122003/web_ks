@@ -1,6 +1,60 @@
+const createError = require('http-errors');
 const User = require('../models/user.model');
+const PermissionService = require('./permission.service');
 
 class UserService {
+    static findUserById = async ({ userId, userIdList }) => {
+        try {
+            let result = null;
+
+            if (userId) result = await User.findById(userId).populate('group').lean();
+            else if (userIdList.length > 0) result = await User.find({ _id: { $in: [...userIdList] } }).lean();
+
+            if (!result) throw createError.NotFound('Người dùng không tồn tại');
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static findUserByUserId = async ({ userId }) => {
+        try {
+            const user = await User.findOne({ userId: userId }).lean();
+            if (!user) throw createError.NotFound('Người dùng không tồn tại');
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static checkRole = async ({ userId, path, method }) => {
+        try {
+            const user = await User.findById(userId)
+                .populate({
+                    path: 'group',
+                    model: 'group',
+                    populate: {
+                        path: `method.${method}`,
+                        model: 'role'
+                    }
+                })
+                .lean();
+
+            if (!user) throw createError.NotFound('Người dùng không tồn tại');
+
+            for (let i = 0; i < user.group.method[method].length; i++) {
+                const roleInfo = user.group.method[method][i];
+                if (roleInfo.url === path && roleInfo.method === method) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static updateUserActivityStatusByMajor = async ({ progressPercentage, score, major, cohort, levelYear }) => {
         try {
             const filterUser = {
@@ -71,7 +125,7 @@ class UserService {
         }
     };
 
-    static getAnnualTaskProgress = async ({ major, cohort, levelYear, filterCompletedTaskProgress, sortProgress }) => {
+    static getAnnualTaskProgress = async ({ major, cohort, levelYear, sortProgress }) => {
         try {
             const studentList = await User.aggregate([
                 {
@@ -82,18 +136,15 @@ class UserService {
                 },
                 {
                     $project: {
-                        studentId: 1,
+                        userId: 1,
                         fullName: 1,
                         faculty: 1,
                         major: 1,
                         levelYear: 1,
                         cohort: 1,
                         isActive: 1,
-                        completedTaskProgress: `$annualTaskProgress.${levelYear}`
+                        completedTaskProgress: `$annualTaskProgress.${levelYear || 1}`
                     }
-                },
-                {
-                    $match: filterCompletedTaskProgress
                 },
                 {
                     $sort: {
@@ -189,6 +240,32 @@ class UserService {
                     }
                 ]
             );
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static addGroupForUser = async ({ groupId, userId }) => {
+        try {
+            const result = await Promise.all([
+                PermissionService.getGroupById({ groupId }),
+                this.findUserById({ userId })
+            ]);
+
+            if (!result[0]) throw createError.NotFound('Chức vụ không tồn tại');
+            if (!result[1]) throw createError.NotFound('Người dùng không tồn tại');
+
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                {
+                    group: groupId
+                },
+                {
+                    new: true
+                }
+            );
+
+            return updatedUser;
         } catch (error) {
             throw error;
         }

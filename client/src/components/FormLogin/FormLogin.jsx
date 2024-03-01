@@ -20,7 +20,7 @@ const RandomString = (length) => {
 
 const FormLogin = () => {
     const dispatch = useDispatch();
-    const [studentId, setStudentId] = useState('');
+    const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
 
     const [captchaLogin, setCaptchaLogin] = useState(RandomString(4));
@@ -48,7 +48,7 @@ const FormLogin = () => {
     //----------------
 
     const handleChangeStudentId = (e) => {
-        setStudentId(e.target.value);
+        setUserId(e.target.value);
     };
 
     const handleChangePassword = (e) => {
@@ -60,7 +60,7 @@ const FormLogin = () => {
         if (isCapcha) {
             dispatch(
                 login({
-                    studentId,
+                    userId,
                     password
                 })
             );
@@ -79,7 +79,7 @@ const FormLogin = () => {
                         type='text'
                         id='user'
                         iconBefore={<RiAccountCircleFill />}
-                        value={studentId}
+                        value={userId}
                         onChange={handleChangeStudentId}
                     />
                     <FormControl
@@ -104,11 +104,7 @@ const FormLogin = () => {
                                     <span key={index}>{char}</span>
                                 ))}
                             </div>
-                            <div
-                                onClick={refreshCaptcha}
-                                type='button'
-                                className='btn_refresh_catcha'
-                            >
+                            <div onClick={refreshCaptcha} type='button' className='btn_refresh_catcha'>
                                 <ImSpinner11 />
                             </div>
                         </div>

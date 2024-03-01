@@ -3,11 +3,15 @@ const FacultyService = require('../services/faculty.service');
 class FacultyController {
     createFaculty = async (req, res, next) => {
         try {
-            const { facultyName } = req.body;
-            const createdFaculty = await FacultyService.createFaculty({ facultyName });
+            const { facultyName, managerIdList, majorList } = req.body;
+            const createdFaculty = await FacultyService.createFaculty({
+                facultyName,
+                managerIdList,
+                majorList
+            });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: `Tạo khoa ${facultyName} thành công`,
                 data: createdFaculty
             });
@@ -25,7 +29,7 @@ class FacultyController {
             const updatedFaculty = await FacultyService.updateFaculty({ facultyId, data });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Cập nhật thông tin khoa thành công',
                 data: updatedFaculty
             });
@@ -41,7 +45,7 @@ class FacultyController {
             const deletedFaculty = await FacultyService.deleteFaculty({ facultyId });
 
             return res.status(200).json({
-                code: deletedFaculty.code,
+                status: deletedFaculty.status,
                 msg: deletedFaculty.msg
             });
         } catch (error) {
@@ -68,10 +72,9 @@ class FacultyController {
             return res.status(201).json({
                 msg: createdMajor.msg,
                 data: createdMajor.data,
-                code: createdMajor.code
+                status: createdMajor.status
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -79,12 +82,11 @@ class FacultyController {
     getMajorById = async (req, res, next) => {
         try {
             const { majorId, facultyId } = req.params;
-            console.log(req.route.path);
 
             const major = await FacultyService.getMajorById({ majorId, facultyId });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Lấy dữ liệu chuyên ngành thành công',
                 data: major
             });
@@ -101,7 +103,7 @@ class FacultyController {
             const updatedMajor = await FacultyService.updateMajor({ majorId, facultyId, data });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Cập nhật chuyên ngành thành công',
                 data: updatedMajor
             });
@@ -116,12 +118,11 @@ class FacultyController {
             const deletedMajor = await FacultyService.deleteMajor({ majorId, facultyId });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Xóa chuyên ngành thành công',
                 data: deletedMajor
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -131,6 +132,12 @@ class FacultyController {
             const { facultyId, majorId } = req.params;
             const { cohortName } = req.body;
 
+            console.log({
+                facultyId,
+                majorId,
+                cohortName
+            });
+
             const createdCohort = await FacultyService.createCohort({
                 facultyId,
                 majorId,
@@ -139,11 +146,10 @@ class FacultyController {
 
             return res.status(200).json({
                 msg: createdCohort.msg,
-                code: createdCohort.code,
+                status: createdCohort.status,
                 data: createdCohort.data
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -156,7 +162,7 @@ class FacultyController {
 
             res.status(200).json({
                 msg: 'Lấy danh sách khóa sinh viên thành công',
-                code: 200,
+                status: 200,
                 data: cohort
             });
         } catch (error) {
@@ -176,7 +182,7 @@ class FacultyController {
 
             res.status(200).json({
                 msg: 'Xóa khóa sinh viên thành công',
-                code: 200,
+                status: 200,
                 data: deletedCohort
             });
         } catch (error) {
@@ -198,7 +204,7 @@ class FacultyController {
 
             res.status(200).json({
                 msg: 'Cập nhật khóa sinh viên thành công',
-                code: 200,
+                status: 200,
                 data: updatedCohort
             });
         } catch (error) {

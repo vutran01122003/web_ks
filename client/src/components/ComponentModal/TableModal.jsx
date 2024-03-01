@@ -10,7 +10,6 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
     const dispatch = useDispatch();
     const [row, setRow] = useState(rowInfo?.rowValue ?? {});
     const [files, setFiles] = useState([]);
-
     const handleChangeRow = (e) => {
         setRow({ ...row, [e.target.name]: e.target.value });
     };
@@ -41,7 +40,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
 
         let rowData = {
             user: auth?.user._id,
-            studentId: auth?.user.studentId,
+            userId: auth?.user.userId,
             faculty: auth?.user.faculty,
             major: auth?.user.major,
             cohort: auth?.user.cohort,
@@ -115,10 +114,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
                                 );
                             } else if (item.typeInput === 'select') {
                                 return (
-                                    <div
-                                        className='select_modal_wrapper'
-                                        key={item.textHeading + index}
-                                    >
+                                    <div className='select_modal_wrapper' key={item.textHeading + index}>
                                         <label>{item.textHeading}</label>
                                         <select
                                             className='select_modal'
@@ -130,10 +126,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
                                                 {item.textHeading}
                                             </option>
                                             {item.fixedValueList.map((fixedValue) => (
-                                                <option
-                                                    key={fixedValue.value}
-                                                    value={fixedValue.value}
-                                                >
+                                                <option key={fixedValue.value} value={fixedValue.value}>
                                                     {fixedValue.value}
                                                 </option>
                                             ))}

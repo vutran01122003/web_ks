@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "studentId": "21013481",
+    "userId": "21013481",
     "password": "1111"
 }
 
@@ -15,33 +15,36 @@ Content-Type: application/json
 
 {
     "pageName": "Hoạt động Nghien Cuu", 
-    "pageType": "chỉ tiêu",
     "tables": [
         {
             "tableName": "Nghiên cứu tuyen sinh",
             "description": "Description 1",
-            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
-            "rowValueList": []
-        },
-        {
-            "tableName": "Hoạt động sinh tuyen",
-            "description": "Description 3",
-            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
-            "rowValueList": []
-        },
-        {
-            "tableName": "Hoạt động tuyen tuyen",
-            "description": "Description 3",
-            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
-            "rowValueList": []
-        },
-        {
-            "tableName": "Hoạt động sinh sinh 2",
-            "description": "Description 3",
-            "rowTitleList": ["row 1", "row 2", "row 3", "row 4", "row 5"],
-            "rowValueList": []
+            "rowTitleList": [{
+                "titleValue": "row 1",
+                "fixedValue": []
+            }, {
+                "titleValue": "row 2",
+                "fixedValue": []
+            }, {
+                "titleValue": "row 3",
+                "fixedValue": []
+            }, {
+                "titleValue": "row 4",
+                "fixedValue": []
+            }, {
+                "titleValue": "row 5",
+                "fixedValue": []
+            }],
+            "rowValueList": [],
+            "quantityDemanded": 5,
+            "fixedScore": 10
         }
-    ] 
+    ],
+    "pageType": "chỉ tiêu",
+    "pageFaculty": "Công nghệ thông tin",
+    "pageStudentCohort": 17,
+    "pageStudentMajor": "Kỹ thuật phần mềm",
+    "pageStudentLevelYear": 1
 }
 
 ### Create Page and mutiple tables
@@ -69,7 +72,7 @@ Content-Type: application/json
     "pageId": "654903da5fc9d102a4430fb7"
 }
 ### Get all table
-GET {{url}}/api/page
+GET {{url}}/api/page 
 
 ### Add table
 POST {{url}}/api/table
@@ -115,14 +118,27 @@ Content-Type: application/json
     "tableId": "6549076834040537486db1c6"
 }
 ### Add row
-POST {{url}}/api/row
+POST {{url}}/api/rows
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="files"; filename="dummy.pdf"
+Content-Type: application/pdf
+
+< ./data/dummy.pdf
+--MyBoundary
+Content-Disposition: form-data; name="rowData"
 Content-Type: application/json
 
-{   
-    "page": "65570d108e800ae7c5adeace",
-    "user": "65570c9b8e800ae7c5adeac7",
-    "table": "65570d108e800ae7c5adeacf"
+{
+    "user": "65d98ca4fe939cfae60740f8",
+    "table": "65d98f5024ee301790cca8a7", 
+    "page": "65d98f5024ee301790cca8a6",
+    "content": "{\"row 1\":\"1\",\"row 2\":\"2\",\"row 3\":\"3\",\"row 4\":\"4\",\"row 5\":\"5\"}"
 }
+
+--MyBoundary--
+
 ### Get pedding row
 GET {{url}}/api/pending_rows?limit=3&page=2
 

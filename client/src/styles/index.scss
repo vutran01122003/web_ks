@@ -210,6 +210,7 @@ a {
 @import "./pages/pageLogin";
 @import "./pages/pageChatbot";
 @import "./pages/pageCompletionSchedule";
+@import "./pages/pageFaculty";
 
 // Component
 @import "./components/modalComponent";
@@ -221,6 +222,8 @@ a {
 @import "./components/peddingGoalsComponent";
 @import "./components/buttonComponent";
 @import "./components/goalsInfoComponent";
+@import "./components/quantity";
+@import "./components/tabs";
 
 // Scrollbar
 @import "./scrollBar/scrollBar";
@@ -229,5 +232,3 @@ a {
 
 // Media
 @import "@media/@mediaComponentLogin.scss";
-
-@import "./components/quantity";

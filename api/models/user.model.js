@@ -9,10 +9,9 @@ const UserSchema = new Schema(
     {
         avatar: {
             type: String,
-            default:
-                'https://tesf.s3.ap-southeast-1.amazonaws.com/avatar/avatar_default/avatar_default.jpg'
+            default: 'https://tesf.s3.ap-southeast-1.amazonaws.com/avatar/avatar_default/avatar_default.jpg'
         },
-        studentId: {
+        userId: {
             type: String,
             required: true,
             trim: true
@@ -25,6 +24,10 @@ const UserSchema = new Schema(
         password: {
             type: String,
             trim: true
+        },
+        group: {
+            type: Schema.Types.ObjectId,
+            ref: 'group'
         },
         birthday: {
             type: Schema.Types.Date,

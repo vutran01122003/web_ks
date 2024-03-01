@@ -72,6 +72,13 @@ export const getNotifications =
                     page
                 }
             });
+
+            dispatch({
+                type: GLOBALTYPES.NOTIFICATION.LOADING_NOTIFICATIONS,
+                payload: {
+                    isLoading: false
+                }
+            });
         } catch (error) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -80,13 +87,6 @@ export const getNotifications =
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response?.data.msg || 'Lấy dữ liệu thông báo thất bại'
-                }
-            });
-        } finally {
-            dispatch({
-                type: GLOBALTYPES.NOTIFICATION.LOADING_NOTIFICATIONS,
-                payload: {
-                    isLoading: false
                 }
             });
         }
@@ -157,19 +157,11 @@ export const markAllAsRead =
                 recipientId
             });
 
-            const res = await getDataApi(`/notifications/${recipientId}?page=1&limit=5&currentNumNotifications=0`);
-
             dispatch({
-                type: GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS,
+                type: GLOBALTYPES.NOTIFICATION.MARK_ALL_AS_READ,
                 payload: {
-                    data: res.data.data,
-                    recipientId,
-                    page: 1
+                    recipientId
                 }
-            });
-
-            dispatch({
-                type: GLOBALTYPES.NOTIFICATION.MARK_ALL_AS_READ
             });
         } catch (error) {
             dispatch({

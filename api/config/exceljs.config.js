@@ -1,19 +1,19 @@
 const userColumn = [
-    { header: "STT", key: "s_no", width: 5 },
-    { header: "MSSV", key: "studentId", width: 10 },
-    { header: "Họ và tên", key: "fullName", width: 25 },
-    { header: "Ngày sinh", key: "birthday", width: 12 },
-    { header: "Khoa", key: "faculty", width: 30 },
-    { header: "Chuyên ngành", key: "major", width: 30 },
-    { header: "Khoá", key: "cohort", width: 5 },
-    { header: "Email", key: "email", width: 35 },
-    { header: "Điện thoại", key: "phone", width: 15 },
+    { header: 'STT', key: 's_no', width: 5 },
+    { header: 'MSSV', key: 'userId', width: 10 },
+    { header: 'Họ và tên', key: 'fullName', width: 25 },
+    { header: 'Ngày sinh', key: 'birthday', width: 12 },
+    { header: 'Khoa', key: 'faculty', width: 30 },
+    { header: 'Chuyên ngành', key: 'major', width: 30 },
+    { header: 'Khoá', key: 'cohort', width: 5 },
+    { header: 'Email', key: 'email', width: 35 },
+    { header: 'Điện thoại', key: 'phone', width: 15 }
 ];
 
 const addDataOfRow = (cell, colNumber, data) => {
     switch (colNumber) {
         case 2:
-            data.studentId = cell.value;
+            data.userId = cell.value;
             break;
         case 3:
             data.fullName = cell.value;
@@ -43,5 +43,5 @@ const addDataOfRow = (cell, colNumber, data) => {
 
 module.exports = {
     userColumn,
-    addDataOfRow,
+    addDataOfRow
 };

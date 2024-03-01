@@ -1,0 +1,155 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "userId": "21013481",
+    "password": "1111"
+}
+
+### Create group
+POST {{url}}/api/groups
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "description": "Người có chức vụ cao nhất trong hệ thống, người này có thể cấp và thu hồi quyền của các người dùng khác",
+    "groupCode": "004"
+}
+
+### Get all group
+GET {{url}}/api/groups
+
+### Update group by id
+PATCH {{url}}/api/groups/65d9fbf433cfcd55b534007f
+Content-Type: application/json
+
+{
+    "groupCode": "003"
+}
+### Delete group
+Delete {{url}}/api/groups/65d9f95033cfcd55b5340077
+
+### Create role
+POST {{url}}/api/roles
+Content-Type: application/json
+
+{
+    "name": "đọc dữ liệu trang động",
+    "method": "get",
+    "url": "/page",
+    "description": "Quyền đọc dữ liệu trang động"
+}
+
+### Delete role
+DELETE {{url}}/api/roles/65d869e64f4c55561ee57878
+
+### Add roles to the faculty manager's group
+# 
+POST {{url}}/api/groups/65e07596147fc5e332b88986/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+       "65e0711a4b961382fd75a421",
+       "65e0711a4b961382fd75a423",
+       "65e0711a4b961382fd75a425",
+       "65e0711a4b961382fd75a427",
+       "65e0711a4b961382fd75a42d",
+       "65e0711a4b961382fd75a42f",
+       "65e0711a4b961382fd75a431",
+       "65e0711a4b961382fd75a433",
+       "65e0711a4b961382fd75a435",
+       "65e0711a4b961382fd75a437",
+       "65e0711a4b961382fd75a43d",
+       "65e0711a4b961382fd75a43f",
+       "65e0711a4b961382fd75a441",
+       "65e0711a4b961382fd75a443",
+       "65e0711a4b961382fd75a45f",
+       "65e0711a4b961382fd75a461",
+       "65e0711a4b961382fd75a465",
+       "65e0711a4b961382fd75a467",
+       "65e0711a4b961382fd75a469",
+       "65e0711a4b961382fd75a46b",
+       "65e0711a4b961382fd75a46d",
+       "65e0711a4b961382fd75a46f",
+       "65e0711a4b961382fd75a471",
+       "65e0711a4b961382fd75a479",
+       "65e0711a4b961382fd75a487"
+    ]
+}
+
+### Add roles to the talented engineer's group
+POST {{url}}/api/groups/65e0770c147fc5e332b8898d/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+        "65e0711a4b961382fd75a423",
+        "65e0711a4b961382fd75a425",
+        "65e0711a4b961382fd75a433",
+        "65e0711a4b961382fd75a437",
+        "65e0711a4b961382fd75a439",
+        "65e0711a4b961382fd75a43b",
+        "65e0711a4b961382fd75a441",
+        "65e0711a4b961382fd75a443",
+        "65e0711a4b961382fd75a45d",
+        "65e0711a4b961382fd75a465",
+        "65e0711a4b961382fd75a467",
+        "65e0711a4b961382fd75a46b",
+        "65e0711a4b961382fd75a46d",
+        "65e0711a4b961382fd75a46f",
+        "65e0711a4b961382fd75a471",
+        "65e0711a4b961382fd75a479"
+    ]
+}
+
+### Add roles to the admin's group
+POST {{url}}/api/groups/65e07792147fc5e332b88994/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+        "65e0711a4b961382fd75a423",
+        "65e0711a4b961382fd75a425",
+        "65e0711a4b961382fd75a445",
+        "65e0711a4b961382fd75a447",
+        "65e0711a4b961382fd75a44d",
+        "65e0711a4b961382fd75a44f",
+        "65e0711a4b961382fd75a451",
+        "65e0711a4b961382fd75a455",
+        "65e0711a4b961382fd75a453",
+        "65e0711a4b961382fd75a457",
+        "65e0711a4b961382fd75a459",
+        "65e0711a4b961382fd75a45b",
+        "65e0711a4b961382fd75a465",
+        "65e0711a4b961382fd75a467",
+        "65e0711a4b961382fd75a469",
+        "65e0711a4b961382fd75a46b",
+        "65e0711a4b961382fd75a46d",
+        "65e0711a4b961382fd75a46f",
+        "65e0711a4b961382fd75a471",
+        "65e0711a4b961382fd75a449",
+        "65e0711a4b961382fd75a44b",
+        "65e0711a4b961382fd75a477",
+        "65e0711a4b961382fd75a479",
+        "65e0711a4b961382fd75a47d",
+        "65e0711a4b961382fd75a47f",
+        "65e0711a4b961382fd75a481",
+        "65e0711a4b961382fd75a483",
+        "65e0711a4b961382fd75a485",
+        "65e0711a4b961382fd75a487",
+        "65e0711a4b961382fd75a489",
+        "65e0711a4b961382fd75a48b",
+        "65e0711a4b961382fd75a473",
+        "65e0711a4b961382fd75a475"
+    ]
+}
+
+### Remove role to the groups
+DELETE {{url}}/api/groups/65d869d24f4c55561ee57872/roles/65d86a8b4f4c55561ee57883
+
+### Get all registered routes
+GET {{url}}/api/routes   

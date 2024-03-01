@@ -1,20 +1,42 @@
 const Faculty = require('../models/faculty.model');
 const createError = require('http-errors');
+const UserService = require('./user.service');
 
 class FacultyService {
-    static createFaculty = async ({ facultyName }) => {
+    static createFaculty = async ({ facultyName, managerIdList, majorList }) => {
         try {
-            const isExists = await Faculty.findOne({ facultyName }).lean();
+            if (!facultyName.trim()) throw createError.BadRequest('Tên khoa không được để trống');
+            if (managerIdList.length === 0) throw createError.BadRequest('Danh sách quản lý khoa không được để trống');
+            if (majorList.length === 0) throw createError.BadRequest('Danh sách chuyên ngành không được để trống');
+
+            const result = await Promise.all([
+                Faculty.findOne({ facultyName }).lean(),
+                UserService.findUserById({ userIdList: managerIdList })
+            ]);
+
+            const isExists = result[0];
+            const userDataList = result[1];
 
             if (isExists) throw createError.Conflict('Tên khoa đã tồn tại');
-
-            if (!facultyName.trim()) throw createError.BadRequest('Tên khoa không được để trống');
+            if (userDataList.length !== managerIdList.length)
+                throw createError.NotFound(`Có người dùng trong danh sách đã bị xóa hoặc không tồn tại`);
 
             const createdFaculty = await Faculty.create({
-                facultyName
+                facultyName,
+                managerList: managerIdList,
+                majors: majorList.map((major) => ({
+                    majorName: major,
+                    cohortList: []
+                }))
             });
 
-            return createdFaculty;
+            const populatedFaculty = createdFaculty.populate({
+                path: 'managerList',
+                model: 'user',
+                select: 'fullName userId'
+            });
+
+            return populatedFaculty;
         } catch (error) {
             throw error;
         }
@@ -27,15 +49,13 @@ class FacultyService {
             if (!faculty)
                 return {
                     msg: 'Khoa không tồn tại',
-                    code: 404,
+                    status: 404,
                     data: null
                 };
 
             if (!majorName.trim()) throw createError.BadRequest('Chuyên ngành không để trống');
 
-            if (
-                !faculty.majors.some((major) => major.majorName === majorName.trim().toLowerCase())
-            ) {
+            if (!faculty.majors.some((major) => major.majorName === majorName.trim().toLowerCase())) {
                 faculty.majors.push({
                     majorName
                 });
@@ -44,14 +64,14 @@ class FacultyService {
             } else {
                 return {
                     msg: 'Chuyên ngành đã tồn tại',
-                    code: 409,
+                    status: 409,
                     data: null
                 };
             }
 
             return {
                 msg: `Chuyên ngành ${majorName} đã được tạo thành công`,
-                code: 201,
+                status: 201,
                 data: faculty.majors[faculty.majors.length - 1]
             };
         } catch (error) {
@@ -74,12 +94,9 @@ class FacultyService {
         try {
             const faculty = await Faculty.findById(facultyId);
             if (!faculty) throw createError.NotFound('Khoa không tồn tại');
-
             if (
                 data.majorName &&
-                faculty.majors.some(
-                    (major) => major.majorName === data.majorName.trim().toLowerCase()
-                )
+                faculty.majors.some((major) => major.majorName === data.majorName.trim().toLowerCase())
             )
                 throw createError.Conflict('Chuyên ngành đã tồn tại');
 
@@ -123,6 +140,7 @@ class FacultyService {
             const cohortList = faculty.majors.id(majorId).cohortList;
             if (cohortList.some((cohort) => cohort.cohortName === cohortName))
                 throw createError.Conflict(`Khóa ${cohortName} đã tồn tại`);
+
             cohortList.push({
                 cohortName
             });
@@ -130,7 +148,7 @@ class FacultyService {
             await faculty.save();
 
             return {
-                code: 201,
+                status: 201,
                 msg: `Khóa ${cohortName} được tạo thành công`,
                 data: cohortList[cohortList.length - 1]
             };
@@ -179,10 +197,7 @@ class FacultyService {
             for (let i = 0; i < cohortList.length; i++) {
                 if (cohortList[i]._id == cohortId) {
                     Object.keys(data).forEach((key) => {
-                        if (
-                            data.cohortName &&
-                            cohortList.some((cohort) => cohort.cohortName === data.cohortName)
-                        )
+                        if (data.cohortName && cohortList.some((cohort) => cohort.cohortName === data.cohortName))
                             throw createError.Conflict(`Khóa ${data.cohortName} đã tồn tại`);
                         cohortList[i][key] = data[key];
                     });
@@ -227,7 +242,7 @@ class FacultyService {
             if (!deletedFaculty) throw createError.NotFound('Khoa không tồn tại');
 
             return {
-                code: 200,
+                status: 200,
                 msg: `Xóa khoa ${deletedFaculty.facultyName} thành công`,
                 data: deletedFaculty
             };
@@ -238,7 +253,9 @@ class FacultyService {
 
     static getAllFaculties = async () => {
         try {
-            const faculties = await Faculty.find({ isActive: true }).populate('majors').lean();
+            const faculties = await Faculty.find({ isActive: true })
+                .populate({ path: 'managerList', model: 'user', select: 'fullName userId' })
+                .lean();
 
             const availableFaculties = faculties.filter((faculty) => faculty.isActive === true);
 

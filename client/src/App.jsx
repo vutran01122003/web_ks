@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom/dist';
 import Layout from './components/Layout/Layout';
@@ -21,6 +21,7 @@ const App = () => {
     const auth = useSelector(authSelector);
     const location = useLocation();
     const pathName = location.pathname;
+    const groupCode = auth?.user?.group.groupCode;
 
     useEffect(() => {
         dispatch(verifyAccessToken());
@@ -47,21 +48,18 @@ const App = () => {
                     element={
                         auth?.user ? (
                             <>
-                                <Layout auth={auth} />
+                                <Layout auth={auth} pathName={pathName} groupCode={groupCode} />
                                 <SocketIO auth={auth} />
                             </>
                         ) : auth?.firstLogin ? (
-                            <FirstLogin
-                                studentId={auth.firstLogin.studentId}
-                                birthday={auth.firstLogin.birthday}
-                            />
+                            <FirstLogin userId={auth.firstLogin.userId} birthday={auth.firstLogin.birthday} />
                         ) : (
                             <Login />
                         )
                     }
                 >
-                    <Route path='/home' element={<Home auth={auth} />} />
                     <Route index element={<Home auth={auth} />} />
+                    <Route path='/home' element={<Home auth={auth} />} />
                     <Route path='/:page' element={<PageRender />} />
                     <Route path='/:page/:id' element={<PageRender />} />
                     <Route path='/page/:dynamicPage' element={<PageRender />} />

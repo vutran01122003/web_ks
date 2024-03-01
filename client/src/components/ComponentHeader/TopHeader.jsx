@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Tooltip } from 'antd';
+import { RiAdminLine } from 'react-icons/ri';
 import { TbGridDots } from 'react-icons/tb';
+import { IoNotificationsOutline } from 'react-icons/io5';
 import ControlBoxAccount from './ComponentControl/ControlBoxAccount';
 import Avatar from '../ComponentAvatar/ComponentAvatar';
 import ImageMessenger from '../../assets/images/image_messenger.png';
 import ImageTask from '../../assets/images/image_task.png';
 import ImageNote from '../../assets/images/image_note.png';
-import { Tooltip } from 'antd';
-import { RiAdminLine } from 'react-icons/ri';
-import { IoNotificationsOutline } from 'react-icons/io5';
 import Notification from './ComponentNotification/Notification';
-import { useSelector } from 'react-redux';
 import { notificationSelector } from '../../redux/selector';
 
 const TopHeader = ({ auth }) => {
@@ -91,7 +91,7 @@ const TopHeader = ({ auth }) => {
                     </div>
                     <div className='box__control'>
                         {determineAuth ? (
-                            <Tooltip placement='bottom' title='QUẢN TRỊ HỆ THỐNG'>
+                            <Tooltip placement='bottom' title={auth?.user?.group.name.toUpperCase()}>
                                 <div className='border__text--role '>
                                     <RiAdminLine />
                                 </div>
@@ -99,10 +99,7 @@ const TopHeader = ({ auth }) => {
                         ) : null}
 
                         <div className='btn__border' ref={refBoxProductList}>
-                            <div
-                                className='flex__center'
-                                onClick={() => setDropBoxProductList(!dropBoxProductList)}
-                            >
+                            <div className='flex__center' onClick={() => setDropBoxProductList(!dropBoxProductList)}>
                                 <TbGridDots />
                             </div>
                             <div
@@ -115,10 +112,7 @@ const TopHeader = ({ auth }) => {
                         </div>
 
                         <div className='btn__border' ref={refBoxNotification}>
-                            <div
-                                className='flex__center'
-                                onClick={handleToggleVisibleNotificationModal}
-                            >
+                            <div className='flex__center' onClick={handleToggleVisibleNotificationModal}>
                                 <IoNotificationsOutline />
                                 {notification.unreadNotificationNum !== 0 && (
                                     <div className='length__noti'>
@@ -134,23 +128,16 @@ const TopHeader = ({ auth }) => {
                                 <Notification
                                     auth={auth}
                                     notification={notification}
-                                    handleToggleVisibleNotificationModal={
-                                        handleToggleVisibleNotificationModal
-                                    }
+                                    handleToggleVisibleNotificationModal={handleToggleVisibleNotificationModal}
                                 />
                             )}
                         </div>
 
                         <div className='border__account' ref={refBoxAccount}>
-                            <div
-                                className='btn_dropdown'
-                                onClick={() => setDropBoxAccount(!dropBoxAccount)}
-                            >
+                            <div className='btn_dropdown' onClick={() => setDropBoxAccount(!dropBoxAccount)}>
                                 <div className='info__user'>
                                     <div id='name__user'>{auth?.user?.fullName}</div>
-                                    <div id='studentId__user'>
-                                        {'ID : ' + auth?.user?.studentId}
-                                    </div>
+                                    <div id='studentId__user'>{'ID : ' + auth?.user?.userId}</div>
                                 </div>
                                 <Avatar
                                     url={auth?.user.avatar}

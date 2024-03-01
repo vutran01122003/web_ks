@@ -22,6 +22,7 @@ class PageService {
             }).lean();
 
             if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
+
             if (pageType === 'tin tức') {
                 createdPage = await Page.create({
                     pageName,
@@ -87,20 +88,14 @@ class PageService {
             if (!pageData) throw createError.NotFound('Trang Không Tồn Tại');
 
             for (let tableItem of pageData.tables) {
-                if (
-                    JSON.stringify(tableItem._id) ===
-                    JSON.stringify(new mongoose.Types.ObjectId(tableId))
-                ) {
+                if (JSON.stringify(tableItem._id) === JSON.stringify(new mongoose.Types.ObjectId(tableId))) {
                     if (tableItem.fixedScore) {
                         totalScore = tableItem.fixedScore;
                         break;
                     } else {
                         tableItem.rowTitleList.forEach((rowTitleItem) => {
                             Object.keys(content).forEach((key) => {
-                                if (
-                                    rowTitleItem.fixedValue.length > 0 &&
-                                    key === rowTitleItem.titleValue
-                                ) {
+                                if (rowTitleItem.fixedValue.length > 0 && key === rowTitleItem.titleValue) {
                                     content[key] = {
                                         value: content[key],
                                         score: rowTitleItem.fixedValue.find((fixedValueItem) => {
@@ -184,12 +179,7 @@ class PageService {
         }
     };
 
-    static getPageDetailsList = async ({
-        pageStudentMajor,
-        pageStudentLevelYear,
-        pageStudentCohort,
-        filterArr
-    }) => {
+    static getPageDetailsList = async ({ pageStudentMajor, pageStudentLevelYear, pageStudentCohort, filterArr }) => {
         try {
             const pageDetailsList = await Page.aggregate([
                 {

@@ -13,7 +13,7 @@ class NotificationControllers {
             });
 
             res.status(201).json({
-                code: 201,
+                status: 201,
                 msg: 'Tạo thông báo thành công',
                 data: createdNotification
             });
@@ -33,12 +33,11 @@ class NotificationControllers {
             });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Lấy dữ liệu thông báo thành công',
                 data: notifications
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     }
@@ -55,7 +54,7 @@ class NotificationControllers {
             });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Cập nhật trạng thái đọc của thông báo thành công',
                 data: updatedNotification
             });
@@ -73,7 +72,7 @@ class NotificationControllers {
             });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Đánh dấu đã đọc tất cả thông báo thành công'
             });
         } catch (error) {
@@ -92,7 +91,7 @@ class NotificationControllers {
             });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Xóa thông báo thành công',
                 data: deletedNotifications
             });
@@ -110,7 +109,7 @@ class NotificationControllers {
             });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Xóa tất cả thông báo thành công'
             });
         } catch (error) {
@@ -127,14 +126,13 @@ class NotificationControllers {
             });
 
             res.status(200).json({
-                code: 200,
+                status: 200,
                 msg: 'Lấy số lượng bài viết chưa đọc thành công',
                 data: {
                     numUnreadNotifications
                 }
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     }

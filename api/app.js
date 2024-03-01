@@ -49,6 +49,8 @@ app.use('/api', require('./router/faculty'));
 app.use('/api', require('./router/progress'));
 app.use('/api', require('./router/excel'));
 app.use('/api', require('./router/notification'));
+app.use('/api', require('./router/permission'));
+app.use('/api', require('./router/user'));
 
 // Catch NotFound
 app.use((req, res, next) => {

@@ -5,7 +5,7 @@ POST {{url}}/api/register
 Content-Type: application/json
 
 {
-    "studentId": "21013481",
+    "userId": "21013481",
     "fullName": "Trần Đức Vũ",
     "birthday": "19-05-2003",
     "cohort": 17,
@@ -21,7 +21,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "studentId": "21013481",
+    "userId": "21013481",
     "password": "1111"
 }
 

@@ -72,7 +72,6 @@ const Row = conn.model(DOC, RowSchema);
 RowSchema.pre('deleteMany', async function (next) {
     try {
         const deletedDocs = await this.model.find(this._conditions).lean();
-        console.log(deletedDocs);
 
         return next();
     } catch (error) {

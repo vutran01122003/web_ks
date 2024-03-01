@@ -1,0 +1,16 @@
+.tabs_container {
+    height: 100%;
+
+    .ant-tabs-nav {
+        background-color: #FAFAFA;
+        border-radius: 3px;
+
+        .ant-tabs-tab {
+            padding: 15px;
+            font-weight: 600;
+            font-size: 17px;
+            min-width: 220px;
+            justify-content: center;
+        }
+    }
+}

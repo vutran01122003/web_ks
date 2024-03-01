@@ -1,20 +1,52 @@
 import React, { useRef, useState } from 'react';
+import Tippy from '@tippyjs/react/headless';
 import ReactQuillComponent from '../components/ComponentReactQuill/ReactQuillComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../redux/selector';
 import { createNews } from '../redux/actions/newsAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
+import { createPage } from '../redux/actions/pageAction';
 
 function CreateNew() {
-    const dispatch = useDispatch();
-    const page = useSelector(pageSelector);
     const coverRef = useRef();
     const newsTypeRef = useRef();
+
+    const dispatch = useDispatch();
+    const page = useSelector(pageSelector);
+
+    const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
-    const [file, setFile] = useState(null);
     const [newsType, setNewsType] = useState('');
+    const [newsTypeValue, setNewsTypeValue] = useState('');
+    const [visibleModal, setVisibleModal] = useState(false);
+
+    const handleToggleModal = () => {
+        setVisibleModal((prev) => !prev);
+    };
+
+    console.log(visibleModal);
+
+    const handleChangeNewsTypeValue = (e) => {
+        setNewsTypeValue(e.target.value);
+    };
+
+    const handleNewsType = (value) => {
+        setNewsType(value);
+        setVisibleModal(false);
+    };
+
+    const handleCreateNewsType = () => {
+        dispatch(
+            createPage({
+                pageData: {
+                    pageName: newsTypeValue,
+                    pageType: 'tin tức'
+                }
+            })
+        );
+    };
 
     const createNewNews = (e) => {
         e.preventDefault();
@@ -67,27 +99,50 @@ function CreateNew() {
                     <label className='select_new_type_label'>
                         <span>Phân Loại Bài Viết</span>
                     </label>
+                    <Tippy
+                        visible={visibleModal}
+                        interactive={visibleModal}
+                        onClickOutside={handleToggleModal}
+                        placement='bottom-start'
+                        render={(attrs) => (
+                            <div className='select_new_type_modal' tabIndex='-1' {...attrs}>
+                                {page.pages.map((currentPage) => {
+                                    if (currentPage.pageType === 'tin tức')
+                                        return (
+                                            <div
+                                                onClick={() => {
+                                                    handleNewsType(currentPage.pageName);
+                                                }}
+                                                className='news_type_item'
+                                                key={currentPage._id}
+                                            >
+                                                {currentPage.pageName}
+                                            </div>
+                                        );
+                                    return null;
+                                })}
 
-                    <select
-                        className='select_new_type'
-                        onChange={(e) => {
-                            setNewsType(e.target.value);
-                        }}
-                        ref={newsTypeRef}
-                        defaultValue=''
+                                <div className='add_news_type_container'>
+                                    <div className='add_news_type_wrapper'>
+                                        <label className='add_news_type_label'>Tạo Mới Loại Tin Tức: </label>
+                                        <input
+                                            className='add_news_type_input'
+                                            type='text'
+                                            onChange={handleChangeNewsTypeValue}
+                                            placeholder='Nhập tên loại tin tức'
+                                        />
+                                    </div>
+                                    <button onClick={handleCreateNewsType} type='button' className='add_news_type_btn'>
+                                        Đồng ý
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     >
-                        <option value=''>Không Xác Định</option>
-                        {page?.pages &&
-                            page.pages.map((page, index) => {
-                                if (page.pageType === 'tin tức') {
-                                    return (
-                                        <option value={page.pageName} key={index}>
-                                            {page.pageName}
-                                        </option>
-                                    );
-                                }
-                            })}
-                    </select>
+                        <div onClick={handleToggleModal} className='select_new_type'>
+                            {newsType || 'Chọn loại tin tức'}
+                        </div>
+                    </Tippy>
                 </div>
 
                 <input

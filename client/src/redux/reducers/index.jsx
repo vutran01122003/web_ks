@@ -9,6 +9,7 @@ import progressReducer from './progressReducer';
 import chatBotReducer from './chatbotReducer';
 import socketReducer from './socketReducer';
 import notificationReducer from './notificationReducer';
+import facultyReducer from './facultyReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     progress: progressReducer,
     chatbot: chatBotReducer,
     socket: socketReducer,
-    notification: notificationReducer
+    notification: notificationReducer,
+    faculty: facultyReducer
 });
 
 export default rootReducer;

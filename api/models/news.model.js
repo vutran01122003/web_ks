@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
+const conn = require('../dbs/init.mongodb');
 
 const [DOC, COL] = ['news', 'news'];
 
@@ -16,11 +17,6 @@ const NewsSchema = new Schema(
         content: {
             type: String,
             required: true
-        },
-        viewedFaculty: {
-            type: [String],
-            enum: ['All', 'Faculty'],
-            default: ['All']
         },
         cover: {
             imageId: String,
@@ -42,6 +38,6 @@ const NewsSchema = new Schema(
     }
 );
 
-const News = model(DOC, NewsSchema);
+const News = conn.model(DOC, NewsSchema);
 
 module.exports = News;

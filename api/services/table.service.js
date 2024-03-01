@@ -32,7 +32,7 @@ class TableService {
             return {
                 msg: 'Thêm chỉ tiêu thành công',
                 page: updatedPage,
-                code: 201
+                status: 201
             };
         } catch (error) {
             throw error;

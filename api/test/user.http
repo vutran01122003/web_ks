@@ -1,0 +1,13 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "userId": "21013481",
+    "password": "1111"
+}
+
+### Add group to user
+POST {{url}}/api/users/65e06f20580884a201b801d7/groups/65e07596147fc5e332b88986

@@ -2,23 +2,24 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Select, Tabs, Input } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, rowSelector } from '../redux/selector';
+import { authSelector, facultySelector, rowSelector } from '../redux/selector';
 import { getDynamicRows } from '../redux/actions/rowAction';
 import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDynamicRows';
 import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import no_search_result from '../assets/images/no_search_result.png';
+import { getAllFaculties } from '../redux/actions/facultyAction';
+import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 
-import { VscLayersActive } from 'react-icons/vsc';
-
-const ListGoals = () => {
+const ActivityApprovalUi = () => {
     const auth = useSelector(authSelector);
     const row = useSelector(rowSelector);
+    const faculty = useSelector(facultySelector);
     const observer = useRef();
     const dispatch = useDispatch();
     const [refreshTabTrigger, setRefreshTabTrigger] = useState(false);
-    const [studentData, setStudentData] = useState({
-        studentId: '',
+    const [userData, setUserData] = useState({
+        userId: '',
         major: ''
     });
 
@@ -37,7 +38,7 @@ const ListGoals = () => {
             dispatch(
                 getDynamicRows({
                     tab,
-                    studentData,
+                    userData,
                     page: nextPage[tab],
                     currentRows: row[tab]?.currentRows,
                     limit
@@ -58,8 +59,8 @@ const ListGoals = () => {
     };
 
     const handleChangeTabValue = (tabValue) => {
-        setStudentData({
-            studentId: '',
+        setUserData({
+            userId: '',
             major: ''
         });
 
@@ -67,11 +68,11 @@ const ListGoals = () => {
     };
 
     const handleRelativeSearchByStudentId = (e) => {
-        setStudentData((prev) => ({ ...prev, studentId: e.target.value }));
+        setUserData((prev) => ({ ...prev, userId: e.target.value }));
     };
 
     const handleSearchByStudentMajor = (major) => {
-        setStudentData((prev) => ({ ...prev, major: major.value }));
+        setUserData((prev) => ({ ...prev, major: major.value }));
     };
 
     const handleRelativeSearch = () => {
@@ -83,11 +84,7 @@ const ListGoals = () => {
             if (row.loading) return;
             if (observer.current) observer.current.disconnect();
             observer.current = new IntersectionObserver((entries) => {
-                if (
-                    entries[0].isIntersecting &&
-                    nextPage[tab] === 1 &&
-                    row[tab]?.data.length === limit
-                ) {
+                if (entries[0].isIntersecting && nextPage[tab] === 1 && row[tab]?.data.length === limit) {
                     setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
                 } else if (entries[0].isIntersecting && nextPage[tab] > 1 && !row[tab]?.maxPage) {
                     setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
@@ -121,6 +118,10 @@ const ListGoals = () => {
         }
     ];
 
+    useEffect(() => {
+        if (faculty.facultyData.length === 0) dispatch(getAllFaculties());
+    }, []);
+
     return (
         <>
             {auth?.user && (
@@ -150,21 +151,19 @@ const ListGoals = () => {
                                             value: '',
                                             label: 'Chọn Chuyên Ngành'
                                         },
-                                        {
-                                            value: 'Kỹ Thuật Phần Mềm',
-                                            label: 'Kỹ Thuật Phần Mềm'
-                                        },
-                                        {
-                                            value: 'Khoa Học Máy Tính',
-                                            label: 'Khoa Học Máy Tính'
-                                        }
+                                        ...(faculty?.facultyData
+                                            .find((facultyItem) => facultyItem.facultyName === auth?.user.faculty)
+                                            ?.majors.map((major) => ({
+                                                value: capitalizeFirstLetter(major.majorName),
+                                                label: capitalizeFirstLetter(major.majorName)
+                                            })) || [])
                                     ]}
                                 />
 
                                 <Input
                                     placeholder='Mã sinh viên'
                                     onChange={handleRelativeSearchByStudentId}
-                                    value={studentData.studentId}
+                                    value={userData.userId}
                                     style={{
                                         width: 220
                                     }}
@@ -188,8 +187,8 @@ const ListGoals = () => {
                                     className='btn__refresh'
                                     onClick={() => {
                                         handleRefreshTab();
-                                        setStudentData({
-                                            studentId: '',
+                                        setUserData({
+                                            userId: '',
                                             major: ''
                                         });
                                     }}
@@ -201,10 +200,7 @@ const ListGoals = () => {
                         <div className='container__center'>
                             <>
                                 {row[tab].data.map((dynamicRows, index) => {
-                                    if (
-                                        index === row[tab].data.length - 1 &&
-                                        row[tab].data.length != 0
-                                    ) {
+                                    if (index === row[tab].data.length - 1 && row[tab].data.length != 0) {
                                         return (
                                             <div
                                                 ref={lastPostElementRef}
@@ -259,4 +255,4 @@ const ListGoals = () => {
     );
 };
 
-export default ListGoals;
+export default ActivityApprovalUi;

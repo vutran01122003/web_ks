@@ -3,7 +3,7 @@ import { getLogged, removeLogged, setLogged } from '../../utils/handleLogged';
 import GLOBALTYPES from './globalTypes';
 
 export const login =
-    ({ studentId, password }) =>
+    ({ userId, password }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -14,7 +14,7 @@ export const login =
             });
 
             const res = await postDataApi('/login', {
-                studentId,
+                userId,
                 password
             });
 

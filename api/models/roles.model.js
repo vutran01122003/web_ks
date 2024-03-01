@@ -1,17 +1,23 @@
-const { permissionConn } = require('../dbs/init.atlas');
+const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const [DOC, COL] = ['role', 'roles'];
 
 const RoleSchema = new Schema(
     {
-        roleName: String,
-        route: {
+        url: {
             type: String,
-            unique: true,
             required: true
         },
-        description: String
+        method: {
+            type: String,
+            enum: ['get', 'post', 'patch', 'delete'],
+            required: true
+        },
+        description: {
+            type: String,
+            default: 'Không có mô tả'
+        }
     },
     {
         collection: COL,
@@ -19,6 +25,6 @@ const RoleSchema = new Schema(
     }
 );
 
-const Role = permissionConn.model(DOC, RoleSchema);
+const Role = conn.model(DOC, RoleSchema);
 
 module.exports = Role;

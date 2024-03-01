@@ -17,4 +17,6 @@ global._io = new Server(server, {
     }
 });
 
+global.routerStack = app._router.stack;
+
 _io.on('connection', socket.connect);
