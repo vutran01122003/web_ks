@@ -17,9 +17,8 @@
             margin-left: 15px;
             background-color: #ffffff;
             box-shadow: 0px 0px 3px rgb(192, 188, 188);
-            
 
-            &:first-child{
+            &:first-child {
                 border: none;
             }
 
@@ -29,13 +28,12 @@
                 flex-direction: column;
                 justify-content: space-around;
                 gap: 5px;
-                
+
                 .text__heading {
                     font-size: 14px;
                     font-weight: 700;
                     text-transform: uppercase;
                     color: #1a1919;
-
                 }
 
                 .number__quantity {
@@ -43,7 +41,6 @@
                     font-size: 14px;
                     font-weight: 600;
                     color: #464444;
-
                 }
             }
 
@@ -61,11 +58,11 @@
             }
         }
 
-        &>.item__quantity:first-child {
+        & > .item__quantity:first-child {
             margin-left: 0px;
         }
 
-        &>.item__quantity:last-child {
+        & > .item__quantity:last-child {
             margin-right: 0px;
         }
     }

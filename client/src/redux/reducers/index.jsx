@@ -10,6 +10,7 @@ import chatBotReducer from './chatbotReducer';
 import socketReducer from './socketReducer';
 import notificationReducer from './notificationReducer';
 import facultyReducer from './facultyReducer';
+import activitiesReducer from './activitiesReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     chatbot: chatBotReducer,
     socket: socketReducer,
     notification: notificationReducer,
-    faculty: facultyReducer
+    faculty: facultyReducer,
+    activities: activitiesReducer
 });
 
 export default rootReducer;

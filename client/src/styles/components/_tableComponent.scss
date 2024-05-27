@@ -1,8 +1,8 @@
 .container__table {
-	width: 100%;
-	position: relative;
+    width: 100%;
+    position: relative;
 
-    &+.container__table {
+    & + .container__table {
         margin-top: 30px;
     }
     &.margin-0 {
@@ -16,14 +16,14 @@
             border: 1px solid $line_color !important;
         }
     }
-    
-	header {
+
+    header {
         padding: 10px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding-right: 20px;
-       
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 20px;
+
         .heading {
             color: #0055cc;
             font-weight: 700;
@@ -43,70 +43,70 @@
             text-transform: uppercase;
             font-size: 12px;
             cursor: pointer;
-            
+
             &.inactive {
                 background: #006fee;
                 opacity: 0.5;
                 cursor: not-allowed;
             }
-    
+
             &:not(.inactive):active {
                 transform: scale(0.9);
             }
         }
-	}
+    }
 
     .table_description {
         color: gray;
         font-weight: 400;
         padding-left: 10px;
     }
-	.table {
-		border: 1px solid $line_color;
-		margin: 10px 0px;
-		width: 100%;
+    .table {
+        border: 1px solid $line_color;
+        margin: 10px 0px;
+        width: 100%;
 
         &.margin-0 {
             margin: 0;
         }
 
-		[class^="table__line"] {
-			padding: 5px 10px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 10px;
-			margin: 0 auto;
-			text-align: center;
+        [class^='table__line'] {
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+            text-align: center;
 
-			&:not(:last-child) {
-				border-bottom: 1px solid $line_color;
-			}
-		}
+            &:not(:last-child) {
+                border-bottom: 1px solid $line_color;
+            }
+        }
 
-		.table__line__header {
-			border-bottom: 1px solid $line_color;
+        .table__line__header {
+            border-bottom: 1px solid $line_color;
 
-			.header__item {
-				padding: 10px;
-				font-weight: 700;
-				margin: 0 auto;
-				width: 100%;
+            .header__item {
+                padding: 10px;
+                font-weight: 700;
+                margin: 0 auto;
+                width: 100%;
                 text-transform: uppercase;
                 font-size: 13.5px;
                 user-select: none;
                 color: #333;
-			}
-		}
+            }
+        }
 
-		.table__items {
-			overflow-y: auto;
+        .table__items {
+            overflow-y: auto;
 
             .button_wrapper {
                 display: flex;
                 justify-content: center;
                 gap: 6px;
-            
+
                 .row_button_wrapper {
                     background: transparent;
                     border: none;
@@ -135,10 +135,10 @@
                         box-shadow: 0 0 3px rgb(208, 206, 206);
                         transition: 0.1s linear;
                         font-size: 25px;
-                        
+
                         &.pending_button {
                             color: rgb(243, 174, 44);
-                            
+
                             &:hover {
                                 color: rgb(252, 181, 47);
                             }
@@ -150,7 +150,7 @@
 
                         &.reject_button {
                             color: #f0635c;
-                            
+
                             &:hover {
                                 color: #f24c44;
                             }
@@ -171,24 +171,23 @@
                                 color: #0055cc;
                             }
                         }
-
-                      
                     }
                 }
             }
 
-			.table__line__item {
-				width: 100%;
+            .table__line__item {
+                width: 100%;
 
-				.line__item {
+                .line__item {
                     font-size: 14px;
                     font-weight: 500;
-					padding: 10px;
-					width: 100%;
-					color: $color_gray-500;
-				}
+                    padding: 10px;
+                    width: 100%;
+                    color: $color_gray-500;
+                }
 
-                .preview_proof_files, .detailed_row > span{
+                .preview_proof_files,
+                .detailed_row > span {
                     color: #006fee;
                     cursor: pointer;
                     &:hover {
@@ -198,10 +197,17 @@
                     user-select: none;
                 }
 
+                .preview_proof_files_wrapper {
+                    display: flex;
+                    gap: 5px;
+                    justify-content: center;
+                    align-items: center;
+                }
+
                 .row_status {
                     font-weight: 600;
                 }
-                
+
                 .wating_status {
                     color: rgb(243 174 44);
                 }
@@ -234,7 +240,7 @@
                 .edit_row {
                     color: #006fee;
                     cursor: pointer;
-                    font-size: 20px; 
+                    font-size: 20px;
                     transition: 0.1s linear;
 
                     &.inactive {
@@ -246,7 +252,7 @@
                         color: #1c86ff;
                     }
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 }

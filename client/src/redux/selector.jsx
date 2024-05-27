@@ -17,3 +17,5 @@ export const progressSelector = (state) => state.progress;
 export const notificationSelector = (state) => state.notification;
 
 export const facultySelector = (state) => state.faculty;
+
+export const activitiesSelector = (state) => state.activities;

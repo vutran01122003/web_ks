@@ -5,8 +5,13 @@ function ComponentDynamicRows({ index, rowsType, dynamicRows }) {
     const table = renderTable({ dynamicRowsInfo: dynamicRows, rowsType });
 
     return (
-        <div className='dynamic_goals_container'>
-            <LayoutTable isDynamicRows index={index} table={table} pendingTable={true} />
+        <div className="dynamic_goals_container">
+            <LayoutTable
+                isDynamicRows
+                index={index}
+                table={table}
+                pendingTable={true}
+            />
         </div>
     );
 }

@@ -29,76 +29,105 @@ function FirstLogin({ userId, birthday }) {
             register({
                 ...data,
                 userId,
-                birthday: formattedBirthday
-            })
+                birthday: formattedBirthday,
+            }),
         );
     };
 
     return (
-        <div className='container__fisrt--login'>
-            <div className='form__update--info'>
-                <form className=''>
-                    <h1 className='heading__text'>Cập Nhật Thông Tin </h1>
+        <div className="container__fisrt--login">
+            <div className="form__update--info">
+                <form className="">
+                    <h1 className="heading__text">Cập Nhật Thông Tin </h1>
                     <FormControl
-                        id='name_sv'
-                        label='Tên Sinh Viên'
-                        type='text'
-                        name='fullName'
-                        placeholder='Nhập tên sinh viên'
+                        id="name_sv"
+                        label="Tên Sinh Viên"
+                        type="text"
+                        name="fullName"
+                        placeholder="Nhập tên sinh viên"
                         onChange={handleChangeData}
                     />
 
                     <FormControl
-                        i='password_new'
-                        label='Mật khẩu mới'
-                        type='password'
-                        name='password'
-                        placeholder='Nhập mật khẩu'
+                        i="password_new"
+                        label="Mật khẩu mới"
+                        type="password"
+                        name="password"
+                        placeholder="Nhập mật khẩu"
                         onChange={handleChangeData}
                     />
-                    <FormControl id='msv' label='Mã Sinh Viên' name='userId' readonly value={userId} />
-                    <FormControl id='bir' label='Ngày Sinh' readonly value={formattedBirthday} />
+                    <FormControl
+                        id="msv"
+                        label="Mã Sinh Viên"
+                        name="userId"
+                        readonly
+                        value={userId}
+                    />
+                    <FormControl
+                        id="bir"
+                        label="Ngày Sinh"
+                        readonly
+                        value={formattedBirthday}
+                    />
 
                     <FormControl
-                        id='cohort'
-                        label='Khóa Sinh Viên'
-                        name='cohort'
-                        type='text'
-                        placeholder='Nhập khóa sinh viên'
+                        id="cohort"
+                        label="Khóa Sinh Viên"
+                        name="cohort"
+                        type="text"
+                        placeholder="Nhập khóa sinh viên"
                         onChange={handleChangeData}
                     />
 
                     <ComponentSelectOption
-                        id='faculty'
-                        name='faculty'
-                        label='Khoa'
-                        labelOptionNull='Chọn khoa'
+                        id="faculty"
+                        name="faculty"
+                        label="Khoa"
+                        labelOptionNull="Chọn khoa"
                         options={[
-                            { labelOption: 'Công nghệ thông tin', value: 'Công nghệ thông tin' },
-                            { labelOption: 'Kế Toán', value: 'Kế Toán' }
+                            {
+                                labelOption: 'Công nghệ thông tin',
+                                value: 'Công nghệ thông tin',
+                            },
+                            { labelOption: 'Kế Toán', value: 'Kế Toán' },
                         ]}
                         onChange={handleChangeData}
                     />
                     <ComponentSelectOption
-                        id='major'
-                        name='major'
-                        label='Chuyên Ngành'
-                        labelOptionNull='Chọn nghành học'
+                        id="major"
+                        name="major"
+                        label="Chuyên Ngành"
+                        labelOptionNull="Chọn nghành học"
                         options={[
-                            { labelOption: 'Kỹ thuật phần mềm', value: 'Kỹ thuật phần mềm' },
-                            { labelOption: 'Khoa học máy tính', value: 'Khoa học máy tính' }
+                            {
+                                labelOption: 'Kỹ thuật phần mềm',
+                                value: 'Kỹ thuật phần mềm',
+                            },
+                            {
+                                labelOption: 'Khoa học máy tính',
+                                value: 'Khoa học máy tính',
+                            },
                         ]}
                         onChange={handleChangeData}
                     />
-                    <FormControl label='Email' name='email' placeholder='Nhập email' onChange={handleChangeData} />
                     <FormControl
-                        label='Số điện thoại liên hệ'
-                        name='phone'
-                        placeholder='Nhập số điện thoại liên hệ'
+                        label="Email"
+                        name="email"
+                        placeholder="Nhập email"
+                        onChange={handleChangeData}
+                    />
+                    <FormControl
+                        label="Số điện thoại liên hệ"
+                        name="phone"
+                        placeholder="Nhập số điện thoại liên hệ"
                         onChange={handleChangeData}
                     />
 
-                    <ComponentButton textButton='Lưu thông tin' type='submit' onClick={handleSumbitForm} />
+                    <ComponentButton
+                        textButton="Lưu thông tin"
+                        type="submit"
+                        onClick={handleSumbitForm}
+                    />
                 </form>
             </div>
         </div>

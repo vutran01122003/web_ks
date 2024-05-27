@@ -8,8 +8,8 @@ export default function Alert() {
     return (
         <>
             {alert.loading && <Loading />}
-            {alert.error && <Toast status='error' msg={alert.error} />}
-            {alert.success && <Toast status='success' msg={alert.success} />}
+            {alert.error && <Toast status="error" msg={alert.error} />}
+            {alert.success && <Toast status="success" msg={alert.success} />}
         </>
     );
 }

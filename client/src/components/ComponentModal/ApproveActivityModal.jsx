@@ -15,7 +15,7 @@ function ApproveActivityModal({
     rowInfoData,
     handleHiddenConfirmModal,
     rowsType,
-    isTimedExtension
+    isTimedExtension,
 }) {
     const dispatch = useDispatch();
     const [noteValue, setNoteValue] = useState('');
@@ -27,8 +27,8 @@ function ApproveActivityModal({
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Chưa nhập hạn cuối nộp lại'
-                }
+                    error: 'Chưa nhập hạn cuối nộp lại',
+                },
             });
             return;
         }
@@ -59,7 +59,7 @@ function ApproveActivityModal({
                     userId: userData?._id,
                     pageStudentCohort: userData?.cohort,
                     pageStudentMajor: userData?.major,
-                    pageStudentLevelYear: userData?.levelYear
+                    pageStudentLevelYear: userData?.levelYear,
                 },
                 noteValue,
                 rowsType,
@@ -67,8 +67,8 @@ function ApproveActivityModal({
                 rowListId: rowInfoData.rowListId,
                 contentIdList: rowInfoData.contentIdList,
                 deadline: datetimeValue,
-                isTimedExtension
-            })
+                isTimedExtension,
+            }),
         );
 
         dispatch(
@@ -77,8 +77,8 @@ function ApproveActivityModal({
                 content: noteValue,
                 senderId: auth.user._id,
                 recipientId: userData?._id,
-                pageId: rowInfoData.pageInfo.pageId
-            })
+                pageId: rowInfoData.pageInfo.pageId,
+            }),
         );
         handleHiddenConfirmModal();
     };
@@ -103,74 +103,96 @@ function ApproveActivityModal({
     };
 
     return (
-        <div className='modal_overlap' onMouseUp={handleHiddenPopup}>
-            <div className='confirm_modal'>
-                <div className='confirm_modal_header'>
+        <div className="modal_overlap" onMouseUp={handleHiddenPopup}>
+            <div className="confirm_modal">
+                <div className="confirm_modal_header">
                     <h2>{title}</h2>
-                    <div className='modal_close_btn' onClick={handleHiddenConfirmModal}>
+                    <div
+                        className="modal_close_btn"
+                        onClick={handleHiddenConfirmModal}
+                    >
                         <AiOutlineClose />
                     </div>
                 </div>
-                <div className='confirm_modal_body'>
-                    <p className='confirm_modal_body_content'>
+                <div className="confirm_modal_body">
+                    <p className="confirm_modal_body_content">
                         {content}
-                        <span>(Kiểm tra thật kỹ minh chứng trước khi đồng ý)</span>
+                        <span>
+                            (Kiểm tra thật kỹ minh chứng trước khi đồng ý)
+                        </span>
                     </p>
                     {status === 'phải nộp lại' && (
-                        <div className='deadline_submit'>
+                        <div className="deadline_submit">
                             {!isTimedExtension && (
-                                <div className='deadline_submit_radio_group'>
+                                <div className="deadline_submit_radio_group">
                                     <label>Tạo Thời Hạn:</label>
 
-                                    <div className='deadline_submit_radio_item'>
+                                    <div className="deadline_submit_radio_item">
                                         <input
-                                            type='radio'
-                                            name='deadline_submit_radio'
-                                            onChange={handleChangeVisiableStatusDateInput}
-                                            id='deadline_submit_radio_optional'
+                                            type="radio"
+                                            name="deadline_submit_radio"
+                                            onChange={
+                                                handleChangeVisiableStatusDateInput
+                                            }
+                                            id="deadline_submit_radio_optional"
                                             defaultChecked
                                             value={false}
                                         />
-                                        <label htmlFor='deadline_submit_radio_optional'>Không bắt buộc</label>
+                                        <label htmlFor="deadline_submit_radio_optional">
+                                            Không bắt buộc
+                                        </label>
                                     </div>
 
-                                    <div className='deadline_submit_radio_item'>
+                                    <div className="deadline_submit_radio_item">
                                         <input
-                                            type='radio'
-                                            onChange={handleChangeVisiableStatusDateInput}
-                                            name='deadline_submit_radio'
-                                            id='required_deadline_submit'
+                                            type="radio"
+                                            onChange={
+                                                handleChangeVisiableStatusDateInput
+                                            }
+                                            name="deadline_submit_radio"
+                                            id="required_deadline_submit"
                                             value={true}
                                         />
-                                        <label htmlFor='required_deadline_submit'>Bắt buộc</label>
+                                        <label htmlFor="required_deadline_submit">
+                                            Bắt buộc
+                                        </label>
                                     </div>
                                 </div>
                             )}
 
-                            {(visibleDateInput === true || isTimedExtension) && (
-                                <div className='deadline_submit_input_wrapper'>
-                                    <label htmlFor='deadline_submit_input'>Nhập Thời Gian:</label>
+                            {(visibleDateInput === true ||
+                                isTimedExtension) && (
+                                <div className="deadline_submit_input_wrapper">
+                                    <label htmlFor="deadline_submit_input">
+                                        Nhập Thời Gian:
+                                    </label>
                                     <input
-                                        type='datetime-local'
+                                        type="datetime-local"
                                         onChange={handleChangeDatetimeValue}
-                                        id='deadline_submit_input'
+                                        id="deadline_submit_input"
                                     />
                                 </div>
                             )}
                         </div>
                     )}
-                    <div className='confirm_modal_body_note'>
+                    <div className="confirm_modal_body_note">
                         <textarea
-                            placeholder='Nhập ghi chú cho hoạt động (nếu có)'
+                            placeholder="Nhập ghi chú cho hoạt động (nếu có)"
                             onChange={handleChangeNoteValue}
                         ></textarea>
                     </div>
                 </div>
-                <div className='confirm_modal_footer'>
-                    <button className='btn_close' onClick={handleHiddenConfirmModal}>
+                <div className="confirm_modal_footer">
+                    <button
+                        className="btn_close"
+                        onClick={handleHiddenConfirmModal}
+                    >
                         Không đồng ý
                     </button>
-                    <button className='btn_accept' onClick={handleUpdateRowsStatus}>
+                    <button
+                        className="btn_accept"
+                        onClick={handleUpdateRowsStatus}
+                    >
                         Đồng ý
                     </button>
                 </div>

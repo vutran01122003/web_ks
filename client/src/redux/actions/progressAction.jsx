@@ -6,15 +6,15 @@ export const getProgressByYear =
     async (dispatch) => {
         try {
             const res = await getDataApi(
-                `/progress?pageStudentMajor=${studentMajor}&pageStudentLevelYear=${studentLevelYear}&pageStudentCohort=${studentCohort}`
+                `/progress?pageStudentMajor=${studentMajor}&pageStudentLevelYear=${studentLevelYear}&pageStudentCohort=${studentCohort}`,
             );
 
             dispatch({
                 type: GLOBALTYPES.PROGRESS.GET_PROGRESS_BY_YEAR,
                 payload: {
                     goalsInfoData: res.data.data,
-                    levelYear: studentLevelYear
-                }
+                    levelYear: studentLevelYear,
+                },
             });
         } catch (error) {
             dispatch({
@@ -24,8 +24,8 @@ export const getProgressByYear =
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response.data?.msg ||
-                              'Lấy Dữ Liệu Tiến Trình Hoàn Thành Chỉ Tiêu Theo Năm Thất Bại'
-                }
+                              'Lấy Dữ Liệu Tiến Trình Hoàn Thành Chỉ Tiêu Theo Năm Thất Bại',
+                },
             });
         }
     };
@@ -37,8 +37,8 @@ export const getAnnualTaskProgress =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
             const res = await getDataApi('/progress/all', {
@@ -47,22 +47,22 @@ export const getAnnualTaskProgress =
                 cohort,
                 isCompleted,
                 userId,
-                sortProgress
+                sortProgress,
             });
 
             dispatch({
                 type: GLOBALTYPES.PROGRESS.GET_ANNUAL_TASK_PROGRESS,
                 payload: {
                     data: res.data.data,
-                    page: 0
-                }
+                    page: 0,
+                },
             });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: false
-                }
+                    loading: false,
+                },
             });
         } catch (error) {
             dispatch({
@@ -71,36 +71,64 @@ export const getAnnualTaskProgress =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response.data?.msg || 'Lấy Dữ Liệu Tiến Độ Hoàn Thành Thất Bại'
-                }
+                            : error?.response.data?.msg ||
+                              'Lấy Dữ Liệu Tiến Độ Hoàn Thành Thất Bại',
+                },
             });
         }
     };
 
 export const stopSubmittingProof =
-    ({ progressPercentage, score, major, cohort, levelYear }) =>
+    ({
+        progressPercentage,
+        score,
+        major,
+        cohort,
+        levelYear,
+        updatedCohortData,
+    }) =>
     async (dispatch) => {
         try {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
-            await postDataApi('/progress/updated-users', {
+            const res = await postDataApi('/progress/updated-users', {
                 progressPercentage,
                 score,
                 major,
                 cohort,
-                levelYear
+                levelYear,
+                updatedCohortData,
+            });
+
+            const faculty = await getDataApi(
+                `/faculties/${updatedCohortData.facultyId}`,
+            );
+
+            dispatch({
+                type: GLOBALTYPES.FACULTY.UPDATE_FACULTY,
+                payload: {
+                    facultyId: updatedCohortData.facultyId,
+                    newElem: faculty.data.data,
+                },
+            });
+
+            dispatch({
+                type: GLOBALTYPES.AUTH.UPDATE_LEVEL_YEAR,
+                payload: {
+                    levelYear: updatedCohortData.currentLevelYear,
+                },
             });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: false
-                }
+                    success: res.data.msg,
+                },
             });
         } catch (error) {
             dispatch({
@@ -109,8 +137,9 @@ export const stopSubmittingProof =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response.data?.msg || 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
-                }
+                            : error?.response.data?.msg ||
+                              'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại',
+                },
             });
         }
     };

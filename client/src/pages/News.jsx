@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { NewsItem } from '../components/ComponentNews/NewsItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllNews } from '../redux/actions/newsAction';
@@ -18,26 +18,30 @@ const News = () => {
     return (
         <>
             {news.newsType[page?.pageName] && (
-                <div className='pageNews'>
-                    <header className='heading-4'>{page?.pageName}</header>
+                <div className="pageNews">
+                    <header className="heading-4">{page?.pageName}</header>
                     {news.newsType[page?.pageName].newsList.length > 0 ? (
                         <>
-                            {news.newsType[page?.pageName].newsList.map((news) => {
-                                return (
-                                    <NewsItem
-                                        key={news._id}
-                                        newsId={news._id}
-                                        cover={news.cover}
-                                        title={news.title}
-                                        summary={news.summary}
-                                        author={news.author}
-                                        createdAt={news.createdAt}
-                                    />
-                                );
-                            })}
+                            {news.newsType[page?.pageName].newsList.map(
+                                (news) => {
+                                    return (
+                                        <NewsItem
+                                            key={news._id}
+                                            newsId={news._id}
+                                            cover={news.cover}
+                                            title={news.title}
+                                            summary={news.summary}
+                                            author={news.author}
+                                            createdAt={news.createdAt}
+                                        />
+                                    );
+                                },
+                            )}
                         </>
                     ) : (
-                        <h3 className='notify_nothing_header'>Không có tin tức</h3>
+                        <h3 className="notify_nothing_header">
+                            Không có tin tức
+                        </h3>
                     )}
                 </div>
             )}

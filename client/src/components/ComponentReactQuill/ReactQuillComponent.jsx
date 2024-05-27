@@ -5,10 +5,15 @@ const modules = {
     toolbar: [
         [{ header: [1, 2, false] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+        [
+            { list: 'ordered' },
+            { list: 'bullet' },
+            { indent: '-1' },
+            { indent: '+1' },
+        ],
         ['link', 'image'],
-        ['clean']
-    ]
+        ['clean'],
+    ],
 };
 
 const formats = [
@@ -22,7 +27,7 @@ const formats = [
     'bullet',
     'indent',
     'link',
-    'image'
+    'image',
 ];
 
 function ReactQuillComponent({ content, setContent }) {
@@ -32,7 +37,7 @@ function ReactQuillComponent({ content, setContent }) {
             onChange={(e) => {
                 setContent(e);
             }}
-            className='react-quill'
+            className="react-quill"
             modules={modules}
             formats={formats}
         />

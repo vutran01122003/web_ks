@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { RiAccountCircleFill } from 'react-icons/ri';
 import { BiSolidLock } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
 import { ImSpinner11 } from 'react-icons/im';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/actions/authAction';
@@ -61,8 +60,8 @@ const FormLogin = () => {
             dispatch(
                 login({
                     userId,
-                    password
-                })
+                    password,
+                }),
             );
         } else {
             alert('sai captcha');
@@ -70,53 +69,61 @@ const FormLogin = () => {
     };
 
     return (
-        <div className='form_group'>
+        <div className="form_group">
             <div>
-                <div className='heading_text--login'>ĐĂNG NHẬP HỆ THỐNG</div>
+                <div className="heading_text--login">ĐĂNG NHẬP HỆ THỐNG</div>
                 <form onSubmit={handleSumbitFormLogin}>
                     <FormControl
-                        label='Tên đăng nhập'
-                        type='text'
-                        id='user'
+                        label="Tên đăng nhập"
+                        type="text"
+                        id="user"
                         iconBefore={<RiAccountCircleFill />}
                         value={userId}
                         onChange={handleChangeStudentId}
                     />
                     <FormControl
-                        label='Mật khẩu'
-                        type='password'
-                        id='password'
+                        label="Mật khẩu"
+                        type="password"
+                        id="password"
                         iconBefore={<BiSolidLock />}
                         value={password}
                         onChange={handleChangePassword}
                     />
 
-                    <div className='tr_line-captcha'>
+                    <div className="tr_line-captcha">
                         <input
-                            type='text'
+                            type="text"
                             value={userInputCaptcha}
                             onChange={handleInputChange}
-                            placeholder='Nhập Catpcha'
+                            placeholder="Nhập Catpcha"
                         />
-                        <div className='text__catpcha'>
-                            <div className='text__render--captcha'>
+                        <div className="text__catpcha">
+                            <div className="text__render--captcha">
                                 {captchaLogin.split('').map((char, index) => (
                                     <span key={index}>{char}</span>
                                 ))}
                             </div>
-                            <div onClick={refreshCaptcha} type='button' className='btn_refresh_catcha'>
+                            <div
+                                onClick={refreshCaptcha}
+                                type="button"
+                                className="btn_refresh_catcha"
+                            >
                                 <ImSpinner11 />
                             </div>
                         </div>
                     </div>
-                    <div className='tr__flex'>
+                    <div className="tr__flex">
                         {/* <div className="check__box--remb">
                             <input type="checkbox" id="remember_account" defaultChecked />
                             <label htmlFor="remember_account">Lưu đăng nhập</label>
                         </div> */}
                         {/* <Link to="#" className="btn_prm_password">Quên mật khẩu</Link> */}
                     </div>
-                    <ComponentButton textButton='Đăng nhập' type='submit' onClick={handleSubmit} />
+                    <ComponentButton
+                        textButton="Đăng nhập"
+                        type="submit"
+                        onClick={handleSubmit}
+                    />
                 </form>
             </div>
         </div>

@@ -1,7 +1,7 @@
 .create_post_container {
     width: 100%;
     min-height: 100vh;
-    padding: 20px 40px;
+    padding: 10px 40px;
     .create_post_title {
         text-align: center;
         margin-bottom: 20px;
@@ -17,14 +17,15 @@
         width: 100%;
 
         .select_new_type,
-        .post_input, .file_input {
+        .post_input,
+        .file_input {
             padding: 8px 12px;
             height: 45px;
             outline: none;
             border: 1px solid rgb(225, 222, 222);
             font-weight: 600;
             font-size: 16px;
-            
+
             span + input {
                 margin-left: 10px;
             }
@@ -40,7 +41,7 @@
 
             .select_new_type {
                 flex: 1;
-            }   
+            }
 
             .select_new_type_label {
                 padding: 8px 12px;
@@ -66,7 +67,7 @@
                     font-weight: 600;
                     padding: 10px;
                     border-bottom: 1px solid rgb(241, 238, 238);
-                    
+
                     &:hover {
                         background: rgb(243, 242, 242);
                     }
@@ -76,15 +77,15 @@
                     flex: 1;
                     display: flex;
                     align-items: center;
-    
+
                     .add_news_type_input {
                         flex: 1;
                     }
-    
+
                     .add_news_type_label {
                         color: gray;
                     }
-    
+
                     .add_news_type_input,
                     .add_news_type_label {
                         font-weight: 600;
@@ -100,7 +101,7 @@
                     gap: 10px;
                     align-items: center;
                     padding: 10px;
-                    
+
                     .add_news_type_btn {
                         padding: 8px 20px;
                         font-weight: 600;
@@ -112,7 +113,7 @@
                         outline: none;
                         border: none;
                         transition: 0.1s linear;
-                        
+
                         &:active {
                             transform: scale(0.9);
                         }
@@ -121,16 +122,13 @@
             }
         }
 
-       
-
         .label_new_type {
             color: gray;
         }
-        
+
         .post_btn_wrapper {
             width: 100%;
             text-align: center;
-            margin-top: 10px;
 
             .post_btn {
                 width: 300px;
@@ -145,7 +143,7 @@
                 border-radius: 10px;
                 cursor: pointer;
                 transition: 0.1s linear;
-                
+
                 &:active {
                     transform: scale(0.9);
                 }

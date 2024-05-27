@@ -13,12 +13,24 @@ import { renderSideBar } from '../../helpers/renderSideBar';
 const LayoutSideBar = ({ auth }) => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
-    const determineAuth = auth?.user?.roles.includes('0004') || auth?.user?.roles.includes('0003');
+    const determineAuth =
+        auth?.user?.roles.includes('0004') ||
+        auth?.user?.roles.includes('0003');
     const [toggleMenu, setToggleMenu] = useState(false);
-    const levelYearList = Array.from(Array(auth?.user?.levelYear || 1).keys()).map((x) => x + 1);
+    const levelYearList = Array.from(
+        Array(auth?.user?.levelYear || 1).keys(),
+    ).map((x) => x + 1);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
-    const refBoxSubs = ARRAY_LIST_MENU.map(() => useRef(null));
-    const [heightBoxSub, setHeightBoxSub] = useState(ARRAY_LIST_MENU.map(() => '0px'));
+
+    const menuRef = useRef([
+        ...ARRAY_LIST_MENU.map(() => ({
+            current: null,
+        })),
+    ]);
+
+    const [heightBoxSub, setHeightBoxSub] = useState(
+        ARRAY_LIST_MENU.map(() => '0px'),
+    );
     const [subMenu, setSubMenu] = useState(ARRAY_LIST_MENU.map(() => false));
 
     const handleSubMenu = (index) => {
@@ -55,9 +67,9 @@ const LayoutSideBar = ({ auth }) => {
     };
 
     useEffect(() => {
-        refBoxSubs.forEach((ref, index) => {
-            if (ref.current && subMenu[index]) {
-                const newHeightBoxSub = `${ref.current.scrollHeight}px`;
+        menuRef.current.forEach((refCurrent, index) => {
+            if (refCurrent && subMenu[index]) {
+                const newHeightBoxSub = `${refCurrent.scrollHeight}px`;
 
                 if (heightBoxSub[index] !== newHeightBoxSub) {
                     const newHeightBoxSubArray = [...heightBoxSub];
@@ -66,7 +78,7 @@ const LayoutSideBar = ({ auth }) => {
                 }
             }
         });
-    }, [refBoxSubs, subMenu]);
+    }, [menuRef, subMenu]);
 
     useEffect(() => {
         dispatch(getPages());
@@ -88,41 +100,65 @@ const LayoutSideBar = ({ auth }) => {
                                 key={item.id}
                                 className={`item_menu_a ${subMenu[item.id] ? 'active_item' : 'unactive_item'} `}
                                 onClick={(e) => {
-                                    if (e.target.name !== 'level_year_list') handleSubMenu(item.id);
+                                    if (e.target.name !== 'level_year_list')
+                                        handleSubMenu(item.id);
                                 }}
                             >
-                                <div className='item_menu_contain_submenu'>
+                                <div className="item_menu_contain_submenu">
                                     <span>
                                         {item.icon_before}
-                                        <span className={toggleMenu ? 'none_text__menu--item' : ''}>
+                                        <span
+                                            className={
+                                                toggleMenu
+                                                    ? 'none_text__menu--item'
+                                                    : ''
+                                            }
+                                        >
                                             {item.name_menu}
+                                            {item.dynamicPage === 'goals' && (
+                                                <select
+                                                    name="level_year_list"
+                                                    value={levelYear}
+                                                    onChange={(e) => {
+                                                        handleChangeLevelYear(
+                                                            e,
+                                                        );
+                                                        handleRefreshSubMenu(
+                                                            item.id,
+                                                        );
+                                                    }}
+                                                >
+                                                    {levelYearList.map(
+                                                        (levelYearItem) => {
+                                                            return (
+                                                                <option
+                                                                    value={
+                                                                        levelYearItem
+                                                                    }
+                                                                    key={
+                                                                        levelYearItem
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        levelYearItem
+                                                                    }
+                                                                </option>
+                                                            );
+                                                        },
+                                                    )}
+                                                </select>
+                                            )}
                                         </span>
                                     </span>
-                                    {item.dynamicPage === 'goals' && (
-                                        <select
-                                            name='level_year_list'
-                                            value={levelYear}
-                                            onChange={(e) => {
-                                                handleChangeLevelYear(e);
-                                                handleRefreshSubMenu(item.id);
-                                            }}
-                                        >
-                                            {levelYearList.map((levelYearItem) => {
-                                                return (
-                                                    <option value={levelYearItem} key={levelYearItem}>
-                                                        {levelYearItem}
-                                                    </option>
-                                                );
-                                            })}
-                                        </select>
-                                    )}
                                 </div>
                                 {toggleMenu ? (
                                     ''
                                 ) : (
                                     <div
                                         className={`icon_active_sub ${
-                                            subMenu[item.id] ? 'active_icon' : 'unactive_icon'
+                                            subMenu[item.id]
+                                                ? 'active_icon'
+                                                : 'unactive_icon'
                                         }`}
                                     >
                                         <IoMdArrowDropright />
@@ -130,31 +166,48 @@ const LayoutSideBar = ({ auth }) => {
                                 )}
                             </div>
                         ) : (
-                            <NavLink key={item.id} className='item_menu_a' to={item.to_link}>
+                            <NavLink
+                                key={item.id}
+                                className="item_menu_a"
+                                to={item.to_link}
+                            >
                                 <span>
                                     {item.icon_before}
-                                    <span className={toggleMenu ? 'none_text__menu--item' : ''}>{item.name_menu}</span>
+                                    <span
+                                        className={
+                                            toggleMenu
+                                                ? 'none_text__menu--item'
+                                                : ''
+                                        }
+                                    >
+                                        {item.name_menu}
+                                    </span>
                                 </span>
                             </NavLink>
                         )}
 
                         {item.submenu ? (
                             <div
-                                className='box_sub_menu_item'
-                                ref={refBoxSubs[item.id]}
+                                className="box_sub_menu_item"
+                                ref={(ref) => {
+                                    if (ref) menuRef.current[item.id] = ref;
+                                }}
                                 style={{
-                                    height: `${subMenu[item.id] ? heightBoxSub[item.id] : '0px'}`
+                                    height: `${subMenu[item.id] ? heightBoxSub[item.id] : '0px'}`,
                                 }}
                             >
                                 {item.sub_menu_item.map((item_sub) => {
                                     return (
                                         <NavLink
                                             key={item_sub?.id}
-                                            className='sub_menu_item'
+                                            className="sub_menu_item"
                                             to={item_sub?.sub_to_link}
                                             title={item_sub?.sub_name_menu}
                                             onClick={() => {
-                                                handleGetPage({ pathName: item_sub?.sub_to_link });
+                                                handleGetPage({
+                                                    pathName:
+                                                        item_sub?.sub_to_link,
+                                                });
                                             }}
                                         >
                                             {item_sub?.sub_name_menu}
@@ -174,13 +227,20 @@ const LayoutSideBar = ({ auth }) => {
             className={`container__menu ${determineAuth ? 'sidebar_admin ' : ''} 
 		${toggleMenu ? 'active_toggle' : ''}`}
         >
-            <div className={`menu_wrapper ${toggleMenu ? 'active_toggle' : ''}`}>
-                <div className='img__logo'>
+            <div
+                className={`menu_wrapper ${toggleMenu ? 'active_toggle' : ''}`}
+            >
+                <div className="img__logo">
                     {toggleMenu ? (
                         ''
                     ) : (
-                        <a href='/'>
-                            <img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt='logo_iuh' />
+                        <a href="/">
+                            <img
+                                src={
+                                    determineAuth ? Logo_IUH_color_w : Logo_IUH
+                                }
+                                alt="logo_iuh"
+                            />
                         </a>
                     )}
 
@@ -189,7 +249,7 @@ const LayoutSideBar = ({ auth }) => {
                             className={`btn__toggle--menu ${toggleMenu ? 'active_icon_toggle--menu' : ''}`}
                             onClick={hanleToggleMenu}
                         >
-                            <div className='line__flex_icon'>
+                            <div className="line__flex_icon">
                                 <FaAnglesLeft />
                                 <FaAnglesRight />
                             </div>
@@ -198,8 +258,8 @@ const LayoutSideBar = ({ auth }) => {
                         ''
                     )}
                 </div>
-                <div className='wrap__menu'>
-                    <div className='flex__box'>{renderArrMenu}</div>
+                <div className="wrap__menu">
+                    <div className="flex__box">{renderArrMenu}</div>
                 </div>
             </div>
         </div>

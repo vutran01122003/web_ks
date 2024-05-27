@@ -66,7 +66,9 @@ export const register = (data) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Cập Nhật Thông Tin Không Thành Công'
+                error:
+                    error?.response?.data.msg ||
+                    'Cập Nhật Thông Tin Không Thành Công'
             }
         });
     }
@@ -103,7 +105,12 @@ export const logout = () => async (dispatch) => {
 
 export const verifyAccessToken = () => async (dispatch) => {
     try {
-        if (document.cookie.split(';').some((cookie) => cookie.includes('accessToken')) || getLogged()) {
+        if (
+            document.cookie
+                .split(';')
+                .some((cookie) => cookie.includes('accessToken')) ||
+            getLogged()
+        ) {
             const res = await getDataApi('/access-token');
 
             dispatch({
@@ -113,8 +120,6 @@ export const verifyAccessToken = () => async (dispatch) => {
 
             setLogged();
         }
-
-        return;
     } catch (error) {
         if (getLogged()) {
             dispatch({

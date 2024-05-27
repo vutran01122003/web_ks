@@ -6,8 +6,8 @@ const initialState = {
         data: [],
         page: 0,
         maxPage: false,
-        currentRows: 0
-    }
+        currentRows: 0,
+    },
 };
 
 function progressReducer(state = initialState, action) {
@@ -17,8 +17,8 @@ function progressReducer(state = initialState, action) {
                 ...state,
                 goalsInfoData: {
                     ...state.goalsInfoData,
-                    [action.payload.levelYear]: action.payload.goalsInfoData
-                }
+                    [action.payload.levelYear]: action.payload.goalsInfoData,
+                },
             };
         }
         case GLOBALTYPES.PROGRESS.GET_ANNUAL_TASK_PROGRESS: {
@@ -29,11 +29,16 @@ function progressReducer(state = initialState, action) {
                     data:
                         state.annualTaskProgress.page === 0
                             ? [...action.payload.data]
-                            : [...state.annualTaskProgress.data, ...action.payload.data],
+                            : [
+                                  ...state.annualTaskProgress.data,
+                                  ...action.payload.data,
+                              ],
                     maxPage: action.payload.data.length === 0 ? true : false,
                     page: action.payload.page,
-                    currentRows: state.annualTaskProgress.currentRows + action.payload.data.length
-                }
+                    currentRows:
+                        state.annualTaskProgress.currentRows +
+                        action.payload.data.length,
+                },
             };
         }
         default:

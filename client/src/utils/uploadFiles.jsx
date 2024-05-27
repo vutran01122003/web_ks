@@ -2,20 +2,20 @@ export function checkFilesUpload(file) {
     if (file.size > 10 * 1024 * 1024) {
         return {
             inValid: true,
-            msg: 'Kích thước hình ảnh tối đa cho phép là 5MB'
+            msg: 'Kích thước hình ảnh tối đa cho phép là 5MB',
         };
     }
 
     if (!(file.type === 'application/pdf')) {
         return {
             inValid: true,
-            msg: 'Định dạng file không hợp lệ'
+            msg: 'Định dạng file không hợp lệ',
         };
     }
 
     return {
         inValid: false,
-        msg: 'Định dạng ảnh và kích thước đủ điều kiện'
+        msg: 'Định dạng ảnh và kích thước đủ điều kiện',
     };
 }
 

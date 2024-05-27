@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoSend } from 'react-icons/io5';
 import { RiBubbleChartFill } from 'react-icons/ri';
@@ -26,11 +26,14 @@ const Chat = () => {
     useEffect(() => {
         const chatContainer = chatContainerRef.current;
         if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+            chatContainer.scrollTop =
+                chatContainer.scrollHeight - chatContainer.clientHeight;
             const handleScroll = () => {
                 setShowScrollButton(
                     chatContainer.scrollTop <
-                        chatContainer.scrollHeight - chatContainer.clientHeight - 200
+                        chatContainer.scrollHeight -
+                            chatContainer.clientHeight -
+                            200,
                 );
             };
             chatContainer.addEventListener('scroll', handleScroll);
@@ -47,8 +50,8 @@ const Chat = () => {
                 type: GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA,
                 payload: {
                     key: 'question',
-                    data: question
-                }
+                    data: question,
+                },
             });
             dispatch(sendChat(question, typeChat));
             setQuestion('');
@@ -68,7 +71,7 @@ const Chat = () => {
         if (chatContainer) {
             chatContainer.scrollTo({
                 top: chatContainer.scrollHeight,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
         }
     };
@@ -78,7 +81,7 @@ const Chat = () => {
         const regex = /(https?:\/\/[^\s]+)/g;
         const matches = text.split(regex);
         return (
-            <div className='chat-message__content'>
+            <div className="chat-message__content">
                 {matches.map((part, index) =>
                     index % 2 === 0 ? (
                         // Phần tử có chỉ số chẵn là văn bản
@@ -87,10 +90,15 @@ const Chat = () => {
                         </div>
                     ) : (
                         // Phần tử có chỉ số lẻ là liên kết
-                        <a key={index} href={part} target='_blank'>
+                        <a
+                            key={index}
+                            href={part}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
                             {part}
                         </a>
-                    )
+                    ),
                 )}
             </div>
         );
@@ -104,43 +112,49 @@ const Chat = () => {
             }
         };
     return (
-        <div className='pageChatbot'>
-            <div className='chat-content' ref={chatContainerRef}>
+        <div className="pageChatbot">
+            <div className="chat-content" ref={chatContainerRef}>
                 {chatbot.typeChat && typeChat ? (
                     chatbot.data.map((item, index) => (
                         <div key={index}>
-                            <div className='user-message'>
-                                <div className='user-message__content'>{item.question}</div>
+                            <div className="user-message">
+                                <div className="user-message__content">
+                                    {item.question}
+                                </div>
                             </div>
                             {item.answer ? (
-                                <div className='chat-message'>
-                                    <div className='chat-info'>
+                                <div className="chat-message">
+                                    <div className="chat-info">
                                         <RiBubbleChartFill />{' '}
                                     </div>
                                     <TextLink text={item?.answer} />
                                 </div>
                             ) : (
                                 <img
-                                    src={import.meta.env.VITE_APP_CHATBOT_LOADING}
-                                    className='chatbot-loading'
-                                    alt='loading'
+                                    src={
+                                        import.meta.env.VITE_APP_CHATBOT_LOADING
+                                    }
+                                    className="chatbot-loading"
+                                    alt="loading"
                                 />
                             )}
                         </div>
                     ))
                 ) : (
-                    <div className='choice-type'>
-                        <div className='choice-type__container'>
+                    <div className="choice-type">
+                        <div className="choice-type__container">
                             {chatbot.typeChat && !typeChat && (
-                                <div className='choice-type__title'>Vui lòng chọn loại chatbot</div>
+                                <div className="choice-type__title">
+                                    Vui lòng chọn loại chatbot
+                                </div>
                             )}
-                            <div className='choice-type__list'>
+                            <div className="choice-type__list">
                                 {chatbot.typeChat &&
                                     !typeChat &&
                                     chatbot.typeChat.map((item, index) => (
                                         <div
                                             key={index}
-                                            className='choice-type__item'
+                                            className="choice-type__item"
                                             onClick={handleTypeChat({ item })}
                                         >
                                             {item}
@@ -153,30 +167,35 @@ const Chat = () => {
             </div>
 
             {chatbot.typeChat && typeChat && (
-                <div className='chat-box'>
+                <div className="chat-box">
                     {showScrollButton && (
-                        <button className='scroll-to-bottom-button' onClick={scrollToBottom}>
+                        <button
+                            className="scroll-to-bottom-button"
+                            onClick={scrollToBottom}
+                        >
                             <FaArrowDown />
                         </button>
                     )}
-                    <div className='chat-box__container'>
-                        <div className='chat-input__container'>
+                    <div className="chat-box__container">
+                        <div className="chat-input__container">
                             <input
-                                type='text'
+                                type="text"
                                 value={question}
                                 onChange={(e) => {
                                     setQuestion(e.target.value);
                                     setShowOption(false);
                                 }}
-                                className='user-input-field'
-                                placeholder='Nhập câu hỏi của bạn tại đây'
+                                className="user-input-field"
+                                placeholder="Nhập câu hỏi của bạn tại đây"
                                 onKeyDown={handleKeyPress}
                             />
                             <Button
-                                type='primary'
+                                type="primary"
                                 loading={chatbot.isLoading}
                                 onClick={(e) => {
-                                    question != '' ? sendQuestion(e) : setShowOption(!showOption);
+                                    question != ''
+                                        ? sendQuestion(e)
+                                        : setShowOption(!showOption);
                                 }}
                                 className={`chat-button ${!question && 'input-empty'}`}
                                 disabled={chatbot.isLoading || !question}
@@ -200,9 +219,9 @@ const Chat = () => {
                             </Button>
                         </div>
                     </div>
-                    <div className='chat-warning'>
-                        Thông tin của IUH chat có thể còn chưa chính xác do còn trong quá trình thử
-                        nghiệm
+                    <div className="chat-warning">
+                        Thông tin của IUH chat có thể còn chưa chính xác do còn
+                        trong quá trình thử nghiệm
                     </div>
                 </div>
             )}

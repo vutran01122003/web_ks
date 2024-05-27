@@ -14,10 +14,15 @@ export const addRow =
 
             const parsedFormData = JSON.parse(formData.get('rowData'));
             const res = parsedFormData?.contentId
-                ? await patchDataApi(`/rows/${parsedFormData.rowListId}`, formData)
+                ? await patchDataApi(
+                      `/rows/${parsedFormData.rowListId}`,
+                      formData
+                  )
                 : await postDataApi('/rows', formData);
 
-            const newPage = await getDataApi(JSON.parse(formData.get('rowData')).path);
+            const newPage = await getDataApi(
+                JSON.parse(formData.get('rowData')).path
+            );
 
             dispatch({
                 type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
@@ -39,14 +44,25 @@ export const addRow =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Thêm Hoạt Động Thất Bại'
+                            : error?.response?.data.msg ||
+                              'Thêm Hoạt Động Thất Bại'
                 }
             });
         }
     };
 
 export const getDynamicRows =
-    ({ tab, userData, page, limit, currentRows }) =>
+    ({
+        tab,
+        userData,
+        page,
+        limit,
+        currentRows,
+        activity,
+        pageStudentMajor,
+        pageStudentCohort,
+        pageStudentLevelYear
+    }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -62,7 +78,11 @@ export const getDynamicRows =
                 current_rows: currentRows,
                 rows_type: tab,
                 student_id: userData?.userId || null,
-                major: userData?.major || null
+                major: userData?.major || null,
+                activity,
+                pageStudentMajor,
+                pageStudentCohort,
+                pageStudentLevelYear
             });
 
             dispatch({
@@ -80,7 +100,8 @@ export const getDynamicRows =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
+                            : error?.response?.data.msg ||
+                              'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
                 }
             });
         } finally {
@@ -94,7 +115,16 @@ export const getDynamicRows =
     };
 
 export const updateRowsStatus =
-    ({ pageInfo, noteValue, rowsType, rowListId, contentIdList, status, deadline, isTimedExtension }) =>
+    ({
+        pageInfo,
+        noteValue,
+        rowsType,
+        rowListId,
+        contentIdList,
+        status,
+        deadline,
+        isTimedExtension
+    }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -135,7 +165,8 @@ export const updateRowsStatus =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Duyệt Chỉ Tiêu Thất Bại'
+                            : error?.response?.data.msg ||
+                              'Duyệt Chỉ Tiêu Thất Bại'
                 }
             });
         }

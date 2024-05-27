@@ -5,7 +5,8 @@
             display: inline-block;
             box-shadow: 0 0 2px rgba(218, 217, 217, 0.686);
 
-            input, select {
+            input,
+            select {
                 padding: 8px 12px;
                 height: 40px;
                 font-weight: 600;
@@ -13,7 +14,7 @@
                 background: none;
                 outline: none;
                 border: 1px solid rgb(222, 221, 221);
-                min-width: 200px
+                min-width: 200px;
             }
 
             .year_info_input {
@@ -24,7 +25,7 @@
         .line__flex {
             display: flex;
             justify-content: space-between;
-            
+
             > h1 {
                 color: #0153b1;
                 text-align: center;
@@ -131,7 +132,7 @@
                 padding: 20px 20px 0;
                 display: flex;
                 align-items: center;
-                
+
                 .score_input.not_allow {
                     user-select: none;
                     cursor: not-allowed;
@@ -216,11 +217,11 @@
                                 justify-content: center;
                                 align-items: center;
                                 flex-direction: column;
-                                
+
                                 span {
                                     font-size: small;
                                     font-weight: 400;
-                                    color: gray
+                                    color: gray;
                                 }
                             }
 
@@ -240,7 +241,7 @@
                                     border-radius: 3px;
                                     font-weight: 600;
                                     font-size: 16px;
-                                }   
+                                }
 
                                 .score_value_input {
                                     width: 100px;
@@ -258,7 +259,7 @@
                                     transition: 0.1s linear;
 
                                     &:active {
-                                        transform: scale(0.9);    
+                                        transform: scale(0.9);
                                     }
                                 }
                             }
@@ -284,7 +285,7 @@
                                         display: flex;
                                         align-items: center;
                                     }
-                                    
+
                                     .fixed_value {
                                         font-weight: 700;
                                         overflow: hidden;
@@ -300,7 +301,7 @@
 
                                 .btn_del_fixed_value {
                                     display: flex;
-                                    align-items: center; 
+                                    align-items: center;
                                     color: rgba(255, 0, 0, 0.715);
                                     transition: 0.1s linear;
 
@@ -343,7 +344,7 @@
                             &:hover {
                                 color: red;
                             }
-                            
+
                             &.top {
                                 top: 0;
                             }
@@ -363,7 +364,7 @@
 
                             &:hover {
                                 color: green;
-                            } 
+                            }
                         }
                     }
                 }

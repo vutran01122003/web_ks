@@ -10,7 +10,7 @@ function PageRender() {
     const pathName = location.pathname;
     const [PageComponent, setPageComponent] = useState(null);
     const [notFound, setNotFound] = useState(false);
-    const privatePages = ['goals', 'create-news', 'manage_pages'];
+    const privatePages = [];
 
     const auth = useSelector(authSelector);
     const pageName = id
@@ -24,13 +24,15 @@ function PageRender() {
                     setPageComponent(module);
                     setNotFound(false);
                 })
-                .catch((e) => {
-                    console.log(e);
+                .catch(() => {
                     setPageComponent(null);
                     setNotFound(true);
                 });
         } else {
-            if (privatePages.includes(page) && !auth?.user.roles.includes('0004')) {
+            if (
+                privatePages.includes(page) &&
+                !auth?.user.roles.includes('0004')
+            ) {
                 setNotFound(true);
                 setPageComponent(null);
             } else {
@@ -39,7 +41,7 @@ function PageRender() {
                         setPageComponent(module);
                         setNotFound(false);
                     })
-                    .catch((e) => {
+                    .catch(() => {
                         setPageComponent(null);
                         setNotFound(true);
                     });

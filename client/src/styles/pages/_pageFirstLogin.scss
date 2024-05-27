@@ -15,20 +15,20 @@
         .input-text {
             margin-top: 10px;
         }
-        .tr__line__row--birth{
+        .tr__line__row--birth {
             display: flex;
             margin-bottom: 8px;
-            >div{
+            > div {
                 width: 100%;
                 margin: 0px 10px;
             }
-            >div:first-child{
+            > div:first-child {
                 margin-left: 0px;
             }
-            >div:last-child{
+            > div:last-child {
                 margin-right: 0px;
             }
-            select{
+            select {
                 height: 45px;
             }
         }

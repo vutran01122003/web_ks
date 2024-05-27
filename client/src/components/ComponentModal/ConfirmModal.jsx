@@ -1,5 +1,5 @@
 function ConfirmModal() {
-    return <div className=''></div>;
+    return <div className=""></div>;
 }
 
 export default ConfirmModal;

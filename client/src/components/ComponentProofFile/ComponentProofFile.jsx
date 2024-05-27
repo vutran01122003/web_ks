@@ -19,8 +19,8 @@ function ComponentProofFile({ files, setFiles }) {
                 dispatch({
                     type: GLOBALTYPES.ALERT,
                     payload: {
-                        error: msg
-                    }
+                        error: msg,
+                    },
                 });
             } else {
                 newFiles.push(encodeFileName(file));
@@ -36,28 +36,29 @@ function ComponentProofFile({ files, setFiles }) {
 
     return (
         <div>
-            <label className='proof_title'>Minh Chứng</label>
-            <div className='proof_wrapper'>
-                <div className='proof_upload'>
+            <label className="proof_title">Minh Chứng</label>
+            <div className="proof_wrapper">
+                <div className="proof_upload">
                     <h4>{`Tải lên :`} </h4>
-                    <div className='icons_wrapper'>
+                    <div className="icons_wrapper">
                         <label
-                            htmlFor='insert_files'
-                            className='insert_files_icon icon-item--proof'
+                            htmlFor="insert_files"
+                            className="insert_files_icon icon-item--proof"
                         >
                             <RiUpload2Fill />
                         </label>
 
-                        <span className='files_type'>
-                            (Giới hạn là 10 files; Kích thước file tối đa 10MB; Định dạng là PDF)
+                        <span className="files_type">
+                            (Giới hạn là 10 files; Kích thước file tối đa 10MB;
+                            Định dạng là PDF)
                         </span>
 
                         <input
-                            id='insert_files'
-                            type='file'
+                            id="insert_files"
+                            type="file"
                             ref={inputRef}
                             multiple
-                            accept='application/pdf, image/*, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                            accept="application/pdf, image/*, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                             onChange={handleInsertFiles}
                             hidden
                         />
@@ -65,11 +66,11 @@ function ComponentProofFile({ files, setFiles }) {
                 </div>
 
                 {files?.length > 0 && (
-                    <div className='show_files'>
-                        <div className='files_wrapper'>
-                            <div className='remove_files_btn'>
+                    <div className="show_files">
+                        <div className="files_wrapper">
+                            <div className="remove_files_btn">
                                 <IoMdClose
-                                    className='remove_files_icon'
+                                    className="remove_files_icon"
                                     onClick={handleClearImages}
                                 />
                             </div>
@@ -78,18 +79,25 @@ function ComponentProofFile({ files, setFiles }) {
                                 if (file.type.split('/').includes('image'))
                                     src = URL.createObjectURL(file);
                                 else if (file.type === 'application/pdf')
-                                    src = import.meta.env.VITE_APP_PDF_FILE_ICON_URL;
+                                    src = import.meta.env
+                                        .VITE_APP_PDF_FILE_ICON_URL;
                                 else if (
                                     file.type ===
                                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
                                     file.type === 'application/msword'
                                 )
-                                    src = import.meta.env.VITE_APP_DOC_FILE_ICON_URL;
-                                else src = import.meta.env.VITE_APP_INVAILD_FILE_ICON_URL;
+                                    src = import.meta.env
+                                        .VITE_APP_DOC_FILE_ICON_URL;
+                                else
+                                    src = import.meta.env
+                                        .VITE_APP_INVAILD_FILE_ICON_URL;
 
                                 return (
-                                    <div className='previewed_file_wrapper' key={index}>
-                                        <img src={src} alt='previewed_file' />
+                                    <div
+                                        className="previewed_file_wrapper"
+                                        key={index}
+                                    >
+                                        <img src={src} alt="previewed_file" />
                                         <span> {decodeURI(file.name)} </span>
                                     </div>
                                 );

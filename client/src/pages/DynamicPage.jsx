@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LayoutTable from '../components/ComponentTable/LayoutTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../redux/selector';
@@ -30,12 +30,16 @@ const DynamicPage = () => {
     }, [page?.pageName, page?.pageType, JSON.stringify(page?.tables)]);
 
     return (
-        <div className='dynamic_page_container'>
+        <div className="dynamic_page_container">
             {page?.pageType &&
                 page?.pageType === 'chỉ tiêu' &&
                 tables.map((table) => {
                     return (
-                        <LayoutTable key={table.tableId} table={table} page={page}></LayoutTable>
+                        <LayoutTable
+                            key={table.tableId}
+                            table={table}
+                            page={page}
+                        ></LayoutTable>
                     );
                 })}
             {page?.pageType && page?.pageType === 'tin tức' && <News />}

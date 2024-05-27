@@ -1,9 +1,9 @@
-import GLOBALTYPES from "../actions/globalTypes";
+import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
-    pageName: "",
-    tables: []
-}
+    pageName: '',
+    tables: [],
+};
 
 function TableReducer(state = initialState, action) {
     switch (action.type) {
@@ -11,13 +11,12 @@ function TableReducer(state = initialState, action) {
             return {
                 ...state,
                 pageName: action.payload.pageName,
-                tables: action.payload.tables
-            }
+                tables: action.payload.tables,
+            };
         }
-           
-        default: 
-            return state
-           
+
+        default:
+            return state;
     }
 }
 

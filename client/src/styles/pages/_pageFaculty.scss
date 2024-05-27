@@ -10,21 +10,22 @@
         text-align: center;
 
         th {
-            background: #8284e6;    
+            background: #8284e6;
             color: #fff;
         }
 
-        td, th {
+        td,
+        th {
             border: 1px solid #dddddd;
             padding: 0 4px;
         }
-        
-          
+
         tr:nth-child(even) {
             background-color: #f5f5f5;
         }
 
-        .major_item, .manager_item {
+        .major_item,
+        .manager_item {
             padding: 10px;
         }
 
@@ -33,12 +34,14 @@
             justify-content: center;
             align-items: center;
             transition: 0.1s linear;
-            >span {
+            > span {
                 min-width: 140px;
             }
         }
 
-        .updated_btn, .delete_btn, .add_btn {
+        .updated_btn,
+        .delete_btn,
+        .add_btn {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -53,7 +56,7 @@
             border-radius: 3px;
             background: transparent;
             transition: 0.1s linear;
-            
+
             &:active {
                 transform: scale(0.9);
             }
@@ -62,7 +65,7 @@
         .updated_btn {
             border: 1px solid #006fee;
             color: #006fee;
-        } 
+        }
 
         .delete_btn {
             border: 1px solid #f0635c;
@@ -74,7 +77,9 @@
         }
 
         .interactive_btn_wrapper {
-            .updated_btn, .delete_btn, .add_btn {
+            .updated_btn,
+            .delete_btn,
+            .add_btn {
                 width: 200px;
                 display: flex;
                 justify-content: flex-start;
@@ -83,7 +88,7 @@
             }
         }
     }
-      
+
     .faculty_form {
         display: flex;
         justify-content: center;
@@ -129,7 +134,7 @@
                 font-weight: 500;
                 font-size: 14px;
             }
-            
+
             .add_aculty_major_btn,
             .add_faculty_manager_btn {
                 margin-left: 5px;
@@ -171,7 +176,7 @@
                     background: #f7f7f7;
                 }
 
-                .manager_info_wrapper{
+                .manager_info_wrapper {
                     display: flex;
                     gap: 10px;
                     align-items: center;
@@ -240,7 +245,7 @@
         label {
             display: inline-block;
             min-width: 150px;
-            font-weight: 600; 
+            font-weight: 600;
         }
 
         button {
@@ -262,7 +267,8 @@
             display: flex;
             width: 100%;
 
-            input, select {
+            input,
+            select {
                 flex: 1;
                 height: 35px;
                 padding: 4px 12px;

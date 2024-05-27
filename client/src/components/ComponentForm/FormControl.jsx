@@ -1,5 +1,3 @@
-import React from 'react'
-
 const FormControl = ({
     children,
     label,
@@ -18,10 +16,12 @@ const FormControl = ({
     readonly,
 }) => {
     return (
-        <div className={`component__input ${classNameRoot ?  classNameRoot : ""}`}>
+        <div
+            className={`component__input ${classNameRoot ? classNameRoot : ''}`}
+        >
             <label htmlFor={id}>{label}</label>
             <div className={classNameWrap}>
-                <div className={`line__input ${className}`}>      
+                <div className={`line__input ${className}`}>
                     <input
                         type={type}
                         placeholder={placeholder}
@@ -34,14 +34,13 @@ const FormControl = ({
                         className={classNameInputItem}
                     />
 
-					<div className="icon__before">{iconBefore}</div>
-				</div>
+                    <div className="icon__before">{iconBefore}</div>
+                </div>
 
-				{children}
-			</div>
-		</div>
-	)
-}
+                {children}
+            </div>
+        </div>
+    );
+};
 
 export default FormControl;
-

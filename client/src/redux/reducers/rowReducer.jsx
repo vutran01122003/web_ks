@@ -35,7 +35,7 @@ function rowReducer(state = initialState, action) {
                 ...state,
                 loading: action.payload.loading
             };
-        case GLOBALTYPES.ROW.GET_DYNAMIC_ROWS:
+        case GLOBALTYPES.ROW.GET_DYNAMIC_ROWS: {
             const rowsType = action.payload.rowsType;
             const dynamicRows = action.payload.dynamicRows;
             const rowData = state[rowsType].data;
@@ -45,13 +45,19 @@ function rowReducer(state = initialState, action) {
                 ...state,
                 [rowsType]: {
                     ...state[rowsType],
-                    data: action.payload.page === 1 ? dynamicRows : [...rowData, ...dynamicRows],
+                    data:
+                        action.payload.page === 1
+                            ? dynamicRows
+                            : [...rowData, ...dynamicRows],
                     page: page || 1,
                     maxPage: dynamicRows.length === 0 ? true : false,
                     currentRows:
-                        page === 1 ? dynamicRows.length : rowData.length + dynamicRows.length
+                        page === 1
+                            ? dynamicRows.length
+                            : rowData.length + dynamicRows.length
                 }
             };
+        }
 
         case GLOBALTYPES.ROW.REMOVE_ROW: {
             const rowsType = action.payload.rowsType;
@@ -64,7 +70,8 @@ function rowReducer(state = initialState, action) {
                             (row) =>
                                 !(
                                     row._id === action.payload.rowId &&
-                                    row.content[0]._id === action.payload.contentId
+                                    row.content[0]._id ===
+                                        action.payload.contentId
                                 )
                         )
                     ],
@@ -82,6 +89,9 @@ function rowReducer(state = initialState, action) {
                     currentRows: 0
                 }
             };
+        }
+        case GLOBALTYPES.ROW.RESET_ALL_TAB: {
+            return initialState;
         }
         default:
             return state;

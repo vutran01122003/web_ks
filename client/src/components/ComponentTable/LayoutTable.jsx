@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TableModal from '../ComponentModal/TableModal';
 import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
 import ApproveActivityModal from '../ComponentModal/ApproveActivityModal';
-import { CheckSquareFilled, CloseSquareFilled, MinusSquareFilled } from '@ant-design/icons';
+import {
+    CheckSquareFilled,
+    CloseSquareFilled,
+    MinusSquareFilled
+} from '@ant-design/icons';
 import { FaEdit } from 'react-icons/fa';
 import NoteModal from '../ComponentModal/NoteModal';
 import { useSelector } from 'react-redux';
@@ -10,10 +14,18 @@ import { authSelector } from '../../redux/selector';
 import DetailedRowModal from '../ComponentModal/DetailedRowModal';
 import { MdOutlineMoreTime } from 'react-icons/md';
 
-const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handleOpenPreviewFilesModal }) => {
+const MainItem = ({
+    auth,
+    setRowInfo,
+    isDetailedRow,
+    handleOpenModal,
+    row,
+    handleOpenPreviewFilesModal
+}) => {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
-    const [visibleDetailedRowModal, setVisibleDetailedRowModal] = useState(false);
+    const [visibleDetailedRowModal, setVisibleDetailedRowModal] =
+        useState(false);
     const [modalData, setModalData] = useState({});
 
     const handleVisibleConfirmModal = () => {
@@ -43,27 +55,34 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
     };
 
     return (
-        <tr className='table__line__item'>
+        <tr className="table__line__item">
             {row.map((item, index) => {
                 if (item?.proofNameLabel) {
                     return !isDetailedRow ? (
-                        item?.proofFiles.length > 1 ? (
-                            <td
-                                onClick={() => {
-                                    handleOpenPreviewFilesModal({ proofData: item?.proofFiles });
-                                }}
-                                className='preview_proof_files line__item'
-                                key={index}
-                            >
-                                {item?.proofNameLabel}
-                            </td>
-                        ) : (
-                            <td key={index + item?.proofFiles[0]?._id} className='line__item'>
-                                <a href={item?.proofFiles[0]?.fileUrl} className='preview_proof_files'>
+                        <td
+                            onClick={() => {
+                                item?.proofFiles.length > 1
+                                    ? handleOpenPreviewFilesModal({
+                                          proofData: item?.proofFiles
+                                      })
+                                    : null;
+                            }}
+                            className="preview_proof_files_wrapper line__item"
+                            key={index}
+                        >
+                            {item?.proofFiles.length > 1 ? (
+                                <span className="preview_proof_files">
+                                    {item?.proofNameLabel}
+                                </span>
+                            ) : (
+                                <a
+                                    href={item?.proofFiles[0]?.fileUrl}
+                                    className="preview_proof_files"
+                                >
                                     {item?.proofNameLabel}
                                 </a>
-                            </td>
-                        )
+                            )}
+                        </td>
                     ) : null;
                 } else if (item?.statusLabel) {
                     let statusValue = '';
@@ -88,13 +107,16 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
                             break;
                     }
                     return !isDetailedRow ? (
-                        <td className={`line__item row_status ${statusValue}`} key={index}>
+                        <td
+                            className={`line__item row_status ${statusValue}`}
+                            key={index}
+                        >
                             {item?.statusLabel}
                         </td>
                     ) : null;
                 } else if (item?.buttonNameLabel) {
                     return (
-                        <td key={index} className='line__item'>
+                        <td key={index} className="line__item">
                             {visibleConfirmModal && (
                                 <ApproveActivityModal
                                     auth={auth}
@@ -103,54 +125,67 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
                                     title={modalData.title}
                                     content={modalData.content}
                                     status={modalData.status}
-                                    isTimedExtension={modalData?.isTimedExtension ?? false}
-                                    isResubmitedRow={modalData?.isResubmitedRow ?? false}
+                                    isTimedExtension={
+                                        modalData?.isTimedExtension ?? false
+                                    }
+                                    isResubmitedRow={
+                                        modalData?.isResubmitedRow ?? false
+                                    }
                                     rowInfoData={item.rowInfoData}
-                                    handleHiddenConfirmModal={handleHiddenConfirmModal}
+                                    handleHiddenConfirmModal={
+                                        handleHiddenConfirmModal
+                                    }
                                     userData={item?.userData}
                                 />
                             )}
-                            <div className='button_wrapper'>
-                                {['rejectedRows', 'pendingRows'].includes(item.rowsType) && (
+                            <div className="button_wrapper">
+                                {['rejectedRows', 'pendingRows'].includes(
+                                    item.rowsType
+                                ) && (
                                     <button
-                                        className='row_button_wrapper'
+                                        className="row_button_wrapper"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content: 'Bạn chắc chắn chấp nhận hoạt động này ?',
+                                                content:
+                                                    'Bạn chắc chắn chấp nhận hoạt động này ?',
                                                 status: 'đã duyệt'
                                             });
                                         }}
                                     >
-                                        <CheckSquareFilled className='row_button accpect_button' />
+                                        <CheckSquareFilled className="row_button accpect_button" />
                                     </button>
                                 )}
 
-                                {['acceptedRows', 'pendingRows'].includes(item.rowsType) && (
+                                {['acceptedRows', 'pendingRows'].includes(
+                                    item.rowsType
+                                ) && (
                                     <button
-                                        className='row_button_wrapper'
+                                        className="row_button_wrapper"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content: 'Bạn chắc chắn từ chối hoạt động này ?',
+                                                content:
+                                                    'Bạn chắc chắn từ chối hoạt động này ?',
                                                 status: 'từ chối'
                                             });
                                         }}
                                     >
-                                        <CloseSquareFilled className='row_button reject_button' />
+                                        <CloseSquareFilled className="row_button reject_button" />
                                     </button>
                                 )}
 
                                 {['resubmitedRows'].includes(item.rowsType) && (
                                     <button
-                                        className='row_button_wrapper more_time_btn'
+                                        className="row_button_wrapper more_time_btn"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content: 'Bạn chắc chắn muốn gia hạn thời gian cho hoạt động này ?',
+                                                content:
+                                                    'Bạn chắc chắn muốn gia hạn thời gian cho hoạt động này ?',
                                                 status: 'phải nộp lại',
                                                 isTimedExtension: true
                                             });
@@ -160,20 +195,25 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
                                     </button>
                                 )}
 
-                                {['pendingRows', 'rejectedRows', 'acceptedRows'].includes(item.rowsType) && (
+                                {[
+                                    'pendingRows',
+                                    'rejectedRows',
+                                    'acceptedRows'
+                                ].includes(item.rowsType) && (
                                     <button
-                                        className='row_button_wrapper'
+                                        className="row_button_wrapper"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content: 'Bạn chắc chắn muốn sinh viên nộp lại hoạt động này ?',
+                                                content:
+                                                    'Bạn chắc chắn muốn sinh viên nộp lại hoạt động này ?',
                                                 status: 'phải nộp lại',
                                                 isResubmitedRow: true
                                             });
                                         }}
                                     >
-                                        <MinusSquareFilled className='row_button pending_button' />
+                                        <MinusSquareFilled className="row_button pending_button" />
                                     </button>
                                 )}
                             </div>
@@ -181,11 +221,19 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
                     );
                 } else if (item?.noteLabel) {
                     return (
-                        <td className='line__item' key={index}>
+                        <td className="line__item" key={index}>
                             {visibleNoteModal && (
-                                <NoteModal handleHiddenNoteModal={handleHiddenNoteModal} noteList={item?.noteValue} />
+                                <NoteModal
+                                    handleHiddenNoteModal={
+                                        handleHiddenNoteModal
+                                    }
+                                    noteList={item?.noteValue}
+                                />
                             )}
-                            <span className='note_row' onClick={handleVisibleNoteModal}>
+                            <span
+                                className="note_row"
+                                onClick={handleVisibleNoteModal}
+                            >
                                 Ghi Chú
                             </span>
                         </td>
@@ -193,7 +241,7 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
                 } else if (item?.editLabel) {
                     return !isDetailedRow ? (
                         <td
-                            className='line__item'
+                            className="line__item"
                             key={index}
                             onClick={() => {
                                 if (item.editValue) {
@@ -202,28 +250,34 @@ const MainItem = ({ auth, setRowInfo, isDetailedRow, handleOpenModal, row, handl
                                 }
                             }}
                         >
-                            <span className={`edit_row ${item.editValue ? 'active' : 'inactive'}`}>
+                            <span
+                                className={`edit_row ${item.editValue ? 'active' : 'inactive'}`}
+                            >
                                 <FaEdit />
                             </span>
                         </td>
                     ) : null;
                 } else if (item?.rowLabel) {
                     return (
-                        <td className='line__item detailed_row' key={index}>
+                        <td className="line__item detailed_row" key={index}>
                             {visibleDetailedRowModal && (
                                 <DetailedRowModal
-                                    handleHiddenDetailedRowModal={handleHiddenDetailedRowModal}
+                                    handleHiddenDetailedRowModal={
+                                        handleHiddenDetailedRowModal
+                                    }
                                     tableData={item?.tableValue}
                                 />
                             )}
 
-                            <span onClick={handleVisibleDetailedRowModal}>{item.rowLabel}</span>
+                            <span onClick={handleVisibleDetailedRowModal}>
+                                {item.rowLabel}
+                            </span>
                         </td>
                     );
                 }
 
                 return (
-                    <td className='line__item' key={index}>
+                    <td className="line__item" key={index}>
                         {item}
                     </td>
                 );
@@ -257,15 +311,23 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
     };
 
     return (
-        <div className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}>
+        <div
+            className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}
+        >
             {!isDynamicRows && (
                 <header>
-                    <h4 className={`heading ${isDetailedRow ? 'fsize_small' : ''}`}>{table?.title}</h4>
-                    <div className='modal'>
+                    <h4
+                        className={`heading ${isDetailedRow ? 'fsize_small' : ''}`}
+                    >
+                        {table?.title}
+                    </h4>
+                    <div className="modal">
                         {!isDynamicRows && !isDetailedRow && (
                             <button
                                 className={`modal_btn_open ${
-                                    page.pageLevelYear === auth.user.levelYear ? 'active' : 'inactive'
+                                    page.pageLevelYear === auth.user.levelYear
+                                        ? 'active'
+                                        : 'inactive'
                                 }`}
                                 onClick={handleOpenModal}
                             >
@@ -292,7 +354,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
             )}
 
             {!isDynamicRows && !isDetailedRow && (
-                <h5 className='table_description'>
+                <h5 className="table_description">
                     <span>Mô tả chỉ tiêu: </span>
                     {`${table.description ? table.description : 'không có mô tả cụ thể cho chỉ tiêu này'}`}
                 </h5>
@@ -301,11 +363,15 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
             <table className={`table ${isDynamicRows ? 'margin-0' : ''}`}>
                 {table?.thead && (!isDynamicRows || index === 0) && (
                     <thead>
-                        <tr className='table__line__header'>
+                        <tr className="table__line__header">
                             {table.thead.map((item, index) => {
                                 return isDetailedRow &&
-                                    ['Sửa', 'Minh Chứng', 'Trạng Thái'].includes(item?.textHeading) ? null : (
-                                    <th className='header__item' key={index}>
+                                    [
+                                        'Sửa',
+                                        'Minh Chứng',
+                                        'Trạng Thái'
+                                    ].includes(item?.textHeading) ? null : (
+                                    <th className="header__item" key={index}>
                                         {item?.textHeading}
                                     </th>
                                 );
@@ -315,7 +381,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                 )}
 
                 {table?.tbody && (
-                    <tbody className='table__items'>
+                    <tbody className="table__items">
                         {table.tbody.map((row, index) => {
                             return (
                                 <MainItem
@@ -323,7 +389,9 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                                     setRowInfo={setRowInfo}
                                     isDetailedRow={isDetailedRow}
                                     isDynamicRows={isDynamicRows}
-                                    handleOpenPreviewFilesModal={handleOpenPreviewFilesModal}
+                                    handleOpenPreviewFilesModal={
+                                        handleOpenPreviewFilesModal
+                                    }
                                     handleOpenModal={handleOpenModal}
                                     row={row}
                                     key={index}

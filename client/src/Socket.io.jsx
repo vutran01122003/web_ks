@@ -8,19 +8,19 @@ function SocketIO({ auth }) {
     const socket = io(URL);
     const dispatch = useDispatch();
 
+    function onConnect() {
+        dispatch({
+            type: GLOBALTYPES.SOCKET.SET_SOCKET,
+            payload: {
+                socket: socket,
+            },
+        });
+    }
+
     useEffect(() => {
         if (socket) {
-            function onConnect() {
-                dispatch({
-                    type: GLOBALTYPES.SOCKET.SET_SOCKET,
-                    payload: {
-                        socket: socket
-                    }
-                });
-            }
-
             socket.emit('handshake', {
-                userId: auth.user._id
+                userId: auth.user._id,
             });
 
             socket.on('connect', onConnect);
@@ -29,7 +29,7 @@ function SocketIO({ auth }) {
                 socket.off('connect', onConnect);
             };
         }
-    }, [socket, dispatch]);
+    }, [socket, auth.user._id, dispatch]);
 
     // notify
     useEffect(() => {
@@ -38,8 +38,8 @@ function SocketIO({ auth }) {
                 dispatch({
                     type: GLOBALTYPES.NOTIFICATION.ADD_NOTIFICATION,
                     payload: {
-                        notification: data
-                    }
+                        notification: data,
+                    },
                 });
             };
 

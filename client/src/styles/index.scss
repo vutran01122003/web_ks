@@ -1,4 +1,4 @@
-@import "@mixin_variable.scss";
+@import '@mixin_variable.scss';
 
 * {
     padding: 0;
@@ -48,7 +48,7 @@ a {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
     color: #6c757d;
-    content: "/";
+    content: '/';
 }
 
 // Empty Data Notification
@@ -110,18 +110,18 @@ a {
         animation: mesh 2.5s ease-in-out infinite -1.25s;
     }
 
-    &>div .circle:last-child {
+    & > div .circle:last-child {
         -webkit-animation-delay: 0s;
         animation-delay: 0s;
     }
 
-    &>div {
+    & > div {
         position: absolute;
         top: 50%;
         left: 50%;
     }
 
-    &>div:last-child {
+    & > div:last-child {
         -webkit-transform: rotate(90deg);
         transform: rotate(90deg);
     }
@@ -187,48 +187,46 @@ a {
     }
 }
 
-.toast{
-    top:70px !important;
+.toast {
+    top: 70px !important;
     right: 15px !important;
-  }
+}
 
 // Pages
-@import "./pages/pageAdmin";
-@import "./pages/pageGoals";
-@import "./pages/pageApply";
-@import "./pages/pageGoals";
-@import "./pages/pageHome";
-@import "./pages/pageNews";
-@import "./pages/pageProfile";
-@import "./pages/pageCreateNews";
-@import "./pages/pageNewsDetail";
-@import "./pages/pageManagement";
-@import "./pages/pageNotFound";
-@import "./pages/pageCreateNewsType";
-@import "./pages/pageFirstLogin";
-@import "./layout/index";
-@import "./pages/pageLogin";
-@import "./pages/pageChatbot";
-@import "./pages/pageCompletionSchedule";
-@import "./pages/pageFaculty";
-
+@import './pages/pageAdmin';
+@import './pages/pageGoals';
+@import './pages/pageApply';
+@import './pages/pageGoals';
+@import './pages/pageHome';
+@import './pages/pageNews';
+@import './pages/pageProfile';
+@import './pages/pageMedia';
+@import './pages/pageNewsDetail';
+@import './pages/pageManagement';
+@import './pages/pageNotFound';
+@import './pages/pageFirstLogin';
+@import './layout/index';
+@import './pages/pageLogin';
+@import './pages/pageChatbot';
+@import './pages/pageProgress';
+@import './pages/pageFaculty';
+@import './pages/pageActivity';
 // Component
-@import "./components/modalComponent";
-@import "./components/tableComponent";
-@import "./components/headerComponent";
-@import "./components/menuComponent";
-@import "./components/inputComponent";
-@import "./components/proofImageComponent";
-@import "./components/peddingGoalsComponent";
-@import "./components/buttonComponent";
-@import "./components/goalsInfoComponent";
-@import "./components/quantity";
-@import "./components/tabs";
+@import './components/modalComponent';
+@import './components/tableComponent';
+@import './components/headerComponent';
+@import './components/menuComponent';
+@import './components/inputComponent';
+@import './components/proofImageComponent';
+@import './components/peddingGoalsComponent';
+@import './components/buttonComponent';
+@import './components/goalsInfoComponent';
+@import './components/quantity';
+@import './components/tabs';
 
 // Scrollbar
-@import "./scrollBar/scrollBar";
-@import "./scrollBar/scrollToTopButton";
-
+@import './scrollBar/scrollBar';
+@import './scrollBar/scrollToTopButton';
 
 // Media
-@import "@media/@mediaComponentLogin.scss";
+@import '@media/@mediaComponentLogin.scss';

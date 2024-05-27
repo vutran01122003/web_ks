@@ -16,22 +16,30 @@ function RemovePageModal({ handleHideRemovePageModal, pageId, subPageName }) {
     };
 
     return (
-        <div className='modal_overlap' onMouseUp={handleClosePopup}>
-            <div className='box_wrapper'>
-                <h2 className='modal_header'>{subPageName}</h2>
-                <div className='modal_close_icon_wrapper' onClick={handleHideRemovePageModal}>
+        <div className="modal_overlap" onMouseUp={handleClosePopup}>
+            <div className="box_wrapper">
+                <h2 className="modal_header">{subPageName}</h2>
+                <div
+                    className="modal_close_icon_wrapper"
+                    onClick={handleHideRemovePageModal}
+                >
                     <AiOutlineClose />
                 </div>
-                <div className='remove_page_modal'>
-                    <div className='remove_page_body'>Bạn có muốn xóa trang {subPageName} ?</div>
-                    <div className='remove_page_footer'>
+                <div className="remove_page_modal">
+                    <div className="remove_page_body">
+                        Bạn có muốn xóa trang {subPageName} ?
+                    </div>
+                    <div className="remove_page_footer">
                         <button
-                            className='remove_page_deny_btn'
+                            className="remove_page_deny_btn"
                             onClick={handleHideRemovePageModal}
                         >
                             Thoát
                         </button>
-                        <button className='remove_page_accept_btn' onClick={handleRemovePage}>
+                        <button
+                            className="remove_page_accept_btn"
+                            onClick={handleRemovePage}
+                        >
                             Đồng ý
                         </button>
                     </div>

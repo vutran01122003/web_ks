@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { addTable } from '../../redux/actions/tableAction';
 import { AiOutlineClose } from 'react-icons/ai';
-import CreateGoals from '../../pages/Goals';
+import CreateGoals from '../../pages/Goal';
 
 function AddTableModal({ subPageName, pageId, handleHideAddTableModal }) {
     const dispatch = useDispatch();
@@ -21,22 +21,25 @@ function AddTableModal({ subPageName, pageId, handleHideAddTableModal }) {
                         tableName: data.tableName,
                         description: data.description,
                         rowTitleList: data.rowTitleList,
-                        quantityDemanded: data.quantityDemanded
-                    }
-                ]
-            })
+                        quantityDemanded: data.quantityDemanded,
+                    },
+                ],
+            }),
         );
         handleHideAddTableModal();
     };
 
     return (
-        <div className='modal_overlap' onMouseUp={handleClosePopup}>
-            <div className='box_wrapper'>
-                <h2 className='modal_header'>{subPageName}</h2>
-                <div className='modal_close_icon_wrapper' onClick={handleHideAddTableModal}>
+        <div className="modal_overlap" onMouseUp={handleClosePopup}>
+            <div className="box_wrapper">
+                <h2 className="modal_header">{subPageName}</h2>
+                <div
+                    className="modal_close_icon_wrapper"
+                    onClick={handleHideAddTableModal}
+                >
                     <AiOutlineClose />
                 </div>
-                <div className='create_goal_container'>
+                <div className="create_goal_container">
                     <CreateGoals handleAddTable={handleAddTable} />
                 </div>
             </div>

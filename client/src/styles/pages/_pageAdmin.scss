@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .bgr__green {
@@ -85,7 +85,7 @@
             color: #fff !important;
 
             &::before {
-                content: "";
+                content: '';
                 width: 5px;
                 height: 5px;
                 display: block;
@@ -173,5 +173,5 @@
 }
 
 .information__welcome {
-    background: linear-gradient(90deg, #F0635C 0%, #ffad76 100%) !important;
+    background: linear-gradient(90deg, #f0635c 0%, #ffad76 100%) !important;
 }

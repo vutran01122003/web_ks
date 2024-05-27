@@ -1,10 +1,10 @@
-import GLOBALTYPES from "../actions/globalTypes";
+import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
     currentNews: '',
     currentNewsType: '',
     newsType: {},
-}
+};
 
 function newsReducer(state = initialState, action) {
     switch (action.type) {
@@ -14,21 +14,26 @@ function newsReducer(state = initialState, action) {
                 currentNewsType: action.payload.newsType,
                 newsType: {
                     ...state.newsType,
-                    [action.payload.newsType] : {
-                        newsList: action.payload.page === 1 ? action.payload.newsList : 
-                        [...state[action.payload.newsId].newsList, ...action.payload.newsList],
+                    [action.payload.newsType]: {
+                        newsList:
+                            action.payload.page === 1
+                                ? action.payload.newsList
+                                : [
+                                      ...state[action.payload.newsId].newsList,
+                                      ...action.payload.newsList,
+                                  ],
                         page: action.payload?.page || 1,
-                        maxPage: action.payload?.maxPage || false
-                    }
-                }
-            }
-        case GLOBALTYPES.NEWS.GET_NEWS_DETAILS: 
+                        maxPage: action.payload?.maxPage || false,
+                    },
+                },
+            };
+        case GLOBALTYPES.NEWS.GET_NEWS_DETAILS:
             return {
                 ...state,
-                currentNews: action.payload.newsData
-            }
+                currentNews: action.payload.newsData,
+            };
         default:
-            return state
+            return state;
     }
 }
 

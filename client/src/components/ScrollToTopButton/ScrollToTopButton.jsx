@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FiArrowUp } from 'react-icons/fi';
 const ScrollToTopButton = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -22,14 +22,14 @@ const ScrollToTopButton = () => {
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth' // Cuộn mượt
+            behavior: 'smooth', // Cuộn mượt
         });
     };
 
     return (
         <div>
             {isVisible && (
-                <button onClick={scrollToTop} className='scroll-to-top-button'>
+                <button onClick={scrollToTop} className="scroll-to-top-button">
                     <FiArrowUp />
                 </button>
             )}

@@ -4,14 +4,13 @@ import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { stopSubmittingProof } from '../../redux/actions/progressAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
-import { updateLevelYearOfCohort } from '../../redux/actions/facultyAction';
 
 function StopSubmittingProofModal({
     cohort,
     major,
     levelYear,
     handleHiddenStopSubmittingProofModal,
-    updatedCohortData
+    updatedCohortData,
 }) {
     const dispatch = useDispatch();
 
@@ -37,7 +36,8 @@ function StopSubmittingProofModal({
     };
 
     const handleHideModal = (e) => {
-        if (e.target === e.currentTarget) handleHiddenStopSubmittingProofModal();
+        if (e.target === e.currentTarget)
+            handleHiddenStopSubmittingProofModal();
     };
 
     const handleChangeProgressPercentageCheckboxValue = (e) => {
@@ -68,7 +68,8 @@ function StopSubmittingProofModal({
 
     const handleStopSubmittingProof = () => {
         if (
-            (progressPercentage || progressPercentageInputRef.current.readOnly) &&
+            (progressPercentage ||
+                progressPercentageInputRef.current.readOnly) &&
             (score || scoreInputRef.current.readOnly)
         ) {
             dispatch(
@@ -77,39 +78,41 @@ function StopSubmittingProofModal({
                     score,
                     major,
                     cohort,
-                    levelYear
-                })
+                    levelYear,
+                    updatedCohortData,
+                }),
             );
-
-            dispatch(updateLevelYearOfCohort(updatedCohortData));
             handleHiddenStopSubmittingProofModal();
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Vui lòng nhập đầy đủ thông tin'
-                }
+                    error: 'Vui lòng nhập đầy đủ thông tin',
+                },
             });
         }
     };
 
     return (
-        <div className='modal_overlap' onMouseUp={handleHideModal}>
-            <div className='stop_submitting_proof_modal'>
-                <div className='stop_submitting_proof_header'>
+        <div className="modal_overlap" onMouseUp={handleHideModal}>
+            <div className="stop_submitting_proof_modal">
+                <div className="stop_submitting_proof_header">
                     <h2>Kết thúc hoạt động nộp minh chứng</h2>
-                    <div className='stop_submitting_proof_close_btn' onClick={handleHiddenStopSubmittingProofModal}>
+                    <div
+                        className="stop_submitting_proof_close_btn"
+                        onClick={handleHiddenStopSubmittingProofModal}
+                    >
                         <AiOutlineClose />
                     </div>
                 </div>
-                <div className='stop_submitting_proof_body'>
-                    <p className='stop_submitting_proof_body_content'>
+                <div className="stop_submitting_proof_body">
+                    <p className="stop_submitting_proof_body_content">
                         {`Bạn muốn kết thúc hoạt động nộp minh chứng năm ${levelYear} khóa ${cohort} của chuyên ngành ${capitalizeFirstLetter(
-                            major
+                            major,
                         )}`}
                     </p>
 
-                    <ul className='stop_submitting_proof_body_notify'>
+                    <ul className="stop_submitting_proof_body_notify">
                         <li>{`Sau khi bạn đồng ý sinh viên không thể tiếp tục nộp minh chứng của năm ${levelYear}.`}</li>
                         <li>{`Bạn phải tạo các chỉ tiêu mới của năm ${
                             levelYear + 1
@@ -120,55 +123,74 @@ function StopSubmittingProofModal({
                         }.`}</li>
                     </ul>
 
-                    <div className='condition_filter_wrapper'>
+                    <div className="condition_filter_wrapper">
                         <h4>Thiết lập điều kiện để sinh viên thông qua: </h4>
 
-                        <div className='input_item'>
+                        <div className="input_item">
                             <label>Tiến Độ:</label>
                             <input
-                                className='input_text_item'
-                                type='text'
-                                placeholder='Nhập phần trăm tiến độ tối thiểu'
+                                className="input_text_item"
+                                type="text"
+                                placeholder="Nhập phần trăm tiến độ tối thiểu"
                                 onChange={handleChangeProgressPercentageValue}
                                 value={progressPercentage}
                                 ref={progressPercentageInputRef}
                             />
-                            <span className='input_checkbox_item'>
-                                <input type='checkbox' onClick={handleChangeProgressPercentageCheckboxValue} />
+                            <span className="input_checkbox_item">
+                                <input
+                                    type="checkbox"
+                                    onClick={
+                                        handleChangeProgressPercentageCheckboxValue
+                                    }
+                                />
                                 <span>Không bắt buộc</span>
                             </span>
                         </div>
 
-                        <div className='input_item'>
+                        <div className="input_item">
                             <label>Số Điểm:</label>
                             <input
-                                className='input_text_item'
-                                type='text'
-                                placeholder='Nhập số điểm tối thiểu'
+                                className="input_text_item"
+                                type="text"
+                                placeholder="Nhập số điểm tối thiểu"
                                 value={score}
                                 onChange={handleChangeScoreValue}
                                 ref={scoreInputRef}
                             />
-                            <span className='input_checkbox_item'>
-                                <input type='checkbox' onClick={handleChangeScoreCheckboxValue} />
+                            <span className="input_checkbox_item">
+                                <input
+                                    type="checkbox"
+                                    onClick={handleChangeScoreCheckboxValue}
+                                />
                                 <span>Không bắt buộc</span>
                             </span>
                         </div>
                     </div>
 
-                    <div className='stop_submitting_proof_body_code'>
-                        <input onChange={handleConfirmValue} placeholder='Nhập văn bản xác nhận' />
-                        <span>Nếu bạn đã chắc chắn thì hãy nhập "Tôi đồng ý"</span>
+                    <div className="stop_submitting_proof_body_code">
+                        <input
+                            onChange={handleConfirmValue}
+                            placeholder="Nhập văn bản xác nhận"
+                        />
+                        <span>
+                            Nếu bạn đã chắc chắn thì hãy nhập &ldquo;Tôi đồng
+                            ý&ldquo;
+                        </span>
                     </div>
                 </div>
-                <div className='stop_submitting_proof_footer'>
-                    <button className='btn_close' onClick={handleHiddenStopSubmittingProofModal}>
+                <div className="stop_submitting_proof_footer">
+                    <button
+                        className="btn_close"
+                        onClick={handleHiddenStopSubmittingProofModal}
+                    >
                         Không đồng ý
                     </button>
 
                     <button
                         className={`btn_accept ${
-                            confirmValue.trim().toLowerCase() === 'tôi đồng ý' ? 'active' : 'inactive'
+                            confirmValue.trim().toLowerCase() === 'tôi đồng ý'
+                                ? 'active'
+                                : 'inactive'
                         }`}
                         onClick={handleStopSubmittingProof}
                     >

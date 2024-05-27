@@ -8,7 +8,7 @@ const initialState = {
     pageName: '',
     pageType: '',
     pageLevelYear: 0,
-    tables: []
+    tables: [],
 };
 
 function pageReducer(state = initialState, action) {
@@ -16,10 +16,10 @@ function pageReducer(state = initialState, action) {
         case GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES: {
             return {
                 ...state,
-                pages: [...action.payload.pages]
+                pages: [...action.payload.pages],
             };
         }
-        case GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO:
+        case GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO: {
             return {
                 ...state,
                 pathName: action.payload.pathName,
@@ -27,21 +27,26 @@ function pageReducer(state = initialState, action) {
                 pageName: action.payload.pageName,
                 pageType: action.payload.pageType,
                 pageLevelYear: action.payload.pageLevelYear,
-                tables: [...action.payload.tables]
+                tables: [...action.payload.tables],
             };
-        case GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE: 
+        }
+
+        case GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE: {
             return {
                 ...state,
-                tables: [...action.payload?.tables],
+                tables: [...action.payload.tables],
             };
-        case GLOBALTYPES.PAGE.REMOVE_DYNAMIC_PAGE: 
+        }
+
+        case GLOBALTYPES.PAGE.REMOVE_DYNAMIC_PAGE: {
             const newPageList = removeElem(state.pages, action.payload.pageId);
 
             return {
                 ...state,
-                pages: [...newPageList]
+                pages: [...newPageList],
             };
-       
+        }
+
         default:
             return state;
     }

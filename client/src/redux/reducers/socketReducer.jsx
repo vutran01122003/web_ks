@@ -1,6 +1,6 @@
 import GLOBALTYPES from '../actions/globalTypes';
 const initialState = {
-    socket: null
+    socket: null,
 };
 
 function socketReducer(state = initialState, action) {
@@ -8,7 +8,7 @@ function socketReducer(state = initialState, action) {
         case GLOBALTYPES.SOCKET.SET_SOCKET:
             return {
                 ...state,
-                socket: action.payload.socket
+                socket: action.payload.socket,
             };
         default:
             return state;

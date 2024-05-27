@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom/dist';
 import Layout from './components/Layout/Layout';
@@ -35,35 +35,42 @@ const App = () => {
         if (auth?.user) {
             dispatch(getNumUnreadNotification({ userId: auth?.user._id }));
         }
-    }, [auth]);
+    }, [auth, dispatch]);
 
     return (
         <>
             <Alert />
             <Routes>
-                <Route path='/login' element={<Login />} />
-                <Route path='/apply' element={<Apply />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/apply" element={<Apply />} />
                 <Route
-                    path='/'
+                    path="/"
                     element={
                         auth?.user ? (
                             <>
-                                <Layout auth={auth} pathName={pathName} groupCode={groupCode} />
+                                <Layout
+                                    auth={auth}
+                                    pathName={pathName}
+                                    groupCode={groupCode}
+                                />
                                 <SocketIO auth={auth} />
                             </>
                         ) : auth?.firstLogin ? (
-                            <FirstLogin userId={auth.firstLogin.userId} birthday={auth.firstLogin.birthday} />
+                            <FirstLogin
+                                userId={auth.firstLogin.userId}
+                                birthday={auth.firstLogin.birthday}
+                            />
                         ) : (
                             <Login />
                         )
                     }
                 >
                     <Route index element={<Home auth={auth} />} />
-                    <Route path='/home' element={<Home auth={auth} />} />
-                    <Route path='/:page' element={<PageRender />} />
-                    <Route path='/:page/:id' element={<PageRender />} />
-                    <Route path='/page/:dynamicPage' element={<PageRender />} />
-                    <Route path='*' element={<NotFound />} />
+                    <Route path="/home" element={<Home auth={auth} />} />
+                    <Route path="/:page" element={<PageRender />} />
+                    <Route path="/:page/:id" element={<PageRender />} />
+                    <Route path="/page/:dynamicPage" element={<PageRender />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </>

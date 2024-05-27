@@ -8,8 +8,8 @@ export const createNews =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
             const res = await postDataApi('/news', newsData);
@@ -17,8 +17,8 @@ export const createNews =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    success: res.data?.msg
-                }
+                    success: res.data?.msg,
+                },
             });
         } catch (error) {
             dispatch({
@@ -27,8 +27,9 @@ export const createNews =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết phiên đăng nhập'
-                            : error?.response.data?.msg || 'Tạo tin tức thất bại'
-                }
+                            : error?.response.data?.msg ||
+                              'Tạo tin tức thất bại',
+                },
             });
         }
     };
@@ -40,8 +41,8 @@ export const getAllNews =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
             const res = await getDataApi('/news', { news_type: newsType });
@@ -52,15 +53,15 @@ export const getAllNews =
                     newsType,
                     newsList: res.data.data,
                     page: res.data?.page || 1,
-                    maxPage: res.data?.maxPage
-                }
+                    maxPage: res.data?.maxPage,
+                },
             });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: false
-                }
+                    loading: false,
+                },
             });
         } catch (error) {
             dispatch({
@@ -69,8 +70,9 @@ export const getAllNews =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error.response?.data?.msg || 'Lấy Dữ Liệu Tin Tức Thất Bại'
-                }
+                            : error.response?.data?.msg ||
+                              'Lấy Dữ Liệu Tin Tức Thất Bại',
+                },
             });
         }
     };
@@ -82,8 +84,8 @@ export const getNewsDetails =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
             const res = await getDataApi(`/news/${newsId}`);
@@ -91,15 +93,15 @@ export const getNewsDetails =
             dispatch({
                 type: GLOBALTYPES.NEWS.GET_NEWS_DETAILS,
                 payload: {
-                    newsData: res.data.data
-                }
+                    newsData: res.data.data,
+                },
             });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: false
-                }
+                    loading: false,
+                },
             });
         } catch (error) {
             dispatch({
@@ -108,8 +110,9 @@ export const getNewsDetails =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error.response?.data?.msg || 'Lấy Dữ Liệu Tin Tức Thất Bại'
-                }
+                            : error.response?.data?.msg ||
+                              'Lấy Dữ Liệu Tin Tức Thất Bại',
+                },
             });
         }
     };

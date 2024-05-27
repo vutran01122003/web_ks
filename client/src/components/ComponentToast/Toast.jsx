@@ -1,5 +1,4 @@
 import { Alert, Snackbar } from '@mui/material';
-import { AiOutlineClose } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { alertSelector } from '../../redux/selector';
@@ -17,7 +16,7 @@ function Toast({ status, msg }) {
     return (
         <>
             <Snackbar
-                className='toast'
+                className="toast"
                 open={open}
                 autoHideDuration={1800}
                 onClose={() => {

@@ -66,7 +66,8 @@ export const getPages = () => async (dispatch) => {
                 error:
                     error.response?.data?.status === 401
                         ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
+                        : error?.response?.data.msg ||
+                          'Lấy Dữ Liệu Trang Thất Bại'
             }
         });
     }
@@ -98,7 +99,8 @@ export const getPage =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
+                            : error?.response?.data.msg ||
+                              'Lấy Dữ Liệu Trang Thất Bại'
                 }
             });
         }

@@ -8,8 +8,8 @@ export const addTable =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
             const res = await postDataApi('/table', { pageId, tables });
@@ -17,8 +17,8 @@ export const addTable =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    success: res?.data.msg
-                }
+                    success: res?.data.msg,
+                },
             });
         } catch (error) {
             dispatch({
@@ -27,8 +27,9 @@ export const addTable =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Thêm chỉ tiêu thất bại'
-                }
+                            : error?.response?.data.msg ||
+                              'Thêm chỉ tiêu thất bại',
+                },
             });
         }
     };
@@ -42,8 +43,8 @@ export const getTables =
                 type: GLOBALTYPES.TABLE.SET_TABLES,
                 payload: {
                     pageName: subPageName,
-                    tables: res.data.data.tables
-                }
+                    tables: res.data.data.tables,
+                },
             });
         } catch (error) {
             dispatch({
@@ -52,8 +53,9 @@ export const getTables =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy dữ liệu chỉ tiêu thất bại'
-                }
+                            : error?.response?.data.msg ||
+                              'Lấy dữ liệu chỉ tiêu thất bại',
+                },
             });
         }
     };
@@ -65,20 +67,20 @@ export const removeTable =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    loading: true
-                }
+                    loading: true,
+                },
             });
 
             const res = await deleteDataApi('/table', {
                 pageId,
-                tableId
+                tableId,
             });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    success: res.data.msg
-                }
+                    success: res.data.msg,
+                },
             });
         } catch (error) {
             dispatch({
@@ -87,8 +89,9 @@ export const removeTable =
                     error:
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Xóa chỉ tiêu thất bại'
-                }
+                            : error?.response?.data.msg ||
+                              'Xóa chỉ tiêu thất bại',
+                },
             });
         }
     };

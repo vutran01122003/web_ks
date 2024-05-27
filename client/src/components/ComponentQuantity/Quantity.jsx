@@ -1,4 +1,3 @@
-import React from 'react';
 import { LuListRestart } from 'react-icons/lu';
 import { MdPeopleAlt } from 'react-icons/md';
 import { RiNumbersFill } from 'react-icons/ri';
@@ -13,7 +12,7 @@ const Quantity = () => {
             quantity: 9,
             icon_after: <LuListRestart />,
             color_border: '#f0635c',
-            link: '/activity-approval'
+            link: '/activity',
         },
         {
             id: 1,
@@ -21,7 +20,7 @@ const Quantity = () => {
             quantity: 1,
             icon_after: <MdPeopleAlt />,
             color_border: '#3E97FF',
-            link: '#'
+            link: '#',
         },
         {
             id: 2,
@@ -29,7 +28,7 @@ const Quantity = () => {
             quantity: 2,
             icon_after: <RiNumbersFill />,
             color_border: '#6E6E6E',
-            link: '#'
+            link: '#',
         },
         {
             id: 3,
@@ -38,27 +37,37 @@ const Quantity = () => {
             quantity: 10,
             icon_after: <ImNewspaper />,
             color_border: '#6E6E6E',
-            link: '#'
-        }
+            link: '#',
+        },
     ];
 
-    const returnListQuantity = LIST_QUANTITY_OVERVIEW.map((QUANTITY_OVERVIEW) => {
-        return (
-            <Link to={QUANTITY_OVERVIEW.link} key={QUANTITY_OVERVIEW.id} className='item__quantity'>
-                <div className='icon_size'>{QUANTITY_OVERVIEW.icon_after}</div>
-                <div className='quantily__number'>
-                    <div className='text__heading'>{QUANTITY_OVERVIEW.text_heading}</div>
-                    <div className='number__quantity'>{`${QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'}: ${
-                        QUANTITY_OVERVIEW.quantity
-                    }`}</div>
-                </div>
-            </Link>
-        );
-    });
+    const returnListQuantity = LIST_QUANTITY_OVERVIEW.map(
+        (QUANTITY_OVERVIEW) => {
+            return (
+                <Link
+                    to={QUANTITY_OVERVIEW.link}
+                    key={QUANTITY_OVERVIEW.id}
+                    className="item__quantity"
+                >
+                    <div className="icon_size">
+                        {QUANTITY_OVERVIEW.icon_after}
+                    </div>
+                    <div className="quantily__number">
+                        <div className="text__heading">
+                            {QUANTITY_OVERVIEW.text_heading}
+                        </div>
+                        <div className="number__quantity">{`${QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'}: ${
+                            QUANTITY_OVERVIEW.quantity
+                        }`}</div>
+                    </div>
+                </Link>
+            );
+        },
+    );
 
     return (
-        <div className='container__quantity'>
-            <div className='body__quantity'>{returnListQuantity}</div>
+        <div className="container__quantity">
+            <div className="body__quantity">{returnListQuantity}</div>
         </div>
     );
 };

@@ -1,22 +1,20 @@
-import React from 'react'
-
-const ComponentButton = ({ 
-    type, 
-    textButton, 
+const ComponentButton = ({
+    type,
+    textButton,
     className,
     onClick,
-    icon_before
+    icon_before,
 }) => {
     return (
-        <button 
-            className={`button__component ${className}`} 
+        <button
+            className={`button__component ${className}`}
             type={type}
             onClick={onClick}
-            >
+        >
             {icon_before}
             {textButton}
         </button>
-    )
-}
+    );
+};
 
-export default ComponentButton
+export default ComponentButton;

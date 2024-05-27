@@ -27,7 +27,7 @@
 
             .box_text_present {
                 width: 100%;
-                color: #676AF8;
+                color: #676af8;
                 // color: #fff;
                 margin-top: 50px;
                 text-align: center;
@@ -50,7 +50,6 @@
                     width: 440px;
                 }
             }
-
         }
 
         .box__form {
@@ -71,7 +70,7 @@
             .footer__form {
                 text-align: center;
 
-                >div:first-child {
+                > div:first-child {
                     @include flex_center;
                     flex-direction: column;
                 }
@@ -106,7 +105,7 @@
                 align-items: center;
                 justify-content: center;
 
-                form>div {
+                form > div {
                     margin-bottom: 10px;
                 }
 
@@ -190,7 +189,7 @@
                         font-size: 15px;
                         color: #282c52;
 
-                        >input {
+                        > input {
                             margin-right: 5px;
                             position: relative;
                             top: 1px;
@@ -204,6 +203,5 @@
                 }
             }
         }
-
     }
 }

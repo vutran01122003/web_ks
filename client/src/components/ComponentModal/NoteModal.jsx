@@ -9,23 +9,28 @@ function NoteModal({ handleHiddenNoteModal, noteList }) {
     };
 
     return (
-        <div className='modal_overlap' onMouseUp={handleHiddenPopup}>
-            <div className='note_modal'>
-                <div className='note_modal_header'>
+        <div className="modal_overlap" onMouseUp={handleHiddenPopup}>
+            <div className="note_modal">
+                <div className="note_modal_header">
                     <h3>{'Lịch sử ghi chú của hoạt động'}</h3>
-                    <div className='modal_close_btn' onClick={handleHiddenNoteModal}>
+                    <div
+                        className="modal_close_btn"
+                        onClick={handleHiddenNoteModal}
+                    >
                         <AiOutlineClose />
                     </div>
                 </div>
-                <div className='note_modal_body'>
+                <div className="note_modal_body">
                     {noteList.length > 0
                         ? noteList.map((note) => (
-                              <div className='note_wrapper' key={note._id}>
-                                  <span className='note_time'>
+                              <div className="note_wrapper" key={note._id}>
+                                  <span className="note_time">
                                       {formatTimeStr(note.createdAt)}
                                       {': '}
                                   </span>
-                                  <span className='note_value'>{note.value}</span>
+                                  <span className="note_value">
+                                      {note.value}
+                                  </span>
                               </div>
                           ))
                         : 'Chưa có ghi chú'}
