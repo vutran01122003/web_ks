@@ -72,9 +72,57 @@ class PageService {
         }
     };
 
+    static getActivities = async ({ pageStudentMajor, pageStudentCohort, pageStudentLevelYear }) => {
+        try {
+            const pages = await Page.aggregate([
+                {
+                    $match: {
+                        pageStudentMajor,
+                        pageStudentCohort: Number.parseInt(pageStudentCohort),
+                        pageStudentLevelYear: Number.parseInt(pageStudentLevelYear)
+                    }
+                },
+                {
+                    $unwind: '$tables'
+                },
+                {
+                    $project: {
+                        'tables.tableName': 1
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        tables: {
+                            $push: '$tables'
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        tables: 1
+                    }
+                }
+            ]);
+            return pages;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static getPageById = async ({ page }) => {
         try {
             const pageInfo = await Page.findById(page);
+            return pageInfo;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getPageByFields = async (fields) => {
+        try {
+            const pageInfo = await Page.findOne(fields);
             return pageInfo;
         } catch (error) {
             throw error;

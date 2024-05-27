@@ -1,12 +1,25 @@
+const createError = require('http-errors');
+const PageService = require('../services/page.service');
 const UserService = require('../services/user.service');
 
 class UserControllers {
     updateUserActivityStatusByMajor = async (req, res, next) => {
         try {
-            const updatedUsers = await UserService.updateUserActivityStatusByMajor(req.body);
+            const { major, cohort, levelYear } = req.body;
+
+            // const isExists = await PageService.getPageByFields({
+            //     pageStudentMajor: major,
+            //     pageStudentCohort: cohort,
+            //     pageStudentLevelYear: levelYear
+            // });
+
+            // if (!isExists) throw createError.NotFound(`Không có hoạt động năm ${levelYear} được tạo để kết thúc`);
+
+            await UserService.updateUserActivityStatusByMajor(req.body);
 
             res.status(200).json({
-                msg: updatedUsers.msg
+                status: 200,
+                msg: `Kết thúc hoạt động nộp minh chứng của sinh viên khóa ${cohort} ngành ${major}`
             });
         } catch (error) {
             next(error);

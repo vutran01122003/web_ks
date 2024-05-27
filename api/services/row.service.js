@@ -143,12 +143,23 @@ class RowService {
         }
     };
 
-    static getDynamicRows = async ({ page, limit, userFilterConditions, currentRows, rowsType }) => {
+    static getDynamicRows = async ({
+        page,
+        limit,
+        userFilterConditions,
+        currentRows,
+        rowsType,
+        activity,
+        pageStudentMajor,
+        pageStudentCohort,
+        pageStudentLevelYear
+    }) => {
         let rowStatus = null;
         let skip = (page - 1) * limit;
         const removedDynamicRows = skip - currentRows;
         if (removedDynamicRows > 0) skip = skip - removedDynamicRows;
 
+        console.log(activity);
         switch (rowsType) {
             case 'pendingRows':
                 rowStatus = 'chờ duyệt';
@@ -169,7 +180,10 @@ class RowService {
         try {
             const dynamicRows = await Row.aggregate([
                 {
-                    $unwind: '$content'
+                    $unwind: {
+                        path: '$content',
+                        preserveNullAndEmptyArrays: true
+                    }
                 },
                 {
                     $match: {
@@ -183,6 +197,19 @@ class RowService {
                         localField: 'page',
                         foreignField: '_id',
                         as: 'page'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$page',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $match: {
+                        'page.pageStudentMajor': pageStudentMajor,
+                        'page.pageStudentCohort': Number.parseInt(pageStudentCohort),
+                        'page.pageStudentLevelYear': Number.parseInt(pageStudentLevelYear)
                     }
                 },
                 {
@@ -203,10 +230,24 @@ class RowService {
                     $limit: limit * 1
                 },
                 {
+                    $unwind: {
+                        path: '$page.tables',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $match: {
+                        'page.tables.tableName': activity,
+
+                        $expr: {
+                            $eq: ['$table', '$page.tables._id']
+                        }
+                    }
+                },
+                {
                     $project: {
                         _id: 1,
                         user: 1,
-                        table: 1,
                         'page.pageName': 1,
                         'page._id': 1,
                         'page.tables._id': 1,
@@ -223,6 +264,7 @@ class RowService {
                 data: dynamicRows
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

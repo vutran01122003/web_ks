@@ -10,7 +10,7 @@ router.post('/groups', permissionControllers.createGroup);
 router.patch('/groups/:groupId', permissionControllers.updateGroupById);
 router.delete('/groups/:groupId', auth, permissionControllers.deleteGroup);
 
-router.post('/roles', auth, checkPermission, permissionControllers.createRole);
+router.post('/roles', auth, permissionControllers.createRole);
 router.delete('/roles/:roleId', auth, checkPermission, permissionControllers.deleteRole);
 
 router.post('/groups/:groupId/roles', permissionControllers.grantPermissionsToGroup);

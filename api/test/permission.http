@@ -37,17 +37,15 @@ POST {{url}}/api/roles
 Content-Type: application/json
 
 {
-    "name": "đọc dữ liệu trang động",
     "method": "get",
-    "url": "/page",
-    "description": "Quyền đọc dữ liệu trang động"
+    "url": "/page/activities",
+    "description": ""
 }
 
 ### Delete role
 DELETE {{url}}/api/roles/65d869e64f4c55561ee57878
 
 ### Add roles to the faculty manager's group
-# 
 POST {{url}}/api/groups/65e07596147fc5e332b88986/roles
 Content-Type: application/json
 
@@ -77,7 +75,8 @@ Content-Type: application/json
        "65e0711a4b961382fd75a46f",
        "65e0711a4b961382fd75a471",
        "65e0711a4b961382fd75a479",
-       "65e0711a4b961382fd75a487"
+       "65e0711a4b961382fd75a487",
+       "665373273b88773c4dd19204"
     ]
 }
 

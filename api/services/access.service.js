@@ -13,7 +13,6 @@ class AccessService {
     static login = async (data) => {
         try {
             const { userId, password } = data;
-
             const user = await User.findOne({ userId }).populate({
                 path: 'group',
                 model: 'group'
@@ -53,7 +52,7 @@ class AccessService {
         }
     };
 
-    static register = async (data) => {
+    static register = async ({ data, groupId }) => {
         try {
             const { userId, fullName, password, birthday, major, cohort, faculty, email, phone } = data;
 
@@ -67,6 +66,7 @@ class AccessService {
                 faculty,
                 email,
                 phone,
+                group: groupId,
                 roles: [role.talentedEngineer, role.contentAdministrator, role.webStructureAdministrator]
             });
 

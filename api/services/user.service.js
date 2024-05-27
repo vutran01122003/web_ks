@@ -1,14 +1,16 @@
 const createError = require('http-errors');
 const User = require('../models/user.model');
 const PermissionService = require('./permission.service');
+const PageService = require('./page.service');
+const FacultyService = require('./faculty.service');
 
 class UserService {
-    static findUserById = async ({ userId, userIdList }) => {
+    static findUserById = async ({ id, idList }) => {
         try {
             let result = null;
 
-            if (userId) result = await User.findById(userId).populate('group').lean();
-            else if (userIdList.length > 0) result = await User.find({ _id: { $in: [...userIdList] } }).lean();
+            if (id) result = await User.findById(id).populate('group').lean();
+            else if (idList.length > 0) result = await User.find({ _id: { $in: [...idList] } }).lean();
 
             if (!result) throw createError.NotFound('Người dùng không tồn tại');
             return result;
@@ -55,8 +57,17 @@ class UserService {
         }
     };
 
-    static updateUserActivityStatusByMajor = async ({ progressPercentage, score, major, cohort, levelYear }) => {
+    static updateUserActivityStatusByMajor = async ({
+        progressPercentage,
+        score,
+        major,
+        cohort,
+        levelYear,
+        updatedCohortData
+    }) => {
         try {
+            const { cohortId, majorId, facultyId, ...data } = updatedCohortData;
+
             const filterUser = {
                 major: major.toLowerCase(),
                 cohort: parseInt(cohort),
@@ -64,7 +75,7 @@ class UserService {
                     $lt: Number.parseFloat(progressPercentage)
                 },
                 [`annualTaskProgress.${levelYear}.totalScore`]: {
-                    $lt: Number.parseFloat(progressPercentage)
+                    $lt: Number.parseFloat(score)
                 }
             };
 
@@ -72,28 +83,28 @@ class UserService {
             if (!score) delete filterUser[`annualTaskProgress.${levelYear}.totalScore`];
 
             if (score || progressPercentage) {
-                await User.updateMany(filterUser, {
-                    $set: {
-                        isActive: false
-                    }
-                });
+                await Promise.all([
+                    User.updateMany(filterUser, {
+                        $set: {
+                            isActive: false
+                        }
+                    }),
+                    User.updateMany(
+                        {
+                            major: major.toLowerCase(),
+                            cohort: parseInt(cohort)
+                        },
+                        {
+                            $set: {
+                                levelYear: levelYear + 1
+                            }
+                        }
+                    ),
+                    FacultyService.updateCohortById({ facultyId, majorId, cohortId, data })
+                ]);
+            } else {
+                throw createError.BadRequest('Phải có ít nhất là một điều kiện xét duyệt');
             }
-
-            await User.updateMany(
-                {
-                    major: major.toLowerCase(),
-                    cohort: parseInt(cohort)
-                },
-                {
-                    $set: {
-                        levelYear: levelYear + 1
-                    }
-                }
-            );
-
-            return {
-                msg: 'Cập nhật trạng thái hoạt động của tất cả sinh viên thành công'
-            };
         } catch (error) {
             throw error;
         }
@@ -135,6 +146,22 @@ class UserService {
                     }
                 },
                 {
+                    $lookup: {
+                        from: 'groups',
+                        localField: 'group',
+                        foreignField: '_id',
+                        as: 'group'
+                    }
+                },
+                {
+                    $unwind: '$group'
+                },
+                {
+                    $match: {
+                        'group.groupCode': { $nin: ['003', '004'] }
+                    }
+                },
+                {
                     $project: {
                         userId: 1,
                         fullName: 1,
@@ -143,6 +170,7 @@ class UserService {
                         levelYear: 1,
                         cohort: 1,
                         isActive: 1,
+                        group: 1,
                         completedTaskProgress: `$annualTaskProgress.${levelYear || 1}`
                     }
                 },
@@ -154,6 +182,7 @@ class UserService {
                     }
                 }
             ]);
+            console.log(studentList);
             return studentList;
         } catch (error) {
             throw error;
@@ -249,7 +278,7 @@ class UserService {
         try {
             const result = await Promise.all([
                 PermissionService.getGroupById({ groupId }),
-                this.findUserById({ userId })
+                this.findUserById({ id: userId })
             ]);
 
             if (!result[0]) throw createError.NotFound('Chức vụ không tồn tại');

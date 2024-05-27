@@ -22,6 +22,9 @@ Content-Type: application/json
 ### Get faculties
 GET {{url}}/api/faculties
 
+### Get faculty by id
+GET {{url}}/api/faculties/65e143d8d5592282126467d8
+
 ### Update faculty by id
 PATCH {{url}}/api/faculties
 Content-Type: application/json

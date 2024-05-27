@@ -152,8 +152,12 @@ Content-Type: application/json
     "rowListId": "654bb94335ed023d2c710208"
 }
 
-###
+### Get row
 GET {{url}}/api/row
 Content-Type: application/json
 
+### Get activities
+GET {{url}}/api/page/activities?pageStudentMajor=kỹ thuật phần mềm&pageStudentLevelYear=1&pageStudentCohort=17
 
+### Get dynamic rows
+GET {{url}}/api/dynamic-rows?page=1&limit=10&current_rows=0&rows_type=acceptedRows&activity=học vượt các môn&pageStudentMajor=kỹ thuật phần mềm&pageStudentLevelYear=1&pageStudentCohort=17

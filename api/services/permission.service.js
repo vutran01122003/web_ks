@@ -39,6 +39,16 @@ class PermissionService {
         }
     };
 
+    static getGroupByGroupCode = async ({ groupCode }) => {
+        try {
+            const group = await Group.findOne({ groupCode });
+            if (!group) throw createError.NotFound('Chức vụ không tồn tại');
+            return group;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static updateGroupById = async ({ groupId, data }) => {
         try {
             const updatedGroup = await Group.findByIdAndUpdate(groupId, data, { new: true });

@@ -1,21 +1,10 @@
 const Faculty = require('../models/faculty.model');
 const createError = require('http-errors');
-const UserService = require('./user.service');
 
 class FacultyService {
-    static createFaculty = async ({ facultyName, managerIdList, majorList }) => {
+    static createFaculty = async ({ facultyName, userDataList, managerIdList, majorList }) => {
         try {
-            if (!facultyName.trim()) throw createError.BadRequest('Tên khoa không được để trống');
-            if (managerIdList.length === 0) throw createError.BadRequest('Danh sách quản lý khoa không được để trống');
-            if (majorList.length === 0) throw createError.BadRequest('Danh sách chuyên ngành không được để trống');
-
-            const result = await Promise.all([
-                Faculty.findOne({ facultyName }).lean(),
-                UserService.findUserById({ userIdList: managerIdList })
-            ]);
-
-            const isExists = result[0];
-            const userDataList = result[1];
+            const isExists = await Faculty.findOne({ facultyName }).lean();
 
             if (isExists) throw createError.Conflict('Tên khoa đã tồn tại');
             if (userDataList.length !== managerIdList.length)
@@ -260,6 +249,16 @@ class FacultyService {
             const availableFaculties = faculties.filter((faculty) => faculty.isActive === true);
 
             return availableFaculties;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getFacultyById = async ({ facultyId }) => {
+        try {
+            const faculty = await Faculty.findById(facultyId).lean();
+
+            return faculty;
         } catch (error) {
             throw error;
         }

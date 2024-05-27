@@ -64,7 +64,16 @@ class RowControllers {
 
     getDynamicRows = async (req, res, next) => {
         try {
-            const { page, limit, current_rows, rows_type } = req.query;
+            const {
+                page,
+                limit,
+                current_rows,
+                rows_type,
+                activity,
+                pageStudentMajor,
+                pageStudentCohort,
+                pageStudentLevelYear
+            } = req.query;
 
             const userFilterConditions = {
                 ['user.major']: req.query?.major ? req.query?.major.toLowerCase() : null,
@@ -84,7 +93,11 @@ class RowControllers {
                 limit,
                 userFilterConditions,
                 currentRows: current_rows,
-                rowsType: rows_type
+                rowsType: rows_type,
+                activity,
+                pageStudentMajor,
+                pageStudentCohort,
+                pageStudentLevelYear
             });
 
             res.status(200).json({

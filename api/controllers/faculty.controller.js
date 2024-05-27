@@ -1,11 +1,20 @@
 const FacultyService = require('../services/faculty.service');
+const UserService = require('../services/user.service');
 
 class FacultyController {
     createFaculty = async (req, res, next) => {
         try {
             const { facultyName, managerIdList, majorList } = req.body;
+
+            if (!facultyName.trim()) throw createError.BadRequest('Tên khoa không được để trống');
+            if (managerIdList.length === 0) throw createError.BadRequest('Danh sách quản lý khoa không được để trống');
+            if (majorList.length === 0) throw createError.BadRequest('Danh sách chuyên ngành không được để trống');
+
+            const userDataList = await UserService.findUserById({ idList: managerIdList });
+
             const createdFaculty = await FacultyService.createFaculty({
                 facultyName,
+                userDataList,
                 managerIdList,
                 majorList
             });
@@ -58,6 +67,21 @@ class FacultyController {
             const faculties = await FacultyService.getAllFaculties();
 
             return res.status(200).json(faculties);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getFacultyById = async (req, res, next) => {
+        try {
+            const { facultyId } = req.params;
+            const faculty = await FacultyService.getFacultyById({ facultyId });
+
+            return res.status(200).json({
+                status: 200,
+                msg: 'Lấy dữ liệu khoa thành công',
+                data: faculty
+            });
         } catch (error) {
             next(error);
         }

@@ -28,6 +28,22 @@ class PageControllers {
         }
     };
 
+    getActivities = async (req, res, next) => {
+        try {
+            const { pageStudentMajor, pageStudentCohort, pageStudentLevelYear } = req.query;
+            const activities = await pageService.getActivities({
+                pageStudentMajor,
+                pageStudentCohort,
+                pageStudentLevelYear
+            });
+
+            return res.status(200).json({
+                status: 'Lấy Toàn Bộ Hoạt Động Thành Công',
+                data: activities || []
+            });
+        } catch (error) {}
+    };
+
     getPage = async (req, res, next) => {
         const page = await pageService.getPage({
             pageName: req.params?.name,

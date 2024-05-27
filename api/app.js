@@ -1,6 +1,3 @@
-require('./dbs/init.redis');
-require('./dbs/init.mongodb');
-
 const express = require('express');
 const { MulterError } = require('multer');
 const createError = require('http-errors');
@@ -10,6 +7,9 @@ const compression = require('compression');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
+
+require('./dbs/init.redis');
+require('./dbs/init.mongodb');
 
 const {
     morganType,
@@ -44,7 +44,7 @@ app.use('/api', require('./router/access'));
 app.use('/api', require('./router/table'));
 app.use('/api', require('./router/news'));
 app.use('/api', require('./router/row'));
-app.use('/api', require('./router/chat'));
+// app.use('/api', require('./router/chat'));
 app.use('/api', require('./router/faculty'));
 app.use('/api', require('./router/progress'));
 app.use('/api', require('./router/excel'));

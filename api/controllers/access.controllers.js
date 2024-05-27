@@ -1,6 +1,7 @@
 const accessService = require('../services/access.service');
 const jwtService = require('../services/jwt.service');
 const createError = require('http-errors');
+const PermissionService = require('../services/permission.service');
 
 class AccessControllers {
     getInfoUser = async (req, res, next) => {
@@ -25,7 +26,7 @@ class AccessControllers {
             if (!loggedUser.isSuccessLogin) throw createError.Unauthorized('Đăng nhập không thành công');
 
             if (loggedUser.typePassword !== 'password') {
-                res.status(200).send({
+                return res.status(200).send({
                     status: 'Đăng nhập thành công',
                     data: {
                         firstLogin: {
@@ -34,7 +35,6 @@ class AccessControllers {
                         }
                     }
                 });
-                next();
             }
 
             if (loggedUser?.data && !loggedUser?.data.isActive) throw createError.BadRequest('Tài khoản đã bị khóa');
@@ -58,13 +58,16 @@ class AccessControllers {
                     }
                 });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
 
     register = async (req, res, next) => {
         try {
-            const createdUser = await accessService.register(req.body);
+            const data = req.body;
+            const group = await PermissionService.getGroupByGroupCode({ groupCode: '002' });
+            const createdUser = await accessService.register({ data, groupId: group._id });
             const accessToken = await jwtService.signAccessToken({
                 userData: createdUser
             });
