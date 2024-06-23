@@ -4,11 +4,11 @@ const PageService = require('./page.service');
 
 class ProgressService {
     static getProgressByYear = async ({ pageStudentMajor, pageStudentLevelYear, pageStudentCohort, userId }) => {
-        const filterArr = [{ $in: ['$_id', '$$rowIds'] }, { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }];
-
-        if (!userId) filterArr.splice(1, 1);
-
         try {
+            const filterArr = [{ $in: ['$_id', '$$rowIds'] }, { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }];
+
+            if (!userId) filterArr.splice(1, 1);
+
             const pageDetailsList = await PageService.getPageDetailsList({
                 pageStudentMajor,
                 pageStudentLevelYear,

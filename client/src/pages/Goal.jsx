@@ -35,13 +35,13 @@ const CreateGoals = ({ handleAddTable }) => {
             rowTitleList: [
                 {
                     titleValue: '',
-                    fixedValue: [],
-                },
+                    fixedValue: []
+                }
             ],
             rowValueList: [],
             fixedScore: '',
-            scoreSelectBoxStatus: null,
-        },
+            scoreSelectBoxStatus: null
+        }
     ]);
 
     const handleChangeFacultySelect = (e) => {
@@ -68,13 +68,13 @@ const CreateGoals = ({ handleAddTable }) => {
                 rowTitleList: [
                     {
                         titleValue: '',
-                        fixedValue: [],
-                    },
+                        fixedValue: []
+                    }
                 ],
                 rowValueList: [],
                 fixedScore: '',
-                scoreSelectBoxStatus: null,
-            },
+                scoreSelectBoxStatus: null
+            }
         ]);
     };
 
@@ -108,12 +108,11 @@ const CreateGoals = ({ handleAddTable }) => {
     };
 
     const addFixedValue = (tableIndex, rowIndex, value, score) => {
-        console.log(score);
         if (value.trim() && score !== '') {
             const updatedTables = [...tables];
             updatedTables[tableIndex].rowTitleList[rowIndex].fixedValue.push({
                 value,
-                score,
+                score
             });
             setTables(updatedTables);
             setFixedValue('');
@@ -122,8 +121,8 @@ const CreateGoals = ({ handleAddTable }) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Vui lòng nhập đầy đủ thông tin',
-                },
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
             });
         }
     };
@@ -132,7 +131,7 @@ const CreateGoals = ({ handleAddTable }) => {
         const updatedTables = [...tables];
         updatedTables[tableIndex].rowTitleList[rowIndex].fixedValue.splice(
             index,
-            1,
+            1
         );
         setTables(updatedTables);
     };
@@ -141,7 +140,7 @@ const CreateGoals = ({ handleAddTable }) => {
         const updatedTables = [...tables];
         updatedTables[tableIndex].rowTitleList.push({
             titleValue: '',
-            fixedValue: [],
+            fixedValue: []
         });
         setTables(updatedTables);
     };
@@ -180,13 +179,13 @@ const CreateGoals = ({ handleAddTable }) => {
                 rowTitleList: [
                     {
                         titleValue: '',
-                        fixedValue: [],
-                    },
+                        fixedValue: []
+                    }
                 ],
                 rowValueList: [],
                 fixedScore: '',
-                scoreSelectBoxStatus: null,
-            },
+                scoreSelectBoxStatus: null
+            }
         ]);
     };
 
@@ -201,8 +200,8 @@ const CreateGoals = ({ handleAddTable }) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Vui Lòng Điền Đầy Đủ Thông Tin',
-                },
+                    error: 'Vui Lòng Điền Đầy Đủ Thông Tin'
+                }
             });
             return;
         }
@@ -214,8 +213,8 @@ const CreateGoals = ({ handleAddTable }) => {
                 table.rowTitleList.length !==
                 new Set(
                     table.rowTitleList.map((rowTitle) =>
-                        JSON.stringify(rowTitle),
-                    ),
+                        JSON.stringify(rowTitle)
+                    )
                 ).size
             ) {
                 notifyValue = 'Các Cột Không Được Trùng Tên';
@@ -230,7 +229,7 @@ const CreateGoals = ({ handleAddTable }) => {
             if (
                 table.scoreSelectBoxStatus === null &&
                 table.rowTitleList.every(
-                    (rowTitleList) => rowTitleList.fixedValue.length === 0,
+                    (rowTitleList) => rowTitleList.fixedValue.length === 0
                 )
             ) {
                 notifyValue = 'Chưa Nhập Điểm Cho Chỉ Tiêu';
@@ -252,13 +251,13 @@ const CreateGoals = ({ handleAddTable }) => {
                         quantityDemanded: table.quantityDemanded,
                         description: table.description,
                         rowTitleList: table.rowTitleList,
-                        fixedScore: table.fixedScore,
+                        fixedScore: table.fixedScore
                     };
 
                     if (!table.fixedScore) delete tableData.fixedScore;
 
                     return tableData;
-                }),
+                })
             };
 
             dispatch(createPage({ pageData, resetAllData }));
@@ -266,8 +265,8 @@ const CreateGoals = ({ handleAddTable }) => {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: notifyValue,
-                },
+                    error: notifyValue
+                }
             });
         }
     };
@@ -289,14 +288,6 @@ const CreateGoals = ({ handleAddTable }) => {
     return (
         <div className="wrap__goals">
             <div className="body__goals">
-                <div className="line__flex">
-                    {handleAddTable ? (
-                        <h1>Thêm Chỉ Tiêu</h1>
-                    ) : (
-                        <h1>Thêm Nhóm Chỉ Tiêu</h1>
-                    )}
-                </div>
-
                 {!handleAddTable && (
                     <div className="goals_info_wrapper">
                         <div className="faculty_info">
@@ -317,7 +308,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                         value={JSON.stringify(facultyItem)}
                                     >
                                         {capitalizeFirstLetter(
-                                            facultyItem.facultyName,
+                                            facultyItem.facultyName
                                         )}
                                     </option>
                                 ))}
@@ -343,11 +334,11 @@ const CreateGoals = ({ handleAddTable }) => {
                                             <option
                                                 key={majorItem._id}
                                                 value={JSON.stringify(
-                                                    majorItem,
+                                                    majorItem
                                                 )}
                                             >
                                                 {capitalizeFirstLetter(
-                                                    majorItem?.majorName,
+                                                    majorItem?.majorName
                                                 )}
                                             </option>
                                         ))}
@@ -377,14 +368,14 @@ const CreateGoals = ({ handleAddTable }) => {
                                                 <option
                                                     key={cohort._id}
                                                     value={JSON.stringify(
-                                                        cohort,
+                                                        cohort
                                                     )}
                                                 >
                                                     {capitalizeFirstLetter(
-                                                        cohort?.cohortName,
+                                                        cohort?.cohortName
                                                     )}
                                                 </option>
-                                            ),
+                                            )
                                         )}
                                     </>
                                 ) : (
@@ -436,7 +427,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                 updateTable(
                                                     tableIndex,
                                                     'tableName',
-                                                    e.target.value,
+                                                    e.target.value
                                                 )
                                             }
                                             className="input_title--chi_tieu"
@@ -467,7 +458,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                             updateTable(
                                                 tableIndex,
                                                 'description',
-                                                e.target.value,
+                                                e.target.value
                                             )
                                         }
                                         id="mo_ta_chi_tieu"
@@ -487,9 +478,9 @@ const CreateGoals = ({ handleAddTable }) => {
                                                 'quantityDemanded',
                                                 Number.parseInt(e.target.value)
                                                     ? Number.parseInt(
-                                                          e.target.value,
+                                                          e.target.value
                                                       )
-                                                    : '',
+                                                    : ''
                                             );
                                         }}
                                         id="mo_ta_chi_tieu"
@@ -503,7 +494,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                             updateTable(
                                                 tableIndex,
                                                 'scoreSelectBoxStatus',
-                                                e.target.value,
+                                                e.target.value
                                             );
                                         }}
                                     >
@@ -549,10 +540,10 @@ const CreateGoals = ({ handleAddTable }) => {
                                                     tableIndex,
                                                     'fixedScore',
                                                     /^\d*\.?\d*$/.test(
-                                                        e.target.value,
+                                                        e.target.value
                                                     )
                                                         ? e.target.value
-                                                        : '',
+                                                        : ''
                                                 )
                                             }
                                         />
@@ -592,7 +583,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                         tableIndex,
                                                                         rowIndex,
                                                                         e.target
-                                                                            .value,
+                                                                            .value
                                                                     )
                                                                 }
                                                             />
@@ -602,7 +593,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                     onClick={() =>
                                                                         deleteRowValue(
                                                                             tableIndex,
-                                                                            rowIndex,
+                                                                            rowIndex
                                                                         )
                                                                     }
                                                                     className={`del__col`}
@@ -627,7 +618,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                     handleCloseModelAddFixedValue
                                                                 }
                                                                 render={(
-                                                                    attrs,
+                                                                    attrs
                                                                 ) => (
                                                                     <div
                                                                         className="add_value_col"
@@ -654,12 +645,12 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                                 placeholder="Nhập giá trị"
                                                                                 className="fixed_value_input"
                                                                                 onChange={(
-                                                                                    e,
+                                                                                    e
                                                                                 ) => {
                                                                                     setFixedValue(
                                                                                         e
                                                                                             .target
-                                                                                            .value,
+                                                                                            .value
                                                                                     );
                                                                                 }}
                                                                                 value={
@@ -673,19 +664,19 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                                     placeholder="Điểm"
                                                                                     className="score_value_input"
                                                                                     onChange={(
-                                                                                        e,
+                                                                                        e
                                                                                     ) => {
                                                                                         setScoreValue(
                                                                                             Number.parseInt(
                                                                                                 e
                                                                                                     .target
-                                                                                                    .value,
-                                                                                            ),
+                                                                                                    .value
+                                                                                            )
                                                                                         );
                                                                                     }}
                                                                                     value={
                                                                                         isNaN(
-                                                                                            scoreValue,
+                                                                                            scoreValue
                                                                                         )
                                                                                             ? ''
                                                                                             : scoreValue
@@ -702,7 +693,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                                         table.scoreSelectBoxStatus !==
                                                                                             null
                                                                                             ? 0
-                                                                                            : scoreValue,
+                                                                                            : scoreValue
                                                                                     );
                                                                                 }}
                                                                             >
@@ -715,7 +706,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                             ].fixedValue.map(
                                                                                 (
                                                                                     fixedValueObj,
-                                                                                    index,
+                                                                                    index
                                                                                 ) => (
                                                                                     <li
                                                                                         key={
@@ -746,14 +737,14 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                                                 removeFixedValue(
                                                                                                     tableIndex,
                                                                                                     rowIndex,
-                                                                                                    index,
+                                                                                                    index
                                                                                                 )
                                                                                             }
                                                                                         >
                                                                                             <AiFillCloseCircle />
                                                                                         </div>
                                                                                     </li>
-                                                                                ),
+                                                                                )
                                                                             )}
                                                                         </ul>
                                                                     </div>
@@ -764,7 +755,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                                     onClick={() => {
                                                                         handleOpenModalAddFixedValue(
                                                                             tableIndex,
-                                                                            rowIndex,
+                                                                            rowIndex
                                                                         );
                                                                     }}
                                                                 >
@@ -775,7 +766,7 @@ const CreateGoals = ({ handleAddTable }) => {
                                                             </Tippy>
                                                         </div>
                                                     );
-                                                },
+                                                }
                                             )}
                                         </div>
                                     </div>

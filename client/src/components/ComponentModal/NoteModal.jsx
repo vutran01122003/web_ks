@@ -1,5 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai';
-import formatTimeStr from '../../utils/formatDatetime';
+import { formatTimeStr } from '../../utils/formatDatetime';
 
 function NoteModal({ handleHiddenNoteModal, noteList }) {
     const handleHiddenPopup = (e) => {

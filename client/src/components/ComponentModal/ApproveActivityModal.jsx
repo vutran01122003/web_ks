@@ -4,7 +4,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { useState } from 'react';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import { createUpdatedActivityNotification } from '../../redux/actions/notifyAction';
-import { getLocalDatetime } from '../../utils/formatDatetime';
+import { formatTimeStr } from '../../utils/formatDatetime';
 
 function ApproveActivityModal({
     auth,
@@ -15,7 +15,7 @@ function ApproveActivityModal({
     rowInfoData,
     handleHiddenConfirmModal,
     rowsType,
-    isTimedExtension,
+    isTimedExtension
 }) {
     const dispatch = useDispatch();
     const [noteValue, setNoteValue] = useState('');
@@ -27,8 +27,8 @@ function ApproveActivityModal({
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Chưa nhập hạn cuối nộp lại',
-                },
+                    error: 'Chưa nhập hạn cuối nộp lại'
+                }
             });
             return;
         }
@@ -45,7 +45,7 @@ function ApproveActivityModal({
                 title = isTimedExtension
                     ? `Hoạt động ${
                           rowInfoData.tableInfo.tableName
-                      } của bạn đã được gia hạn thời gian nộp lại. Hạn cuối là ${getLocalDatetime(datetimeValue)}.`
+                      } của bạn đã được gia hạn thời gian nộp lại. Hạn nộp cuối là${formatTimeStr(datetimeValue)}.`
                     : `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn cần phải nộp lại.`;
                 break;
             default:
@@ -55,11 +55,12 @@ function ApproveActivityModal({
 
         dispatch(
             updateRowsStatus({
+                userId: userData?._id,
                 pageInfo: {
-                    userId: userData?._id,
-                    pageStudentCohort: userData?.cohort,
-                    pageStudentMajor: userData?.major,
-                    pageStudentLevelYear: userData?.levelYear,
+                    pageStudentCohort: rowInfoData.pageInfo.pageStudentCohort,
+                    pageStudentMajor: rowInfoData.pageInfo.pageStudentMajor,
+                    pageStudentLevelYear:
+                        rowInfoData.pageInfo.pageStudentLevelYear
                 },
                 noteValue,
                 rowsType,
@@ -67,8 +68,8 @@ function ApproveActivityModal({
                 rowListId: rowInfoData.rowListId,
                 contentIdList: rowInfoData.contentIdList,
                 deadline: datetimeValue,
-                isTimedExtension,
-            }),
+                isTimedExtension
+            })
         );
 
         dispatch(
@@ -77,8 +78,8 @@ function ApproveActivityModal({
                 content: noteValue,
                 senderId: auth.user._id,
                 recipientId: userData?._id,
-                pageId: rowInfoData.pageInfo.pageId,
-            }),
+                pageId: rowInfoData.pageInfo.pageId
+            })
         );
         handleHiddenConfirmModal();
     };

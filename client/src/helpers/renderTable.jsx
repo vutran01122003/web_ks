@@ -1,11 +1,7 @@
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
-import { IoMdDownload } from 'react-icons/io';
-import { MdPreview } from 'react-icons/md';
 
 export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
     const TABLE = {};
-
-    console.log(dynamicRowsInfo);
     const dynamicTable = dynamicRowsInfo ? dynamicRowsInfo.page.tables : null;
 
     if (table) TABLE.description = table.description;
@@ -54,12 +50,6 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                 typeInput: 'text',
                 isShow: true
             }
-            // {
-            //     textHeading: 'Chi Tiết HĐ',
-            //     typeInput: 'text',
-            //     requiredHeading: true,
-            //     isShow: false
-            // }
         ];
     }
 
@@ -75,7 +65,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
     );
 
     if (buttonNameLabel === 'Gia Hạn')
-        TABLE.thead.splice(-1, 0, {
+        TABLE.thead.push({
             textHeading: 'Hạn Nộp Lại',
             typeInput: 'text',
             requiredHeading: true,
@@ -170,25 +160,12 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                             : 'Không Có'
                     );
                 }
-
-                // rowValueItemArr.push({
-                //     rowLabel: 'Xem Chi Tiết',
-                //     tableValue: {
-                //         ...dynamicTable,
-                //         rowValueList: [
-                //             {
-                //                 content: [rowValueItem]
-                //             }
-                //         ],
-                //         user: dynamicRowsInfo?.user[0]
-                //     }
-                // });
             }
             const tbody = [
                 ...rowValueItemArr,
                 {
-                    proofNameLabel: <IoMdDownload size={20} />,
-                    proofPreviewLabel: <MdPreview size={22} />,
+                    proofNameLabel: 'Tải về',
+                    proofPreviewLabel: 'Xem',
                     proofFiles: rowValueItem.proofFilesList,
                     tableValue: {
                         ...dynamicTable,
@@ -213,7 +190,13 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                           },
                           pageInfo: {
                               pageId: dynamicTable._id,
-                              pageName: dynamicTable.pageName
+                              pageName: dynamicRowsInfo.page.pageName,
+                              pageStudentMajor:
+                                  dynamicRowsInfo.page.pageStudentMajor,
+                              pageStudentLevelYear:
+                                  dynamicRowsInfo.page.pageStudentLevelYear,
+                              pageStudentCohort:
+                                  dynamicRowsInfo.page.pageStudentCohort
                           },
                           rowListId: dynamicRowsInfo?._id,
                           contentIdList: [rowValueItem?._id]

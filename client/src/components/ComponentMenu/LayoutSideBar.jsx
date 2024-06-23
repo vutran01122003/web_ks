@@ -18,18 +18,18 @@ const LayoutSideBar = ({ auth }) => {
         auth?.user?.roles.includes('0003');
     const [toggleMenu, setToggleMenu] = useState(false);
     const levelYearList = Array.from(
-        Array(auth?.user?.levelYear || 1).keys(),
+        Array(auth?.user?.levelYear || 1).keys()
     ).map((x) => x + 1);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
 
     const menuRef = useRef([
         ...ARRAY_LIST_MENU.map(() => ({
-            current: null,
-        })),
+            current: null
+        }))
     ]);
 
     const [heightBoxSub, setHeightBoxSub] = useState(
-        ARRAY_LIST_MENU.map(() => '0px'),
+        ARRAY_LIST_MENU.map(() => '0px')
     );
     const [subMenu, setSubMenu] = useState(ARRAY_LIST_MENU.map(() => false));
 
@@ -121,10 +121,10 @@ const LayoutSideBar = ({ auth }) => {
                                                     value={levelYear}
                                                     onChange={(e) => {
                                                         handleChangeLevelYear(
-                                                            e,
+                                                            e
                                                         );
                                                         handleRefreshSubMenu(
-                                                            item.id,
+                                                            item.id
                                                         );
                                                     }}
                                                 >
@@ -144,7 +144,7 @@ const LayoutSideBar = ({ auth }) => {
                                                                     }
                                                                 </option>
                                                             );
-                                                        },
+                                                        }
                                                     )}
                                                 </select>
                                             )}
@@ -193,7 +193,7 @@ const LayoutSideBar = ({ auth }) => {
                                     if (ref) menuRef.current[item.id] = ref;
                                 }}
                                 style={{
-                                    height: `${subMenu[item.id] ? heightBoxSub[item.id] : '0px'}`,
+                                    height: `${subMenu[item.id] ? heightBoxSub[item.id] : '0px'}`
                                 }}
                             >
                                 {item.sub_menu_item.map((item_sub) => {
@@ -206,7 +206,7 @@ const LayoutSideBar = ({ auth }) => {
                                             onClick={() => {
                                                 handleGetPage({
                                                     pathName:
-                                                        item_sub?.sub_to_link,
+                                                        item_sub?.sub_to_link
                                                 });
                                             }}
                                         >

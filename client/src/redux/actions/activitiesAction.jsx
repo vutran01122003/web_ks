@@ -9,14 +9,17 @@ export const getActivities =
                 `/page/activities?pageStudentMajor=${pageStudentMajor}&pageStudentCohort=${pageStudentCohort}&pageStudentLevelYear=${pageStudentLevelYear}`
             );
 
-            const activities = res.data.data[0].tables;
+            const activities =
+                res.data.data.length > 0
+                    ? res.data.data[0].tables.map(
+                          (activity) => activity.tableName
+                      )
+                    : [];
+
             dispatch({
                 type: GLOBALTYPES.ACTIVITIES.GET_ACTIVITIES,
                 payload: {
-                    activities:
-                        activities.length > 0
-                            ? activities.map((activity) => activity.tableName)
-                            : activities
+                    activities
                 }
             });
         } catch (error) {

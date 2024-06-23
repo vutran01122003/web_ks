@@ -40,19 +40,19 @@
         }
 
         .list__hanle--menu {
-            border: none !important;
-            border-bottom: 1px solid #797878 !important;
+            border: none;
+            border-bottom: 1px solid #797878;
         }
     }
 
     .box_sub_menu_item {
         .box__select--year {
             .set__year--item {
-                background-color: transparent !important;
-                color: #8d98af !important;
+                background-color: transparent;
+                color: #8d98af;
 
                 &:hover {
-                    color: #fff !important;
+                    color: #fff;
                 }
 
                 &::before {
@@ -61,51 +61,38 @@
             }
 
             .set__year--item.active {
-                background-color: #3e97ff !important;
-                color: #fff !important;
+                background-color: #3e97ff;
+                color: #fff;
             }
         }
 
         .sub_menu_item {
-            background: transparent !important;
-            border-bottom: none !important;
+            background: transparent;
+            border-bottom: none;
             color: #000;
 
             &::before {
-                background-color: #000;
+                background-color: #333;
             }
 
             &:hover {
-                background: rgb(245, 243, 243) !important;
+                background: rgb(245, 243, 243);
             }
         }
 
         .sub_menu_item.active {
-            background-color: #8284e6 !important;
-            color: #fff !important;
-
-            &::before {
-                content: '';
-                width: 5px;
-                height: 5px;
-                display: block;
-                background-color: #fff;
-                border-radius: 100%;
-                margin-right: 15px;
-            }
+            background: rgb(245, 243, 243);
         }
     }
 
     .btn__toggle--menu {
         width: 40px;
         height: 30px;
-        color: #fff;
-        background-color: #8284e6;
+        color: #000;
         border-radius: 8px;
         cursor: pointer;
         text-align: center;
         overflow: hidden;
-        box-shadow: 0 0 3px rgba(185, 183, 183, 0.686);
 
         .line__flex_icon {
             width: 100px;
@@ -129,10 +116,6 @@
     .active_icon_toggle--menu {
         .line__flex_icon {
             transform: translateX(-37px);
-
-            svg {
-                color: #fff;
-            }
         }
     }
 }
@@ -164,10 +147,10 @@
     }
 
     .box__drop--account {
-        border-radius: 3px !important;
+        border-radius: 3px;
 
         .item_btn_control {
-            border-radius: 3px !important;
+            border-radius: 3px;
         }
     }
 }

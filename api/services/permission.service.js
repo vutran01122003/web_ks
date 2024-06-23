@@ -53,8 +53,6 @@ class PermissionService {
         try {
             const updatedGroup = await Group.findByIdAndUpdate(groupId, data, { new: true });
 
-            console.log(updatedGroup);
-
             if (!updatedGroup) throw createError.NotFound('Chức vụ không tồn tại');
 
             return updatedGroup;

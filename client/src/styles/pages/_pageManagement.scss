@@ -66,22 +66,6 @@
                 }
             }
 
-            .add_table_btn {
-                background: green;
-            }
-
-            .remove_table_btn {
-                background: orange;
-            }
-
-            .remove_page_btn {
-                background: red;
-            }
-
-            .watch_table_btn {
-                background: #0ca379;
-            }
-
             .sub_menu_item_btn_wrapper {
                 display: flex;
                 flex-wrap: wrap;
@@ -120,30 +104,37 @@
                 border-top: 1px solid #dddddd;
                 height: 50px;
             }
+            
             tr:hover {
                 background-color: #f3f3f3d7;
                 transition: all 0.15s;
             }
+
             th {
                 padding: 10px;
                 text-align: left;
                 font-size: 15px;
                 color: #424242;
             }
+
             td:first-child {
                 font-weight: 700;
             }
+
             td {
                 padding: 12px 10px;
                 font-size: 16px;
             }
+
             .name_menu {
                 color: #1c7ae6;
                 font-weight: 650;
             }
+
             .tr__sub_menu {
                 cursor: pointer;
             }
+
             .name_sub_menu {
                 padding-left: 40px;
                 font-weight: 500;
@@ -152,6 +143,7 @@
                     padding-right: 10px;
                 }
             }
+
             .icon__show {
                 width: max-content;
                 background-color: #0ca379;
@@ -161,8 +153,23 @@
                 font-size: 15px;
                 cursor: pointer;
             }
-            .remove_page_btn {
-                color: #f0635c;
+
+            .btn_man-pages {
+                .remove_page_btn {
+                    color: #f0635c;
+                }
+
+                .add_table_btn {
+                    color: #1c7ae6;
+                }
+    
+                .remove_table_btn {
+                    color: orange;
+                }
+    
+                .watch_table_btn {
+                    color: #1c7ae6;
+                }
             }
         }
     }

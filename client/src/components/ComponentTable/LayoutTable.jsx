@@ -9,17 +9,19 @@ import {
 } from '@ant-design/icons';
 import { FaEdit } from 'react-icons/fa';
 import NoteModal from '../ComponentModal/NoteModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authSelector } from '../../redux/selector';
-import DetailedRowModal from '../ComponentModal/DetailedRowModal';
+import PreviewPdfModal from '../ComponentModal/PreviewPdfModal';
 import { MdOutlineMoreTime } from 'react-icons/md';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const MainItem = ({
     auth,
+    row,
+    page,
     setRowInfo,
     isDetailedRow,
     handleOpenModal,
-    row,
     handleOpenPreviewFilesModal
 }) => {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
@@ -58,32 +60,50 @@ const MainItem = ({
         <tr className="table__line__item">
             {row.map((item, index) => {
                 if (item?.proofNameLabel) {
-                    return !isDetailedRow ? (
-                        <td
-                            onClick={() => {
-                                item?.proofFiles.length > 1
-                                    ? handleOpenPreviewFilesModal({
-                                          proofData: item?.proofFiles
-                                      })
-                                    : null;
-                            }}
-                            className="preview_proof_files_wrapper line__item"
-                            key={index}
-                        >
-                            {item?.proofFiles.length > 1 ? (
-                                <span className="preview_proof_files">
-                                    {item?.proofNameLabel}
-                                </span>
-                            ) : (
-                                <a
-                                    href={item?.proofFiles[0]?.fileUrl}
+                    return (
+                        !isDetailedRow && (
+                            <td
+                                className="proof_files_wrapper line__item"
+                                key={index}
+                            >
+                                {visibleDetailedRowModal && (
+                                    <PreviewPdfModal
+                                        handleHiddenDetailedRowModal={
+                                            handleHiddenDetailedRowModal
+                                        }
+                                        tableData={item?.tableValue}
+                                    />
+                                )}
+
+                                {item?.proofFiles.length > 1 ? (
+                                    <span
+                                        className="proof_files_download"
+                                        onClick={() => {
+                                            handleOpenPreviewFilesModal({
+                                                proofData: item?.proofFiles
+                                            });
+                                        }}
+                                    >
+                                        {item?.proofNameLabel}
+                                    </span>
+                                ) : (
+                                    <a
+                                        href={item?.proofFiles[0]?.fileUrl}
+                                        className="proof_files_download"
+                                    >
+                                        {item?.proofNameLabel}
+                                    </a>
+                                )}
+
+                                <span
+                                    onClick={handleVisibleDetailedRowModal}
                                     className="preview_proof_files"
                                 >
-                                    {item?.proofNameLabel}
-                                </a>
-                            )}
-                        </td>
-                    ) : null;
+                                    {item?.proofPreviewLabel}
+                                </span>
+                            </td>
+                        )
+                    );
                 } else if (item?.statusLabel) {
                     let statusValue = '';
 
@@ -240,40 +260,42 @@ const MainItem = ({
                     );
                 } else if (item?.editLabel) {
                     return !isDetailedRow ? (
-                        <td
-                            className="line__item"
-                            key={index}
-                            onClick={() => {
-                                if (item.editValue) {
-                                    setRowInfo(item.rowInfo);
-                                    handleOpenModal();
-                                }
-                            }}
-                        >
-                            <span
-                                className={`edit_row ${item.editValue ? 'active' : 'inactive'}`}
-                            >
-                                <FaEdit />
-                            </span>
+                        <td className="line__item " key={index}>
+                            {
+                                <abbr
+                                    title={`${
+                                        item.editValue
+                                            ? page.pageLevelYear ===
+                                              auth.user.levelYear
+                                                ? ''
+                                                : `Hoạt động năm ${page.pageLevelYear} đã kết thúc`
+                                            : 'Không được chỉnh sửa'
+                                    }`}
+                                >
+                                    <span
+                                        onClick={() => {
+                                            if (
+                                                item.editValue &&
+                                                page.pageLevelYear ===
+                                                    auth.user.levelYear
+                                            ) {
+                                                setRowInfo(item.rowInfo);
+                                                handleOpenModal();
+                                            }
+                                        }}
+                                        className={`edit_row ${item.editValue ? 'active' : 'inactive'} ${
+                                            page.pageLevelYear ===
+                                            auth.user.levelYear
+                                                ? 'allow'
+                                                : 'deny'
+                                        }`}
+                                    >
+                                        <FaEdit />
+                                    </span>
+                                </abbr>
+                            }
                         </td>
                     ) : null;
-                } else if (item?.rowLabel) {
-                    return (
-                        <td className="line__item detailed_row" key={index}>
-                            {visibleDetailedRowModal && (
-                                <DetailedRowModal
-                                    handleHiddenDetailedRowModal={
-                                        handleHiddenDetailedRowModal
-                                    }
-                                    tableData={item?.tableValue}
-                                />
-                            )}
-
-                            <span onClick={handleVisibleDetailedRowModal}>
-                                {item.rowLabel}
-                            </span>
-                        </td>
-                    );
                 }
 
                 return (
@@ -287,6 +309,7 @@ const MainItem = ({
 };
 
 const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
+    const dispatch = useDispatch();
     const [useStateModal, setUseStateModal] = useState(false);
     const [openPreviewModal, setOpenPreviewModal] = useState(false);
     const [proofFilesData, setProofFilesData] = useState(null);
@@ -300,6 +323,12 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
 
     const handleOpenModal = () => {
         if (page.pageLevelYear !== auth.user.levelYear) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: `Hoạt động năm ${page.pageLevelYear} đã kết thúc`
+                }
+            });
             return;
         }
         setUseStateModal(true);
@@ -395,6 +424,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                                     handleOpenModal={handleOpenModal}
                                     row={row}
                                     key={index}
+                                    page={page}
                                 />
                             );
                         })}

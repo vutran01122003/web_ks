@@ -151,7 +151,6 @@ class PermissionControllers {
                 data: result
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

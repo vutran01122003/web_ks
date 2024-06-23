@@ -110,20 +110,17 @@ class UserService {
         }
     };
 
-    static setAnnualTaskProgress = async ({ pageInfo, completedTask, quantityDemanded, score }) => {
+    static setAnnualTaskProgress = async ({ data, pageInfo, userId }) => {
         try {
             await User.findByIdAndUpdate(
-                pageInfo.userId,
+                userId,
                 {
                     $set: {
                         [`annualTaskProgress.${pageInfo.pageStudentLevelYear}`]: {
+                            ...data,
                             completedTaskPrecent: Number.parseFloat(
-                                ((completedTask / quantityDemanded) * 100).toFixed(2)
-                            ),
-                            totalScore: score,
-                            quantityDemanded: quantityDemanded,
-                            completedTasksNum: completedTask,
-                            updatedAt: new Date()
+                                ((data.completedTask / data.quantityDemanded) * 100).toFixed(2)
+                            )
                         }
                     }
                 },
@@ -182,7 +179,6 @@ class UserService {
                     }
                 }
             ]);
-            console.log(studentList);
             return studentList;
         } catch (error) {
             throw error;

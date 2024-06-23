@@ -6,7 +6,7 @@ import GLOBALTYPES from '../redux/actions/globalTypes';
 import {
     authSelector,
     facultySelector,
-    progressSelector,
+    progressSelector
 } from '../redux/selector';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import no_search_result from '../assets/images/no_search_result.png';
@@ -19,9 +19,6 @@ function ProgressUI() {
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
     const progress = useSelector(progressSelector);
-    const selectMajorRef = useRef();
-    const selectCohortRef = useRef();
-    const selectYeartRef = useRef();
     const auth = useSelector(authSelector);
     const [cohort, setCohort] = useState('');
     const [major, setMajor] = useState('');
@@ -37,20 +34,21 @@ function ProgressUI() {
                     cohort: cohort?.cohortName,
                     major: major?.majorName,
                     levelYear,
-                    sortProgress,
-                }),
+                    sortProgress
+                })
             );
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Vui lòng nhập đầy đủ thông tin',
-                },
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
             });
         }
     };
 
     const handleToggleSortProgress = () => {
+        if (progress.annualTaskProgress.data.length === 0) return;
         setSortProgress((prev) => !prev);
     };
 
@@ -61,8 +59,8 @@ function ProgressUI() {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Vui lòng nhập đầy đủ thông tin',
-                },
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
             });
         }
     };
@@ -72,38 +70,44 @@ function ProgressUI() {
     };
 
     useEffect(() => {
+        if (facultyState.facultyData.length === 0) dispatch(getAllFaculties());
         if (progress.annualTaskProgress.data.length > 0) {
-            handleSearchAnnualTaskProgress();
+            dispatch({
+                type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
+            });
         }
-    }, [progress.annualTaskProgress.data.length]);
+    }, []);
 
     useEffect(() => {
-        if (facultyState.facultyData.length === 0) dispatch(getAllFaculties());
-        dispatch(
-            getAnnualTaskProgress({
-                cohort,
-                major,
-                levelYear,
-                sortProgress,
-            }),
-        );
-    }, []);
+        if (
+            progress.annualTaskProgress.data.length > 0 &&
+            cohort &&
+            major &&
+            levelYear
+        ) {
+            handleSearchAnnualTaskProgress();
+        }
+    }, [sortProgress]);
 
     useEffect(() => {
         if (facultyState.facultyData.length > 0) {
             const _faculty = facultyState?.facultyData.find(
-                (facultyItem) => facultyItem.facultyName === auth?.user.faculty,
+                (facultyItem) => facultyItem.facultyName === auth?.user.faculty
             );
             setFaculty(_faculty);
-            selectMajorRef.current.value = '';
-            selectCohortRef.current.value = '';
-            selectYeartRef.current.value = '';
+            setMajor('');
+            setCohort('');
+            setLevelYear('');
         }
     }, [JSON.stringify(facultyState.facultyData)]);
 
     useEffect(() => {
         setCohort('');
     }, [major]);
+
+    useEffect(() => {
+        setLevelYear('');
+    }, [cohort]);
 
     return auth?.user ? (
         <div className="completion_shedule_container">
@@ -120,29 +124,15 @@ function ProgressUI() {
                             facultyId: faculty._id,
                             majorId: major._id,
                             cohortId: cohort._id,
-                            currentLevelYear: cohort.currentLevelYear + 1,
+                            currentLevelYear: cohort.currentLevelYear + 1
                         }}
                     />
                 )}
-                <div className="line__flex">
-                    <div className="heading_text--pages">
-                        Danh Sách Tiến Độ Hoàn Thành
-                    </div>
-                    {auth?.user.levelYear === levelYear && (
-                        <button
-                            className="btn__end_progress_btn"
-                            onClick={handleVissbleStopSubmittingProofModal}
-                        >
-                            <LuTimerReset />
-                            Kết Thúc Nộp Minh Chứng
-                        </button>
-                    )}
-                </div>
 
                 <div className="completion_shedule_body">
                     <div className="line__sort__completion-Shedule">
                         <div className="line__search">
-                            <div>
+                            <div className="select_group">
                                 <select
                                     onChange={(e) => {
                                         if (!e.target.value) {
@@ -151,8 +141,7 @@ function ProgressUI() {
                                         }
                                         setMajor(JSON.parse(e.target.value));
                                     }}
-                                    defaultValue={''}
-                                    ref={selectMajorRef}
+                                    value={major ? JSON.stringify(major) : ''}
                                 >
                                     <option value="">Chọn Chuyên Ngành</option>
                                     {faculty?.majors.map((majorItem) => (
@@ -161,10 +150,10 @@ function ProgressUI() {
                                             value={JSON.stringify(majorItem)}
                                         >
                                             {capitalizeFirstLetter(
-                                                majorItem.majorName,
+                                                majorItem.majorName
                                             )}
                                         </option>
-                                    )) || null}
+                                    ))}
                                 </select>
 
                                 <select
@@ -175,8 +164,7 @@ function ProgressUI() {
                                         }
                                         setCohort(JSON.parse(e.target.value));
                                     }}
-                                    defaultValue={''}
-                                    ref={selectCohortRef}
+                                    value={cohort ? JSON.stringify(cohort) : ''}
                                 >
                                     {major && major?.cohortList ? (
                                         <>
@@ -186,13 +174,13 @@ function ProgressUI() {
                                                     <option
                                                         key={cohortItem._id}
                                                         value={JSON.stringify(
-                                                            cohortItem,
+                                                            cohortItem
                                                         )}
                                                     >
                                                         {cohortItem.cohortName}
                                                     </option>
-                                                ),
-                                            ) || null}
+                                                )
+                                            )}
                                         </>
                                     ) : (
                                         <option value="">
@@ -209,11 +197,10 @@ function ProgressUI() {
                                             return;
                                         }
                                         setLevelYear(
-                                            Number.parseInt(e.target.value),
+                                            Number.parseInt(e.target.value)
                                         );
                                     }}
-                                    defaultValue={''}
-                                    ref={selectYeartRef}
+                                    value={levelYear || ''}
                                 >
                                     {cohort ? (
                                         <>
@@ -223,9 +210,9 @@ function ProgressUI() {
 
                                             {Array.from(
                                                 {
-                                                    length: cohort?.currentLevelYear,
+                                                    length: cohort?.currentLevelYear
                                                 },
-                                                (_, index) => index + 1,
+                                                (_, index) => index + 1
                                             ).map((year) => (
                                                 <option key={year} value={year}>
                                                     {`Năm ${year} ${
@@ -241,7 +228,24 @@ function ProgressUI() {
                                         <option value="">Chưa chọn khóa</option>
                                     )}
                                 </select>
+
+                                <div className="line__flex">
+                                    {auth?.user.levelYear === levelYear &&
+                                        progress.annualTaskProgress.data
+                                            .length > 0 && (
+                                            <button
+                                                className="btn__end_progress"
+                                                onClick={
+                                                    handleVissbleStopSubmittingProofModal
+                                                }
+                                            >
+                                                <LuTimerReset />
+                                                Dừng Nộp Minh Chứng
+                                            </button>
+                                        )}
+                                </div>
                             </div>
+
                             <button
                                 className="search_btn"
                                 onClick={handleSearchAnnualTaskProgress}
@@ -293,17 +297,17 @@ function ProgressUI() {
                                         <td>{progressItem?.userId}</td>
                                         <td>
                                             {capitalizeFirstLetter(
-                                                progressItem?.fullName,
+                                                progressItem?.fullName
                                             )}
                                         </td>
                                         <td>
                                             {capitalizeFirstLetter(
-                                                progressItem?.major,
+                                                progressItem?.major
                                             )}
                                         </td>
                                         <td>
                                             {(progressItem.completedTaskProgress?.completedTaskPrecent.toFixed(
-                                                2,
+                                                2
                                             ) || 0) + '%'}
                                         </td>
                                         <td>
@@ -317,7 +321,7 @@ function ProgressUI() {
                                                 : 'Chưa Hoàn Thành'}
                                         </td>
                                     </tr>
-                                ),
+                                )
                             )}
                         </tbody>
                     </table>

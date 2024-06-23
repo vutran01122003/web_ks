@@ -25,7 +25,7 @@
         padding-right: 20px;
 
         .heading {
-            color: #0055cc;
+            color: #0153b1;
             font-weight: 700;
             text-transform: uppercase;
         }
@@ -164,7 +164,7 @@
                             color: #1677ff;
 
                             &:hover {
-                                color: #0d6cf3;
+                                color: #0266f2;
                             }
 
                             &:active {
@@ -186,22 +186,33 @@
                     color: $color_gray-500;
                 }
 
-                .preview_proof_files,
-                .detailed_row > span {
-                    color: #006fee;
-                    cursor: pointer;
-                    &:hover {
-                        text-decoration: underline;
-                    }
-
-                    user-select: none;
-                }
-
-                .preview_proof_files_wrapper {
+                .proof_files_wrapper {
                     display: flex;
-                    gap: 5px;
                     justify-content: center;
                     align-items: center;
+
+                    .proof_files_download {
+                        border-right: 1px solid #333;
+                    }
+    
+                    .preview_proof_files,   
+                    .proof_files_download {  
+                        display: inline-block;
+                        padding: 0 8px;
+                        color: currentColor;
+                        cursor: pointer;
+
+                        &:hover {
+                            color: #0266f2;
+                            text-decoration: underline;
+                        }
+    
+                        &:active {
+                            color: #0055cc;
+                        }
+    
+                        user-select: none;
+                    }
                 }
 
                 .row_status {
@@ -242,6 +253,10 @@
                     cursor: pointer;
                     font-size: 20px;
                     transition: 0.1s linear;
+
+                    &.deny {
+                        cursor: not-allowed;
+                    }
 
                     &.inactive {
                         opacity: 0.5;

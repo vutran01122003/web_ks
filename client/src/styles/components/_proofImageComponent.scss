@@ -25,11 +25,13 @@
 
         .icons_wrapper {
             flex: 1;
+            height: 45px;
             display: flex;
+            font-size: 22px;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            height: 45px;
+            user-select: none;
+            cursor: pointer;
 
             .icon-item--proof {
                 margin-left: 10px;

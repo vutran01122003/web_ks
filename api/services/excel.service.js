@@ -1,13 +1,13 @@
-const ExcelJS = require("exceljs/dist/es5");
-const User = require("../models/user.model");
-const { userColumn, addDataOfRow } = require("../config/exceljs.config");
-const accessService = require("../services/access.service");
+const ExcelJS = require('exceljs/dist/es5');
+const User = require('../models/user.model');
+const { userColumn, addDataOfRow } = require('../config/exceljs.config');
+const accessService = require('../services/access.service');
 
 class ExcelService {
     static exportUserQualified = async () => {
         const workbook = new ExcelJS.Workbook();
 
-        const sheet = workbook.addWorksheet("My Sheet");
+        const sheet = workbook.addWorksheet('My Sheet');
 
         sheet.columns = userColumn;
 
@@ -41,7 +41,7 @@ class ExcelService {
         worksheet.eachRow((row, rowNumber) => {
             if (rowNumber > 1) {
                 const data = {};
-                data.password = "1111";
+                data.password = '1111';
                 row.eachCell((cell, colNumber) => {
                     if (colNumber > 1) {
                         addDataOfRow(cell, colNumber, data);
@@ -51,7 +51,6 @@ class ExcelService {
                 // registerData.push(data);
             }
         });
-        // console.log(registerData);
     };
 }
 

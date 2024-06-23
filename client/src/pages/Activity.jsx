@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Select, Tabs, Input } from 'antd';
+import { Button, Tabs, Input } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -218,7 +218,6 @@ const ActivityUi = () => {
                 <div className="container__tables">
                     <div className="body__tables">
                         <div className="filter_activity_wrapper heading__text_lg">
-                            <h3>Danh Sách Xét Duyệt Hoạt Động</h3>
                             <div className="filter_activity">
                                 <select onInput={handleMajorValue}>
                                     <option value="">Chọn Chuyên Ngành</option>
@@ -276,9 +275,12 @@ const ActivityUi = () => {
                                                 .map((_, index) => (
                                                     <option
                                                         key={index}
-                                                        value={index + 1}
+                                                        value={
+                                                            cohortValue?.currentLevelYear -
+                                                            index
+                                                        }
                                                     >
-                                                        {`Năm ${index + 1} ${index + 1 === cohortValue?.currentLevelYear ? '(Hiện tại)' : ''}`}
+                                                        {`Năm ${cohortValue?.currentLevelYear - index} ${cohortValue?.currentLevelYear - index === cohortValue?.currentLevelYear ? '(Hiện tại)' : '(Đã kết thúc)'}`}
                                                     </option>
                                                 ))}
                                         </>
@@ -411,8 +413,7 @@ const ActivityUi = () => {
                                         draggable="false"
                                     />
                                     <span className="notify_nothing_content">
-                                        KHÔNG CÓ HOẠT ĐỘNG (LÀM MỚI ĐỂ KIỂM TRA
-                                        LẠI)
+                                        KHÔNG CÓ HOẠT ĐỘNG
                                     </span>
                                 </div>
                             )}

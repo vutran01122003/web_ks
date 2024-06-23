@@ -4,41 +4,49 @@ import { RiNumbersFill } from 'react-icons/ri';
 import { ImNewspaper } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 
-const Quantity = () => {
+const Quantity = ({ annualTaskProgress }) => {
     const LIST_QUANTITY_OVERVIEW = [
         {
             id: 0,
             text_heading: 'Số lượng hoạt động chờ duyệt',
-            quantity: 9,
+            quantity: annualTaskProgress?.pendingTask || 0,
             icon_after: <LuListRestart />,
             color_border: '#f0635c',
-            link: '/activity',
+            link: '#'
+        },
+        {
+            id: 0,
+            text_heading: 'Số lượng hoạt động đã duyệt',
+            quantity: annualTaskProgress?.completedTask || 0,
+            icon_after: <LuListRestart />,
+            color_border: '#f0635c',
+            link: '#'
         },
         {
             id: 1,
             text_heading: 'Số lượng hoạt động bị từ chối',
-            quantity: 1,
+            quantity: annualTaskProgress?.rejectedTask || 0,
             icon_after: <MdPeopleAlt />,
             color_border: '#3E97FF',
-            link: '#',
+            link: '#'
         },
         {
             id: 2,
             text_heading: 'Số lượng hoạt động phải nộp lại',
-            quantity: 2,
+            quantity: annualTaskProgress?.resubmitedTask || 0,
             icon_after: <RiNumbersFill />,
             color_border: '#6E6E6E',
-            link: '#',
+            link: '#'
         },
         {
             id: 3,
             text_heading: 'Tổng điểm đã đạt',
             isTotalScore: true,
-            quantity: 10,
+            quantity: annualTaskProgress?.score || 0,
             icon_after: <ImNewspaper />,
             color_border: '#6E6E6E',
-            link: '#',
-        },
+            link: '#'
+        }
     ];
 
     const returnListQuantity = LIST_QUANTITY_OVERVIEW.map(
@@ -62,7 +70,7 @@ const Quantity = () => {
                     </div>
                 </Link>
             );
-        },
+        }
     );
 
     return (

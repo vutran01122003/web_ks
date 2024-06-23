@@ -1,15 +1,12 @@
-import moment from 'moment';
-
 export function formatTimeStr(timeStr) {
-    return new Date(timeStr).toLocaleDateString('en-GB');
+    return new Date(timeStr)
+        .toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        })
+        .toLocaleUpperCase();
 }
-
-export const getLocalDatetime = (datetime) => {
-    const pattern = 'DD/MM/YYYY HH:mm';
-    const formattedDatetimeStr = moment(datetime).format(pattern);
-    const part = formattedDatetimeStr.split(' ');
-
-    return `${part[0]} lúc ${part[1]}`;
-};
-
-export default formatTimeStr;

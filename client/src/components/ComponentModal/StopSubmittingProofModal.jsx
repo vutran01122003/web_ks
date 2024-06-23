@@ -10,7 +10,7 @@ function StopSubmittingProofModal({
     major,
     levelYear,
     handleHiddenStopSubmittingProofModal,
-    updatedCohortData,
+    updatedCohortData
 }) {
     const dispatch = useDispatch();
 
@@ -79,16 +79,16 @@ function StopSubmittingProofModal({
                     major,
                     cohort,
                     levelYear,
-                    updatedCohortData,
-                }),
+                    updatedCohortData
+                })
             );
             handleHiddenStopSubmittingProofModal();
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Vui lòng nhập đầy đủ thông tin',
-                },
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
             });
         }
     };
@@ -97,7 +97,7 @@ function StopSubmittingProofModal({
         <div className="modal_overlap" onMouseUp={handleHideModal}>
             <div className="stop_submitting_proof_modal">
                 <div className="stop_submitting_proof_header">
-                    <h2>Kết thúc hoạt động nộp minh chứng</h2>
+                    <h2>Kết Thúc Hoạt Động Nộp Minh Chứng</h2>
                     <div
                         className="stop_submitting_proof_close_btn"
                         onClick={handleHiddenStopSubmittingProofModal}
@@ -107,20 +107,15 @@ function StopSubmittingProofModal({
                 </div>
                 <div className="stop_submitting_proof_body">
                     <p className="stop_submitting_proof_body_content">
-                        {`Bạn muốn kết thúc hoạt động nộp minh chứng năm ${levelYear} khóa ${cohort} của chuyên ngành ${capitalizeFirstLetter(
-                            major,
-                        )}`}
+                        {`Kết thúc hoạt động nộp minh chứng của năm ${levelYear} khóa ${cohort} ngành ${major}.`}
                     </p>
 
                     <ul className="stop_submitting_proof_body_notify">
-                        <li>{`Sau khi bạn đồng ý sinh viên không thể tiếp tục nộp minh chứng của năm ${levelYear}.`}</li>
-                        <li>{`Bạn phải tạo các chỉ tiêu mới của năm ${
-                            levelYear + 1
-                        } để sinh viên tiếp tục nộp minh chứng.`}</li>
-                        <li>{`Những sinh viên năm ${levelYear} khóa ${cohort} không đạt yêu cầu sẽ bị khóa tài khoản.`}</li>
-                        <li>{`Những sinh viên đạt yêu cầu sẽ được phép tiếp tục nộp minh chứng năm ${
+                        <li>{`Sinh viên không thể tiếp tục tham các hoạt động và nộp minh chứng của năm ${levelYear}.`}</li>
+                        <li>{`Sinh viên đạt điều kiện có thể tiếp tục tham gia các hoạt động và nộp minh chứng của năm ${
                             levelYear + 1
                         }.`}</li>
+                        <li>{`Sinh viên không đạt điều kiện sẽ bị khóa tài khoản và bị loại khỏi danh sách kỹ sư tài năng.`}</li>
                     </ul>
 
                     <div className="condition_filter_wrapper">

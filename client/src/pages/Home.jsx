@@ -17,9 +17,6 @@ const Home = ({ auth }) => {
     const [chartData, setChartData] = useState([]);
     const [goalsInfo, setGoalInfo] = useState([]);
     const [levelYear, setLevelYear] = useState(auth?.user?.levelYear || 1);
-    const determineAuth =
-        auth?.user?.roles.includes('0004') ||
-        auth?.user?.roles.includes('0003');
     const groupCode = auth?.user.group.groupCode;
 
     const handleGetProgressByYear = () => {
@@ -32,8 +29,8 @@ const Home = ({ auth }) => {
                 getProgressByYear({
                     studentMajor: auth.user?.major,
                     studentCohort: auth.user?.cohort,
-                    studentLevelYear: levelYear,
-                }),
+                    studentLevelYear: levelYear
+                })
             );
         }
     };
@@ -50,9 +47,9 @@ const Home = ({ auth }) => {
                     return {
                         caterogy: elemProgress.pageName,
                         value: elemProgress.percent,
-                        quantityDemanded: elemProgress.quantityDemanded,
+                        quantityDemanded: elemProgress.quantityDemanded
                     };
-                }),
+                })
             );
         }
     }, [progress.goalsInfoData, levelYear]);
@@ -69,11 +66,16 @@ const Home = ({ auth }) => {
                     </div>
                 </div>
                 <div className="bio__user">
-                    &quot;Khi gặp khó khăn đừng chỉ ngồi than thở mà hãy tìm
-                    cách giải quyết&quot;
+                    &quot;Hãy thường xuyên kiểm tra tình trạng xét duyệt của các
+                    hoạt động để kịp thời xử lý&quot;
                 </div>
             </div>
-            {determineAuth ? <Quantity /> : ''}
+
+            {auth?.user.group.groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
+                <Quantity
+                    annualTaskProgress={auth.user.annualTaskProgress[levelYear]}
+                />
+            )}
 
             <div className="container__top transform__animation--top">
                 <LayoutInfo user={auth?.user} />

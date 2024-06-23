@@ -116,6 +116,7 @@ export const getDynamicRows =
 
 export const updateRowsStatus =
     ({
+        userId,
         pageInfo,
         noteValue,
         rowsType,
@@ -135,6 +136,7 @@ export const updateRowsStatus =
             });
 
             const res = await patchDataApi(`/dynamic-rows/${rowListId}`, {
+                userId,
                 pageInfo,
                 contentIdList,
                 status,

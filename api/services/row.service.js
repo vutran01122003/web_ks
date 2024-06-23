@@ -159,7 +159,6 @@ class RowService {
         const removedDynamicRows = skip - currentRows;
         if (removedDynamicRows > 0) skip = skip - removedDynamicRows;
 
-        console.log(activity);
         switch (rowsType) {
             case 'pendingRows':
                 rowStatus = 'chờ duyệt';
@@ -248,11 +247,7 @@ class RowService {
                     $project: {
                         _id: 1,
                         user: 1,
-                        'page.pageName': 1,
-                        'page._id': 1,
-                        'page.tables._id': 1,
-                        'page.tables.tableName': 1,
-                        'page.tables.rowTitleList': 1,
+                        page: 1,
                         content: ['$content']
                     }
                 }
@@ -264,7 +259,6 @@ class RowService {
                 data: dynamicRows
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

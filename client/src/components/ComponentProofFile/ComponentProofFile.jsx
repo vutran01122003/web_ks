@@ -19,8 +19,8 @@ function ComponentProofFile({ files, setFiles }) {
                 dispatch({
                     type: GLOBALTYPES.ALERT,
                     payload: {
-                        error: msg,
-                    },
+                        error: msg
+                    }
                 });
             } else {
                 newFiles.push(encodeFileName(file));
@@ -40,13 +40,10 @@ function ComponentProofFile({ files, setFiles }) {
             <div className="proof_wrapper">
                 <div className="proof_upload">
                     <h4>{`Tải lên :`} </h4>
-                    <div className="icons_wrapper">
-                        <label
-                            htmlFor="insert_files"
-                            className="insert_files_icon icon-item--proof"
-                        >
+                    <label className="icons_wrapper" htmlFor="insert_files">
+                        <div className="insert_files_icon icon-item--proof">
                             <RiUpload2Fill />
-                        </label>
+                        </div>
 
                         <span className="files_type">
                             (Giới hạn là 10 files; Kích thước file tối đa 10MB;
@@ -62,7 +59,7 @@ function ComponentProofFile({ files, setFiles }) {
                             onChange={handleInsertFiles}
                             hidden
                         />
-                    </div>
+                    </label>
                 </div>
 
                 {files?.length > 0 && (

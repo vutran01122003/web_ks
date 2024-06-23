@@ -13,7 +13,7 @@
             display: flex;
             justify-content: space-between;
 
-            .btn__end_progress_btn {
+            .btn__end_progress {
                 background-color: #f0635c;
                 font-size: 15px;
                 padding: 8px;
@@ -25,6 +25,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                min-width: 200px;
 
                 svg {
                     font-size: 17px !important;
@@ -34,38 +35,33 @@
         }
 
         .completion_shedule_body {
-            border-top: 2px solid #1c7ae6;
             background-color: #fff;
-            margin-top: 10px;
             padding-bottom: 20px;
 
             .line__sort__completion-Shedule {
                 padding: 10px 0px;
-
-                input,
-                select {
-                    padding: 5px;
-                    border-radius: 3px;
-                    border: 1px solid #c9c9c9;
-                    margin-right: 8px;
-                    font-size: 15px;
-                }
-
-                input {
-                    width: 170px;
-                }
-
-                select {
-                    width: 180px;
-                }
 
                 .line__search {
                     display: flex;
                     justify-content: space-between;
                     margin-bottom: 8px;
 
+                    .select_group {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 5px;
+                        
+                        select {
+                            min-width: 200px;
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            color: #333;
+                            font-weight: 600;
+                        }
+                    }
+
                     .search_btn {
-                        background-color: #1c7ae6;
+                        background-color: #1677ff;
                         font-size: 15px;
                         padding: 8px 12px;
                         border: none;
@@ -76,6 +72,8 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        max-height: 40px;
+                        min-width: 140px;
 
                         svg {
                             font-size: 17px !important;

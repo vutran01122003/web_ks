@@ -25,7 +25,6 @@ class FacultyController {
                 data: createdFaculty
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

@@ -28,7 +28,6 @@ class NewsControllers {
                 data: createdNews
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

@@ -4,6 +4,8 @@ const createError = require('http-errors');
 const ProgressService = require('../services/progress.service');
 const UserService = require('../services/user.service');
 const { getLocalDatetime, toISOString } = require('../utils/getDatetime');
+const Page = require('../models/page.model');
+const Row = require('../models/row.model');
 
 class RowControllers {
     addRow = async (req, res, next) => {
@@ -113,7 +115,8 @@ class RowControllers {
     updateRowStatus = async (req, res, next) => {
         try {
             const rowListId = req.params.rowId;
-            const { contentIdList, status, noteValue, pageInfo, deadline, isTimedExtension } = req.body;
+            const { contentIdList, status, noteValue, pageInfo, deadline, isTimedExtension, userId } = req.body;
+            const { pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = pageInfo;
 
             const deadlineDatetime = toISOString(deadline);
 
@@ -131,29 +134,67 @@ class RowControllers {
                 isTimedExtension
             });
 
-            const pages = await ProgressService.getProgressByYear(pageInfo);
+            // const pages = await ProgressService.getProgressByYear(pageInfo);
 
             let quantityDemanded = 0;
+            let resubmitedTask = 0;
             let completedTask = 0;
-            let score = 0;
+            let rejectedTask = 0;
+            let pendingTask = 0;
+            let totalScore = 0;
 
-            pages.forEach((page) => {
-                page.tables.forEach((table) => {
-                    quantityDemanded += table.quantityDemanded;
-                    table.rowValueList[0]?.content.forEach((content) => {
-                        if (content.status === 'đã duyệt') {
-                            ++completedTask;
-                            score += content.totalScore;
-                        }
-                    });
-                });
+            const pages = await Page.find({
+                pageStudentMajor,
+                pageStudentLevelYear,
+                pageStudentCohort
+            });
+
+            const tables = pages.reduce((tables, page) => {
+                return [...tables, ...page.tables];
+            }, []);
+
+            const rowIdList = tables.reduce((rowIdList, table) => {
+                quantityDemanded += table.quantityDemanded;
+                return [...rowIdList, ...table.rowValueList];
+            }, []);
+
+            const rowList = await Row.find({ _id: { $in: rowIdList }, user: userId });
+
+            const contentList = rowList.reduce((contentList, rowItem) => {
+                return [...contentList, ...rowItem.content];
+            }, []);
+
+            contentList.forEach((content) => {
+                switch (content.status) {
+                    case 'đã duyệt':
+                        ++completedTask;
+                        score += content.totalScore;
+                        break;
+                    case 'chờ duyệt':
+                        ++pendingTask;
+                        break;
+                    case 'từ chối':
+                        ++rejectedTask;
+                        break;
+                    case 'phải nộp lại':
+                        ++resubmitedTask;
+                        break;
+                    default:
+                        break;
+                }
             });
 
             await UserService.setAnnualTaskProgress({
-                quantityDemanded,
-                completedTask,
-                score,
-                pageInfo
+                data: {
+                    quantityDemanded,
+                    resubmitedTask,
+                    rejectedTask,
+                    completedTask,
+                    pendingTask,
+                    score
+                },
+                pageInfo,
+                userId
             });
 
             res.status(200).json({

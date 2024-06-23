@@ -9,12 +9,14 @@ import RemovePageModal from '../components/ComponentModal/RemovePageModal';
 import { useSelector } from 'react-redux';
 import { pageSelector } from '../redux/selector';
 import { ImBin2 } from 'react-icons/im';
+import { IoMdAddCircle } from 'react-icons/io';
+import { LuView } from 'react-icons/lu';
 
 const PageManagement = () => {
     const {
         VITE_APP_ADMIN_CODE,
         VITE_APP_TALENTED_ENGINEER_CODE,
-        VITE_APP_FACULTY_MANAGER_CODE,
+        VITE_APP_FACULTY_MANAGER_CODE
     } = import.meta.env;
 
     const { Search } = Input;
@@ -85,14 +87,14 @@ const PageManagement = () => {
                                                 sub_page_type: page.pageType,
                                                 sub_name_menu: page?.pageName,
                                                 sub_icon_before: '?',
-                                                sub_to_link: `/page/${page?.pageName}`,
-                                            },
+                                                sub_to_link: `/page/${page?.pageName}`
+                                            }
                                         ];
                                     }
                                     return initialArr;
                                 },
-                                [],
-                            ),
+                                []
+                            )
                         };
                         break;
                     }
@@ -109,7 +111,7 @@ const PageManagement = () => {
                     placeholder="Nhập tên trang"
                     allowClear
                     style={{
-                        width: 250,
+                        width: 250
                     }}
                 />
             </div>
@@ -229,8 +231,8 @@ const PageManagement = () => {
                                                                     handleOpenViewTablesModal(
                                                                         {
                                                                             pageName:
-                                                                                sub_menu_item?.sub_name_menu,
-                                                                        },
+                                                                                sub_menu_item?.sub_name_menu
+                                                                        }
                                                                     );
                                                                 }}
                                                             >
@@ -249,7 +251,7 @@ const PageManagement = () => {
                                                             </td>
                                                             <td className="">
                                                                 {sub_menu_item?.sub_to_link.includes(
-                                                                    '/page/',
+                                                                    '/page/'
                                                                 ) && (
                                                                     <div className="sub_menu_item_btn_wrapper">
                                                                         {sub_menu_item?.sub_page_type ===
@@ -261,15 +263,18 @@ const PageManagement = () => {
                                                                                         handleOpenViewTablesModal(
                                                                                             {
                                                                                                 pageName:
-                                                                                                    sub_menu_item?.sub_name_menu,
-                                                                                            },
+                                                                                                    sub_menu_item?.sub_name_menu
+                                                                                            }
                                                                                         );
                                                                                     }}
                                                                                 >
-                                                                                    Xem
-                                                                                    Các
-                                                                                    Chỉ
-                                                                                    Tiêu
+                                                                                    <LuView />
+                                                                                    <span>
+                                                                                        Xem
+                                                                                        Các
+                                                                                        Chỉ
+                                                                                        Tiêu
+                                                                                    </span>
                                                                                 </div>
 
                                                                                 <div
@@ -279,14 +284,17 @@ const PageManagement = () => {
                                                                                             {
                                                                                                 pageId: sub_menu_item?.id,
                                                                                                 pageName:
-                                                                                                    sub_menu_item?.sub_name_menu,
-                                                                                            },
+                                                                                                    sub_menu_item?.sub_name_menu
+                                                                                            }
                                                                                         );
                                                                                     }}
                                                                                 >
-                                                                                    Thêm
-                                                                                    Chỉ
-                                                                                    Tiêu
+                                                                                    <IoMdAddCircle />
+                                                                                    <span>
+                                                                                        Thêm
+                                                                                        Chỉ
+                                                                                        Tiêu
+                                                                                    </span>
                                                                                 </div>
                                                                             </>
                                                                         )}
@@ -297,8 +305,8 @@ const PageManagement = () => {
                                                                                     {
                                                                                         pageId: sub_menu_item.id,
                                                                                         pageName:
-                                                                                            sub_menu_item?.sub_name_menu,
-                                                                                    },
+                                                                                            sub_menu_item?.sub_name_menu
+                                                                                    }
                                                                                 );
                                                                             }}
                                                                         >
@@ -311,7 +319,7 @@ const PageManagement = () => {
                                                                 )}
                                                             </td>
                                                         </tr>
-                                                    ),
+                                                    )
                                                 )}
                                             </>
                                         ) : (

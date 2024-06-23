@@ -10,6 +10,7 @@
     background: rgba(0, 0, 0, 0.7);
     z-index: 100;
     overflow: auto;
+    overflow-x: hidden;
 
     .box_wrapper {
         background: #fff;
@@ -225,10 +226,6 @@
     max-width: 100%;
     max-height: 100%;
     padding: 20px;
-
-    .wrap__goals {
-        width: 100%;
-    }
 
     .input_goal_wrapper {
         .input_goal_item {
@@ -484,7 +481,7 @@
 // Stop submitting proof modal
 .stop_submitting_proof_modal {
     background: #fff;
-    width: 600px;
+    width: 650px;
     max-width: 100%;
     border-radius: 5px;
     box-shadow: 0 0 1px #fff;
@@ -520,7 +517,6 @@
         padding: 20px;
 
         .stop_submitting_proof_body_content {
-            color: #333;
             font-size: 16px;
             font-weight: 600;
             display: flex;
@@ -531,8 +527,7 @@
 
         .stop_submitting_proof_body_notify {
             margin-top: 10px;
-            color: gray;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 400;
             list-style-position: inside;
         }
@@ -831,83 +826,53 @@
     }
 }
 
-// Detailed row modal
-.detailed_row_modal {
+// preview PDF
+.preview_PDF_wrapper {
     background: #fff;
-    border-radius: 5px;
+    border-radius: 3px;
+    overflow: hidden;
     box-shadow: 0 0 5px gray;
-    padding: 10px 15px;
-    height: 600px;
-    width: 950px;
     max-width: 100%;
     max-height: 100%;
-    overflow-y: auto;
+    padding-bottom: 10px;
+    min-width: 617px;
 
-    .detailed_row_modal_header {
+    .preview_PDF_wrapper_header {
         display: flex;
         justify-content: space-between;
-        padding-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #f1efef;
 
         h3 {
             text-transform: uppercase;
             color: #0153b1;
-            margin-bottom: 10px;
         }
     }
 
-    .detailed_row_modal_content {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
+    &.multi_page {
+        padding-bottom: 0px;
+    }
 
-        > h4 {
-            text-align: left;
-            padding: 10px;
-            color: #0055cc;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .detailed_row_modal_body {
-            display: flex;
-            gap: 10px;
-        }
-
-        .preview_PDF_wrapper {
-            box-shadow: 0 0 5px rgb(198, 197, 197);
-            overflow: hidden;
-            border-radius: 3px;
+    .preview_PDF {
+        height: 550px;
+        overflow: auto;
+        .react-pdf__Page__canvas {
             margin: 0 auto;
-            height: 100%;
-            min-width: 612px;
-            .preview_PDF {
-                height: 550px;
+            width: 100% !important;
+        }
+    }
 
-                &.multiPDF {
-                    height: 550px;
-                }
+    .preview_PDF_pagination {
+        border-top: 1px solid gray;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        background: #000;
 
-                overflow: auto;
-                .react-pdf__Page__canvas {
-                    margin: 0 auto;
-                    width: 100% !important;
-                }
-            }
-
-            .preview_PDF_pagination {
-                border-top: 1px solid gray;
-                display: flex;
-                gap: 10px;
-                justify-content: center;
-                align-items: center;
-                background: #000;
-
-                .pagination_pdf {
-                    &.active {
-                        color: #1677ff;
-                    }
-                }
+        .pagination_pdf {
+            &.active {
+                color: #1677ff;
             }
         }
     }

@@ -8,21 +8,21 @@ export const createFaculty =
             const res = await postDataApi(`/faculties`, {
                 facultyName,
                 managerIdList,
-                majorList,
+                majorList
             });
 
             dispatch({
                 type: GLOBALTYPES.FACULTY.ADD_FACULTY,
                 payload: {
-                    faculty: res.data.data,
-                },
+                    faculty: res.data.data
+                }
             });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    success: res.data.msg,
-                },
+                    success: res.data.msg
+                }
             });
         } catch (error) {
             dispatch({
@@ -32,8 +32,8 @@ export const createFaculty =
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response?.data.msg ||
-                              'Tạo Khoa mới thất bại',
-                },
+                              'Tạo Khoa mới thất bại'
+                }
             });
         }
     };
@@ -45,8 +45,8 @@ export const getAllFaculties = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.FACULTY.GET_ALL_FACULTIES,
             payload: {
-                facultyData: res.data,
-            },
+                facultyData: res.data
+            }
         });
     } catch (error) {
         dispatch({
@@ -56,8 +56,8 @@ export const getAllFaculties = () => async (dispatch) => {
                     error.response?.data?.status === 401
                         ? 'Hết Phiên Đăng Nhập'
                         : error?.response?.data.msg ||
-                          'Lấy dữ liệu khoa mới thất bại',
-            },
+                          'Lấy dữ liệu khoa mới thất bại'
+            }
         });
     }
 };
@@ -69,15 +69,15 @@ export const createCohort =
             const res = await postDataApi(
                 `/faculties/${facultyId}/majors/${majorId}/cohorts`,
                 {
-                    cohortName,
-                },
+                    cohortName
+                }
             );
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    success: res.data.msg,
-                },
+                    success: res.data.msg
+                }
             });
         } catch (error) {
             dispatch({
@@ -87,8 +87,8 @@ export const createCohort =
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response?.data.msg ||
-                              'Tạo khóa sinh viên thất bại',
-                },
+                              'Tạo khóa sinh viên thất bại'
+                }
             });
         }
     };
@@ -100,8 +100,8 @@ export const updateLevelYearOfCohort =
             await patchDataApi(
                 `/faculties/${facultyId}/majors/${majorId}/cohorts/${cohortId}`,
                 {
-                    currentLevelYear: currentLevelYear,
-                },
+                    currentLevelYear: currentLevelYear
+                }
             );
         } catch (error) {
             dispatch({
@@ -111,8 +111,8 @@ export const updateLevelYearOfCohort =
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response?.data.msg ||
-                              'Cập nhật khóa sinh viên thất bại',
-                },
+                              'Cập nhật khóa sinh viên thất bại'
+                }
             });
         }
     };
@@ -122,7 +122,6 @@ export const getFacultyById =
     async (dispatch) => {
         try {
             const res = await getDataApi(`/faculties/${facultyId}`);
-            console.log(res);
         } catch (error) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -131,8 +130,8 @@ export const getFacultyById =
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response?.data.msg ||
-                              'Lấy dữ liệu khoa thất bại',
-                },
+                              'Lấy dữ liệu khoa thất bại'
+                }
             });
         }
     };
