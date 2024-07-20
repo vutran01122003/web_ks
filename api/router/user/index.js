@@ -5,4 +5,5 @@ const { checkPermission } = require('../../middleware/permission');
 
 router.post('/users/:userId/groups/:groupId', userControllers.addGroupForUser);
 router.get('/users/:userId', auth, checkPermission, userControllers.getUserByUserId);
+
 module.exports = router;

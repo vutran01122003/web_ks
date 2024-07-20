@@ -13,11 +13,7 @@ import { IoMdAddCircle } from 'react-icons/io';
 import { LuView } from 'react-icons/lu';
 
 const PageManagement = () => {
-    const {
-        VITE_APP_ADMIN_CODE,
-        VITE_APP_TALENTED_ENGINEER_CODE,
-        VITE_APP_FACULTY_MANAGER_CODE
-    } = import.meta.env;
+    const { VITE_APP_ADMIN_CODE, VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE } = import.meta.env;
 
     const { Search } = Input;
     const page = useSelector(pageSelector);
@@ -71,30 +67,24 @@ const PageManagement = () => {
             setPages((prev) => {
                 const menu = [...prev];
                 for (let menuItem of menu) {
-                    if (
-                        menuItem.dynamicPage &&
-                        menuItem.dynamicPage === 'goals'
-                    ) {
+                    if (menuItem.dynamicPage && menuItem.dynamicPage === 'goals') {
                         menuItem = {
                             ...menuItem,
-                            sub_menu_item: page.pages.reduce(
-                                (initialArr, page) => {
-                                    if (page.pageType === 'chỉ tiêu') {
-                                        return [
-                                            ...initialArr,
-                                            {
-                                                id: page?._id,
-                                                sub_page_type: page.pageType,
-                                                sub_name_menu: page?.pageName,
-                                                sub_icon_before: '?',
-                                                sub_to_link: `/page/${page?.pageName}`
-                                            }
-                                        ];
-                                    }
-                                    return initialArr;
-                                },
-                                []
-                            )
+                            sub_menu_item: page.pages.reduce((initialArr, page) => {
+                                if (page.pageType === 'chỉ tiêu') {
+                                    return [
+                                        ...initialArr,
+                                        {
+                                            id: page?._id,
+                                            sub_page_type: page.pageType,
+                                            sub_name_menu: page?.pageName,
+                                            sub_icon_before: '?',
+                                            sub_to_link: `/page/${page?.pageName}`
+                                        }
+                                    ];
+                                }
+                                return initialArr;
+                            }, [])
                         };
                         break;
                     }
@@ -139,10 +129,7 @@ const PageManagement = () => {
                 )}
 
                 {openViewTablesModal && (
-                    <ViewTablesModal
-                        handleHideViewTablesModal={handleHideViewTablesModal}
-                        subPageName={subPageName}
-                    />
+                    <ViewTablesModal handleHideViewTablesModal={handleHideViewTablesModal} subPageName={subPageName} />
                 )}
 
                 {openRemovePageModal && (
@@ -190,137 +177,88 @@ const PageManagement = () => {
                                     <React.Fragment key={menu_item.id}>
                                         <tr className="">
                                             <td>{index + 1}.</td>
-                                            <td className="name_menu">
-                                                {menu_item?.name_menu}
-                                            </td>
+                                            <td className="name_menu">{menu_item?.name_menu}</td>
                                             <td>
                                                 {menu_item?.allow ? (
-                                                    <span className="required_role">
-                                                        Tất Cả
-                                                    </span>
+                                                    <span className="required_role">Tất Cả</span>
                                                 ) : (
-                                                    <span className="required_role">
-                                                        {role}
-                                                    </span>
+                                                    <span className="required_role">{role}</span>
                                                 )}
                                             </td>
                                             <td>
-                                                <div className="icon__show">
-                                                    Hiện
-                                                </div>
+                                                <div className="icon__show">Hiện</div>
                                             </td>
                                             <td></td>
                                         </tr>
-                                        {menu_item?.sub_menu_item &&
-                                        menu_item?.sub_menu_item.length > 0 ? (
+                                        {menu_item?.sub_menu_item && menu_item?.sub_menu_item.length > 0 ? (
                                             <>
-                                                {menu_item?.sub_menu_item.map(
-                                                    (sub_menu_item, index) => (
-                                                        <tr
-                                                            key={
-                                                                sub_menu_item?.id
-                                                            }
-                                                            className="tr__sub_menu"
+                                                {menu_item?.sub_menu_item.map((sub_menu_item, index) => (
+                                                    <tr key={sub_menu_item?.id} className="tr__sub_menu">
+                                                        <td className="">{index + 1}.</td>
+                                                        <td
+                                                            className="name_sub_menu"
+                                                            onClick={() => {
+                                                                handleOpenViewTablesModal({
+                                                                    pageName: sub_menu_item?.sub_name_menu
+                                                                });
+                                                            }}
                                                         >
-                                                            <td className="">
-                                                                {index + 1}.
-                                                            </td>
-                                                            <td
-                                                                className="name_sub_menu"
-                                                                onClick={() => {
-                                                                    handleOpenViewTablesModal(
-                                                                        {
-                                                                            pageName:
-                                                                                sub_menu_item?.sub_name_menu
-                                                                        }
-                                                                    );
-                                                                }}
-                                                            >
-                                                                <span className="icon__vol">
-                                                                    ┗{' '}
-                                                                </span>
-                                                                {
-                                                                    sub_menu_item?.sub_name_menu
-                                                                }
-                                                            </td>
-                                                            <td>{role}</td>
-                                                            <td>
-                                                                <div className="icon__show">
-                                                                    Hiện
-                                                                </div>
-                                                            </td>
-                                                            <td className="">
-                                                                {sub_menu_item?.sub_to_link.includes(
-                                                                    '/page/'
-                                                                ) && (
-                                                                    <div className="sub_menu_item_btn_wrapper">
-                                                                        {sub_menu_item?.sub_page_type ===
-                                                                            'chỉ tiêu' && (
-                                                                            <>
-                                                                                <div
-                                                                                    className="btn_man-pages watch_table_btn"
-                                                                                    onClick={() => {
-                                                                                        handleOpenViewTablesModal(
-                                                                                            {
-                                                                                                pageName:
-                                                                                                    sub_menu_item?.sub_name_menu
-                                                                                            }
-                                                                                        );
-                                                                                    }}
-                                                                                >
-                                                                                    <LuView />
-                                                                                    <span>
-                                                                                        Xem
-                                                                                        Các
-                                                                                        Chỉ
-                                                                                        Tiêu
-                                                                                    </span>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    className="btn_man-pages add_table_btn"
-                                                                                    onClick={() => {
-                                                                                        handleOpenAddTableModal(
-                                                                                            {
-                                                                                                pageId: sub_menu_item?.id,
-                                                                                                pageName:
-                                                                                                    sub_menu_item?.sub_name_menu
-                                                                                            }
-                                                                                        );
-                                                                                    }}
-                                                                                >
-                                                                                    <IoMdAddCircle />
-                                                                                    <span>
-                                                                                        Thêm
-                                                                                        Chỉ
-                                                                                        Tiêu
-                                                                                    </span>
-                                                                                </div>
-                                                                            </>
-                                                                        )}
-                                                                        <div
-                                                                            className="btn_man-pages remove_page_btn"
-                                                                            onClick={() => {
-                                                                                handleOpenRemovePageModal(
-                                                                                    {
-                                                                                        pageId: sub_menu_item.id,
+                                                            <span className="icon__vol">┗ </span>
+                                                            {sub_menu_item?.sub_name_menu}
+                                                        </td>
+                                                        <td>{role}</td>
+                                                        <td>
+                                                            <div className="icon__show">Hiện</div>
+                                                        </td>
+                                                        <td className="">
+                                                            {sub_menu_item?.sub_to_link.includes('/page/') && (
+                                                                <div className="sub_menu_item_btn_wrapper">
+                                                                    {sub_menu_item?.sub_page_type === 'chỉ tiêu' && (
+                                                                        <>
+                                                                            <div
+                                                                                className="btn_man-pages watch_table_btn"
+                                                                                onClick={() => {
+                                                                                    handleOpenViewTablesModal({
                                                                                         pageName:
                                                                                             sub_menu_item?.sub_name_menu
-                                                                                    }
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            <ImBin2 />{' '}
-                                                                            Xóa
-                                                                            chỉ
-                                                                            tiêu
-                                                                        </div>
+                                                                                    });
+                                                                                }}
+                                                                            >
+                                                                                <LuView />
+                                                                                <span>Xem Các Chỉ Tiêu</span>
+                                                                            </div>
+
+                                                                            <div
+                                                                                className="btn_man-pages add_table_btn"
+                                                                                onClick={() => {
+                                                                                    handleOpenAddTableModal({
+                                                                                        pageId: sub_menu_item?.id,
+                                                                                        pageName:
+                                                                                            sub_menu_item?.sub_name_menu
+                                                                                    });
+                                                                                }}
+                                                                            >
+                                                                                <IoMdAddCircle />
+                                                                                <span>Thêm Chỉ Tiêu</span>
+                                                                            </div>
+                                                                        </>
+                                                                    )}
+                                                                    <div
+                                                                        className="btn_man-pages remove_page_btn"
+                                                                        onClick={() => {
+                                                                            handleOpenRemovePageModal({
+                                                                                pageId: sub_menu_item.id,
+                                                                                pageName: sub_menu_item?.sub_name_menu
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        <ImBin2 /> Xóa chỉ tiêu
                                                                     </div>
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                )}
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
                                             </>
                                         ) : (
                                             <></>

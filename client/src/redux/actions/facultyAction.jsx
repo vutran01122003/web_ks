@@ -121,7 +121,32 @@ export const getFacultyById =
     ({ facultyId }) =>
     async (dispatch) => {
         try {
-            const res = await getDataApi(`/faculties/${facultyId}`);
+            await getDataApi(`/faculties/${facultyId}`);
+        } catch (error) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error:
+                        error.response?.data?.status === 401
+                            ? 'Hết Phiên Đăng Nhập'
+                            : error?.response?.data.msg ||
+                              'Lấy dữ liệu khoa thất bại'
+                }
+            });
+        }
+    };
+
+export const getFacultyByName =
+    ({ facultyName }) =>
+    async (dispatch) => {
+        try {
+            const res = await getDataApi(`/faculty/${facultyName}`);
+            dispatch({
+                type: GLOBALTYPES.FACULTY.GET_FACULTY,
+                payload: {
+                    faculty: res.data.data
+                }
+            });
         } catch (error) {
             dispatch({
                 type: GLOBALTYPES.ALERT,

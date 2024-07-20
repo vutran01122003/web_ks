@@ -25,6 +25,9 @@ GET {{url}}/api/faculties
 ### Get faculty by id
 GET {{url}}/api/faculties/65e143d8d5592282126467d8
 
+### Get faculty by name
+GET {{url}}/api/faculty/công nghệ thông tin
+
 ### Update faculty by id
 PATCH {{url}}/api/faculties
 Content-Type: application/json

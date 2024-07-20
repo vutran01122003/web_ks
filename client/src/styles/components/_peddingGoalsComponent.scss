@@ -35,6 +35,7 @@
             .ant-tabs-nav {
                 background-color: #fafafa;
                 border-radius: 3px;
+                user-select: none;
 
                 .ant-tabs-nav-list {
                     flex-wrap: wrap;

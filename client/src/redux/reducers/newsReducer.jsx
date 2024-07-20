@@ -3,7 +3,7 @@ import GLOBALTYPES from '../actions/globalTypes';
 const initialState = {
     currentNews: '',
     currentNewsType: '',
-    newsType: {},
+    newsType: {}
 };
 
 function newsReducer(state = initialState, action) {
@@ -18,20 +18,19 @@ function newsReducer(state = initialState, action) {
                         newsList:
                             action.payload.page === 1
                                 ? action.payload.newsList
-                                : [
-                                      ...state[action.payload.newsId].newsList,
-                                      ...action.payload.newsList,
-                                  ],
+                                : [...state[action.payload.newsId].newsList, ...action.payload.newsList],
                         page: action.payload?.page || 1,
-                        maxPage: action.payload?.maxPage || false,
-                    },
-                },
+                        maxPage: action.payload?.maxPage || false
+                    }
+                }
             };
+
         case GLOBALTYPES.NEWS.GET_NEWS_DETAILS:
             return {
                 ...state,
-                currentNews: action.payload.newsData,
+                currentNews: action.payload.newsData
             };
+
         default:
             return state;
     }

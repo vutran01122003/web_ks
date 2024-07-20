@@ -36,8 +36,7 @@ function StopSubmittingProofModal({
     };
 
     const handleHideModal = (e) => {
-        if (e.target === e.currentTarget)
-            handleHiddenStopSubmittingProofModal();
+        if (e.target === e.currentTarget) handleHiddenStopSubmittingProofModal();
     };
 
     const handleChangeProgressPercentageCheckboxValue = (e) => {
@@ -68,8 +67,7 @@ function StopSubmittingProofModal({
 
     const handleStopSubmittingProof = () => {
         if (
-            (progressPercentage ||
-                progressPercentageInputRef.current.readOnly) &&
+            (progressPercentage || progressPercentageInputRef.current.readOnly) &&
             (score || scoreInputRef.current.readOnly)
         ) {
             dispatch(
@@ -98,10 +96,7 @@ function StopSubmittingProofModal({
             <div className="stop_submitting_proof_modal">
                 <div className="stop_submitting_proof_header">
                     <h2>Kết Thúc Hoạt Động Nộp Minh Chứng</h2>
-                    <div
-                        className="stop_submitting_proof_close_btn"
-                        onClick={handleHiddenStopSubmittingProofModal}
-                    >
+                    <div className="stop_submitting_proof_close_btn" onClick={handleHiddenStopSubmittingProofModal}>
                         <AiOutlineClose />
                     </div>
                 </div>
@@ -132,12 +127,7 @@ function StopSubmittingProofModal({
                                 ref={progressPercentageInputRef}
                             />
                             <span className="input_checkbox_item">
-                                <input
-                                    type="checkbox"
-                                    onClick={
-                                        handleChangeProgressPercentageCheckboxValue
-                                    }
-                                />
+                                <input type="checkbox" onClick={handleChangeProgressPercentageCheckboxValue} />
                                 <span>Không bắt buộc</span>
                             </span>
                         </div>
@@ -153,39 +143,25 @@ function StopSubmittingProofModal({
                                 ref={scoreInputRef}
                             />
                             <span className="input_checkbox_item">
-                                <input
-                                    type="checkbox"
-                                    onClick={handleChangeScoreCheckboxValue}
-                                />
+                                <input type="checkbox" onClick={handleChangeScoreCheckboxValue} />
                                 <span>Không bắt buộc</span>
                             </span>
                         </div>
                     </div>
 
                     <div className="stop_submitting_proof_body_code">
-                        <input
-                            onChange={handleConfirmValue}
-                            placeholder="Nhập văn bản xác nhận"
-                        />
-                        <span>
-                            Nếu bạn đã chắc chắn thì hãy nhập &ldquo;Tôi đồng
-                            ý&ldquo;
-                        </span>
+                        <input onChange={handleConfirmValue} placeholder="Nhập văn bản xác nhận" />
+                        <span>Nếu bạn đã chắc chắn thì hãy nhập &ldquo;Tôi đồng ý&ldquo;</span>
                     </div>
                 </div>
                 <div className="stop_submitting_proof_footer">
-                    <button
-                        className="btn_close"
-                        onClick={handleHiddenStopSubmittingProofModal}
-                    >
+                    <button className="btn_close" onClick={handleHiddenStopSubmittingProofModal}>
                         Không đồng ý
                     </button>
 
                     <button
                         className={`btn_accept ${
-                            confirmValue.trim().toLowerCase() === 'tôi đồng ý'
-                                ? 'active'
-                                : 'inactive'
+                            confirmValue.trim().toLowerCase() === 'tôi đồng ý' ? 'active' : 'inactive'
                         }`}
                         onClick={handleStopSubmittingProof}
                     >

@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const ComponentSelectOption = ({
-    id,
-    label,
-    options,
-    name,
-    onChange,
-    labelOptionNull,
-}) => {
+const ComponentSelectOption = ({ id, label, options, name, onChange, labelOptionNull }) => {
     const [optionData, setOptionData] = useState([]);
 
     useEffect(() => {

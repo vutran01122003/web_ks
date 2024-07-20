@@ -67,26 +67,30 @@ class TableService {
         }
     };
 
-    static updateTable = async ({ pageId, tableId, tableData }) => {
+    static updateTable = async ({ pageId, table }) => {
         try {
             const page = await Page.findById(pageId).lean();
 
             if (!page) throw createError.NotFound('Không tìm thấy page');
 
-            const updatedPage = await Page.findOneAndUpdate(
-                { _id: pageId, 'tables._id': tableId },
+            await Page.findOneAndUpdate(
+                { _id: pageId, 'tables._id': table._id },
                 {
                     $set: {
-                        'tables.$.tableName': tableData.tableName,
-                        'tables.$.rowTitleList': tableData.rowTitleList
+                        'tables.$.tableName': table.tableName,
+                        'tables.$.description': table.description,
+                        'tables.$.titleValue': table.titleValue,
+                        'tables.$.fixedValue': table.fixedValue,
+                        'tables.$.quantityDemanded': table.quantityDemanded,
+                        'tables.$.rowValueList': table.rowValueList,
+                        'tables.$.fixedScore': table.fixedScore,
+                        'tables.$.isActive': table.isActive
                     }
-                },
-                { new: true }
+                }
             );
 
             return {
                 status: 200,
-                page: updatedPage,
                 msg: 'Cập nhật chỉ tiêu thành công'
             };
         } catch (error) {

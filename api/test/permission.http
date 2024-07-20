@@ -37,8 +37,8 @@ POST {{url}}/api/roles
 Content-Type: application/json
 
 {
-    "method": "get",
-    "url": "/page/activities",
+    "method": "patch",
+    "url": "/page",
     "description": ""
 }
 
@@ -76,7 +76,8 @@ Content-Type: application/json
        "65e0711a4b961382fd75a471",
        "65e0711a4b961382fd75a479",
        "65e0711a4b961382fd75a487",
-       "665373273b88773c4dd19204"
+       "665373273b88773c4dd19204",
+       "667a6dc081cfb18734dc6186"
     ]
 }
 

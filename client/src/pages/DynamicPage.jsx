@@ -34,13 +34,7 @@ const DynamicPage = () => {
             {page?.pageType &&
                 page?.pageType === 'chỉ tiêu' &&
                 tables.map((table) => {
-                    return (
-                        <LayoutTable
-                            key={table.tableId}
-                            table={table}
-                            page={page}
-                        ></LayoutTable>
-                    );
+                    return <LayoutTable key={table.tableId} table={table} page={page}></LayoutTable>;
                 })}
             {page?.pageType && page?.pageType === 'tin tức' && <News />}
         </div>

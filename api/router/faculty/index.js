@@ -5,6 +5,7 @@ const { checkPermission } = require('../../middleware/permission');
 
 router.get('/faculties', facultyController.getAllFaculty);
 router.get('/faculties/:facultyId', facultyController.getFacultyById);
+router.get('/faculty/:facultyName', facultyController.getFacultyByName);
 router.post('/faculties', facultyController.createFaculty);
 router.patch('/faculties/:facultyId', facultyController.updateFaculty);
 router.delete('/faculties/:facultyId', facultyController.deleteFaculty);

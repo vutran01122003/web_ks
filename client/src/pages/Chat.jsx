@@ -26,14 +26,10 @@ const Chat = () => {
     useEffect(() => {
         const chatContainer = chatContainerRef.current;
         if (chatContainer) {
-            chatContainer.scrollTop =
-                chatContainer.scrollHeight - chatContainer.clientHeight;
+            chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
             const handleScroll = () => {
                 setShowScrollButton(
-                    chatContainer.scrollTop <
-                        chatContainer.scrollHeight -
-                            chatContainer.clientHeight -
-                            200,
+                    chatContainer.scrollTop < chatContainer.scrollHeight - chatContainer.clientHeight - 200
                 );
             };
             chatContainer.addEventListener('scroll', handleScroll);
@@ -50,8 +46,8 @@ const Chat = () => {
                 type: GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA,
                 payload: {
                     key: 'question',
-                    data: question,
-                },
+                    data: question
+                }
             });
             dispatch(sendChat(question, typeChat));
             setQuestion('');
@@ -71,7 +67,7 @@ const Chat = () => {
         if (chatContainer) {
             chatContainer.scrollTo({
                 top: chatContainer.scrollHeight,
-                behavior: 'smooth',
+                behavior: 'smooth'
             });
         }
     };
@@ -90,15 +86,10 @@ const Chat = () => {
                         </div>
                     ) : (
                         // Phần tử có chỉ số lẻ là liên kết
-                        <a
-                            key={index}
-                            href={part}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
+                        <a key={index} href={part} target="_blank" rel="noreferrer">
                             {part}
                         </a>
-                    ),
+                    )
                 )}
             </div>
         );
@@ -118,9 +109,7 @@ const Chat = () => {
                     chatbot.data.map((item, index) => (
                         <div key={index}>
                             <div className="user-message">
-                                <div className="user-message__content">
-                                    {item.question}
-                                </div>
+                                <div className="user-message__content">{item.question}</div>
                             </div>
                             {item.answer ? (
                                 <div className="chat-message">
@@ -131,9 +120,7 @@ const Chat = () => {
                                 </div>
                             ) : (
                                 <img
-                                    src={
-                                        import.meta.env.VITE_APP_CHATBOT_LOADING
-                                    }
+                                    src={import.meta.env.VITE_APP_CHATBOT_LOADING}
                                     className="chatbot-loading"
                                     alt="loading"
                                 />
@@ -144,9 +131,7 @@ const Chat = () => {
                     <div className="choice-type">
                         <div className="choice-type__container">
                             {chatbot.typeChat && !typeChat && (
-                                <div className="choice-type__title">
-                                    Vui lòng chọn loại chatbot
-                                </div>
+                                <div className="choice-type__title">Vui lòng chọn loại chatbot</div>
                             )}
                             <div className="choice-type__list">
                                 {chatbot.typeChat &&
@@ -169,10 +154,7 @@ const Chat = () => {
             {chatbot.typeChat && typeChat && (
                 <div className="chat-box">
                     {showScrollButton && (
-                        <button
-                            className="scroll-to-bottom-button"
-                            onClick={scrollToBottom}
-                        >
+                        <button className="scroll-to-bottom-button" onClick={scrollToBottom}>
                             <FaArrowDown />
                         </button>
                     )}
@@ -193,9 +175,7 @@ const Chat = () => {
                                 type="primary"
                                 loading={chatbot.isLoading}
                                 onClick={(e) => {
-                                    question != ''
-                                        ? sendQuestion(e)
-                                        : setShowOption(!showOption);
+                                    question != '' ? sendQuestion(e) : setShowOption(!showOption);
                                 }}
                                 className={`chat-button ${!question && 'input-empty'}`}
                                 disabled={chatbot.isLoading || !question}
@@ -220,8 +200,7 @@ const Chat = () => {
                         </div>
                     </div>
                     <div className="chat-warning">
-                        Thông tin của IUH chat có thể còn chưa chính xác do còn
-                        trong quá trình thử nghiệm
+                        Thông tin của IUH chat có thể còn chưa chính xác do còn trong quá trình thử nghiệm
                     </div>
                 </div>
             )}

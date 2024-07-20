@@ -2,11 +2,7 @@ import { useState } from 'react';
 import TableModal from '../ComponentModal/TableModal';
 import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
 import ApproveActivityModal from '../ComponentModal/ApproveActivityModal';
-import {
-    CheckSquareFilled,
-    CloseSquareFilled,
-    MinusSquareFilled
-} from '@ant-design/icons';
+import { CheckSquareFilled, CloseSquareFilled, MinusSquareFilled } from '@ant-design/icons';
 import { FaEdit } from 'react-icons/fa';
 import NoteModal from '../ComponentModal/NoteModal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,19 +11,10 @@ import PreviewPdfModal from '../ComponentModal/PreviewPdfModal';
 import { MdOutlineMoreTime } from 'react-icons/md';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
-const MainItem = ({
-    auth,
-    row,
-    page,
-    setRowInfo,
-    isDetailedRow,
-    handleOpenModal,
-    handleOpenPreviewFilesModal
-}) => {
+const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal, handleOpenPreviewFilesModal }) => {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
-    const [visibleDetailedRowModal, setVisibleDetailedRowModal] =
-        useState(false);
+    const [visibleDetailedRowModal, setVisibleDetailedRowModal] = useState(false);
     const [modalData, setModalData] = useState({});
 
     const handleVisibleConfirmModal = () => {
@@ -62,15 +49,10 @@ const MainItem = ({
                 if (item?.proofNameLabel) {
                     return (
                         !isDetailedRow && (
-                            <td
-                                className="proof_files_wrapper line__item"
-                                key={index}
-                            >
+                            <td className="proof_files_wrapper line__item" key={index}>
                                 {visibleDetailedRowModal && (
                                     <PreviewPdfModal
-                                        handleHiddenDetailedRowModal={
-                                            handleHiddenDetailedRowModal
-                                        }
+                                        handleHiddenDetailedRowModal={handleHiddenDetailedRowModal}
                                         tableData={item?.tableValue}
                                     />
                                 )}
@@ -87,18 +69,12 @@ const MainItem = ({
                                         {item?.proofNameLabel}
                                     </span>
                                 ) : (
-                                    <a
-                                        href={item?.proofFiles[0]?.fileUrl}
-                                        className="proof_files_download"
-                                    >
+                                    <a href={item?.proofFiles[0]?.fileUrl} className="proof_files_download">
                                         {item?.proofNameLabel}
                                     </a>
                                 )}
 
-                                <span
-                                    onClick={handleVisibleDetailedRowModal}
-                                    className="preview_proof_files"
-                                >
+                                <span onClick={handleVisibleDetailedRowModal} className="preview_proof_files">
                                     {item?.proofPreviewLabel}
                                 </span>
                             </td>
@@ -127,10 +103,7 @@ const MainItem = ({
                             break;
                     }
                     return !isDetailedRow ? (
-                        <td
-                            className={`line__item row_status ${statusValue}`}
-                            key={index}
-                        >
+                        <td className={`line__item row_status ${statusValue}`} key={index}>
                             {item?.statusLabel}
                         </td>
                     ) : null;
@@ -145,31 +118,22 @@ const MainItem = ({
                                     title={modalData.title}
                                     content={modalData.content}
                                     status={modalData.status}
-                                    isTimedExtension={
-                                        modalData?.isTimedExtension ?? false
-                                    }
-                                    isResubmitedRow={
-                                        modalData?.isResubmitedRow ?? false
-                                    }
+                                    isTimedExtension={modalData?.isTimedExtension ?? false}
+                                    isResubmitedRow={modalData?.isResubmitedRow ?? false}
                                     rowInfoData={item.rowInfoData}
-                                    handleHiddenConfirmModal={
-                                        handleHiddenConfirmModal
-                                    }
+                                    handleHiddenConfirmModal={handleHiddenConfirmModal}
                                     userData={item?.userData}
                                 />
                             )}
                             <div className="button_wrapper">
-                                {['rejectedRows', 'pendingRows'].includes(
-                                    item.rowsType
-                                ) && (
+                                {['rejectedRows', 'pendingRows'].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content:
-                                                    'Bạn chắc chắn chấp nhận hoạt động này ?',
+                                                content: 'Bạn chắc chắn chấp nhận hoạt động này ?',
                                                 status: 'đã duyệt'
                                             });
                                         }}
@@ -178,17 +142,14 @@ const MainItem = ({
                                     </button>
                                 )}
 
-                                {['acceptedRows', 'pendingRows'].includes(
-                                    item.rowsType
-                                ) && (
+                                {['acceptedRows', 'pendingRows'].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content:
-                                                    'Bạn chắc chắn từ chối hoạt động này ?',
+                                                content: 'Bạn chắc chắn từ chối hoạt động này ?',
                                                 status: 'từ chối'
                                             });
                                         }}
@@ -204,8 +165,7 @@ const MainItem = ({
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content:
-                                                    'Bạn chắc chắn muốn gia hạn thời gian cho hoạt động này ?',
+                                                content: 'Bạn chắc chắn muốn gia hạn thời gian cho hoạt động này ?',
                                                 status: 'phải nộp lại',
                                                 isTimedExtension: true
                                             });
@@ -215,19 +175,14 @@ const MainItem = ({
                                     </button>
                                 )}
 
-                                {[
-                                    'pendingRows',
-                                    'rejectedRows',
-                                    'acceptedRows'
-                                ].includes(item.rowsType) && (
+                                {['pendingRows', 'rejectedRows', 'acceptedRows'].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper"
                                         onClick={() => {
                                             handleVisibleConfirmModal();
                                             setModalData({
                                                 title: 'Thông Báo',
-                                                content:
-                                                    'Bạn chắc chắn muốn sinh viên nộp lại hoạt động này ?',
+                                                content: 'Bạn chắc chắn muốn sinh viên nộp lại hoạt động này ?',
                                                 status: 'phải nộp lại',
                                                 isResubmitedRow: true
                                             });
@@ -243,17 +198,9 @@ const MainItem = ({
                     return (
                         <td className="line__item" key={index}>
                             {visibleNoteModal && (
-                                <NoteModal
-                                    handleHiddenNoteModal={
-                                        handleHiddenNoteModal
-                                    }
-                                    noteList={item?.noteValue}
-                                />
+                                <NoteModal handleHiddenNoteModal={handleHiddenNoteModal} noteList={item?.noteValue} />
                             )}
-                            <span
-                                className="note_row"
-                                onClick={handleVisibleNoteModal}
-                            >
+                            <span className="note_row" onClick={handleVisibleNoteModal}>
                                 Ghi Chú
                             </span>
                         </td>
@@ -265,8 +212,7 @@ const MainItem = ({
                                 <abbr
                                     title={`${
                                         item.editValue
-                                            ? page.pageLevelYear ===
-                                              auth.user.levelYear
+                                            ? page.pageLevelYear === auth.user.levelYear
                                                 ? ''
                                                 : `Hoạt động năm ${page.pageLevelYear} đã kết thúc`
                                             : 'Không được chỉnh sửa'
@@ -274,20 +220,13 @@ const MainItem = ({
                                 >
                                     <span
                                         onClick={() => {
-                                            if (
-                                                item.editValue &&
-                                                page.pageLevelYear ===
-                                                    auth.user.levelYear
-                                            ) {
+                                            if (item.editValue && page.pageLevelYear === auth.user.levelYear) {
                                                 setRowInfo(item.rowInfo);
                                                 handleOpenModal();
                                             }
                                         }}
                                         className={`edit_row ${item.editValue ? 'active' : 'inactive'} ${
-                                            page.pageLevelYear ===
-                                            auth.user.levelYear
-                                                ? 'allow'
-                                                : 'deny'
+                                            page.pageLevelYear === auth.user.levelYear ? 'allow' : 'deny'
                                         }`}
                                     >
                                         <FaEdit />
@@ -340,23 +279,15 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
     };
 
     return (
-        <div
-            className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}
-        >
+        <div className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}>
             {!isDynamicRows && (
                 <header>
-                    <h4
-                        className={`heading ${isDetailedRow ? 'fsize_small' : ''}`}
-                    >
-                        {table?.title}
-                    </h4>
+                    <h4 className={`heading ${isDetailedRow ? 'fsize_small' : ''}`}>{table?.title}</h4>
                     <div className="modal">
                         {!isDynamicRows && !isDetailedRow && (
                             <button
                                 className={`modal_btn_open ${
-                                    page.pageLevelYear === auth.user.levelYear
-                                        ? 'active'
-                                        : 'inactive'
+                                    page.pageLevelYear === auth.user.levelYear ? 'active' : 'inactive'
                                 }`}
                                 onClick={handleOpenModal}
                             >
@@ -395,11 +326,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                         <tr className="table__line__header">
                             {table.thead.map((item, index) => {
                                 return isDetailedRow &&
-                                    [
-                                        'Sửa',
-                                        'Minh Chứng',
-                                        'Trạng Thái'
-                                    ].includes(item?.textHeading) ? null : (
+                                    ['Sửa', 'Minh Chứng', 'Trạng Thái'].includes(item?.textHeading) ? null : (
                                     <th className="header__item" key={index}>
                                         {item?.textHeading}
                                     </th>
@@ -418,9 +345,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                                     setRowInfo={setRowInfo}
                                     isDetailedRow={isDetailedRow}
                                     isDynamicRows={isDynamicRows}
-                                    handleOpenPreviewFilesModal={
-                                        handleOpenPreviewFilesModal
-                                    }
+                                    handleOpenPreviewFilesModal={handleOpenPreviewFilesModal}
                                     handleOpenModal={handleOpenModal}
                                     row={row}
                                     key={index}

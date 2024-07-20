@@ -32,6 +32,7 @@ class RowControllers {
                 data: rowList
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -168,7 +169,7 @@ class RowControllers {
                 switch (content.status) {
                     case 'đã duyệt':
                         ++completedTask;
-                        score += content.totalScore;
+                        totalScore += content.totalScore;
                         break;
                     case 'chờ duyệt':
                         ++pendingTask;
@@ -191,7 +192,7 @@ class RowControllers {
                     rejectedTask,
                     completedTask,
                     pendingTask,
-                    score
+                    totalScore
                 },
                 pageInfo,
                 userId

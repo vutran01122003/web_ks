@@ -8,12 +8,11 @@
         border-radius: 3px;
 
         .item__quantity {
-            width: 100%;
-            display: block;
-            min-height: 100px;
-            padding: 15px;
             display: flex;
             gap: 10px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 3px;
             transition: all 0.35s;
             margin-left: 15px;
             background-color: #ffffff;
@@ -27,19 +26,19 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-around;
-                gap: 5px;
+                justify-content: space-between;
 
                 .text__heading {
                     font-size: 14px;
-                    font-weight: 700;
+                    font-weight: 600;
                     text-transform: uppercase;
                     color: #1a1919;
                 }
 
                 .number__quantity {
+                    margin-top: 10px;
                     text-transform: uppercase;
-                    font-size: 14px;
+                    font-size: 12px;
                     font-weight: 600;
                     color: #464444;
                 }
@@ -49,7 +48,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                font-size: 38px;
+                font-size: 30px;
                 color: #b8b8b8;
             }
 

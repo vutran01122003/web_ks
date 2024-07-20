@@ -9,11 +9,7 @@ import { getDataApi } from '../utils/fetchData';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import Avatar from '../components/ComponentAvatar/ComponentAvatar';
-import {
-    createCohort,
-    createFaculty,
-    getAllFaculties,
-} from '../redux/actions/facultyAction';
+import { createCohort, createFaculty, getAllFaculties } from '../redux/actions/facultyAction';
 import { facultySelector } from '../redux/selector';
 
 function Faculty() {
@@ -49,11 +45,7 @@ function Faculty() {
             const res = await getDataApi(`/users/${userId}`);
             const userData = res.data.data;
 
-            if (
-                facultyManagerList.some(
-                    (facultyManager) => facultyManager._id === userData._id,
-                )
-            ) {
+            if (facultyManagerList.some((facultyManager) => facultyManager._id === userData._id)) {
                 setUserId('');
                 return;
             }
@@ -65,8 +57,8 @@ function Faculty() {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error.response.data.msg,
-                },
+                    error: error.response.data.msg
+                }
             });
         }
     };
@@ -75,11 +67,9 @@ function Faculty() {
         dispatch(
             createFaculty({
                 facultyName,
-                managerIdList: facultyManagerList.map(
-                    (facultyManager) => facultyManager._id,
-                ),
-                majorList,
-            }),
+                managerIdList: facultyManagerList.map((facultyManager) => facultyManager._id),
+                majorList
+            })
         );
 
         setFacultyName('');
@@ -89,21 +79,16 @@ function Faculty() {
     };
 
     const deleteFacultyManager = async (managerId) => {
-        setFacultyManagerList((prev) =>
-            prev.filter((manager) => manager._id != managerId),
-        );
+        setFacultyManagerList((prev) => prev.filter((manager) => manager._id != managerId));
     };
 
     const addMajor = () => {
-        if (majorName.trim())
-            setMajorList((prev) => Array.from(new Set([...prev, majorName])));
+        if (majorName.trim()) setMajorList((prev) => Array.from(new Set([...prev, majorName])));
         setMajorName('');
     };
 
     const deleteMajor = (majorData) => {
-        setMajorList((prev) =>
-            prev.filter((majorItem) => majorItem !== majorData),
-        );
+        setMajorList((prev) => prev.filter((majorItem) => majorItem !== majorData));
     };
 
     const handleChangeFacultySelect = (e) => {
@@ -115,19 +100,15 @@ function Faculty() {
     };
 
     const createNewCohort = () => {
-        if (
-            Object.keys(currentFaculty).length === 0 ||
-            Object.keys(currentMajor).length === 0 ||
-            !cohortName.trim()
-        )
+        if (Object.keys(currentFaculty).length === 0 || Object.keys(currentMajor).length === 0 || !cohortName.trim())
             return;
 
         dispatch(
             createCohort({
                 facultyId: currentFaculty._id,
                 majorId: currentMajor._id,
-                cohortName,
-            }),
+                cohortName
+            })
         );
     };
 
@@ -141,9 +122,7 @@ function Faculty() {
                 <fieldset>
                     <legend>Tạo Mới Khoa</legend>
                     <div className="input_item_wrapper">
-                        <label htmlFor="faculty_name_input">
-                            Tên Khoa Mới:
-                        </label>
+                        <label htmlFor="faculty_name_input">Tên Khoa Mới:</label>
                         <input
                             id="faculty_name_input"
                             type="text"
@@ -154,9 +133,7 @@ function Faculty() {
                     </div>
 
                     <div className="input_item_wrapper">
-                        <label htmlFor="faculty_manager_input">
-                            Quản Lý Khoa:
-                        </label>
+                        <label htmlFor="faculty_manager_input">Quản Lý Khoa:</label>
                         <input
                             id="faculty_manager_input"
                             type="text"
@@ -164,19 +141,13 @@ function Faculty() {
                             value={userId}
                             placeholder="Nhập mã quản lý khoa"
                         />
-                        <button
-                            type="button"
-                            onClick={addFacultyManager}
-                            className="add_faculty_manager_btn"
-                        >
+                        <button type="button" onClick={addFacultyManager} className="add_faculty_manager_btn">
                             Thêm
                         </button>
                     </div>
 
                     <div className="input_item_wrapper">
-                        <label htmlFor="faculty_major_input">
-                            Tên Chuyên Ngành:
-                        </label>
+                        <label htmlFor="faculty_major_input">Tên Chuyên Ngành:</label>
                         <input
                             id="faculty_major_input"
                             type="text"
@@ -184,49 +155,28 @@ function Faculty() {
                             value={majorName}
                             placeholder="Nhập tên chuyên ngành"
                         />
-                        <button
-                            type="button"
-                            onClick={addMajor}
-                            className="add_aculty_major_btn"
-                        >
+                        <button type="button" onClick={addMajor} className="add_aculty_major_btn">
                             Thêm
                         </button>
                     </div>
                     {facultyManagerList.length > 0 && (
                         <div className="faculy_manager_list">
-                            <h5 className="faculy_manager_list title">
-                                Danh sách quản lý khoa:{' '}
-                            </h5>
+                            <h5 className="faculy_manager_list title">Danh sách quản lý khoa: </h5>
                             {facultyManagerList.map((facultyManager, index) => (
                                 <div key={index} className="manager_info">
                                     <div className="manager_info_wrapper">
                                         <IoMdArrowDropright />
-                                        <Avatar
-                                            url={facultyManager.avatar}
-                                            size="small"
-                                        />
+                                        <Avatar url={facultyManager.avatar} size="small" />
                                         <div className="manager_info_content">
-                                            <span>
-                                                {' '}
-                                                {capitalizeFirstLetter(
-                                                    facultyManager.userId,
-                                                )}{' '}
-                                            </span>
-                                            <span>
-                                                {' '}
-                                                {capitalizeFirstLetter(
-                                                    facultyManager.fullName,
-                                                )}{' '}
-                                            </span>
+                                            <span> {capitalizeFirstLetter(facultyManager.userId)} </span>
+                                            <span> {capitalizeFirstLetter(facultyManager.fullName)} </span>
                                         </div>
                                     </div>
 
                                     <div
                                         className="manager_info_delete_btn"
                                         onClick={() => {
-                                            deleteFacultyManager(
-                                                facultyManager._id,
-                                            );
+                                            deleteFacultyManager(facultyManager._id);
                                         }}
                                     >
                                         <TiDeleteOutline />
@@ -238,9 +188,7 @@ function Faculty() {
 
                     {majorList.length > 0 && (
                         <div className="faculy_major_list">
-                            <h5 className="faculy_major_list_title title">
-                                Danh sách chuyên ngành:{' '}
-                            </h5>
+                            <h5 className="faculy_major_list_title title">Danh sách chuyên ngành: </h5>
                             {majorList.map((major, index) => (
                                 <div key={index} className="major_item">
                                     <div className="major_item_content">
@@ -260,11 +208,7 @@ function Faculty() {
                             ))}
                         </div>
                     )}
-                    <button
-                        type="button"
-                        className="create_new_faculty_btn"
-                        onClick={createNewFaculty}
-                    >
+                    <button type="button" className="create_new_faculty_btn" onClick={createNewFaculty}>
                         Tạo Khoa Mới
                     </button>
                 </fieldset>
@@ -282,50 +226,30 @@ function Faculty() {
                 <tbody>
                     {faculty.facultyData.map((facultyItem) => (
                         <tr key={facultyItem._id}>
+                            <td>{capitalizeFirstLetter(facultyItem.facultyName)}</td>
                             <td>
-                                {capitalizeFirstLetter(facultyItem.facultyName)}
-                            </td>
-                            <td>
-                                {facultyItem.managerList.map(
-                                    (manager, index) => (
-                                        <div
-                                            key={index}
-                                            className="manager_item"
-                                        >{`${
-                                            manager.userId
-                                        }-${capitalizeFirstLetter(manager.fullName)}`}</div>
-                                    ),
-                                )}
+                                {facultyItem.managerList.map((manager, index) => (
+                                    <div key={index} className="manager_item">{`${
+                                        manager.userId
+                                    }-${capitalizeFirstLetter(manager.fullName)}`}</div>
+                                ))}
                             </td>
                             <td>
                                 {facultyItem.majors.map((major, index) => (
                                     <div className="major_item" key={index}>
-                                        <span>
-                                            {capitalizeFirstLetter(
-                                                major.majorName,
-                                            )}
-                                        </span>
-                                        <button className="updated_btn">
-                                            Sửa
-                                        </button>
-                                        <button className="delete_btn">
-                                            Xóa
-                                        </button>
+                                        <span>{capitalizeFirstLetter(major.majorName)}</span>
+                                        <button className="updated_btn">Sửa</button>
+                                        <button className="delete_btn">Xóa</button>
                                     </div>
                                 ))}
                             </td>
-                            <td>
-                                {facultyItem.isActive
-                                    ? 'Đang Hoạt Động'
-                                    : 'Không Hoạt Động'}
-                            </td>
+                            <td>{facultyItem.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}</td>
                             <td className="interactive_btn_wrapper">
                                 <div className="updated_btn">
                                     <FaPen /> <span>Chỉnh Sửa</span>
                                 </div>
                                 <div className="add_btn">
-                                    <IoMdAddCircle />{' '}
-                                    <span>Thêm Chuyên Ngành</span>
+                                    <IoMdAddCircle /> <span>Thêm Chuyên Ngành</span>
                                 </div>
                                 <div className="delete_btn">
                                     <MdRemoveCircle /> <span>Xóa Khoa</span>
@@ -345,16 +269,10 @@ function Faculty() {
 
                 <div className="cohort_input_item">
                     <label>Chọn Khoa:</label>
-                    <select
-                        defaultValue={''}
-                        onChange={handleChangeFacultySelect}
-                    >
+                    <select defaultValue={''} onChange={handleChangeFacultySelect}>
                         <option value="">Chọn Khoa</option>
                         {faculty.facultyData.map((facultyItem) => (
-                            <option
-                                key={facultyItem._id}
-                                value={JSON.stringify(facultyItem)}
-                            >
+                            <option key={facultyItem._id} value={JSON.stringify(facultyItem)}>
                                 {capitalizeFirstLetter(facultyItem.facultyName)}
                             </option>
                         ))}
@@ -363,22 +281,14 @@ function Faculty() {
 
                 <div className="cohort_input_item">
                     <label>Chọn Chuyên Ngành:</label>
-                    <select
-                        defaultValue={''}
-                        onChange={handleChangeMajorSelect}
-                    >
+                    <select defaultValue={''} onChange={handleChangeMajorSelect}>
                         {Object.keys(currentFaculty).length > 0 ? (
                             <>
                                 <option value="">Chọn Chuyên Ngành</option>
 
                                 {currentFaculty.majors.map((majorItem) => (
-                                    <option
-                                        key={majorItem._id}
-                                        value={JSON.stringify(majorItem)}
-                                    >
-                                        {capitalizeFirstLetter(
-                                            majorItem.majorName,
-                                        )}
+                                    <option key={majorItem._id} value={JSON.stringify(majorItem)}>
+                                        {capitalizeFirstLetter(majorItem.majorName)}
                                     </option>
                                 ))}
                             </>
@@ -409,22 +319,18 @@ function Faculty() {
         {
             key: 'faculty',
             label: 'Khoa & Chuyên Ngành',
-            children: FacultyUi,
+            children: FacultyUi
         },
         {
             key: 'cohort',
             label: 'Khóa Sinh Viên',
-            children: CohortUi,
-        },
+            children: CohortUi
+        }
     ];
 
     return (
         <div className="faculty_major_container">
-            <Tabs
-                defaultActiveKey="1"
-                items={items}
-                className="tabs_container"
-            />
+            <Tabs defaultActiveKey="1" items={items} className="tabs_container" />
         </div>
     );
 }

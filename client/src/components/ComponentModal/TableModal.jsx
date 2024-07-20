@@ -6,15 +6,7 @@ import ComponentProofFile from '../ComponentProofFile/ComponentProofFile';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import FormControl from '../ComponentForm/FormControl';
 
-const ComponentModal = ({
-    auth,
-    rowInfo,
-    handleHideModal,
-    tableId,
-    title,
-    thead,
-    page,
-}) => {
+const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead, page }) => {
     const dispatch = useDispatch();
     const [row, setRow] = useState(rowInfo?.rowValue ?? {});
     const [files, setFiles] = useState([]);
@@ -38,8 +30,8 @@ const ComponentModal = ({
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Thông tin chưa đầy đủ',
-                },
+                    error: 'Thông tin chưa đầy đủ'
+                }
             });
             return;
         }
@@ -56,14 +48,14 @@ const ComponentModal = ({
             page: page.pageId,
             table: tableId,
             path: page.pathName,
-            content: JSON.stringify(row),
+            content: JSON.stringify(row)
         };
 
         if (rowInfo)
             rowData = {
                 ...rowData,
                 rowListId: rowInfo.rowListId,
-                contentId: rowInfo._id,
+                contentId: rowInfo._id
             };
 
         formData.set('rowData', JSON.stringify(rowData));
@@ -74,8 +66,8 @@ const ComponentModal = ({
 
         dispatch(
             addRow({
-                formData,
-            }),
+                formData
+            })
         );
 
         handleHideModal();
@@ -92,11 +84,7 @@ const ComponentModal = ({
             <form className={`modal`}>
                 <div className="head__modal">
                     <div className="head__modal__title ">{title}</div>
-                    <button
-                        type="button"
-                        className="btn__close"
-                        onClick={() => handleHideModal()}
-                    >
+                    <button type="button" className="btn__close" onClick={() => handleHideModal()}>
                         <IoCloseOutline />
                     </button>
                 </div>
@@ -123,49 +111,30 @@ const ComponentModal = ({
                                         className="input__modal"
                                         type={item.typeInput}
                                         disabled={item.disabled}
-                                        value={
-                                            row[item.textHeading]
-                                                ? row[item.textHeading]
-                                                : ''
-                                        }
+                                        value={row[item.textHeading] ? row[item.textHeading] : ''}
                                         name={item.textHeading}
                                         onChange={handleChangeRow}
-                                        classNameInputItem={
-                                            item.classNameInputItem
-                                        }
+                                        classNameInputItem={item.classNameInputItem}
                                     />
                                 );
                             } else if (item.typeInput === 'select') {
                                 return (
-                                    <div
-                                        className="select_modal_wrapper"
-                                        key={item.textHeading + index}
-                                    >
+                                    <div className="select_modal_wrapper" key={item.textHeading + index}>
                                         <label>{item.textHeading}</label>
                                         <select
                                             className="select_modal"
-                                            defaultValue={
-                                                row[item.textHeading] || ''
-                                            }
+                                            defaultValue={row[item.textHeading] || ''}
                                             name={item.textHeading}
                                             onChange={handleChangeRow}
                                         >
-                                            <option
-                                                key={item.textHeading}
-                                                value=""
-                                            >
+                                            <option key={item.textHeading} value="">
                                                 {item.textHeading}
                                             </option>
-                                            {item.fixedValueList.map(
-                                                (fixedValue) => (
-                                                    <option
-                                                        key={fixedValue.value}
-                                                        value={fixedValue.value}
-                                                    >
-                                                        {fixedValue.value}
-                                                    </option>
-                                                ),
-                                            )}
+                                            {item.fixedValueList.map((fixedValue) => (
+                                                <option key={fixedValue.value} value={fixedValue.value}>
+                                                    {fixedValue.value}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 );
@@ -176,10 +145,7 @@ const ComponentModal = ({
                 </div>
 
                 <div className="button_add_row">
-                    <button
-                        type="button"
-                        onClick={rowInfo ? handleUpdateRow : handleAddRow}
-                    >
+                    <button type="button" onClick={rowInfo ? handleUpdateRow : handleAddRow}>
                         {rowInfo ? 'Nộp Lại Hoạt Động' : 'Thêm Hoạt Động'}
                     </button>
                 </div>

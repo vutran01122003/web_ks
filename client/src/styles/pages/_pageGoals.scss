@@ -1,5 +1,5 @@
 .wrap__goals {
-    padding: 40px 20px;
+    padding: 30px 20px 20px 20px;
     .body__goals {
         .goals_info_wrapper {
             display: inline-block;
@@ -133,11 +133,6 @@
                 display: flex;
                 align-items: center;
 
-                .score_input.not_allow {
-                    user-select: none;
-                    cursor: not-allowed;
-                }
-
                 select {
                     height: 30px;
                     margin-left: 10px;
@@ -187,9 +182,14 @@
                         font-size: 17px;
                         background-color: $main_color;
                         margin: 10px;
+                        transition: 0.1s linear;
                         @include flex_center;
                         svg {
                             margin-right: 10px;
+                        }
+
+                        &:active {
+                            transform: scale(0.9);
                         }
                     }
                 }
@@ -374,9 +374,15 @@
             width: max-content;
             background-color: $main_color;
             padding: 10px;
+            transition: 0.1s linear;
             @include flex_center;
+            
             svg {
                 margin-right: 10px;
+            }
+
+            &:active {
+                transform: scale(0.9);
             }
         }
 
@@ -389,8 +395,14 @@
             padding: 10px;
             @include flex_center;
             background-color: $main_color;
+            transition: 0.1s linear;
+
             svg {
                 margin-right: 10px;
+            }
+
+            &:active {
+                transform: scale(0.9);
             }
         }
     }

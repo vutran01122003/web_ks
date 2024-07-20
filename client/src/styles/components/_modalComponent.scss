@@ -14,8 +14,8 @@
 
     .box_wrapper {
         background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 5px gray;
+        border-radius: 3px;
+        box-shadow: 0 0 5px rgb(142, 141, 141);
         position: relative;
 
         .notify_nothing_title {
@@ -25,8 +25,11 @@
         }
 
         .modal_header {
+            text-transform: uppercase;
+            color: #222222;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
+            font-size: 20px;
             border-bottom: 1px solid rgb(217, 216, 216);
         }
 
@@ -222,10 +225,9 @@
 
 // Create table Modal
 .create_goal_container {
-    width: 800px;
+    width: 1000px;
     max-width: 100%;
     max-height: 100%;
-    padding: 20px;
 
     .input_goal_wrapper {
         .input_goal_item {
@@ -332,14 +334,14 @@
 }
 
 // Confirm modal
-.confirm_modal {
+.approve_modal {
     background: #fff;
     width: 480px;
     border-radius: 5px;
     box-shadow: 0 0 1px #fff;
     border: 1px solid rgb(197, 194, 194);
 
-    .confirm_modal_header {
+    .approve_modal_header {
         padding: 10px;
         display: flex;
         justify-content: space-between;
@@ -347,10 +349,9 @@
         font-size: 14px;
     }
 
-    .confirm_modal_body {
+    .approve_modal_body {
         padding: 20px;
-
-        .confirm_modal_body_content {
+        .approve_modal_body_content {
             color: #333;
             font-size: 16px;
             font-weight: 600;
@@ -412,7 +413,7 @@
             }
         }
 
-        .confirm_modal_body_note {
+        .approve_modal_body_note {
             margin-top: 20px;
 
             textarea {
@@ -428,7 +429,7 @@
         }
     }
 
-    .confirm_modal_footer {
+    .approve_modal_footer {
         margin-bottom: 15px;
         display: flex;
         justify-content: center;
@@ -788,11 +789,23 @@
     width: 450px;
     max-width: 100%;
     text-align: center;
-
+    
     .remove_page_body {
-        font-weight: 500;
-        padding: 20px 0 40px 0;
-        font-size: large;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &>span:first-child {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        &>span:last-child {
+            font-weight: 400;
+            color: gray;
+            font-size: 12px;
+            padding-bottom: 20px;
+        }
     }
 
     .remove_page_footer {
@@ -807,7 +820,7 @@
             border: none;
             color: #fff;
             font-weight: 500;
-            border-radius: 5px;
+            border-radius: 3px;
             cursor: pointer;
             transition: 0.1s linear;
 
@@ -816,17 +829,79 @@
             }
 
             &.remove_page_deny_btn {
-                background: red;
+                background: #f0635c;
+                &:hover {
+                    background: red;
+                }
             }
 
             &.remove_page_accept_btn {
-                background: green;
+                background: #1677ff;
             }
         }
     }
 }
 
-// preview PDF
+// Confirm modal
+.confirm_modal {
+    padding: 20px;
+    width: 450px;
+    max-width: 100%;
+    text-align: center;
+    
+    .confirm_modal_body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &>span:first-child {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        &>span:last-child {
+            font-weight: 400;
+            color: gray;
+            font-size: 12px;
+            padding-bottom: 20px;
+        }
+    }
+
+    .confirm_modal_footer {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+
+        button {
+            padding: 8px 12px;
+            width: 140px;
+            outline: none;
+            border: none;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: 0.1s linear;
+
+            &:active {
+                transform: scale(0.9);
+            }
+
+            &.confirm_modal_deny_btn {
+                background: #f0635c;
+                &:hover {
+                    background: red;
+                }
+            }
+
+            &.confirm_modal_accept_btn {
+                background: #1677ff;
+            }
+        }
+    }
+}
+
+// Preview PDF
 .preview_PDF_wrapper {
     background: #fff;
     border-radius: 3px;

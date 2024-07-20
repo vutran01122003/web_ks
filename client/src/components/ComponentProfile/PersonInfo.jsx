@@ -8,31 +8,19 @@ const PersonInfo = ({ auth }) => {
                 <div className="info__text">
                     <LineItem
                         info="Ngày sinh"
-                        text={
-                            moment(auth?.user?.birthday).format('DD/MM/YYYY') ||
-                            'Chưa cập nhật'
-                        }
+                        text={moment(auth?.user?.birthday).format('DD/MM/YYYY') || 'Chưa cập nhật'}
                     />
-                    <LineItem
-                        info="Số chứng minh nhân dân"
-                        text={'Chưa cập nhật'}
-                    />
+                    <LineItem info="Số chứng minh nhân dân" text={'Chưa cập nhật'} />
                     <LineItem info="Đối tượng" text="Chưa cập nhật" />
                     <LineItem info="Ngày vào đoàn" text={'Chưa cập nhật'} />
-                    <LineItem
-                        info="Số điện thoại"
-                        text={auth?.user?.phone || 'Chưa cập nhật'}
-                    />
+                    <LineItem info="Số điện thoại" text={auth?.user?.phone || 'Chưa cập nhật'} />
                 </div>
                 <div className="info__text">
                     <LineItem info="Dân tộc" text={'Chưa cập nhật'} />
                     <LineItem info="Ngày cấp" text={'Chưa cập nhật'} />
                     <LineItem info="Diện chính sách" text="Chưa cập nhật" />
                     <LineItem info="Ngày vào đảng" text={'Chưa cập nhật'} />
-                    <LineItem
-                        info="Email"
-                        text={auth?.user?.email || 'Chưa cập nhật'}
-                    />
+                    <LineItem info="Email" text={auth?.user?.email || 'Chưa cập nhật'} />
                 </div>
                 <div className="info__text">
                     <LineItem info="Tôn giáo" text={'Chưa cập nhật'} />
@@ -40,25 +28,13 @@ const PersonInfo = ({ auth }) => {
                     <LineItem info="Khu vực" text={'Chưa cập nhật'} />
                 </div>
                 <div className="info__text item__full">
-                    <LineItem
-                        info="Tôn giáo"
-                        text={'Chưa cập nhật'}
-                        className=""
-                    />
+                    <LineItem info="Tôn giáo" text={'Chưa cập nhật'} className="" />
                 </div>
                 <div className="info__text item__full">
-                    <LineItem
-                        info="Nơi sinh"
-                        text={'Chưa cập nhật'}
-                        className=""
-                    />
+                    <LineItem info="Nơi sinh" text={'Chưa cập nhật'} className="" />
                 </div>
                 <div className="info__text item__full">
-                    <LineItem
-                        info="Hộ khẩu thường trú"
-                        text={'Chưa cập nhật'}
-                        className=""
-                    />
+                    <LineItem info="Hộ khẩu thường trú" text={'Chưa cập nhật'} className="" />
                 </div>
                 <div className="info__text">
                     <LineItem info="Tên ngân hàng" text={'Chưa cập nhật'} />

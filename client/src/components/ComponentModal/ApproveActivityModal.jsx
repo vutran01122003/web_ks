@@ -59,8 +59,7 @@ function ApproveActivityModal({
                 pageInfo: {
                     pageStudentCohort: rowInfoData.pageInfo.pageStudentCohort,
                     pageStudentMajor: rowInfoData.pageInfo.pageStudentMajor,
-                    pageStudentLevelYear:
-                        rowInfoData.pageInfo.pageStudentLevelYear
+                    pageStudentLevelYear: rowInfoData.pageInfo.pageStudentLevelYear
                 },
                 noteValue,
                 rowsType,
@@ -105,22 +104,17 @@ function ApproveActivityModal({
 
     return (
         <div className="modal_overlap" onMouseUp={handleHiddenPopup}>
-            <div className="confirm_modal">
-                <div className="confirm_modal_header">
+            <div className="approve_modal">
+                <div className="approve_modal_header">
                     <h2>{title}</h2>
-                    <div
-                        className="modal_close_btn"
-                        onClick={handleHiddenConfirmModal}
-                    >
+                    <div className="modal_close_btn" onClick={handleHiddenConfirmModal}>
                         <AiOutlineClose />
                     </div>
                 </div>
-                <div className="confirm_modal_body">
-                    <p className="confirm_modal_body_content">
+                <div className="approve_modal_body">
+                    <p className="approve_modal_body_content">
                         {content}
-                        <span>
-                            (Kiểm tra thật kỹ minh chứng trước khi đồng ý)
-                        </span>
+                        <span>(Kiểm tra thật kỹ minh chứng trước khi đồng ý)</span>
                     </p>
                     {status === 'phải nộp lại' && (
                         <div className="deadline_submit">
@@ -132,41 +126,30 @@ function ApproveActivityModal({
                                         <input
                                             type="radio"
                                             name="deadline_submit_radio"
-                                            onChange={
-                                                handleChangeVisiableStatusDateInput
-                                            }
+                                            onChange={handleChangeVisiableStatusDateInput}
                                             id="deadline_submit_radio_optional"
                                             defaultChecked
                                             value={false}
                                         />
-                                        <label htmlFor="deadline_submit_radio_optional">
-                                            Không bắt buộc
-                                        </label>
+                                        <label htmlFor="deadline_submit_radio_optional">Không bắt buộc</label>
                                     </div>
 
                                     <div className="deadline_submit_radio_item">
                                         <input
                                             type="radio"
-                                            onChange={
-                                                handleChangeVisiableStatusDateInput
-                                            }
+                                            onChange={handleChangeVisiableStatusDateInput}
                                             name="deadline_submit_radio"
                                             id="required_deadline_submit"
                                             value={true}
                                         />
-                                        <label htmlFor="required_deadline_submit">
-                                            Bắt buộc
-                                        </label>
+                                        <label htmlFor="required_deadline_submit">Bắt buộc</label>
                                     </div>
                                 </div>
                             )}
 
-                            {(visibleDateInput === true ||
-                                isTimedExtension) && (
+                            {(visibleDateInput === true || isTimedExtension) && (
                                 <div className="deadline_submit_input_wrapper">
-                                    <label htmlFor="deadline_submit_input">
-                                        Nhập Thời Gian:
-                                    </label>
+                                    <label htmlFor="deadline_submit_input">Nhập Thời Gian:</label>
                                     <input
                                         type="datetime-local"
                                         onChange={handleChangeDatetimeValue}
@@ -176,24 +159,18 @@ function ApproveActivityModal({
                             )}
                         </div>
                     )}
-                    <div className="confirm_modal_body_note">
+                    <div className="approve_modal_body_note">
                         <textarea
                             placeholder="Nhập ghi chú cho hoạt động (nếu có)"
                             onChange={handleChangeNoteValue}
                         ></textarea>
                     </div>
                 </div>
-                <div className="confirm_modal_footer">
-                    <button
-                        className="btn_close"
-                        onClick={handleHiddenConfirmModal}
-                    >
+                <div className="approve_modal_footer">
+                    <button className="btn_close" onClick={handleHiddenConfirmModal}>
                         Không đồng ý
                     </button>
-                    <button
-                        className="btn_accept"
-                        onClick={handleUpdateRowsStatus}
-                    >
+                    <button className="btn_accept" onClick={handleUpdateRowsStatus}>
                         Đồng ý
                     </button>
                 </div>

@@ -24,10 +24,6 @@ const RenderGetSizeWindow = ({ children }) => {
     const getWidthWindow = windowSize.innerWidth;
     const valueWindowSize = { getWidthWindow };
 
-    return (
-        <ContextFromWindowResize.Provider value={valueWindowSize}>
-            {children}
-        </ContextFromWindowResize.Provider>
-    );
+    return <ContextFromWindowResize.Provider value={valueWindowSize}>{children}</ContextFromWindowResize.Provider>;
 };
 export default RenderGetSizeWindow;

@@ -41,9 +41,9 @@ function MediaUi() {
             createPage({
                 pageData: {
                     pageName: newsTypeValue,
-                    pageType: 'tin tức',
-                },
-            }),
+                    pageType: 'tin tức'
+                }
+            })
         );
     };
 
@@ -65,8 +65,8 @@ function MediaUi() {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: 'Thông Tin Chưa Đầy Đủ',
-                },
+                    error: 'Thông Tin Chưa Đầy Đủ'
+                }
             });
         }
     };
@@ -103,26 +103,18 @@ function MediaUi() {
                         onClickOutside={handleToggleModal}
                         placement="bottom-start"
                         render={(attrs) => (
-                            <div
-                                className="select_new_type_modal"
-                                tabIndex="-1"
-                                {...attrs}
-                            >
+                            <div className="select_new_type_modal" tabIndex="-1" {...attrs}>
                                 {page.pages.map((currentPage) => {
                                     if (currentPage.pageType === 'tin tức')
                                         return (
                                             <div
                                                 onClick={() => {
-                                                    handleNewsType(
-                                                        currentPage.pageName,
-                                                    );
+                                                    handleNewsType(currentPage.pageName);
                                                 }}
                                                 className="news_type_item"
                                                 key={currentPage._id}
                                             >
-                                                {capitalizeFirstLetter(
-                                                    currentPage.pageName,
-                                                )}
+                                                {capitalizeFirstLetter(currentPage.pageName)}
                                             </div>
                                         );
                                     return null;
@@ -130,9 +122,7 @@ function MediaUi() {
 
                                 <div className="add_news_type_container">
                                     <div className="add_news_type_wrapper">
-                                        <label className="add_news_type_label">
-                                            Thêm loại tin tức:
-                                        </label>
+                                        <label className="add_news_type_label">Thêm loại tin tức:</label>
                                         <input
                                             className="add_news_type_input"
                                             type="text"
@@ -140,23 +130,15 @@ function MediaUi() {
                                             placeholder="Nhập tên loại tin tức"
                                         />
                                     </div>
-                                    <button
-                                        onClick={handleCreateNewsType}
-                                        type="button"
-                                        className="add_news_type_btn"
-                                    >
+                                    <button onClick={handleCreateNewsType} type="button" className="add_news_type_btn">
                                         Đồng ý
                                     </button>
                                 </div>
                             </div>
                         )}
                     >
-                        <div
-                            onClick={handleToggleModal}
-                            className="select_new_type"
-                        >
-                            {capitalizeFirstLetter(newsType) ||
-                                'Chọn loại tin tức'}
+                        <div onClick={handleToggleModal} className="select_new_type">
+                            {capitalizeFirstLetter(newsType) || 'Chọn loại tin tức'}
                         </div>
                     </Tippy>
                 </div>
@@ -183,10 +165,7 @@ function MediaUi() {
                         accept="image/png, image/gif, image/jpeg"
                     />
                 </span>
-                <ReactQuillComponent
-                    content={content}
-                    setContent={setContent}
-                />
+                <ReactQuillComponent content={content} setContent={setContent} />
                 <div className="post_btn_wrapper">
                     <button className="post_btn">Tạo bài viết</button>
                 </div>

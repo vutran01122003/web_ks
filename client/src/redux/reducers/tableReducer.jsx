@@ -2,7 +2,7 @@ import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
     pageName: '',
-    tables: [],
+    tables: []
 };
 
 function TableReducer(state = initialState, action) {
@@ -11,7 +11,7 @@ function TableReducer(state = initialState, action) {
             return {
                 ...state,
                 pageName: action.payload.pageName,
-                tables: action.payload.tables,
+                tables: action.payload.tables
             };
         }
 

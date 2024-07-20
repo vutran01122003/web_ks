@@ -263,6 +263,15 @@ class FacultyService {
             throw error;
         }
     };
+
+    static getFacultyByName = async ({ facultyName }) => {
+        try {
+            const faculty = await Faculty.findOne({ facultyName });
+            return faculty;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = FacultyService;

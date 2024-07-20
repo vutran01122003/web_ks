@@ -45,16 +45,10 @@ function rowReducer(state = initialState, action) {
                 ...state,
                 [rowsType]: {
                     ...state[rowsType],
-                    data:
-                        action.payload.page === 1
-                            ? dynamicRows
-                            : [...rowData, ...dynamicRows],
+                    data: action.payload.page === 1 ? dynamicRows : [...rowData, ...dynamicRows],
                     page: page || 1,
                     maxPage: dynamicRows.length === 0 ? true : false,
-                    currentRows:
-                        page === 1
-                            ? dynamicRows.length
-                            : rowData.length + dynamicRows.length
+                    currentRows: page === 1 ? dynamicRows.length : rowData.length + dynamicRows.length
                 }
             };
         }
@@ -68,17 +62,14 @@ function rowReducer(state = initialState, action) {
                     data: [
                         ...state[rowsType].data.filter(
                             (row) =>
-                                !(
-                                    row._id === action.payload.rowId &&
-                                    row.content[0]._id ===
-                                        action.payload.contentId
-                                )
+                                !(row._id === action.payload.rowId && row.content[0]._id === action.payload.contentId)
                         )
                     ],
                     currentRows: state.currentRows
                 }
             };
         }
+
         case GLOBALTYPES.ROW.REFRESH_TAB: {
             return {
                 ...state,
@@ -90,9 +81,11 @@ function rowReducer(state = initialState, action) {
                 }
             };
         }
+
         case GLOBALTYPES.ROW.RESET_ALL_TAB: {
             return initialState;
         }
+
         default:
             return state;
     }

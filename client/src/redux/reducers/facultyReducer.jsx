@@ -3,6 +3,7 @@ import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
     facultyData: [],
+    faculty: null
 };
 
 function facultyReducer(state = initialState, action) {
@@ -10,14 +11,21 @@ function facultyReducer(state = initialState, action) {
         case GLOBALTYPES.FACULTY.GET_ALL_FACULTIES: {
             return {
                 ...state,
-                facultyData: action.payload.facultyData,
+                facultyData: action.payload.facultyData
+            };
+        }
+
+        case GLOBALTYPES.FACULTY.GET_FACULTY: {
+            return {
+                ...state,
+                faculty: action.payload.faculty
             };
         }
 
         case GLOBALTYPES.FACULTY.ADD_FACULTY: {
             return {
                 ...state,
-                facultyData: [...state.facultyData, action.payload.faculty],
+                facultyData: [...state.facultyData, action.payload.faculty]
             };
         }
 
@@ -30,7 +38,7 @@ function facultyReducer(state = initialState, action) {
 
             return {
                 ...state,
-                facultyData: newData,
+                facultyData: newData
             };
         }
         default:

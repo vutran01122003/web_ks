@@ -85,11 +85,12 @@ PageSchema.pre('findOneAndDelete', async function (next) {
 
         const page = await Page.findById(_id);
 
-        const rowValueIdList = page.tables.reduce((initialArr, table) => {
-            return [...initialArr, ...table.rowValueList];
-        }, []);
+        console.log(page);
+        // const rowValueIdList = page.tables.reduce((initialArr, table) => {
+        //     return [...initialArr, ...table.rowValueList];
+        // }, []);
 
-        await Row.deleteMany({ _id: { $in: rowValueIdList } });
+        // await Row.deleteMany({ _id: { $in: rowValueIdList } });
 
         next();
     } catch (error) {

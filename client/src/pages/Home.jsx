@@ -20,11 +20,7 @@ const Home = ({ auth }) => {
     const groupCode = auth?.user.group.groupCode;
 
     const handleGetProgressByYear = () => {
-        if (
-            auth?.user &&
-            groupCode === VITE_APP_TALENTED_ENGINEER_CODE &&
-            !progress.goalsInfoData[levelYear]
-        ) {
+        if (auth?.user && groupCode === VITE_APP_TALENTED_ENGINEER_CODE && !progress.goalsInfoData[levelYear]) {
             dispatch(
                 getProgressByYear({
                     studentMajor: auth.user?.major,
@@ -66,26 +62,19 @@ const Home = ({ auth }) => {
                     </div>
                 </div>
                 <div className="bio__user">
-                    &quot;Hãy thường xuyên kiểm tra tình trạng xét duyệt của các
-                    hoạt động để kịp thời xử lý&quot;
+                    &quot;Hãy thường xuyên kiểm tra tình trạng xét duyệt của các hoạt động để kịp thời xử lý&quot;
                 </div>
             </div>
 
             {auth?.user.group.groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
-                <Quantity
-                    annualTaskProgress={auth.user.annualTaskProgress[levelYear]}
-                />
+                <Quantity annualTaskProgress={auth.user.annualTaskProgress[levelYear]} />
             )}
 
             <div className="container__top transform__animation--top">
                 <LayoutInfo user={auth?.user} />
                 <>
                     {groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
-                        <LayoutChart
-                            chartData={chartData}
-                            auth={auth}
-                            setLevelYear={setLevelYear}
-                        />
+                        <LayoutChart chartData={chartData} auth={auth} setLevelYear={setLevelYear} />
                     )}
                 </>
             </div>

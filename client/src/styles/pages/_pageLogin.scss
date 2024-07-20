@@ -1,7 +1,6 @@
 .container__login {
     width: 100%;
     position: relative;
-    background-color: #f5f5f5;
 
     .header__box_introduce {
         width: 100%;
@@ -16,25 +15,36 @@
         overflow: hidden;
 
         .box__introducation {
+            position: relative;
             width: 100%;
-            // background: linear-gradient(90deg, #8082e7ea 0%, #5b96da 100%);
-            // background-color:#8082e7bb;
             padding: 20px;
+            
+            .box__introducation__background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0.8;
+                object-position: center center;
+            }
 
             .img_logo_header {
-                width: 120px;
+                width: 450px;
             }
 
             .box_text_present {
                 width: 100%;
-                color: #676af8;
-                // color: #fff;
+                color: #044eb7;
                 margin-top: 50px;
                 text-align: center;
 
                 .text_heading_prt {
                     font-size: 28px;
                     font-weight: 700;
+                    text-shadow: 1px 1px #fff;
                 }
             }
 
@@ -47,24 +57,32 @@
                 justify-content: center;
 
                 .image_intro {
-                    width: 440px;
+                    width: 400px;
                 }
             }
         }
 
         .box__form {
-            // height: 100%;
-            background-color: #fff;
-            box-shadow: 0px 3px 6px #5e5a5a69;
-            // margin: 30px;
-            // border-radius: 10px;
-
+            box-shadow: 0px 3px 6px #47454569;
+            background: rgba(255, 255, 255, 0.626);
             .container__form--login {
+                position: relative;
                 width: 470px;
                 height: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
+                .container__form__background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: -1;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center center;
+                }
             }
 
             .footer__form {
@@ -110,9 +128,13 @@
                 }
 
                 .heading_text--login {
+                    position: relative;
+                    top: -20px;
                     font-size: 27px;
-                    font-weight: 600;
-                    margin: 10px 0 40px 0px;
+                    color: #044eb7;
+                    margin: 20px 0;
+                    font-weight: 700;
+                    text-transform: uppercase;
                     text-align: center;
                 }
 

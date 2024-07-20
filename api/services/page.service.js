@@ -63,9 +63,9 @@ class PageService {
         }
     };
 
-    static getAllPage = async () => {
+    static getPages = async (fields) => {
         try {
-            const pages = await Page.find().lean();
+            const pages = await Page.find(fields).lean();
             return pages;
         } catch (error) {
             throw error;
@@ -79,7 +79,8 @@ class PageService {
                     $match: {
                         pageStudentMajor,
                         pageStudentCohort: Number.parseInt(pageStudentCohort),
-                        pageStudentLevelYear: Number.parseInt(pageStudentLevelYear)
+                        pageStudentLevelYear: Number.parseInt(pageStudentLevelYear),
+                        isActive: true
                     }
                 },
                 {
@@ -113,7 +114,9 @@ class PageService {
 
     static getPageById = async ({ page }) => {
         try {
-            const pageInfo = await Page.findById(page);
+            const pageInfo = await Page.findOne({
+                _id: page
+            });
             return pageInfo;
         } catch (error) {
             throw error;
@@ -122,7 +125,10 @@ class PageService {
 
     static getPageByFields = async (fields) => {
         try {
-            const pageInfo = await Page.findOne(fields);
+            const pageInfo = await Page.findOne({
+                ...fields,
+                isActive: true
+            });
             return pageInfo;
         } catch (error) {
             throw error;
@@ -187,7 +193,7 @@ class PageService {
 
     static getPage = async ({ pageName, userId }) => {
         try {
-            const page = await Page.findOne({ pageName })
+            const page = await Page.findOne({ pageName, isActive: true })
                 .populate({
                     path: 'tables',
                     populate: {
@@ -220,7 +226,26 @@ class PageService {
 
             return {
                 status: 200,
-                msg: 'Xóa Trang thành công'
+                msg: 'Xóa Trang Thành Công'
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static updateStatusPage = async ({ pageId, currentStatus }) => {
+        try {
+            const updatedPage = await Page.findByIdAndUpdate(
+                pageId,
+                {
+                    isActive: !currentStatus
+                },
+                { new: true }
+            );
+
+            return {
+                status: 200,
+                msg: 'Cập Nhật Trạng Thái Trang Thành Công'
             };
         } catch (error) {
             throw error;

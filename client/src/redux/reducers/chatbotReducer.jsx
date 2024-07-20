@@ -3,7 +3,7 @@ import GLOBALTYPES from '../actions/globalTypes';
 const initialState = {
     isLoading: false,
     data: [],
-    typeChat: [],
+    typeChat: []
 };
 
 function chatBotReducer(state = initialState, action) {
@@ -11,17 +11,17 @@ function chatBotReducer(state = initialState, action) {
         case GLOBALTYPES.CHATBOT.ANSWER_CHATBOT_LOADING: {
             return {
                 ...state,
-                isLoading: action.payload.isLoading,
+                isLoading: action.payload.isLoading
             };
         }
+
         case GLOBALTYPES.CHATBOT.SET_CHATBOT_DATA: {
             if (action.payload.key === 'answer') {
                 const new_data = [...state.data];
-                new_data[new_data.length - 1][action.payload.key] =
-                    action.payload.data;
+                new_data[new_data.length - 1][action.payload.key] = action.payload.data;
                 return {
                     ...state,
-                    data: new_data,
+                    data: new_data
                 };
             }
             return {
@@ -29,16 +29,16 @@ function chatBotReducer(state = initialState, action) {
                 data: [
                     ...state.data,
                     {
-                        [action.payload.key]: action.payload.data,
-                    },
-                ],
+                        [action.payload.key]: action.payload.data
+                    }
+                ]
             };
         }
 
         case GLOBALTYPES.CHATBOT.GET_TYPE_CHAT: {
             return {
                 ...state,
-                typeChat: action.payload.typeChat,
+                typeChat: action.payload.typeChat
             };
         }
 

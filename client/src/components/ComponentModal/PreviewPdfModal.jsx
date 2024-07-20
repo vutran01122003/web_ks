@@ -10,15 +10,11 @@ import GLOBALTYPES from '../../redux/actions/globalTypes';
 import { renderTable } from '../../helpers/renderTable';
 
 function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
-    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-        'pdfjs-dist/build/pdf.worker.min.js',
-        import.meta.url
-    ).toString();
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
 
     const dispatch = useDispatch();
     const table = renderTable({ table: tableData });
-    const linkPDFList =
-        tableData.rowValueList[0].content[0].proofFilesList || [];
+    const linkPDFList = tableData.rowValueList[0].content[0].proofFilesList || [];
     const [pdfList, setPdfList] = useState([]);
     const [numPages, setNumPages] = useState(1);
     const [pdfIndex, setPdfIndex] = useState(0);
@@ -64,11 +60,7 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
                 );
             })
             .then((data) => {
-                setPdfList(
-                    data.map(
-                        (item) => new Blob([item], { type: 'application/pdf' })
-                    )
-                );
+                setPdfList(data.map((item) => new Blob([item], { type: 'application/pdf' })));
             })
             .catch(() => {
                 dispatch({
@@ -85,27 +77,16 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
     }, []);
 
     return (
-        <div
-            className="modal_overlap"
-            onMouseUp={handleMouseUpDetailedRowModal}
-        >
-            <div
-                className={`preview_PDF_wrapper ${pdfList.length > 1 ? 'multi_page' : 'single_page'}`}
-            >
+        <div className="modal_overlap" onMouseUp={handleMouseUpDetailedRowModal}>
+            <div className={`preview_PDF_wrapper ${pdfList.length > 1 ? 'multi_page' : 'single_page'}`}>
                 <div className="preview_PDF_wrapper_header">
                     <h3>Minh Chứng</h3>
-                    <div
-                        className="modal_close_btn"
-                        onClick={handleHiddenDetailedRowModal}
-                    >
+                    <div className="modal_close_btn" onClick={handleHiddenDetailedRowModal}>
                         <AiOutlineClose />
                     </div>
                 </div>
                 <div className="preview_PDF">
-                    <Document
-                        file={pdfList[pdfIndex]}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                    >
+                    <Document file={pdfList[pdfIndex]} onLoadSuccess={onDocumentLoadSuccess}>
                         {Array.apply(null, Array(numPages))
                             .map((_, i) => i + 1)
                             .map((page) => {
@@ -125,9 +106,7 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
                         {pdfList.map((_, index) => (
                             <div
                                 key={index}
-                                className={`pagination_pdf ${
-                                    pdfIndex === index ? 'active' : ''
-                                }`}
+                                className={`pagination_pdf ${pdfIndex === index ? 'active' : ''}`}
                                 onClick={() => {
                                     handleChangePdfIndex(index);
                                 }}

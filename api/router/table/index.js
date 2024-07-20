@@ -3,6 +3,8 @@ const tableControllers = require('../../controllers/table.controllers');
 const { auth } = require('../../middleware/auth');
 const { checkPermission } = require('../../middleware/permission');
 
+router.get('/table', tableControllers.getTable);
+
 router.post('/table', auth, checkPermission, tableControllers.addTable);
 
 router.patch('/table', auth, checkPermission, tableControllers.updateTable);

@@ -18,8 +18,8 @@ function RemoveTableModal({ handleHideRemoveTableModal, subPageName, pageId }) {
         dispatch(
             removeTable({
                 pageId,
-                tableId,
-            }),
+                tableId
+            })
         );
 
         handleHideRemoveTableModal();
@@ -33,17 +33,12 @@ function RemoveTableModal({ handleHideRemoveTableModal, subPageName, pageId }) {
         <div className="modal_overlap" onMouseUp={handleClosePopup}>
             <div className="box_wrapper">
                 <h2 className="modal_header">{subPageName}</h2>
-                <div
-                    className="modal_close_icon_wrapper"
-                    onClick={handleHideRemoveTableModal}
-                >
+                <div className="modal_close_icon_wrapper" onClick={handleHideRemoveTableModal}>
                     <AiOutlineClose />
                 </div>
                 <div className="remove_table_wrapper">
                     {table.tables.length === 0 ? (
-                        <h3 className="notify_nothing_title">
-                            Không có chỉ tiêu
-                        </h3>
+                        <h3 className="notify_nothing_title">Không có chỉ tiêu</h3>
                     ) : (
                         <>
                             {table.tables.map((table) => (
@@ -53,7 +48,7 @@ function RemoveTableModal({ handleHideRemoveTableModal, subPageName, pageId }) {
                                         className="remove_table_btn"
                                         onClick={() => {
                                             handleRemoveTable({
-                                                tableId: table._id,
+                                                tableId: table._id
                                             });
                                         }}
                                     >

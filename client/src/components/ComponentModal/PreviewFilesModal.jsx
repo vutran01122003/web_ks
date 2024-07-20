@@ -1,15 +1,11 @@
 import { Modal } from 'antd';
 
-function PreviewFilesModal({
-    proofFilesData,
-    openPreviewModal,
-    setOpenPreviewModal,
-}) {
+function PreviewFilesModal({ proofFilesData, openPreviewModal, setOpenPreviewModal }) {
     const {
         VITE_APP_IMG_FILE_ICON_URL,
         VITE_APP_DOC_FILE_ICON_URL,
         VITE_APP_PDF_FILE_ICON_URL,
-        VITE_APP_INVAILD_FILE_ICON_URL,
+        VITE_APP_INVAILD_FILE_ICON_URL
     } = import.meta.env;
 
     return (
@@ -50,20 +46,9 @@ function PreviewFilesModal({
                     }
 
                     return (
-                        <a
-                            key={proofFiles?._id}
-                            href={proofFiles?.fileUrl}
-                            className="file_item_link_wrapper"
-                            download
-                        >
-                            <img
-                                className="file_item_link_icon"
-                                src={src}
-                                alt={alt}
-                            />
-                            <span className="file_item_link">
-                                {proofFiles?.originalName}
-                            </span>
+                        <a key={proofFiles?._id} href={proofFiles?.fileUrl} className="file_item_link_wrapper" download>
+                            <img className="file_item_link_icon" src={src} alt={alt} />
+                            <span className="file_item_link">{proofFiles?.originalName}</span>
                         </a>
                     );
                 })}

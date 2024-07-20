@@ -1,7 +1,25 @@
 const createError = require('http-errors');
 const TableService = require('../services/table.service');
+const PageService = require('../services/page.service');
 
 class TableControllers {
+    getTable = async (req, res, next) => {
+        try {
+            const { pageId, tableId } = req.query;
+            const page = await PageService.getPageById({ page: pageId });
+
+            const table = await page.tables.id(tableId);
+
+            res.status(200).json({
+                table,
+                status: 200,
+                msg: 'Lấy dữ liệu bảng thành công'
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     addTable = async (req, res, next) => {
         try {
             const { pageId, tables } = req.body;
@@ -35,15 +53,15 @@ class TableControllers {
 
     updateTable = async (req, res, next) => {
         try {
-            const { pageId, tableId, tableData } = req.body;
-            const updatedTable = await TableService.updateTable({ pageId, tableId, tableData });
+            const { pageId, table } = req.body;
+            const updatedTable = await TableService.updateTable({ pageId, table });
 
             res.status(200).json({
                 status: updatedTable.status,
-                page: updatedTable.page,
                 msg: 'Cập nhật chỉ tiêu thành công'
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

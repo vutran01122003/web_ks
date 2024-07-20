@@ -16,9 +16,16 @@ class PageControllers {
         }
     };
 
-    getAllPage = async (req, res, next) => {
+    getPages = async (req, res, next) => {
         try {
-            const pages = await pageService.getAllPage();
+            const fields =
+                Object.keys(req.query).length > 0
+                    ? req.query
+                    : {
+                          isActive: true
+                      };
+            const pages = await pageService.getPages(fields);
+
             res.status(200).json({
                 status: 'Lấy Toàn Bộ Page Thành Công',
                 data: pages || []
@@ -61,6 +68,21 @@ class PageControllers {
         }
     };
 
+    updateStatusPage = async (req, res, next) => {
+        try {
+            const { pageId, currentStatus } = req.body;
+
+            const updatedPage = await PageService.updateStatusPage({ pageId, currentStatus });
+
+            res.status(200).json({
+                status: updatedPage.status,
+                msg: updatedPage.msg
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     removePage = async (req, res, next) => {
         try {
             const { pageId } = req.body;
@@ -72,6 +94,7 @@ class PageControllers {
                 msg: removedPage.msg
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

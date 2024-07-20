@@ -3,7 +3,7 @@ import { addTable } from '../../redux/actions/tableAction';
 import { AiOutlineClose } from 'react-icons/ai';
 import CreateGoals from '../../pages/Goal';
 
-function AddTableModal({ subPageName, pageId, handleHideAddTableModal }) {
+function AddTableModal({ pageId, handleHideAddTableModal }) {
     const dispatch = useDispatch();
 
     const handleClosePopup = (e) => {
@@ -12,19 +12,20 @@ function AddTableModal({ subPageName, pageId, handleHideAddTableModal }) {
         }
     };
 
-    const handleAddTable = ({ data }) => {
+    const handleAddTable = ({ table }) => {
         dispatch(
             addTable({
                 pageId,
                 tables: [
                     {
-                        tableName: data.tableName,
-                        description: data.description,
-                        rowTitleList: data.rowTitleList,
-                        quantityDemanded: data.quantityDemanded,
-                    },
-                ],
-            }),
+                        tableName: table.tableName,
+                        description: table.description,
+                        rowTitleList: table.rowTitleList,
+                        quantityDemanded: table.quantityDemanded,
+                        fixedScore: table.fixedScore
+                    }
+                ]
+            })
         );
         handleHideAddTableModal();
     };
@@ -32,11 +33,8 @@ function AddTableModal({ subPageName, pageId, handleHideAddTableModal }) {
     return (
         <div className="modal_overlap" onMouseUp={handleClosePopup}>
             <div className="box_wrapper">
-                <h2 className="modal_header">{subPageName}</h2>
-                <div
-                    className="modal_close_icon_wrapper"
-                    onClick={handleHideAddTableModal}
-                >
+                <h2 className="modal_header">Thêm Chỉ Tiêu Mới</h2>
+                <div className="modal_close_icon_wrapper" onClick={handleHideAddTableModal}>
                     <AiOutlineClose />
                 </div>
                 <div className="create_goal_container">

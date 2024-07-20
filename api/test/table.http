@@ -1,0 +1,13 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "userId": "21013481",
+    "password": "1111"
+}
+
+### Get table
+GET {{url}}/api/table?tableId=6697f497345ec9153676869c&pageId=6697f497345ec91536768696

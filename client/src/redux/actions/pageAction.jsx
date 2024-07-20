@@ -1,4 +1,4 @@
-import { deleteDataApi, getDataApi, postDataApi } from '../../utils/fetchData';
+import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 export const createPage =
@@ -35,7 +35,7 @@ export const createPage =
         }
     };
 
-export const getPages = () => async (dispatch) => {
+export const getPages = (params) => async (dispatch) => {
     try {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -44,14 +44,23 @@ export const getPages = () => async (dispatch) => {
             }
         });
 
-        const res = await getDataApi('/page');
+        const res = await getDataApi('/pages', params);
 
-        dispatch({
-            type: GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES,
-            payload: {
-                pages: res?.data.data
-            }
-        });
+        if (params) {
+            dispatch({
+                type: GLOBALTYPES.GOALS.GET_GOALS,
+                payload: {
+                    pages: res?.data.data
+                }
+            });
+        } else {
+            dispatch({
+                type: GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES,
+                payload: {
+                    pages: res?.data.data
+                }
+            });
+        }
 
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -66,8 +75,7 @@ export const getPages = () => async (dispatch) => {
                 error:
                     error.response?.data?.status === 401
                         ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg ||
-                          'Lấy Dữ Liệu Trang Thất Bại'
+                        : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
             }
         });
     }
@@ -99,8 +107,7 @@ export const getPage =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Lấy Dữ Liệu Trang Thất Bại'
+                            : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
                 }
             });
         }
@@ -110,13 +117,6 @@ export const removePage =
     ({ pageId }) =>
     async (dispatch) => {
         try {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    loading: true
-                }
-            });
-
             const res = await deleteDataApi('/page', { pageId });
 
             dispatch({
@@ -140,6 +140,46 @@ export const removePage =
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response?.data.msg || 'Xóa Trang Thất Bại'
+                }
+            });
+        }
+    };
+
+export const updatedStatusPage =
+    ({ pageId, currentStatus }) =>
+    async (dispatch) => {
+        try {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    loading: true
+                }
+            });
+
+            const res = await patchDataApi('/page', { pageId, currentStatus });
+
+            dispatch({
+                type: GLOBALTYPES.PAGE.UPDATE_STATUS_PAGE,
+                payload: {
+                    pageId,
+                    currentStatus
+                }
+            });
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res.data.msg
+                }
+            });
+        } catch (error) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error:
+                        error.response?.data?.status === 401
+                            ? 'Hết Phiên Đăng Nhập'
+                            : error?.response?.data.msg || 'Cập Nhật Trạng Thái Trang Thất Bại'
                 }
             });
         }

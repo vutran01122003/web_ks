@@ -86,6 +86,21 @@ class FacultyController {
         }
     };
 
+    getFacultyByName = async (req, res, next) => {
+        try {
+            const { facultyName } = req.params;
+            const faculty = await FacultyService.getFacultyByName({ facultyName });
+
+            return res.status(200).json({
+                status: 200,
+                msg: 'Lấy dữ liệu khoa thành công',
+                data: faculty
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     createMajor = async (req, res, next) => {
         try {
             const facultyId = req.params.facultyId;
@@ -154,12 +169,6 @@ class FacultyController {
         try {
             const { facultyId, majorId } = req.params;
             const { cohortName } = req.body;
-
-            console.log({
-                facultyId,
-                majorId,
-                cohortName
-            });
 
             const createdCohort = await FacultyService.createCohort({
                 facultyId,

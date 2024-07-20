@@ -60,8 +60,8 @@ const FormLogin = () => {
             dispatch(
                 login({
                     userId,
-                    password,
-                }),
+                    password
+                })
             );
         } else {
             alert('sai captcha');
@@ -103,11 +103,7 @@ const FormLogin = () => {
                                     <span key={index}>{char}</span>
                                 ))}
                             </div>
-                            <div
-                                onClick={refreshCaptcha}
-                                type="button"
-                                className="btn_refresh_catcha"
-                            >
+                            <div onClick={refreshCaptcha} type="button" className="btn_refresh_catcha">
                                 <ImSpinner11 />
                             </div>
                         </div>
@@ -119,11 +115,7 @@ const FormLogin = () => {
                         </div> */}
                         {/* <Link to="#" className="btn_prm_password">Quên mật khẩu</Link> */}
                     </div>
-                    <ComponentButton
-                        textButton="Đăng nhập"
-                        type="submit"
-                        onClick={handleSubmit}
-                    />
+                    <ComponentButton textButton="Đăng nhập" type="submit" onClick={handleSubmit} />
                 </form>
             </div>
         </div>

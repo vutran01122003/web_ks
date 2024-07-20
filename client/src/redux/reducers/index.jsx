@@ -11,6 +11,7 @@ import socketReducer from './socketReducer';
 import notificationReducer from './notificationReducer';
 import facultyReducer from './facultyReducer';
 import activitiesReducer from './activitiesReducer';
+import goalsReduce from './goalsReduce';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
     socket: socketReducer,
     notification: notificationReducer,
     faculty: facultyReducer,
-    activities: activitiesReducer
+    activities: activitiesReducer,
+    goals: goalsReduce
 });
 
 export default rootReducer;

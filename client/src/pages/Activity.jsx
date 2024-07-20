@@ -2,12 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Tabs, Input } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    activitiesSelector,
-    authSelector,
-    facultySelector,
-    rowSelector
-} from '../redux/selector';
+import { activitiesSelector, authSelector, facultySelector, rowSelector } from '../redux/selector';
 import { getDynamicRows } from '../redux/actions/rowAction';
 import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDynamicRows';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -101,17 +96,9 @@ const ActivityUi = () => {
             if (row.loading) return;
             if (observer.current) observer.current.disconnect();
             observer.current = new IntersectionObserver((entries) => {
-                if (
-                    entries[0].isIntersecting &&
-                    nextPage[tab] === 1 &&
-                    row[tab]?.data.length === limit
-                ) {
+                if (entries[0].isIntersecting && nextPage[tab] === 1 && row[tab]?.data.length === limit) {
                     setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
-                } else if (
-                    entries[0].isIntersecting &&
-                    nextPage[tab] > 1 &&
-                    !row[tab]?.maxPage
-                ) {
+                } else if (entries[0].isIntersecting && nextPage[tab] > 1 && !row[tab]?.maxPage) {
                     setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
                 }
             });
@@ -150,20 +137,13 @@ const ActivityUi = () => {
     useEffect(() => {
         if (faculty?.facultyData.length > 0 && auth?.user?.faculty) {
             setMajorsValue(
-                faculty?.facultyData.find(
-                    (facultyItem) =>
-                        facultyItem.facultyName === auth?.user.faculty
-                ).majors
+                faculty?.facultyData.find((facultyItem) => facultyItem.facultyName === auth?.user.faculty).majors
             );
         }
     }, [faculty?.facultyData]);
 
     useEffect(() => {
-        if (
-            majorValue?.majorName &&
-            cohortValue?.cohortName &&
-            currentLevelYearValue > 0
-        ) {
+        if (majorValue?.majorName && cohortValue?.cohortName && currentLevelYearValue > 0) {
             dispatch(
                 getActivities({
                     pageStudentCohort: cohortValue.cohortName,
@@ -177,12 +157,7 @@ const ActivityUi = () => {
             });
         }
 
-        if (
-            majorValue?.majorName &&
-            cohortValue?.cohortName &&
-            currentLevelYearValue > 0 &&
-            activityValue
-        ) {
+        if (majorValue?.majorName && cohortValue?.cohortName && currentLevelYearValue > 0 && activityValue) {
             dispatch(
                 getDynamicRows({
                     tab,
@@ -222,100 +197,41 @@ const ActivityUi = () => {
                                 <select onInput={handleMajorValue}>
                                     <option value="">Chọn Chuyên Ngành</option>
                                     {majorsValue.map((major, index) => (
-                                        <option
-                                            key={index}
-                                            value={JSON.stringify(major)}
-                                        >
-                                            {capitalizeFirstLetter(
-                                                major.majorName
-                                            )}
+                                        <option key={index} value={JSON.stringify(major)}>
+                                            {capitalizeFirstLetter(major.majorName)}
                                         </option>
                                     ))}
                                 </select>
 
-                                <select
-                                    onInput={handleCohortValue}
-                                    value={JSON.stringify(cohortValue)}
-                                >
+                                <select onInput={handleCohortValue} value={JSON.stringify(cohortValue)}>
+                                    <option value="">Chọn khóa</option>
                                     {majorValue?.cohortList &&
-                                    majorValue?.cohortList.length > 0 ? (
-                                        <>
-                                            <option value="">Chọn khóa</option>
-                                            {majorValue?.cohortList.map(
-                                                (cohort, index) => (
-                                                    <option
-                                                        key={index}
-                                                        value={JSON.stringify(
-                                                            cohort
-                                                        )}
-                                                    >
-                                                        {`Khóa ${cohort.cohortName}`}
-                                                    </option>
-                                                )
-                                            )}
-                                        </>
-                                    ) : (
-                                        <option value="">
-                                            Chưa Chọn Ngành
-                                        </option>
-                                    )}
+                                        majorValue?.cohortList.length > 0 &&
+                                        majorValue?.cohortList.map((cohort, index) => (
+                                            <option key={index} value={JSON.stringify(cohort)}>
+                                                {`Khóa ${cohort.cohortName}`}
+                                            </option>
+                                        ))}
                                 </select>
 
-                                <select
-                                    onInput={handleCurrentLevelYear}
-                                    value={currentLevelYearValue}
-                                >
-                                    {cohortValue?.currentLevelYear ? (
-                                        <>
-                                            <option value={0}>Chọn Năm</option>
-                                            {new Array(
-                                                cohortValue?.currentLevelYear
-                                            )
-                                                .fill(0)
-                                                .map((_, index) => (
-                                                    <option
-                                                        key={index}
-                                                        value={
-                                                            cohortValue?.currentLevelYear -
-                                                            index
-                                                        }
-                                                    >
-                                                        {`Năm ${cohortValue?.currentLevelYear - index} ${cohortValue?.currentLevelYear - index === cohortValue?.currentLevelYear ? '(Hiện tại)' : '(Đã kết thúc)'}`}
-                                                    </option>
-                                                ))}
-                                        </>
-                                    ) : (
-                                        <option value="">Chưa Chọn Khóa</option>
-                                    )}
-                                </select>
-                                <select
-                                    value={activityValue}
-                                    onInput={handleActivityValue}
-                                >
-                                    {!majorValue ||
-                                    !cohortValue ||
-                                    !currentLevelYearValue ? (
-                                        <option value="">Chưa Chọn Năm</option>
-                                    ) : (
-                                        <>
-                                            <option value="">
-                                                Chọn Hoạt Động
+                                <select onInput={handleCurrentLevelYear} value={currentLevelYearValue}>
+                                    <option value={0}>Chọn Năm</option>
+                                    {cohortValue?.currentLevelYear &&
+                                        new Array(cohortValue?.currentLevelYear).fill(0).map((_, index) => (
+                                            <option key={index} value={cohortValue?.currentLevelYear - index}>
+                                                {`Năm ${cohortValue?.currentLevelYear - index} ${index === 0 ? '(Hiện tại)' : '(Đã kết thúc)'}`}
                                             </option>
-                                            {activity.length > 0 &&
-                                                activity.map(
-                                                    (activity, index) => (
-                                                        <option
-                                                            key={index}
-                                                            value={activity}
-                                                        >
-                                                            {capitalizeFirstLetter(
-                                                                activity
-                                                            )}
-                                                        </option>
-                                                    )
-                                                )}
-                                        </>
-                                    )}
+                                        ))}
+                                </select>
+                                <select value={activityValue} onInput={handleActivityValue}>
+                                    <option value="">Chọn Hoạt Động</option>
+                                    {currentLevelYearValue &&
+                                        activity.length > 0 &&
+                                        activity.map((activity, index) => (
+                                            <option key={index} value={activity}>
+                                                {capitalizeFirstLetter(activity)}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
                         </div>
@@ -367,10 +283,7 @@ const ActivityUi = () => {
                         <div className="container__center">
                             <>
                                 {row[tab].data.map((dynamicRows, index) => {
-                                    if (
-                                        index === row[tab].data.length - 1 &&
-                                        row[tab].data.length != 0
-                                    ) {
+                                    if (index === row[tab].data.length - 1 && row[tab].data.length != 0) {
                                         return (
                                             <div
                                                 ref={lastPostElementRef}
@@ -412,9 +325,7 @@ const ActivityUi = () => {
                                         alt="nothing"
                                         draggable="false"
                                     />
-                                    <span className="notify_nothing_content">
-                                        KHÔNG CÓ HOẠT ĐỘNG
-                                    </span>
+                                    <span className="notify_nothing_content">KHÔNG CÓ HOẠT ĐỘNG</span>
                                 </div>
                             )}
                         </div>

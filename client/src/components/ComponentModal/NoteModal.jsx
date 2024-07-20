@@ -13,10 +13,7 @@ function NoteModal({ handleHiddenNoteModal, noteList }) {
             <div className="note_modal">
                 <div className="note_modal_header">
                     <h3>{'Lịch sử ghi chú của hoạt động'}</h3>
-                    <div
-                        className="modal_close_btn"
-                        onClick={handleHiddenNoteModal}
-                    >
+                    <div className="modal_close_btn" onClick={handleHiddenNoteModal}>
                         <AiOutlineClose />
                     </div>
                 </div>
@@ -28,9 +25,7 @@ function NoteModal({ handleHiddenNoteModal, noteList }) {
                                       {formatTimeStr(note.createdAt)}
                                       {': '}
                                   </span>
-                                  <span className="note_value">
-                                      {note.value}
-                                  </span>
+                                  <span className="note_value">{note.value}</span>
                               </div>
                           ))
                         : 'Chưa có ghi chú'}
