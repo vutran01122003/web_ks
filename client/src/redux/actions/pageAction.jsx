@@ -37,13 +37,6 @@ export const createPage =
 
 export const getPages = (params) => async (dispatch) => {
     try {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                loading: true
-            }
-        });
-
         const res = await getDataApi('/pages', params);
 
         if (params) {
@@ -61,13 +54,6 @@ export const getPages = (params) => async (dispatch) => {
                 }
             });
         }
-
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                loading: false
-            }
-        });
     } catch (error) {
         dispatch({
             type: GLOBALTYPES.ALERT,

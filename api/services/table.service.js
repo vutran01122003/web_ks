@@ -72,19 +72,12 @@ class TableService {
             const page = await Page.findById(pageId).lean();
 
             if (!page) throw createError.NotFound('Không tìm thấy page');
-
+            console.log(table);
             await Page.findOneAndUpdate(
                 { _id: pageId, 'tables._id': table._id },
                 {
                     $set: {
-                        'tables.$.tableName': table.tableName,
-                        'tables.$.description': table.description,
-                        'tables.$.titleValue': table.titleValue,
-                        'tables.$.fixedValue': table.fixedValue,
-                        'tables.$.quantityDemanded': table.quantityDemanded,
-                        'tables.$.rowValueList': table.rowValueList,
-                        'tables.$.fixedScore': table.fixedScore,
-                        'tables.$.isActive': table.isActive
+                        'tables.$': table
                     }
                 }
             );

@@ -36,33 +36,39 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                 textHeading: 'Mã Sinh Viên',
                 fixedValueList: [],
                 typeInput: 'text',
-                isShow: true
+                isShow: true,
+                requiredHeading: true
             },
             {
                 textHeading: 'Tên Sinh Viên',
                 fixedValueList: [],
                 typeInput: 'text',
-                isShow: true
+                isShow: true,
+                requiredHeading: true
             },
             {
                 textHeading: 'Ngày Nộp',
                 fixedValueList: [],
                 typeInput: 'text',
-                isShow: true
+                isShow: true,
+                requiredHeading: true
             }
         ];
     }
 
-    TABLE.thead.push(
-        ...rowTitleList.map((rowTitle) => {
-            return {
-                textHeading: rowTitle.titleValue,
-                fixedValueList: rowTitle.fixedValue,
-                typeInput: rowTitle.fixedValue.length > 0 ? 'select' : 'text',
-                isShow: true
-            };
-        })
-    );
+    if (rowTitleList) {
+        TABLE.thead.push(
+            ...rowTitleList.map((rowTitle) => {
+                return {
+                    _id: rowTitle._id,
+                    textHeading: rowTitle.titleValue,
+                    fixedValueList: rowTitle.fixedValue,
+                    typeInput: rowTitle.fixedValue.length > 0 ? 'select' : 'text',
+                    isShow: true
+                };
+            })
+        );
+    }
 
     if (buttonNameLabel === 'Gia Hạn')
         TABLE.thead.push({
@@ -112,9 +118,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
         );
     }
 
-    const content = table
-        ? table.rowValueList[0]?.content
-        : dynamicRowsInfo?.content;
+    const content = table ? table.rowValueList[0]?.content : dynamicRowsInfo?.content;
 
     if (content && content?.length > 0) {
         TABLE.tbody = content.map((rowValueItem) => {
@@ -122,45 +126,35 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
             let rowValueItemArr = null;
 
             rowValueItemArr = thead.reduce((arr, headingItem) => {
-                if (
-                    !thead?.requiredHeading &&
-                    rowValueItem?.rowValue &&
-                    rowValueItem?.rowValue[headingItem?.textHeading]
-                )
+                if (!headingItem?.requiredHeading && rowValueItem?.rowValue) {
                     return [
                         ...arr,
-                        typeof rowValueItem.rowValue[
-                            headingItem.textHeading
-                        ] === 'object'
-                            ? rowValueItem.rowValue[headingItem.textHeading]
-                                  .value
-                            : rowValueItem.rowValue[headingItem.textHeading]
+                        rowValueItem?.rowValue[headingItem?._id]
+                            ? typeof rowValueItem.rowValue[headingItem._id] === 'object'
+                                ? rowValueItem.rowValue[headingItem._id].value
+                                : rowValueItem.rowValue[headingItem._id]
+                            : 'Trống'
                     ];
-                else return arr;
+                } else return arr;
             }, []);
 
             if (dynamicRowsInfo) {
                 rowValueItemArr = [
                     dynamicRowsInfo?.user[0]?.userId,
                     capitalizeFirstLetter(dynamicRowsInfo?.user[0]?.fullName),
-                    rowValueItem?.createdAt
-                        ? new Date(rowValueItem.createdAt).toLocaleDateString(
-                              'en-GB'
-                          )
-                        : 'Không có',
+                    rowValueItem?.createdAt ? new Date(rowValueItem.createdAt).toLocaleDateString('en-GB') : 'Không có',
                     ...rowValueItemArr
                 ];
 
                 if (buttonNameLabel === 'Gia Hạn') {
                     rowValueItemArr.push(
                         rowValueItem?.deadline
-                            ? new Date(
-                                  rowValueItem.deadline
-                              ).toLocaleDateString('en-GB')
+                            ? new Date(rowValueItem.deadline).toLocaleDateString('en-GB')
                             : 'Không Có'
                     );
                 }
             }
+
             const tbody = [
                 ...rowValueItemArr,
                 {
@@ -191,12 +185,9 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                           pageInfo: {
                               pageId: dynamicTable._id,
                               pageName: dynamicRowsInfo.page.pageName,
-                              pageStudentMajor:
-                                  dynamicRowsInfo.page.pageStudentMajor,
-                              pageStudentLevelYear:
-                                  dynamicRowsInfo.page.pageStudentLevelYear,
-                              pageStudentCohort:
-                                  dynamicRowsInfo.page.pageStudentCohort
+                              pageStudentMajor: dynamicRowsInfo.page.pageStudentMajor,
+                              pageStudentLevelYear: dynamicRowsInfo.page.pageStudentLevelYear,
+                              pageStudentCohort: dynamicRowsInfo.page.pageStudentCohort
                           },
                           rowListId: dynamicRowsInfo?._id,
                           contentIdList: [rowValueItem?._id]
@@ -216,10 +207,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                       },
                       {
                           editLabel: 'Sửa',
-                          editValue:
-                              rowValueItem.status === 'phải nộp lại'
-                                  ? true
-                                  : false,
+                          editValue: rowValueItem.status === 'phải nộp lại' ? true : false,
                           rowInfo: {
                               ...rowValueItem,
                               rowListId: table.rowValueList[0]._id

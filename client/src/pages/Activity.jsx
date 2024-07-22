@@ -7,10 +7,10 @@ import { getDynamicRows } from '../redux/actions/rowAction';
 import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDynamicRows';
 import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import no_search_result from '../assets/images/no_search_result.png';
 import { getAllFaculties } from '../redux/actions/facultyAction';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import { getActivities } from '../redux/actions/activitiesAction';
+import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 
 const ActivityUi = () => {
     const auth = useSelector(authSelector);
@@ -317,17 +317,7 @@ const ActivityUi = () => {
                                 )}
                             </>
 
-                            {!row.loading && row[tab].data.length == 0 && (
-                                <div className="no_search_result_img_wrapper">
-                                    <img
-                                        className="no_search_result_img"
-                                        src={no_search_result}
-                                        alt="nothing"
-                                        draggable="false"
-                                    />
-                                    <span className="notify_nothing_content">KHÔNG CÓ HOẠT ĐỘNG</span>
-                                </div>
-                            )}
+                            {!row.loading && row[tab].data.length == 0 && <EmptyDataNotification />}
                         </div>
                     </div>
                 </div>

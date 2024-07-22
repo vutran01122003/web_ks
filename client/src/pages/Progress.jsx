@@ -7,10 +7,9 @@ import { getAnnualTaskProgress } from '../redux/actions/progressAction';
 
 import { authSelector, facultySelector, progressSelector } from '../redux/selector';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { getAllFaculties } from '../redux/actions/facultyAction';
-import no_search_result from '../assets/images/no_search_result.png';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import StopSubmittingProofModal from '../components/ComponentModal/StopSubmittingProofModal';
+import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 
 function ProgressUI() {
     const dispatch = useDispatch();
@@ -180,7 +179,13 @@ function ProgressUI() {
                                                 >{`Năm ${cohort?.currentLevelYear - index} ${index === 0 ? '(Hiện tại)' : '(Đã kết thúc)'}`}</option>
                                             ))}
                                 </select>
+                            </div>
 
+                            <div className="btn_group">
+                                <button className="search_btn" onClick={handleSearchAnnualTaskProgress}>
+                                    <IoSearch />
+                                    Tìm Kiếm
+                                </button>
                                 <div className="line__flex">
                                     {auth?.user.levelYear === levelYear &&
                                         progress.annualTaskProgress.data.length > 0 && (
@@ -194,11 +199,6 @@ function ProgressUI() {
                                         )}
                                 </div>
                             </div>
-
-                            <button className="search_btn" onClick={handleSearchAnnualTaskProgress}>
-                                <IoSearch />
-                                Tìm Kiếm
-                            </button>
                         </div>
                     </div>
 
@@ -244,17 +244,7 @@ function ProgressUI() {
                         </tbody>
                     </table>
 
-                    {progress.annualTaskProgress.data.length === 0 && (
-                        <div className="no_search_result_img_wrapper">
-                            <img
-                                className="no_search_result_img"
-                                src={no_search_result}
-                                alt="nothing"
-                                draggable="false"
-                            />
-                            <span>Dữ liệu thống kê chưa có</span>
-                        </div>
-                    )}
+                    {progress.annualTaskProgress.data.length === 0 && <EmptyDataNotification />}
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { addTable } from '../../redux/actions/tableAction';
 import { AiOutlineClose } from 'react-icons/ai';
-import CreateGoals from '../../pages/Goal';
+import GoalsCreation from '../ComponentGoal/GoalCreation';
 
 function AddTableModal({ pageId, handleHideAddTableModal }) {
     const dispatch = useDispatch();
@@ -38,7 +38,7 @@ function AddTableModal({ pageId, handleHideAddTableModal }) {
                     <AiOutlineClose />
                 </div>
                 <div className="create_goal_container">
-                    <CreateGoals handleAddTable={handleAddTable} />
+                    <GoalsCreation handleAddTable={handleAddTable} />
                 </div>
             </div>
         </div>

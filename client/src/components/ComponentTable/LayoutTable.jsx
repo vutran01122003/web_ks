@@ -282,7 +282,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
         <div className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}>
             {!isDynamicRows && (
                 <header>
-                    <h4 className={`heading ${isDetailedRow ? 'fsize_small' : ''}`}>{table?.title}</h4>
+                    <h4 className={`heading ${isDetailedRow ? 'fsize_small' : ''}`}>{`CHỈ TIÊU: ${table?.title}`}</h4>
                     <div className="modal">
                         {!isDynamicRows && !isDetailedRow && (
                             <button

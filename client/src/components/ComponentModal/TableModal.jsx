@@ -13,7 +13,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
     const handleChangeRow = (e) => {
         setRow({ ...row, [e.target.name]: e.target.value });
     };
-
+    console.log(row);
     const handleUpdateRow = (e) => {
         handleAddRow(e);
     };
@@ -23,7 +23,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
 
         if (
             thead.find((head) => {
-                return !head.requiredHeading && !row[head.textHeading];
+                return !head.requiredHeading && !row[head._id];
             }) ||
             files.length === 0
         ) {
@@ -91,47 +91,41 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
 
                 <div className="body__modal">
                     {thead &&
-                        thead.map((item, index) => {
+                        thead.map((item) => {
                             if (!item.isShow) return null;
 
                             if (item.typeInput === 'file') {
-                                return (
-                                    <ComponentProofFile
-                                        files={files}
-                                        setFiles={setFiles}
-                                        key={item.textHeading + index}
-                                    />
-                                );
+                                return <ComponentProofFile files={files} setFiles={setFiles} key={item.textHeading} />;
                             } else if (item.typeInput === 'text') {
                                 return (
                                     <FormControl
-                                        key={item.textHeading + index}
+                                        key={item.textHeading}
                                         label={item.textHeading}
                                         placeholder={item.textHeading}
                                         className="input__modal"
                                         type={item.typeInput}
                                         disabled={item.disabled}
-                                        value={row[item.textHeading] ? row[item.textHeading] : ''}
-                                        name={item.textHeading}
+                                        value={row[item._id] ? row[item._id] : ''}
+                                        name={item._id}
                                         onChange={handleChangeRow}
                                         classNameInputItem={item.classNameInputItem}
                                     />
                                 );
                             } else if (item.typeInput === 'select') {
                                 return (
-                                    <div className="select_modal_wrapper" key={item.textHeading + index}>
+                                    <div className="select_modal_wrapper" key={item.textHeading}>
                                         <label>{item.textHeading}</label>
                                         <select
                                             className="select_modal"
-                                            defaultValue={row[item.textHeading] || ''}
-                                            name={item.textHeading}
+                                            defaultValue={row[item._id] || ''}
+                                            name={item._id}
                                             onChange={handleChangeRow}
                                         >
                                             <option key={item.textHeading} value="">
                                                 {item.textHeading}
                                             </option>
-                                            {item.fixedValueList.map((fixedValue) => (
-                                                <option key={fixedValue.value} value={fixedValue.value}>
+                                            {item.fixedValueList.map((fixedValue, index) => (
+                                                <option key={fixedValue.value + index} value={fixedValue.value}>
                                                     {fixedValue.value}
                                                 </option>
                                             ))}

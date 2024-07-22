@@ -1,7 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { AiOutlineClose } from 'react-icons/ai';
-import CreateGoals from '../../pages/Goal';
 import { updateTable } from '../../redux/actions/tableAction';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
+import GoalsCreation from '../ComponentGoal/GoalCreation';
 
 function UpdateTableModal({ tableInfo, toggleUpdateTableModalDisplay }) {
     const dispatch = useDispatch();
@@ -14,7 +15,6 @@ function UpdateTableModal({ tableInfo, toggleUpdateTableModalDisplay }) {
     };
 
     const handleUpdateTable = ({ checkError, table }) => {
-        console.log(table);
         const { notifyValue, isError } = checkError([table]);
         if (isError) {
             dispatch({
@@ -42,7 +42,7 @@ function UpdateTableModal({ tableInfo, toggleUpdateTableModalDisplay }) {
                     <AiOutlineClose />
                 </div>
                 <div className="create_goal_container">
-                    <CreateGoals handleUpdateTable={handleUpdateTable} prevUpdatedTableData={table} />
+                    <GoalsCreation handleUpdateTable={handleUpdateTable} prevUpdatedTableData={table} />
                 </div>
             </div>
         </div>

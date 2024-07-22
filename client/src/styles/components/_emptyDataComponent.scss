@@ -1,0 +1,23 @@
+.empty_data_notification_container {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    margin: auto;
+    margin-top: 100px;
+    align-items: center;
+
+    img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        opacity: 0.5;
+    }
+
+    span {
+        display: block;
+        color: gray;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+}

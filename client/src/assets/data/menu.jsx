@@ -36,17 +36,9 @@ export const ARRAY_LIST_MENU = [
     {
         id: 3,
         role: VITE_APP_FACULTY_MANAGER_CODE,
-        name_menu: 'Tạo Nhóm Chỉ Tiêu',
+        name_menu: 'Quản lý Nhóm Chỉ Tiêu',
         icon_before: <TbTargetArrow />,
         to_link: '/goal',
-        submenu: false
-    },
-    {
-        id: 5,
-        role: VITE_APP_FACULTY_MANAGER_CODE,
-        name_menu: 'Quản Lý Nhóm Chỉ Tiêu',
-        icon_before: <CgBrowser />,
-        to_link: '/goal-management',
         submenu: false
     },
     {

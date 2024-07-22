@@ -1,16 +1,18 @@
+const createError = require('http-errors');
+const { getLocalDatetime, toISOString } = require('../utils/getDatetime');
 const RowService = require('../services/row.service');
 const UploadService = require('../services/upload.service');
-const createError = require('http-errors');
-const ProgressService = require('../services/progress.service');
 const UserService = require('../services/user.service');
-const { getLocalDatetime, toISOString } = require('../utils/getDatetime');
 const Page = require('../models/page.model');
 const Row = require('../models/row.model');
+
+const [ACCEPTED, PENDING, REJECTED, RESUMBIT] = ['đã duyệt', 'chờ duyệt', 'từ chối', 'phải nộp lại'];
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
             const rowData = JSON.parse(req.body.rowData);
+
             const { rowList, rowItemId } = await RowService.addRow({
                 data: rowData
             });
@@ -28,8 +30,8 @@ class RowControllers {
             });
 
             res.status(200).json({
-                msg: 'Thêm Thông Tin Thành Công',
-                data: rowList
+                msg: 'Thêm Thông Tin Thành Công'
+                // data: rowList
             });
         } catch (error) {
             console.log(error);
@@ -134,8 +136,6 @@ class RowControllers {
                 deadline: deadlineDatetime,
                 isTimedExtension
             });
-
-            // const pages = await ProgressService.getProgressByYear(pageInfo);
 
             let quantityDemanded = 0;
             let resubmitedTask = 0;

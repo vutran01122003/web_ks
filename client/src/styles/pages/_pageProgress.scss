@@ -9,47 +9,21 @@
         padding: 15px;
         height: calc(100vh - 70px - 10px);
 
-        .line__flex {
-            display: flex;
-            justify-content: space-between;
-
-            .btn__end_progress {
-                background-color: #f0635c;
-                font-size: 15px;
-                padding: 8px;
-                border: none;
-                border-radius: 3px;
-                color: #fff;
-                font-weight: 600;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-width: 200px;
-
-                svg {
-                    font-size: 17px !important;
-                    margin-right: 5px;
-                }
-            }
-        }
-
         .completion_shedule_body {
             background-color: #fff;
             padding-bottom: 20px;
 
             .line__sort__completion-Shedule {
                 padding: 10px 0px;
+                border-bottom: 1px solid #dddddd;
 
                 .line__search {
                     display: flex;
-                    justify-content: space-between;
                     margin-bottom: 8px;
 
                     .select_group {
                         display: flex;
                         flex-wrap: wrap;
-                        gap: 5px;
                         
                         select {
                             min-width: 200px;
@@ -60,26 +34,54 @@
                         }
                     }
 
-                    .search_btn {
-                        background-color: #1677ff;
-                        font-size: 15px;
-                        padding: 8px 12px;
-                        border: none;
-                        border-radius: 3px;
-                        color: #fff;
-                        font-weight: 600;
-                        cursor: pointer;
+                    .btn_group {
+                        margin-left: 8px;
                         display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        max-height: 40px;
-                        min-width: 140px;
+                        gap: 8px;
 
-                        svg {
-                            font-size: 17px !important;
-                            margin-right: 5px;
+                        .search_btn {
+                            background-color: #1677ff;
+                            font-size: 15px;
+                            padding: 8px 12px;
+                            border: none;
+                            border-radius: 3px;
+                            color: #fff;
+                            font-weight: 600;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            max-height: 40px;
+                            min-width: 140px;
+    
+                            svg {
+                                font-size: 17px !important;
+                                margin-right: 5px;
+                            }
+                        }  
+
+                        .btn__end_progress {
+                            height: 40px;
+                            background-color: #f0635c;
+                            font-size: 15px;
+                            padding: 8px;
+                            border: none;
+                            border-radius: 3px;
+                            color: #fff;
+                            font-weight: 600;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-width: 200px;
+            
+                            svg {
+                                font-size: 17px !important;
+                                margin-right: 5px;
+                            }
                         }
                     }
+                   
                 }
             }
 
@@ -111,7 +113,6 @@
 
             .completion_shedule_table {
                 width: 100%;
-                border-top: 1px solid #a5a5a5;
                 border-collapse: collapse;
 
                 .completion_shedule_header {

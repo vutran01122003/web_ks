@@ -1,14 +1,17 @@
 .border__text--role {
+    display: flex;
     width: 39px;
     height: 35px;
-    background-color: #f0635c;
+    min-width: 39px;
+    min-height: 35px;
+    align-items: center;
+    justify-content: center;
     color: #fff;
     border-radius: 5px;
     font-weight: 500;
     font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: #f0635c;
+
     cursor: pointer;
 }
 
@@ -16,13 +19,13 @@
     background-color: #008000;
 }
 
-.container__menu.sidebar_admin {
+.container__menu.sidebar {
     .menu_wrapper {
         background-color: #fff;
     }
 }
 
-.sidebar_admin {
+.sidebar {
     // HEADING TITLE MENU
     .heading__title--menu {
         color: #ffffff;

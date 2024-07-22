@@ -51,35 +51,6 @@ a {
     content: '/';
 }
 
-// Empty Data Notification
-.no_search_result_img_wrapper {
-    padding-top: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    .no_search_result_img {
-        opacity: 0.6;
-        display: block;
-        width: 260px;
-        height: 220px;
-        object-fit: cover;
-        -webkit-user-drag: none;
-        -khtml-user-drag: none;
-        -moz-user-drag: none;
-        -o-user-drag: none;
-    }
-
-    span {
-        display: block;
-        color: gray;
-        font-weight: 600;
-        font-size: 12px;
-        text-transform: uppercase;
-    }
-}
-
 // Dynamic page
 .dynamic_page_container {
     padding: 10px;
@@ -211,7 +182,6 @@ a {
 @import './pages/pageProgress';
 @import './pages/pageFaculty';
 @import './pages/pageActivity';
-@import './pages/pageGoalManagement';
 
 // Component
 @import './components/modalComponent';
@@ -225,7 +195,7 @@ a {
 @import './components/goalsInfoComponent';
 @import './components/quantity';
 @import './components/tabs';
-
+@import './components/emptyDataComponent';
 // Scrollbar
 @import './scrollBar/scrollBar';
 @import './scrollBar/scrollToTopButton';

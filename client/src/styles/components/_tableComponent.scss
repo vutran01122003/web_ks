@@ -176,9 +176,8 @@
             }
 
             .table__line__item {
-                width: 100%;
-
                 .line__item {
+                    overflow-wrap: anywhere;
                     font-size: 14px;
                     font-weight: 500;
                     padding: 10px;

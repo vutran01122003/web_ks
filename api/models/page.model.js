@@ -1,6 +1,8 @@
-const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+
+const Row = require('../models/row.model');
+const conn = require('../dbs/init.mongodb');
 const TableSchema = require('./tables.schema');
 
 const [DOC, COL] = ['page', 'pages'];
@@ -80,17 +82,14 @@ const PageSchema = new Schema(
 
 PageSchema.pre('findOneAndDelete', async function (next) {
     try {
-        const Row = require('../models/row.model');
         const { _id } = this.getQuery();
-
         const page = await Page.findById(_id);
 
-        console.log(page);
-        // const rowValueIdList = page.tables.reduce((initialArr, table) => {
-        //     return [...initialArr, ...table.rowValueList];
-        // }, []);
+        const rowValueIdList = page.tables.reduce((initialArr, table) => {
+            return [...initialArr, ...table.rowValueList];
+        }, []);
 
-        // await Row.deleteMany({ _id: { $in: rowValueIdList } });
+        await Row.deleteMany({ _id: { $in: rowValueIdList } });
 
         next();
     } catch (error) {
@@ -104,7 +103,6 @@ PageSchema.pre('findOneAndUpdate', async function (next) {
         const update = this.getUpdate();
 
         if (update?.$pull && update.$pull?.tables) {
-            const Row = require('../models/row.model');
             const tableId = update.$pull.tables._id;
             const pageId = query._id;
 

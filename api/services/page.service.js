@@ -141,31 +141,28 @@ class PageService {
             const pageData = await this.getPageById({ page: pageId });
             if (!pageData) throw createError.NotFound('Trang Không Tồn Tại');
 
-            for (let tableItem of pageData.tables) {
-                if (JSON.stringify(tableItem._id) === JSON.stringify(new mongoose.Types.ObjectId(tableId))) {
-                    if (tableItem.fixedScore) {
-                        totalScore = tableItem.fixedScore;
-                        break;
-                    } else {
-                        tableItem.rowTitleList.forEach((rowTitleItem) => {
-                            Object.keys(content).forEach((key) => {
-                                if (rowTitleItem.fixedValue.length > 0 && key === rowTitleItem.titleValue) {
-                                    content[key] = {
-                                        value: content[key],
-                                        score: rowTitleItem.fixedValue.find((fixedValueItem) => {
-                                            if (fixedValueItem.value === content[key]) {
-                                                totalScore += fixedValueItem.score;
-                                                return true;
-                                            }
-                                        }).score
-                                    };
-                                }
-                            });
-                        });
-                        break;
-                    }
+            const table = pageData.tables.id(tableId);
+
+            if (table) {
+                if (table.fixedScore) {
+                    totalScore = table.fixedScore;
+                } else {
+                    table.rowTitleList.forEach((rowTitleItem) => {
+                        const fixedValueList = rowTitleItem.fixedValue;
+                        if (fixedValueList.length > 0) {
+                            const fixedValueOfContent = content[rowTitleItem._id];
+                            const score = fixedValueList.find(
+                                (fixedValueItem) => fixedValueItem.value === fixedValueOfContent
+                            ).score;
+                            content[rowTitleItem._id] = {
+                                value: fixedValueOfContent,
+                                score
+                            };
+                            totalScore += score;
+                        }
+                    });
                 }
-            }
+            } else throw createError.NotFound('Chỉ tiêu không tồn tại');
 
             return {
                 pageData,
@@ -218,11 +215,6 @@ class PageService {
         try {
             await Page.findOneAndDelete({ _id: pageId });
             const pages = await Page.findById(pageId);
-
-            let quantityDemanded = 0;
-            pages.tables.forEach((table) => {
-                quantityDemanded += table.quantityDemanded;
-            });
 
             return {
                 status: 200,
