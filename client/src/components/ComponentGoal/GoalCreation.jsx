@@ -284,7 +284,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
 
     useEffect(() => {
         if (prevUpdatedTableData) {
-            console.log(prevUpdatedTableData.fixedScore);
             setTables([
                 {
                     ...prevUpdatedTableData,

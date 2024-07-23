@@ -61,7 +61,6 @@ class TableControllers {
                 msg: 'Cập nhật chỉ tiêu thành công'
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

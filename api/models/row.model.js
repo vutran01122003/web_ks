@@ -2,9 +2,12 @@ const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const [DOC, COL] = ['row', 'rows'];
+const User = require('./user.model');
+const Page = require('./page.model');
 
 const RowSchema = new Schema(
     {
+        levelYear: Number,
         page: {
             type: Schema.Types.ObjectId,
             ref: 'page'
@@ -67,11 +70,36 @@ const RowSchema = new Schema(
     }
 );
 
-const Row = conn.model(DOC, RowSchema);
-
 RowSchema.pre('deleteMany', async function (next) {
     try {
+        const fieldOfStatus = {
+            'chờ duyệt': 'numberOfPendingActivity',
+            'đã duyệt': 'numberOfAcceptedActivity',
+            'từ chối': 'numberOfRejectedActivity',
+            'phải nộp lại': 'numberOfResubmitedActivity'
+        };
+
+        const ACCEPTED_STATUS = 'đã duyệt';
         const deletedDocs = await this.model.find(this._conditions).lean();
+        const page = await Page.findById(deletedDocs[0].page);
+        const index = page.pageStudentLevelYear - 1;
+
+        await Promise.all(
+            deletedDocs.reduce((arrPendingTask, doc) => {
+                return [
+                    ...arrPendingTask,
+                    ...doc.content.map((contentItem) =>
+                        User.findByIdAndUpdate(doc.user, {
+                            $inc: {
+                                [`annualActivitiesProgress.${index}.${fieldOfStatus[contentItem.status]}`]: -1,
+                                [`annualActivitiesProgress.${index}.totalScore`]:
+                                    contentItem.status === ACCEPTED_STATUS ? -contentItem.totalScore : 0
+                            }
+                        })
+                    )
+                ];
+            }, [])
+        );
 
         return next();
     } catch (error) {
@@ -79,4 +107,5 @@ RowSchema.pre('deleteMany', async function (next) {
     }
 });
 
+const Row = conn.model(DOC, RowSchema);
 module.exports = Row;

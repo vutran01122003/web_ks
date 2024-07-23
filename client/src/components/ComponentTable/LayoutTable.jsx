@@ -11,6 +11,20 @@ import PreviewPdfModal from '../ComponentModal/PreviewPdfModal';
 import { MdOutlineMoreTime } from 'react-icons/md';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
+const [PENDING_ROWS, ACCEPTED_ROWS, REJECTED_ROWS, RESUBMITED_ROWS] = [
+    'pendingRows',
+    'acceptedRows',
+    'rejectedRows',
+    'resubmitedRows'
+];
+
+const ROW_STATUS = {
+    pendingRows: 'chờ duyệt',
+    acceptedRows: 'đã duyệt',
+    rejectedRows: 'từ chối',
+    resubmitedRows: 'phải nộp lại'
+};
+
 const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal, handleOpenPreviewFilesModal }) => {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
@@ -83,7 +97,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                 } else if (item?.statusLabel) {
                     let statusValue = '';
 
-                    switch (item?.statusValue) {
+                    switch (item?.statusLabel) {
                         case 'chờ duyệt':
                             statusValue = 'wating_status';
                             break;
@@ -117,6 +131,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                     isOpen={visibleConfirmModal}
                                     title={modalData.title}
                                     content={modalData.content}
+                                    prevStatus={modalData.prevStatus}
                                     status={modalData.status}
                                     isTimedExtension={modalData?.isTimedExtension ?? false}
                                     isResubmitedRow={modalData?.isResubmitedRow ?? false}
@@ -126,7 +141,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                 />
                             )}
                             <div className="button_wrapper">
-                                {['rejectedRows', 'pendingRows'].includes(item.rowsType) && (
+                                {[REJECTED_ROWS, PENDING_ROWS].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper"
                                         onClick={() => {
@@ -134,7 +149,8 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                             setModalData({
                                                 title: 'Thông Báo',
                                                 content: 'Bạn chắc chắn chấp nhận hoạt động này ?',
-                                                status: 'đã duyệt'
+                                                prevStatus: ROW_STATUS[item.rowsType],
+                                                status: ROW_STATUS.acceptedRows
                                             });
                                         }}
                                     >
@@ -142,7 +158,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                     </button>
                                 )}
 
-                                {['acceptedRows', 'pendingRows'].includes(item.rowsType) && (
+                                {[ACCEPTED_ROWS, PENDING_ROWS].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper"
                                         onClick={() => {
@@ -150,7 +166,8 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                             setModalData({
                                                 title: 'Thông Báo',
                                                 content: 'Bạn chắc chắn từ chối hoạt động này ?',
-                                                status: 'từ chối'
+                                                prevStatus: ROW_STATUS[item.rowsType],
+                                                status: ROW_STATUS.rejectedRows
                                             });
                                         }}
                                     >
@@ -158,7 +175,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                     </button>
                                 )}
 
-                                {['resubmitedRows'].includes(item.rowsType) && (
+                                {[RESUBMITED_ROWS].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper more_time_btn"
                                         onClick={() => {
@@ -166,7 +183,8 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                             setModalData({
                                                 title: 'Thông Báo',
                                                 content: 'Bạn chắc chắn muốn gia hạn thời gian cho hoạt động này ?',
-                                                status: 'phải nộp lại',
+                                                prevStatus: ROW_STATUS[item.rowsType],
+                                                status: ROW_STATUS.resubmitedRows,
                                                 isTimedExtension: true
                                             });
                                         }}
@@ -175,7 +193,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                     </button>
                                 )}
 
-                                {['pendingRows', 'rejectedRows', 'acceptedRows'].includes(item.rowsType) && (
+                                {[PENDING_ROWS, REJECTED_ROWS, ACCEPTED_ROWS].includes(item.rowsType) && (
                                     <button
                                         className="row_button_wrapper"
                                         onClick={() => {
@@ -183,7 +201,8 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                                             setModalData({
                                                 title: 'Thông Báo',
                                                 content: 'Bạn chắc chắn muốn sinh viên nộp lại hoạt động này ?',
-                                                status: 'phải nộp lại',
+                                                prevStatus: ROW_STATUS[item.rowsType],
+                                                status: ROW_STATUS.resubmitedRows,
                                                 isResubmitedRow: true
                                             });
                                         }}

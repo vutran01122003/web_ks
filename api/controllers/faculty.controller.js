@@ -10,7 +10,7 @@ class FacultyController {
             if (managerIdList.length === 0) throw createError.BadRequest('Danh sách quản lý khoa không được để trống');
             if (majorList.length === 0) throw createError.BadRequest('Danh sách chuyên ngành không được để trống');
 
-            const userDataList = await UserService.findUserById({ idList: managerIdList });
+            const userDataList = await UserService.findUserAndPopulateGroupById({ idList: managerIdList });
 
             const createdFaculty = await FacultyService.createFaculty({
                 facultyName,

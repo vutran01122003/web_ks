@@ -5,7 +5,7 @@ const PageService = require('./page.service');
 const FacultyService = require('./faculty.service');
 
 class UserService {
-    static findUserById = async ({ id, idList }) => {
+    static findUserAndPopulateGroupById = async ({ id, idList }) => {
         try {
             let result = null;
 
@@ -14,6 +14,14 @@ class UserService {
 
             if (!result) throw createError.NotFound('Người dùng không tồn tại');
             return result;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static findUserById = async (id) => {
+        try {
+            return await User.findById(id);
         } catch (error) {
             throw error;
         }
@@ -274,7 +282,7 @@ class UserService {
         try {
             const result = await Promise.all([
                 PermissionService.getGroupById({ groupId }),
-                this.findUserById({ id: userId })
+                this.findUserAndPopulateGroupById({ id: userId })
             ]);
 
             if (!result[0]) throw createError.NotFound('Chức vụ không tồn tại');

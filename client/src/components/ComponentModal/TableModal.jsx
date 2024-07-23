@@ -13,7 +13,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
     const handleChangeRow = (e) => {
         setRow({ ...row, [e.target.name]: e.target.value });
     };
-    console.log(row);
+
     const handleUpdateRow = (e) => {
         handleAddRow(e);
     };
@@ -44,6 +44,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
             faculty: auth?.user.faculty,
             major: auth?.user.major,
             cohort: auth?.user.cohort,
+            levelYear: auth?.user.levelYear,
             tableName: title,
             page: page.pageId,
             table: tableId,
@@ -117,8 +118,8 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
                                         <label>{item.textHeading}</label>
                                         <select
                                             className="select_modal"
-                                            defaultValue={row[item._id] || ''}
                                             name={item._id}
+                                            value={row[item._id]?.value || ''}
                                             onChange={handleChangeRow}
                                         >
                                             <option key={item.textHeading} value="">

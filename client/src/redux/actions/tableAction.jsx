@@ -22,7 +22,6 @@ export const addTable =
                 }
             });
         } catch (error) {
-            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -133,7 +132,6 @@ export const updateTable =
                 table
             });
 
-            console.log(res.data);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {

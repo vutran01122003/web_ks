@@ -45,8 +45,8 @@ class AccessControllers {
 
             res.status(200)
                 .cookie('accessToken', accessToken, {
-                    // httpOnly: true,
-                    // secure: true
+                    httpOnly: true,
+                    secure: true
                 })
                 .send({
                     status: 'Đăng nhập thành công',

@@ -94,7 +94,6 @@ class PageControllers {
                 msg: removedPage.msg
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

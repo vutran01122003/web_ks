@@ -14,15 +14,10 @@ export const addRow =
 
             const parsedFormData = JSON.parse(formData.get('rowData'));
             const res = parsedFormData?.contentId
-                ? await patchDataApi(
-                      `/rows/${parsedFormData.rowListId}`,
-                      formData
-                  )
+                ? await patchDataApi(`/rows/${parsedFormData.rowListId}`, formData)
                 : await postDataApi('/rows', formData);
 
-            const newPage = await getDataApi(
-                JSON.parse(formData.get('rowData')).path
-            );
+            const newPage = await getDataApi(JSON.parse(formData.get('rowData')).path);
 
             dispatch({
                 type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
@@ -44,8 +39,7 @@ export const addRow =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Thêm Hoạt Động Thất Bại'
+                            : error?.response?.data.msg || 'Thêm Hoạt Động Thất Bại'
                 }
             });
         }
@@ -74,7 +68,7 @@ export const getDynamicRows =
 
             const res = await getDataApi('/dynamic-rows', {
                 page: page || 1,
-                limit: limit || 3,
+                limit: limit || 10,
                 current_rows: currentRows,
                 rows_type: tab,
                 student_id: userData?.userId || null,
@@ -100,8 +94,7 @@ export const getDynamicRows =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
+                            : error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
                 }
             });
         } finally {
@@ -122,6 +115,7 @@ export const updateRowsStatus =
         rowsType,
         rowListId,
         contentIdList,
+        prevStatus,
         status,
         deadline,
         isTimedExtension
@@ -139,6 +133,7 @@ export const updateRowsStatus =
                 userId,
                 pageInfo,
                 contentIdList,
+                prevStatus,
                 status,
                 noteValue,
                 deadline,
@@ -167,8 +162,7 @@ export const updateRowsStatus =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Duyệt Chỉ Tiêu Thất Bại'
+                            : error?.response?.data.msg || 'Duyệt Chỉ Tiêu Thất Bại'
                 }
             });
         }

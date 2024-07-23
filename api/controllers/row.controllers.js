@@ -5,16 +5,30 @@ const UploadService = require('../services/upload.service');
 const UserService = require('../services/user.service');
 const Page = require('../models/page.model');
 const Row = require('../models/row.model');
+const User = require('../models/user.model');
 
-const [ACCEPTED, PENDING, REJECTED, RESUMBIT] = ['đã duyệt', 'chờ duyệt', 'từ chối', 'phải nộp lại'];
+const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
+    'đã duyệt',
+    'chờ duyệt',
+    'từ chối',
+    'phải nộp lại'
+];
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
             const rowData = JSON.parse(req.body.rowData);
 
-            const { rowList, rowItemId } = await RowService.addRow({
+            const { totalScore, rowList, rowItemId } = await RowService.addRow({
                 data: rowData
+            });
+
+            await this.updateAnnualActivityProgress({
+                userId: rowData.user,
+                levelYear: rowData.levelYear,
+                prevStatus: null,
+                status: PENDING_STATUS,
+                totalScore
             });
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
@@ -30,11 +44,10 @@ class RowControllers {
             });
 
             res.status(200).json({
-                msg: 'Thêm Thông Tin Thành Công'
-                // data: rowList
+                msg: 'Thêm Thông Tin Thành Công',
+                data: rowList
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -118,9 +131,9 @@ class RowControllers {
     updateRowStatus = async (req, res, next) => {
         try {
             const rowListId = req.params.rowId;
-            const { contentIdList, status, noteValue, pageInfo, deadline, isTimedExtension, userId } = req.body;
+            const { contentIdList, prevStatus, status, noteValue, pageInfo, deadline, isTimedExtension, userId } =
+                req.body;
             const { pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = pageInfo;
-
             const deadlineDatetime = toISOString(deadline);
 
             if (isTimedExtension && !deadline) throw createError.BadRequest('Chưa nhập thời gian hạn gia');
@@ -135,6 +148,16 @@ class RowControllers {
                 noteValue,
                 deadline: deadlineDatetime,
                 isTimedExtension
+            });
+
+            const row = await Row.findById(rowListId);
+
+            await this.updateAnnualActivityProgress({
+                userId,
+                levelYear: pageStudentLevelYear,
+                prevStatus,
+                status,
+                totalScore: row.content.id(contentIdList).totalScore
             });
 
             let quantityDemanded = 0;
@@ -204,6 +227,72 @@ class RowControllers {
             });
         } catch (error) {
             next(error);
+        }
+    };
+
+    updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
+        try {
+            const fieldOfStatus = {
+                'chờ duyệt': 'numberOfPendingActivity',
+                'đã duyệt': 'numberOfAcceptedActivity',
+                'từ chối': 'numberOfRejectedActivity',
+                'phải nộp lại': 'numberOfResubmitedActivity'
+            };
+
+            const index = levelYear - 1;
+
+            const updatedInfo = {
+                [`annualActivitiesProgress.${index}.${fieldOfStatus[status]}`]: 1,
+                [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1
+            };
+
+            if (!prevStatus) delete updatedInfo[`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`];
+            if (prevStatus === ACCEPTED_STATUS) {
+                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = -totalScore;
+            } else if (status === ACCEPTED_STATUS) {
+                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = totalScore;
+            }
+
+            const user = await UserService.findUserById(userId);
+
+            if (!user.annualActivitiesProgress[index]) {
+                await Promise.all(
+                    Array(levelYear)
+                        .fill(null)
+                        .reduce((arr, _null, index) => {
+                            if (!user.annualActivitiesProgress[index])
+                                return [
+                                    ...arr,
+                                    User.findByIdAndUpdate(userId, {
+                                        $push: {
+                                            annualActivitiesProgress: {
+                                                $each: [
+                                                    {
+                                                        levelYear: index + 1,
+                                                        totalScore: 0,
+                                                        numberOfRequiredActivity: 0,
+                                                        numberOfPendingActivity: 0,
+                                                        numberOfAcceptedActivity: 0,
+                                                        numberOfRejectedActivity: 0,
+                                                        numberOfResubmitedActivity: 0
+                                                    }
+                                                ],
+                                                $position: index
+                                            }
+                                        }
+                                    })
+                                ];
+
+                            return arr;
+                        }, [])
+                );
+            }
+
+            await User.findByIdAndUpdate(userId, {
+                $inc: updatedInfo
+            });
+        } catch (error) {
+            throw error;
         }
     };
 }

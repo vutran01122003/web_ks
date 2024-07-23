@@ -72,7 +72,6 @@ class TableService {
             const page = await Page.findById(pageId).lean();
 
             if (!page) throw createError.NotFound('Không tìm thấy page');
-            console.log(table);
             await Page.findOneAndUpdate(
                 { _id: pageId, 'tables._id': table._id },
                 {

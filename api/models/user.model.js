@@ -1,6 +1,7 @@
 const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const ProgressSchema = require('./progress.schema');
 const { Schema } = mongoose;
 
 const [DOC, COL] = ['user', 'users'];
@@ -70,7 +71,8 @@ const UserSchema = new Schema(
             lowercase: true
         },
         // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
-        annualTaskProgress: {}
+        annualTaskProgress: {},
+        annualActivitiesProgress: [ProgressSchema]
     },
     {
         collection: COL,

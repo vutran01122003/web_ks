@@ -9,7 +9,7 @@ class RowService {
             const { user, table, page, content } = data;
             const contentObj = JSON.parse(content);
 
-            let rowList = await Row.findOne({ user, table, page });
+            let rowList = await Row.findOne({ user, table });
             let rowItemId = null;
 
             let { pageData, totalScore } = await PageService.calculateTotalScoreOfRow({
@@ -43,7 +43,8 @@ class RowService {
 
             return {
                 rowList,
-                rowItemId
+                rowItemId,
+                totalScore
             };
         } catch (error) {
             throw error;

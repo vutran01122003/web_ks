@@ -78,6 +78,7 @@
             gap: 10px;
             margin: 0 auto;
             text-align: center;
+            overflow-wrap: break-word;
 
             &:not(:last-child) {
                 border-bottom: 1px solid $line_color;
@@ -104,6 +105,7 @@
 
             .button_wrapper {
                 display: flex;
+                flex-wrap: wrap;
                 justify-content: center;
                 gap: 6px;
 
@@ -177,7 +179,6 @@
 
             .table__line__item {
                 .line__item {
-                    overflow-wrap: anywhere;
                     font-size: 14px;
                     font-weight: 500;
                     padding: 10px;
@@ -187,6 +188,7 @@
 
                 .proof_files_wrapper {
                     display: flex;
+                    flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
 

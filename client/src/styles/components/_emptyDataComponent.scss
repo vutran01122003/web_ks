@@ -3,19 +3,20 @@
     flex-direction: column;
     width: 250px;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 180px;
     align-items: center;
 
     img {
         display: block;
-        width: 100%;
-        object-fit: contain;
+        width: 220px;
+        height: 120px;
+        object-fit: cover;
         opacity: 0.5;
     }
 
     span {
         display: block;
-        color: gray;
+        color: rgb(165, 165, 165);
         font-weight: 600;
         font-size: 12px;
         text-transform: uppercase;
