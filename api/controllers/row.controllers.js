@@ -5,25 +5,17 @@ const UploadService = require('../services/upload.service');
 const UserService = require('../services/user.service');
 const Page = require('../models/page.model');
 const Row = require('../models/row.model');
-const User = require('../models/user.model');
-
-const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
-    'đã duyệt',
-    'chờ duyệt',
-    'từ chối',
-    'phải nộp lại'
-];
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
+            const PENDING_STATUS = 'chờ duyệt';
             const rowData = JSON.parse(req.body.rowData);
-
             const { totalScore, rowList, rowItemId } = await RowService.addRow({
                 data: rowData
             });
 
-            await this.updateAnnualActivityProgress({
+            await UserService.updateAnnualActivityProgress({
                 userId: rowData.user,
                 levelYear: rowData.levelYear,
                 prevStatus: null,
@@ -48,6 +40,7 @@ class RowControllers {
                 data: rowList
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -152,7 +145,7 @@ class RowControllers {
 
             const row = await Row.findById(rowListId);
 
-            await this.updateAnnualActivityProgress({
+            await UserService.updateAnnualActivityProgress({
                 userId,
                 levelYear: pageStudentLevelYear,
                 prevStatus,
@@ -227,72 +220,6 @@ class RowControllers {
             });
         } catch (error) {
             next(error);
-        }
-    };
-
-    updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
-        try {
-            const fieldOfStatus = {
-                'chờ duyệt': 'numberOfPendingActivity',
-                'đã duyệt': 'numberOfAcceptedActivity',
-                'từ chối': 'numberOfRejectedActivity',
-                'phải nộp lại': 'numberOfResubmitedActivity'
-            };
-
-            const index = levelYear - 1;
-
-            const updatedInfo = {
-                [`annualActivitiesProgress.${index}.${fieldOfStatus[status]}`]: 1,
-                [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1
-            };
-
-            if (!prevStatus) delete updatedInfo[`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`];
-            if (prevStatus === ACCEPTED_STATUS) {
-                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = -totalScore;
-            } else if (status === ACCEPTED_STATUS) {
-                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = totalScore;
-            }
-
-            const user = await UserService.findUserById(userId);
-
-            if (!user.annualActivitiesProgress[index]) {
-                await Promise.all(
-                    Array(levelYear)
-                        .fill(null)
-                        .reduce((arr, _null, index) => {
-                            if (!user.annualActivitiesProgress[index])
-                                return [
-                                    ...arr,
-                                    User.findByIdAndUpdate(userId, {
-                                        $push: {
-                                            annualActivitiesProgress: {
-                                                $each: [
-                                                    {
-                                                        levelYear: index + 1,
-                                                        totalScore: 0,
-                                                        numberOfRequiredActivity: 0,
-                                                        numberOfPendingActivity: 0,
-                                                        numberOfAcceptedActivity: 0,
-                                                        numberOfRejectedActivity: 0,
-                                                        numberOfResubmitedActivity: 0
-                                                    }
-                                                ],
-                                                $position: index
-                                            }
-                                        }
-                                    })
-                                ];
-
-                            return arr;
-                        }, [])
-                );
-            }
-
-            await User.findByIdAndUpdate(userId, {
-                $inc: updatedInfo
-            });
-        } catch (error) {
-            throw error;
         }
     };
 }

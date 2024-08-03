@@ -1,4 +1,10 @@
 const ProgressService = require('../services/progress.service');
+const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
+    'đã duyệt',
+    'chờ duyệt',
+    'từ chối',
+    'phải nộp lại'
+];
 
 class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
@@ -25,16 +31,29 @@ class ProgressControllers {
                         tableId: table._id,
                         quantityDemanded: table.quantityDemanded,
                         tableDescription: table?.description,
-                        completedTasksNum: 0,
-                        rejectedTasksNum: 0
+                        acceptedTasksNum: 0,
+                        rejectedTasksNum: 0,
+                        resubmitedTasksNum: 0,
+                        pendingTasksNum: 0
                     };
 
                     table.rowValueList[0]?.content.forEach((content) => {
-                        if (content.status === 'đã duyệt') {
-                            completedTasksNum += 1;
-                            tables[table.tableName].completedTasksNum += 1;
-                        } else if (content.status === 'từ chối') {
-                            tables[table.tableName].rejectedTasksNum += 1;
+                        switch (content.status) {
+                            case ACCEPTED_STATUS:
+                                tables[table.tableName].acceptedTasksNum += 1;
+                                completedTasksNum += 1;
+                                break;
+                            case REJECTED_STATUS:
+                                tables[table.tableName].rejectedTasksNum += 1;
+                                break;
+                            case PENDING_STATUS:
+                                tables[table.tableName].pendingTasksNum += 1;
+                                break;
+                            case RESUMBITED_STATUS:
+                                tables[table.tableName].resubmitedTasksNum += 1;
+                                break;
+                            default:
+                                break;
                         }
                     });
                 });

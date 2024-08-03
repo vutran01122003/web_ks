@@ -119,7 +119,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
                                         <select
                                             className="select_modal"
                                             name={item._id}
-                                            value={row[item._id]?.value || ''}
+                                            value={row[item._id] || ''}
                                             onChange={handleChangeRow}
                                         >
                                             <option key={item.textHeading} value="">

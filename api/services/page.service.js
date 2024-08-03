@@ -1,7 +1,6 @@
 const createError = require('http-errors');
 const Page = require('../models/page.model');
 const UserService = require('./user.service');
-const mongoose = require('mongoose');
 
 class PageService {
     static createPage = async (data) => {
@@ -39,7 +38,14 @@ class PageService {
                     pageType
                 });
 
+                await UserService.updateNumOfRequiredActivity({
+                    page: createdPage,
+                    tables,
+                    isDesc: false
+                });
+
                 let quantityDemanded = 0;
+
                 tables.forEach((table) => {
                     quantityDemanded += table.quantityDemanded;
                 });
@@ -59,6 +65,7 @@ class PageService {
                 data: createdPage
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };
@@ -213,8 +220,16 @@ class PageService {
 
     static removePage = async ({ pageId }) => {
         try {
+            const page = await Page.findById(pageId);
+            if (!page) throw createError.NotFound('Trang không tồn tại');
+
+            await UserService.updateNumOfRequiredActivity({
+                page: page,
+                tables: page.tables,
+                isDesc: true
+            });
+
             await Page.findOneAndDelete({ _id: pageId });
-            const pages = await Page.findById(pageId);
 
             return {
                 status: 200,
@@ -227,7 +242,8 @@ class PageService {
 
     static updateStatusPage = async ({ pageId, currentStatus }) => {
         try {
-            const updatedPage = await Page.findByIdAndUpdate(
+            console.log({ pageId, currentStatus });
+            await Page.findByIdAndUpdate(
                 pageId,
                 {
                     isActive: !currentStatus
@@ -237,7 +253,7 @@ class PageService {
 
             return {
                 status: 200,
-                msg: 'Cập Nhật Trạng Thái Trang Thành Công'
+                msg: 'Cập nhật trạng thái trang thành công'
             };
         } catch (error) {
             throw error;

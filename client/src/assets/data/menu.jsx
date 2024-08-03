@@ -42,7 +42,7 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 6,
+        id: 4,
         role: VITE_APP_ADMIN_CODE,
         name_menu: 'Quản Lý Trang',
         icon_before: <CgBrowser />,
@@ -50,7 +50,7 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 7,
+        id: 5,
         role: VITE_APP_FACULTY_MANAGER_CODE,
         name_menu: 'Tạo Tin Tức & Thông Báo',
         icon_before: <MdOutlineCreate />,
@@ -58,7 +58,7 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 8,
+        id: 6,
         name_menu: 'Tin Tức',
         allow: true,
         icon_before: <HiOutlineNewspaper />,
@@ -67,7 +67,7 @@ export const ARRAY_LIST_MENU = [
         sub_menu_item: []
     },
     {
-        id: 9,
+        id: 7,
         name_menu: 'Nhóm Chỉ Tiêu Năm',
         role: VITE_APP_TALENTED_ENGINEER_CODE,
         icon_before: <BiBookBookmark />,
@@ -76,7 +76,7 @@ export const ARRAY_LIST_MENU = [
         sub_menu_item: []
     },
     {
-        id: 10,
+        id: 8,
         name_menu: 'Quản Lý Sinh Viên',
         role: VITE_APP_FACULTY_MANAGER_CODE,
         to_link: '/student',
@@ -84,7 +84,7 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 11,
+        id: 9,
         name_menu: 'Quản Lý Khoa & Chuyên Ngành',
         role: VITE_APP_ADMIN_CODE,
         to_link: '/faculty',
@@ -92,7 +92,7 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 12,
+        id: 10,
         name_menu: 'Phân Quyền Người Dùng',
         role: VITE_APP_ADMIN_CODE,
         to_link: '/permission',

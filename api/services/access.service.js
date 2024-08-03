@@ -13,10 +13,12 @@ class AccessService {
     static login = async (data) => {
         try {
             const { userId, password } = data;
-            const user = await User.findOne({ userId }).populate({
-                path: 'group',
-                model: 'group'
-            });
+            const user = await User.findOne({ userId }).populate([
+                {
+                    path: 'group',
+                    model: 'group'
+                }
+            ]);
 
             if (user) {
                 const isValidPassword = user.checkPassword(password);
@@ -55,24 +57,37 @@ class AccessService {
     static register = async ({ data, groupId }) => {
         try {
             const { userId, fullName, password, birthday, major, cohort, faculty, email, phone } = data;
+            const [day, month, year] = birthday.split('/');
 
             const createdUser = new User({
                 userId,
                 fullName,
                 password,
-                birthday: moment(birthday, 'DD/MM/YYYY').toDate(),
+                birthday: new Date(year, month - 1, day).toLocaleDateString(),
                 major,
                 cohort,
                 faculty,
                 email,
                 phone,
                 group: groupId,
-                roles: [role.talentedEngineer, role.contentAdministrator, role.webStructureAdministrator]
+                annualActivitiesProgress: [
+                    {
+                        levelYear: 1,
+                        totalScore: 0,
+                        numberOfRequiredActivity: 0,
+                        numberOfPendingActivity: 0,
+                        numberOfAcceptedActivity: 0,
+                        numberOfRejectedActivity: 0,
+                        numberOfResubmitedActivity: 0
+                    }
+                ]
             });
 
             await createdUser.save();
 
-            return createdUser;
+            const populatedUser = await User.populate(createdUser, { path: 'group' });
+
+            return populatedUser;
         } catch (error) {
             throw error;
         }
@@ -82,11 +97,14 @@ class AccessService {
         try {
             const user = await User.findById(userId)
                 .select('-password')
-                .populate({
-                    path: 'group',
-                    model: 'group'
-                })
+                .populate([
+                    {
+                        path: 'group',
+                        model: 'group'
+                    }
+                ])
                 .lean();
+
             return user;
         } catch (error) {
             throw error;

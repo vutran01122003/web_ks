@@ -90,7 +90,6 @@ PageSchema.pre('findOneAndDelete', async function (next) {
         }, []);
 
         await Row.deleteMany({ _id: { $in: rowValueIdList } });
-
         next();
     } catch (error) {
         next(error);

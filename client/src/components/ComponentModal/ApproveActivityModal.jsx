@@ -46,7 +46,7 @@ function ApproveActivityModal({
                 title = isTimedExtension
                     ? `Hoạt động ${
                           rowInfoData.tableInfo.tableName
-                      } của bạn đã được gia hạn thời gian nộp lại. Hạn nộp cuối là${formatTimeStr(datetimeValue)}.`
+                      } của bạn đã được gia hạn thời gian nộp lại. Hạn nộp cuối là ${formatTimeStr(datetimeValue)}.`
                     : `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn cần phải nộp lại.`;
                 break;
             default:

@@ -37,8 +37,7 @@ const UserSchema = new Schema(
         // Thuộc tính faculty cho biết khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
         faculty: {
             type: String,
-            lowercase: true,
-            required: true
+            lowercase: true
         },
         // Thuộc tính major cho biết chuyên ngành của sinh viên (Ví Dụ: Kỹ Thuật Phần Mềm,...)
         major: {
@@ -49,10 +48,6 @@ const UserSchema = new Schema(
         cohort: {
             type: Number,
             required: true
-        },
-        roles: {
-            type: Array,
-            default: []
         },
         levelYear: {
             type: Number,

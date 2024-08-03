@@ -8,6 +8,9 @@ class AccessControllers {
         try {
             const accessToken = req?.headers['x-token'] || req.cookies?.accessToken;
             const user = await accessService.getUserInfo(res.locals.userId);
+
+            if (!user.isActive) throw createError.BadRequest('Tài khoản đã bị khóa');
+
             res.status(200).json({
                 user,
                 token: {
@@ -45,8 +48,8 @@ class AccessControllers {
 
             res.status(200)
                 .cookie('accessToken', accessToken, {
-                    httpOnly: true,
-                    secure: true
+                    // httpOnly: true,
+                    // secure: true
                 })
                 .send({
                     status: 'Đăng nhập thành công',
@@ -67,6 +70,9 @@ class AccessControllers {
             const data = req.body;
             const group = await PermissionService.getGroupByGroupCode({ groupCode: '002' });
             const createdUser = await accessService.register({ data, groupId: group._id });
+
+            if (!createdUser) throw createError.BadRequest('Tạo tài khoản người dùng thất bại');
+
             const accessToken = await jwtService.signAccessToken({
                 userData: createdUser
             });

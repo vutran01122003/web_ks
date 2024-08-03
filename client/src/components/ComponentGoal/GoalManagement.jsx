@@ -6,7 +6,7 @@ import { IoSearch, IoRemoveCircleOutline, IoEyeOffOutline, IoEyeOutline } from '
 import { facultySelector, goalsSelector } from '../../redux/selector';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
 import { getTable, removeTable } from '../../redux/actions/tableAction';
-import { getPages } from '../../redux/actions/pageAction';
+import { getPages, updateStatusPage } from '../../redux/actions/pageAction';
 import UpdateTableModal from '../ComponentModal/UpdateTableModal';
 import RemovePageModal from '../ComponentModal/RemovePageModal';
 import ComfirmModal from '../ComponentModal/ConfirmModal';
@@ -75,6 +75,11 @@ function GoalsManagement() {
 
     const onHideUpdateStatusPageModal = () => {
         setVissibleUpdateStatusPageModal(false);
+    };
+
+    const handleUpdateStatusPage = () => {
+        dispatch(updateStatusPage({ pageId, currentStatus }));
+        onHideUpdateStatusPageModal();
     };
 
     const handleHideRemovePageModal = () => {
@@ -191,12 +196,18 @@ function GoalsManagement() {
                 )}
 
                 {vissibleUpdateStatusPageModal && (
-                    <RemovePageModal
-                        onHideUpdateStatusPageModal={onHideUpdateStatusPageModal}
-                        subPageName={subPageName}
-                        pageId={pageId}
-                        currentStatus={currentStatus}
+                    <ComfirmModal
+                        headerContent={currentStatus ? 'Ẩn Nhóm Chỉ Tiêu' : 'Hiện Thị Nhóm Chỉ Tiếu'}
+                        bodyContent={`Bạn chắc chắn muốn ${currentStatus ? 'ẩn' : 'hiện'} ${subPageName}`}
+                        toggleConfirmModalDisplay={onHideUpdateStatusPageModal}
+                        onAccept={handleUpdateStatusPage}
                     />
+                    // <RemovePageModal
+                    //     onHideUpdateStatusPageModal={onHideUpdateStatusPageModal}
+                    //     subPageName={subPageName}
+                    //     pageId={pageId}
+                    //     currentStatus={currentStatus}
+                    // />
                 )}
 
                 {isVisibleRemoveTableModal && (
@@ -246,7 +257,7 @@ function GoalsManagement() {
                                             <td>
                                                 {filteredPageItem.tables.length > 0 &&
                                                     filteredPageItem.tables.map((table) => (
-                                                        <div className="activity_name">
+                                                        <div key={table._id} className="activity_name">
                                                             <span>{capitalizeFirstLetter(table.tableName)}</span>
                                                             <div className="activity_btn_group">
                                                                 <span

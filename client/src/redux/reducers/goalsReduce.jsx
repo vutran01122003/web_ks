@@ -59,6 +59,31 @@ function goalsReduce(state = initialState, action) {
             };
         }
 
+        case GLOBALTYPES.GOALS.REMOVE_GOALS: {
+            const { pageId } = action.payload;
+            const goalList = [...state.filteredPage];
+
+            return {
+                ...state,
+                filteredPage: goalList.filter((goal) => goal._id !== pageId)
+            };
+        }
+
+        case GLOBALTYPES.GOALS.UPDATE_STATUS_GOAL: {
+            const goalList = [...state.filteredPage];
+            for (let i = 0; i < goalList.length; i++) {
+                if (goalList[i]._id === action.payload.pageId) {
+                    goalList[i].isActive = !action.payload.currentStatus;
+                    break;
+                }
+            }
+
+            return {
+                ...state,
+                filteredPages: goalList
+            };
+        }
+
         default:
             return state;
     }

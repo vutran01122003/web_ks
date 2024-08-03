@@ -1,4 +1,4 @@
-import removeElem from '../../utils/removeElem';
+import { removeElem } from '../../utils/handleArray';
 import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
@@ -36,22 +36,6 @@ function pageReducer(state = initialState, action) {
             return {
                 ...state,
                 tables: [...action.payload.tables]
-            };
-        }
-
-        case GLOBALTYPES.PAGE.UPDATE_STATUS_PAGE: {
-            const _filteredPages = state.filteredPages.map((filteredPage) => {
-                if (filteredPage._id === action.payload.pageId)
-                    return {
-                        ...filteredPage,
-                        isActive: !action.payload.currentStatus
-                    };
-                return filteredPage;
-            });
-
-            return {
-                ...state,
-                filteredPages: _filteredPages
             };
         }
 

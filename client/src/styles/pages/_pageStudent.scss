@@ -1,0 +1,206 @@
+.container_st__manager {
+    width: 100%;
+    height: 90vh;
+    padding: 10px;
+
+    .body__data--st {
+        background-color: #fff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .line__sort {
+            display: flex;
+            padding: 10px 0;
+            gap: 10px;
+            border-bottom: 1px solid #dddddd;;
+
+            input {
+                width: 180px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                color: #333;
+                font-weight: 600;
+                outline: none;
+            }
+
+            .search_wrapper {
+                display: flex;
+              
+                button {
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 120px;
+                    border-radius: 3px;
+                    border: none;
+                    color: #fff;
+                    background-color: #1677ff;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: 0.1s linear;
+
+                    &:active {
+                        transform: scale(0.9);
+                    }
+                }
+            }
+            
+
+            > div:nth-child(2) {
+                > div{
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .table_wrapper {
+            height: 500px;
+            overflow: auto;
+            flex: 1;
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                position: relative;
+
+                thead {
+                    th {
+                        position: sticky;
+                        top: 0;
+                        background: #fff;
+                        padding: 10px;
+                        font-size: 13px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        user-select: none;
+                        color: #333;
+                        text-align: center;
+                    }
+                }
+    
+                tbody {
+                    tr {
+                        border-top: 1px solid #dddddd;
+                        height: 50px;
+                    }
+                    
+                    td:first-child {
+                        font-weight: 700;
+                    }
+        
+                    td {
+                        font-size: 14px;
+                        font-weight: 500;
+                        padding: 10px;
+                        color: #4e545b;
+                        text-align: center;
+                    }
+        
+                    .state {
+                        &.hoat_dong {
+                            color: #1c7ae6;
+                        }
+            
+                        &.da_khoa {
+                            color: #F0635C;
+                        }
+                    }
+
+                    .editing_student_btn {
+                        padding: 5px;
+                        background: transparent;
+                        outline: none;
+                        border: none;
+                        cursor: pointer;
+                        transition: 0.1s linear;
+
+                        &:active {
+                            transform: scale(0.9);
+                        }
+                    }
+                }
+    
+                tr:hover {
+                    background-color: #f3f3f3d7;
+                    cursor: pointer;
+                }
+            }
+        }
+       
+    }
+}
+
+.container_detail_ctsv {
+    width: 100%;
+
+    .modal_detail_sv {
+        height: 430px;
+        padding: 20px;
+        width: 100%;
+        display: flex;
+
+        .box_avatar {
+            height: 100%;
+            width: 300px;
+            text-align: center;
+
+            img {
+                margin: 0px auto;
+            }
+
+            .msv_css {
+                text-align: center;
+                font-weight: 500;
+                margin-top: 30px;
+            }
+
+            .name_sv_css {
+                font-weight: 600;
+                font-size: 18px;
+            }
+        }
+
+        .box_chi_tiet_chi_tieu {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            padding-left: 50px;
+
+            .list_chi_tieu {
+
+                .line_box {
+                    display: flex;
+                    font-size: 18px;
+                    font-weight: 500;
+
+                    div {
+                        width: 100%;
+                        border: 1px solid #ebe8e8;
+                        padding: 8px;
+                        margin-bottom: 10px;
+                        text-align: center;
+                    }
+
+                    span {
+                        display: block;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .active_trang_thai {
+                width: 100%;
+                position: absolute;
+                bottom: 0px;
+                display: flex;
+                font-size: 20px;
+
+                >div {
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
+}

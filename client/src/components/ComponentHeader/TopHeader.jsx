@@ -13,6 +13,8 @@ import ImageNote from '../../assets/images/image_note.png';
 import Notification from './ComponentNotification/Notification';
 import { notificationSelector } from '../../redux/selector';
 
+const { VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
+
 const TopHeader = ({ auth }) => {
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
     const [dropBoxProductList, setDropBoxProductList] = useState(false);
@@ -29,8 +31,7 @@ const TopHeader = ({ auth }) => {
 
     useEffect(() => {
         let hanlder = (e) => {
-            if (!refBoxAccount.current.contains(e.target))
-                setDropBoxAccount(false);
+            if (!refBoxAccount.current.contains(e.target)) setDropBoxAccount(false);
         };
         document.addEventListener('mousedown', hanlder);
         return () => document.removeEventListener('mousedown', hanlder);
@@ -38,8 +39,7 @@ const TopHeader = ({ auth }) => {
 
     useEffect(() => {
         let hanlder = (e) => {
-            if (!refBoxProductList.current.contains(e.target))
-                setDropBoxProductList(false);
+            if (!refBoxProductList.current.contains(e.target)) setDropBoxProductList(false);
         };
         document.addEventListener('mousedown', hanlder);
         return () => document.removeEventListener('mousedown', hanlder);
@@ -47,65 +47,53 @@ const TopHeader = ({ auth }) => {
 
     useEffect(() => {
         let hanlder = (e) => {
-            if (!refBoxNotification.current.contains(e.target))
-                setDropBoxNotification(false);
+            if (!refBoxNotification.current.contains(e.target)) setDropBoxNotification(false);
         };
         document.addEventListener('mousedown', hanlder);
         return () => document.removeEventListener('mousedown', hanlder);
     });
 
-    const determineAuth =
-        auth?.user?.roles.includes('0004') ||
-        auth?.user?.roles.includes('0003');
+    const determineAuth = [VITE_APP_ADMIN_CODE, VITE_APP_FACULTY_MANAGER_CODE].includes(auth?.user?.group.groupCode);
 
     const ARRAY_LIST_PRODUCT = [
         {
             id: 0,
             name_production: 'IUH Chat',
             icon_size: ImageMessenger,
-            to_link: '/chat',
+            to_link: '/chat'
         },
         {
             id: 1,
             name_production: 'Task',
             icon_size: ImageTask,
-            to_link: '#',
+            to_link: '#'
         },
         {
             id: 2,
             name_production: 'Note',
             icon_size: ImageNote,
-            to_link: '#',
-        },
+            to_link: '#'
+        }
     ];
     const returnListProduct = ARRAY_LIST_PRODUCT.map((item) => {
         return (
             <Link className="item__product" key={item.id} to={item.to_link}>
                 <img src={item.icon_size} className="img__list--product" />
-                <div className="text__list--product">
-                    {item.name_production}
-                </div>
+                <div className="text__list--product">{item.name_production}</div>
             </Link>
         );
     });
 
     return (
-        <div
-            className={`container__header ${determineAuth ? 'header_admin' : ''}`}
-        >
+        <div className={`container__header ${determineAuth ? 'header_admin' : ''}`}>
             <div className="tr__header">
                 <div className="flex__line">
                     <div className="line__firts">
-                        <div className="khoa_style">
-                            KHOA : {auth?.user?.faculty}
-                        </div>
+                        <div className="khoa_style">KHOA : {auth?.user?.faculty}</div>
                     </div>
                     <div className="box__control">
                         {determineAuth ? (
-                            <Tooltip
-                                placement="bottom"
-                                title={auth?.user?.group.name.toUpperCase()}
-                            >
+                            <Tooltip placement="bottom" title={auth?.user?.group.name.toUpperCase()}>
                                 <div className="border__text--role ">
                                     <RiAdminLine />
                                 </div>
@@ -113,19 +101,12 @@ const TopHeader = ({ auth }) => {
                         ) : null}
 
                         <div className="btn__border" ref={refBoxProductList}>
-                            <div
-                                className="flex__center"
-                                onClick={() =>
-                                    setDropBoxProductList(!dropBoxProductList)
-                                }
-                            >
+                            <div className="flex__center" onClick={() => setDropBoxProductList(!dropBoxProductList)}>
                                 <TbGridDots />
                             </div>
                             <div
                                 className={`box__drop--product-list  ${
-                                    dropBoxProductList
-                                        ? 'active_drop_box'
-                                        : 'unactive_drop_box'
+                                    dropBoxProductList ? 'active_drop_box' : 'unactive_drop_box'
                                 }`}
                             >
                                 {returnListProduct}
@@ -133,16 +114,12 @@ const TopHeader = ({ auth }) => {
                         </div>
 
                         <div className="btn__border" ref={refBoxNotification}>
-                            <div
-                                className="flex__center"
-                                onClick={handleToggleVisibleNotificationModal}
-                            >
+                            <div className="flex__center" onClick={handleToggleVisibleNotificationModal}>
                                 <IoNotificationsOutline />
                                 {notification.unreadNotificationNum !== 0 && (
                                     <div className="length__noti">
                                         <span className="dots__color">
-                                            {notification.unreadNotificationNum >
-                                            9
+                                            {notification.unreadNotificationNum > 9
                                                 ? '9+'
                                                 : notification.unreadNotificationNum}
                                         </span>
@@ -153,47 +130,30 @@ const TopHeader = ({ auth }) => {
                                 <Notification
                                     auth={auth}
                                     notification={notification}
-                                    handleToggleVisibleNotificationModal={
-                                        handleToggleVisibleNotificationModal
-                                    }
+                                    handleToggleVisibleNotificationModal={handleToggleVisibleNotificationModal}
                                 />
                             )}
                         </div>
 
                         <div className="border__account" ref={refBoxAccount}>
-                            <div
-                                className="btn_dropdown"
-                                onClick={() =>
-                                    setDropBoxAccount(!dropBoxAccount)
-                                }
-                            >
+                            <div className="btn_dropdown" onClick={() => setDropBoxAccount(!dropBoxAccount)}>
                                 <div className="info__user">
-                                    <div id="name__user">
-                                        {auth?.user?.fullName}
-                                    </div>
-                                    <div id="studentId__user">
-                                        {'ID : ' + auth?.user?.userId}
-                                    </div>
+                                    <div id="name__user">{auth?.user?.fullName}</div>
+                                    <div id="studentId__user">{'ID : ' + auth?.user?.userId}</div>
                                 </div>
                                 <Avatar
                                     url={auth?.user.avatar}
                                     size="small"
-                                    className={
-                                        dropBoxAccount ? 'border__avatar' : ''
-                                    }
+                                    className={dropBoxAccount ? 'border__avatar' : ''}
                                 />
                             </div>
                             <div
                                 className={`box__drop--account ${
-                                    dropBoxAccount
-                                        ? 'active_drop_box'
-                                        : 'unactive_drop_box'
+                                    dropBoxAccount ? 'active_drop_box' : 'unactive_drop_box'
                                 }`}
                             >
                                 <div className="pd__select">
-                                    <ControlBoxAccount
-                                        setState={setDropBoxAccount}
-                                    />
+                                    <ControlBoxAccount setState={setDropBoxAccount} />
                                 </div>
                             </div>
                         </div>

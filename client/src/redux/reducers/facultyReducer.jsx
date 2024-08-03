@@ -1,4 +1,4 @@
-import replaceElem from '../../utils/replaceElem';
+import { replaceElem } from '../../utils/handleArray';
 import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {

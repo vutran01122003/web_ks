@@ -25,11 +25,15 @@ class NotificationControllers {
     async getNotifications(req, res, next) {
         try {
             const recipientId = req.params.recipientId;
-            const queryString = req.query;
+            const { limit, page, currentNumNotifications: numOfDocs } = req.query;
 
             const notifications = await NotificationService.getNotifications({
                 recipientId,
-                queryString
+                queryString: {
+                    limit,
+                    page,
+                    numOfDocs
+                }
             });
 
             res.status(200).json({

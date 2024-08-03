@@ -37,7 +37,7 @@ const News = () => {
                             })}
                         </>
                     ) : (
-                        <h3 className="notify_nothing_header">Không có tin tức</h3>
+                        <h4 className="notify_nothing_header">KHÔNG CÓ TIN TỨC</h4>
                     )}
                 </div>
             )}

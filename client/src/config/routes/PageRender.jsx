@@ -24,15 +24,13 @@ function PageRender() {
                     setPageComponent(module);
                     setNotFound(false);
                 })
-                .catch(() => {
+                .catch((e) => {
+                    console.log(e);
                     setPageComponent(null);
                     setNotFound(true);
                 });
         } else {
-            if (
-                privatePages.includes(page) &&
-                !auth?.user.roles.includes('0004')
-            ) {
+            if (privatePages.includes(page) && !auth?.user.roles.includes('0004')) {
                 setNotFound(true);
                 setPageComponent(null);
             } else {
@@ -41,7 +39,8 @@ function PageRender() {
                         setPageComponent(module);
                         setNotFound(false);
                     })
-                    .catch(() => {
+                    .catch((e) => {
+                        console.log(e);
                         setPageComponent(null);
                         setNotFound(true);
                     });

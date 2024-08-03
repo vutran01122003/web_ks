@@ -12,6 +12,7 @@ import notificationReducer from './notificationReducer';
 import facultyReducer from './facultyReducer';
 import activitiesReducer from './activitiesReducer';
 import goalsReduce from './goalsReduce';
+import studentReducer from './studentReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
     notification: notificationReducer,
     faculty: facultyReducer,
     activities: activitiesReducer,
-    goals: goalsReduce
+    goals: goalsReduce,
+    student: studentReducer
 });
 
 export default rootReducer;

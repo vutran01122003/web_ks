@@ -24,6 +24,14 @@ a {
     text-decoration: none;
 }
 
+select {
+    min-width: 180px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    color: #333;
+    font-weight: 600;
+}
+
 .heading-4 {
     font-size: 16px;
     font-weight: 500;
@@ -182,6 +190,7 @@ a {
 @import './pages/pageProgress';
 @import './pages/pageFaculty';
 @import './pages/pageActivity';
+@import './pages/pageStudent';
 
 // Component
 @import './components/modalComponent';
@@ -196,6 +205,7 @@ a {
 @import './components/quantity';
 @import './components/tabs';
 @import './components/emptyDataComponent';
+
 // Scrollbar
 @import './scrollBar/scrollBar';
 @import './scrollBar/scrollToTopButton';

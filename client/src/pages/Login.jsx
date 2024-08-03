@@ -5,14 +5,12 @@ import FormLogin from '../components/FormLogin/FormLogin';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../redux/selector';
 import { Navigate } from 'react-router-dom';
-import { getLogged } from '../utils/handleLogged';
 import imgBackGround from '../assets/images/background_form_login.jpg';
 
 const Login = () => {
     const auth = useSelector(authSelector);
 
     if (auth.user || auth.firstLogin) return <Navigate to="/" />;
-    if (getLogged()) return <></>;
 
     return (
         <div className="container__login">

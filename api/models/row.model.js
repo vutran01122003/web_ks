@@ -1,9 +1,9 @@
-const conn = require('../dbs/init.mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const [DOC, COL] = ['row', 'rows'];
+const conn = require('../dbs/init.mongodb');
 const User = require('./user.model');
-const Page = require('./page.model');
+
+const [DOC, COL] = ['row', 'rows'];
 
 const RowSchema = new Schema(
     {
@@ -80,29 +80,32 @@ RowSchema.pre('deleteMany', async function (next) {
         };
 
         const ACCEPTED_STATUS = 'đã duyệt';
-        const deletedDocs = await this.model.find(this._conditions).lean();
-        const page = await Page.findById(deletedDocs[0].page);
-        const index = page.pageStudentLevelYear - 1;
+        const deletedDocs = await this.model.find(this._conditions).populate('page').lean();
 
-        await Promise.all(
-            deletedDocs.reduce((arrPendingTask, doc) => {
-                return [
-                    ...arrPendingTask,
-                    ...doc.content.map((contentItem) =>
-                        User.findByIdAndUpdate(doc.user, {
-                            $inc: {
-                                [`annualActivitiesProgress.${index}.${fieldOfStatus[contentItem.status]}`]: -1,
-                                [`annualActivitiesProgress.${index}.totalScore`]:
-                                    contentItem.status === ACCEPTED_STATUS ? -contentItem.totalScore : 0
-                            }
-                        })
-                    )
-                ];
-            }, [])
-        );
+        if (deletedDocs.length > 0) {
+            const index = deletedDocs[0].page.pageStudentLevelYear - 1;
+
+            await Promise.all(
+                deletedDocs.reduce((arrPendingTask, doc) => {
+                    return [
+                        ...arrPendingTask,
+                        ...doc.content.map((contentItem) =>
+                            User.findByIdAndUpdate(doc.user, {
+                                $inc: {
+                                    [`annualActivitiesProgress.${index}.${fieldOfStatus[contentItem.status]}`]: -1,
+                                    [`annualActivitiesProgress.${index}.totalScore`]:
+                                        contentItem.status === ACCEPTED_STATUS ? -contentItem.totalScore : 0
+                                }
+                            })
+                        )
+                    ];
+                }, [])
+            );
+        }
 
         return next();
     } catch (error) {
+        console.log(error);
         return next(error);
     }
 });

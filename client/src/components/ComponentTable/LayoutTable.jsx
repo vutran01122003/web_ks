@@ -97,7 +97,7 @@ const MainItem = ({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal,
                 } else if (item?.statusLabel) {
                     let statusValue = '';
 
-                    switch (item?.statusLabel) {
+                    switch (item?.statusLabel.toLowerCase()) {
                         case 'chờ duyệt':
                             statusValue = 'wating_status';
                             break;

@@ -1,101 +1,57 @@
 import { IoMdArrowDropright } from 'react-icons/io';
-import { MdOutlineLibraryBooks } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import search from '../../assets/images/search.png';
+import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
 
 function GoalsInfo({ levelYear, goalsInfo }) {
     return (
         <div className="goals_info_container">
-            <h2 className="goals_info_container_heading">
-                Các Nhóm Chỉ Tiêu Năm {levelYear}
-            </h2>
+            <h2 className="goals_info_container_heading">Các Nhóm Chỉ Tiêu Năm {levelYear}</h2>
             {goalsInfo.length > 0 ? (
                 goalsInfo.map((goals) => (
                     <div className="goals_info_wrapper" key={goals.pageId}>
-                        <Link
-                            to={`/page/${goals.pageName}`}
-                            className="goals_info_heading_wrapper"
-                        >
-                            <h3 className="goals_info_heading">
-                                {goals.pageName}
-                            </h3>
+                        <Link to={`/page/${goals.pageName}`} className="goals_info_heading_wrapper">
+                            <h3 className="goals_info_heading">{goals.pageName}</h3>
                         </Link>
-                        {Object.keys(goals.tables).map((key) => (
-                            <div
-                                className="goal_info_wrapper"
-                                key={goals.tables[key].tableId}
-                            >
-                                <div className="goal_info_heading_wrapper">
-                                    <MdOutlineLibraryBooks />
-                                    <h3 className="goal_info_heading">{key}</h3>
-                                    {goals.tables[key]?.quantityDemanded ===
-                                    goals.tables[key]?.completedTasksNum ? (
-                                        <span className="goal_info_success_status">
-                                            {'(Đã hoàn thành)'}
-                                        </span>
-                                    ) : (
-                                        <span className="goal_info_dangerous_status">
-                                            {'(Chưa hoàn thành)'}
-                                        </span>
-                                    )}
-                                </div>
 
-                                <div className="goal_info_desc">
-                                    <div className="goal_info_desc_table_description">
-                                        <div className="icon_wrapper">
-                                            <IoMdArrowDropright />
-                                        </div>
-                                        <span className="goal_info_lable">
-                                            Mô tả chỉ tiêu:
-                                        </span>
-                                        <span className="goal_info_value">
-                                            {goals.tables[key]
-                                                ?.tableDescription ||
-                                                'Không có'}
-                                        </span>
-                                    </div>
+                        <table className="goal_info_table">
+                            <thead className="goal_info_header">
+                                <tr>
+                                    <th>Tên Chỉ Tiêu</th>
+                                    <th>Số Lượng</th>
+                                    <th>Chờ Duyệt</th>
+                                    <th>Từ Chối</th>
+                                    <th>Hoàn Thành</th>
+                                    <th>Phải Nộp Lại</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
 
-                                    <div className="goal_info_desc_quantityDemanded">
-                                        <div className="icon_wrapper">
-                                            <IoMdArrowDropright />
-                                        </div>
-                                        <span className="goal_info_lable">
-                                            Số lượng yêu cầu:
-                                        </span>
-                                        <span className="goal_info_value">
-                                            {goals.tables[key]
-                                                ?.quantityDemanded || 0}
-                                        </span>
-                                    </div>
-
-                                    <div className="goal_info_desc_completedTasksNum">
-                                        <div className="icon_wrapper">
-                                            <IoMdArrowDropright />
-                                        </div>
-                                        <span className="goal_info_lable">
-                                            Số lượng đã hoàn thành:
-                                        </span>
-                                        <span className="goal_info_value">
-                                            {goals.tables[key]
-                                                ?.completedTasksNum || 0}
-                                        </span>
-                                    </div>
-
-                                    <div className="goal_info_desc_rejectTasksNum">
-                                        <div className="icon_wrapper">
-                                            <IoMdArrowDropright />
-                                        </div>
-                                        <span className="goal_info_lable">
-                                            Số lượng bị từ chối:
-                                        </span>
-                                        <span className="goal_info_value">
-                                            {goals.tables[key]
-                                                ?.rejectedTasksNum || 0}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                            <tbody className="goal_info_body">
+                                {Object.keys(goals.tables).map((key, index) => (
+                                    <tr key={key + index} className="goal_info">
+                                        <td className="goal_info_item goal_name">{capitalizeFirstLetter(key)}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.quantityDemanded || 0}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.pendingTasksNum || 0}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.rejectedTasksNum || 0}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.acceptedTasksNum || 0}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.resubmitedTasksNum || 0}</td>
+                                        <td className="goal_info_item">
+                                            {goals.tables[key]?.quantityDemanded ===
+                                            goals.tables[key]?.completedTasksNum ? (
+                                                <span className="goal_info_status goal_info_success_status">
+                                                    Hoàn Thành
+                                                </span>
+                                            ) : (
+                                                <span className="goal_info_status goal_info_dangerous_status">
+                                                    Chưa Hoàn Thành
+                                                </span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 ))
             ) : (

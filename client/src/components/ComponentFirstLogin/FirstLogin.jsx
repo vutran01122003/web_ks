@@ -29,8 +29,8 @@ function FirstLogin({ userId, birthday }) {
             register({
                 ...data,
                 userId,
-                birthday: formattedBirthday,
-            }),
+                birthday: formattedBirthday
+            })
         );
     };
 
@@ -56,19 +56,8 @@ function FirstLogin({ userId, birthday }) {
                         placeholder="Nhập mật khẩu"
                         onChange={handleChangeData}
                     />
-                    <FormControl
-                        id="msv"
-                        label="Mã Sinh Viên"
-                        name="userId"
-                        readonly
-                        value={userId}
-                    />
-                    <FormControl
-                        id="bir"
-                        label="Ngày Sinh"
-                        readonly
-                        value={formattedBirthday}
-                    />
+                    <FormControl id="msv" label="Mã Sinh Viên" name="userId" readonly value={userId} />
+                    <FormControl id="bir" label="Ngày Sinh" readonly value={formattedBirthday} />
 
                     <FormControl
                         id="cohort"
@@ -87,9 +76,9 @@ function FirstLogin({ userId, birthday }) {
                         options={[
                             {
                                 labelOption: 'Công nghệ thông tin',
-                                value: 'Công nghệ thông tin',
+                                value: 'Công nghệ thông tin'
                             },
-                            { labelOption: 'Kế Toán', value: 'Kế Toán' },
+                            { labelOption: 'Kế Toán', value: 'Kế Toán' }
                         ]}
                         onChange={handleChangeData}
                     />
@@ -101,21 +90,16 @@ function FirstLogin({ userId, birthday }) {
                         options={[
                             {
                                 labelOption: 'Kỹ thuật phần mềm',
-                                value: 'Kỹ thuật phần mềm',
+                                value: 'Kỹ thuật phần mềm'
                             },
                             {
                                 labelOption: 'Khoa học máy tính',
-                                value: 'Khoa học máy tính',
-                            },
+                                value: 'Khoa học máy tính'
+                            }
                         ]}
                         onChange={handleChangeData}
                     />
-                    <FormControl
-                        label="Email"
-                        name="email"
-                        placeholder="Nhập email"
-                        onChange={handleChangeData}
-                    />
+                    <FormControl label="Email" name="email" placeholder="Nhập email" onChange={handleChangeData} />
                     <FormControl
                         label="Số điện thoại liên hệ"
                         name="phone"
@@ -123,11 +107,7 @@ function FirstLogin({ userId, birthday }) {
                         onChange={handleChangeData}
                     />
 
-                    <ComponentButton
-                        textButton="Lưu thông tin"
-                        type="submit"
-                        onClick={handleSumbitForm}
-                    />
+                    <ComponentButton textButton="Lưu thông tin" type="submit" onClick={handleSumbitForm} />
                 </form>
             </div>
         </div>

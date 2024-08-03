@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom/dist';
@@ -16,6 +16,7 @@ import { getPage } from './redux/actions/pageAction';
 import FirstLogin from './components/ComponentFirstLogin/FirstLogin';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
 import { getFacultyByName } from './redux/actions/facultyAction';
+import Loading from './components/ComponentToast/Loading';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -25,9 +26,10 @@ const App = () => {
     const pathName = location.pathname;
     const groupCode = auth?.user?.group.groupCode;
     const { VITE_APP_TALENTED_ENGINEER_CODE } = import.meta.env;
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(verifyAccessToken());
+        dispatch(verifyAccessToken()).finally(() => setIsLoading(false));
     }, [dispatch]);
 
     useEffect(() => {
@@ -37,9 +39,11 @@ const App = () => {
     useEffect(() => {
         if (auth?.user) {
             dispatch(getNumUnreadNotification({ userId: auth?.user._id }));
-            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: auth?.user.faculty }));
+            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: auth?.user?.faculty }));
         }
     }, [auth, dispatch]);
+
+    if (isLoading) return null;
 
     return (
         <>

@@ -7,14 +7,6 @@ class UserControllers {
         try {
             const { major, cohort, levelYear } = req.body;
 
-            // const isExists = await PageService.getPageByFields({
-            //     pageStudentMajor: major,
-            //     pageStudentCohort: cohort,
-            //     pageStudentLevelYear: levelYear
-            // });
-
-            // if (!isExists) throw createError.NotFound(`Không có hoạt động năm ${levelYear} được tạo để kết thúc`);
-
             await UserService.updateUserActivityStatusByMajor(req.body);
 
             res.status(200).json({
@@ -46,12 +38,61 @@ class UserControllers {
         try {
             const userId = req.params.userId;
 
-            const user = await UserService.findUserByUserId({ userId });
+            const user = await UserService.getUserByUserId({ userId });
 
             res.status(200).json({
                 msg: 'Lấy dữ liệu người dùng thành công',
                 status: 200,
                 data: user
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getUsers = async (req, res, next) => {
+        try {
+            const { limit, page, cohort, major, userId, status } = req.query;
+
+            const users = await UserService.getUsersByFields({
+                fields: {
+                    cohort: parseInt(cohort),
+                    major,
+                    isActive: status ? status === 'true' : undefined,
+                    userId: userId ? { $regex: userId } : undefined
+                },
+                queryString: {
+                    limit,
+                    page
+                }
+            });
+
+            res.status(200).json({
+                msg: 'Lấy danh sách người dùng thành công',
+                status: 200,
+                data: users
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    updateUser = async (req, res, next) => {
+        try {
+            const userId = req.params.userId;
+            const { password, ...userData } = req.body.userData;
+
+            console.log(userData);
+
+            if (Object.keys(userData).some((key) => userData[key] === ''))
+                throw createError.BadRequest('Vui lòng nhập đầy đủ thông tin');
+
+            const updatedUser = await UserService.updateUser({ password, userId, userData });
+
+            res.status(200).json({
+                msg: 'Cập nhật thông tin người dùng thành công',
+                status: 200,
+                data: updatedUser
             });
         } catch (error) {
             next(error);

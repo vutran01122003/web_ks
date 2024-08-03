@@ -103,25 +103,26 @@ const LayoutSideBar = ({ auth }) => {
                                         {item.icon_before}
                                         <span className={toggleMenu ? 'none_text__menu--item' : ''}>
                                             {item.name_menu}
-                                            {item.dynamicPage === 'goals' && (
-                                                <select
-                                                    name="level_year_list"
-                                                    value={levelYear}
-                                                    onChange={(e) => {
-                                                        handleChangeLevelYear(e);
-                                                        handleRefreshSubMenu(item.id);
-                                                    }}
-                                                >
-                                                    {levelYearList.map((levelYearItem) => {
-                                                        return (
-                                                            <option value={levelYearItem} key={levelYearItem}>
-                                                                {levelYearItem}
-                                                            </option>
-                                                        );
-                                                    })}
-                                                </select>
-                                            )}
                                         </span>
+                                        {item.dynamicPage === 'goals' && (
+                                            <select
+                                                className="level_year_list"
+                                                name="level_year_list"
+                                                value={levelYear}
+                                                onChange={(e) => {
+                                                    handleChangeLevelYear(e);
+                                                    handleRefreshSubMenu(item.id);
+                                                }}
+                                            >
+                                                {levelYearList.map((levelYearItem) => {
+                                                    return (
+                                                        <option value={levelYearItem} key={levelYearItem}>
+                                                            {levelYearItem}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </select>
+                                        )}
                                     </span>
                                 </div>
                                 {toggleMenu ? (

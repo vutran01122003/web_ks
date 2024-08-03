@@ -137,7 +137,7 @@ const ActivityUi = () => {
     useEffect(() => {
         if (faculty?.facultyData.length > 0 && auth?.user?.faculty) {
             setMajorsValue(
-                faculty?.facultyData.find((facultyItem) => facultyItem.facultyName === auth?.user.faculty).majors
+                faculty?.facultyData.find((facultyItem) => facultyItem.facultyName === auth?.user?.faculty).majors
             );
         }
     }, [faculty?.facultyData]);

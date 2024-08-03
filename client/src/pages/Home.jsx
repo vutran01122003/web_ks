@@ -67,7 +67,7 @@ const Home = ({ auth }) => {
             </div>
 
             {auth?.user.group.groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
-                <Quantity annualTaskProgress={auth.user.annualTaskProgress[levelYear]} />
+                <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
             )}
 
             <div className="container__top transform__animation--top">

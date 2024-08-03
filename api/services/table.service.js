@@ -1,5 +1,6 @@
 const Page = require('../models/page.model');
 const createError = require('http-errors');
+const UserService = require('./user.service');
 
 class TableService {
     static addTable = async ({ pageId, tables }) => {
@@ -29,6 +30,12 @@ class TableService {
                 }
             );
 
+            await UserService.updateNumOfRequiredActivity({
+                page,
+                tables,
+                isDesc: false
+            });
+
             return {
                 msg: 'Thêm chỉ tiêu thành công',
                 page: updatedPage,
@@ -41,7 +48,7 @@ class TableService {
 
     static removeTable = async ({ pageId, tableId }) => {
         try {
-            const page = await Page.findById(pageId).lean();
+            const page = await Page.findById(pageId);
 
             if (!page) throw createError.NotFound('Không tìm thấy page');
 
@@ -56,6 +63,12 @@ class TableService {
                     new: true
                 }
             );
+
+            await UserService.updateNumOfRequiredActivity({
+                page,
+                tables: [page.tables.id(tableId)],
+                isDesc: true
+            });
 
             return {
                 msg: 'Xóa chỉ tiêu thành công',

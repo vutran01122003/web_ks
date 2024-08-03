@@ -113,6 +113,13 @@ export const removePage =
             });
 
             dispatch({
+                type: GLOBALTYPES.GOALS.REMOVE_GOALS,
+                payload: {
+                    pageId
+                }
+            });
+
+            dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
                     success: res.data.msg
@@ -131,7 +138,7 @@ export const removePage =
         }
     };
 
-export const updatedStatusPage =
+export const updateStatusPage =
     ({ pageId, currentStatus }) =>
     async (dispatch) => {
         try {
@@ -145,7 +152,7 @@ export const updatedStatusPage =
             const res = await patchDataApi('/page', { pageId, currentStatus });
 
             dispatch({
-                type: GLOBALTYPES.PAGE.UPDATE_STATUS_PAGE,
+                type: GLOBALTYPES.GOALS.UPDATE_STATUS_GOAL,
                 payload: {
                     pageId,
                     currentStatus
@@ -159,6 +166,7 @@ export const updatedStatusPage =
                 }
             });
         } catch (error) {
+            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {

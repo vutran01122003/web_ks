@@ -1,11 +1,12 @@
 const createError = require('http-errors');
 const User = require('../models/user.model');
 const PermissionService = require('./permission.service');
-const PageService = require('./page.service');
 const FacultyService = require('./faculty.service');
+const Pagination = require('../utils/Pagination');
+const [FACULTY_MANAGER, ADMIN] = ['003', '004'];
 
 class UserService {
-    static findUserAndPopulateGroupById = async ({ id, idList }) => {
+    static getUserAndPopulateGroupById = async ({ id, idList }) => {
         try {
             let result = null;
 
@@ -19,7 +20,7 @@ class UserService {
         }
     };
 
-    static findUserById = async (id) => {
+    static getUserById = async (id) => {
         try {
             return await User.findById(id);
         } catch (error) {
@@ -27,11 +28,66 @@ class UserService {
         }
     };
 
-    static findUserByUserId = async ({ userId }) => {
+    static getUserByUserId = async ({ userId }) => {
         try {
             const user = await User.findOne({ userId: userId }).lean();
             if (!user) throw createError.NotFound('Người dùng không tồn tại');
             return user;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getUsersByFields = async ({ fields, queryString }) => {
+        Object.keys(fields).forEach((key) => fields[key] === undefined && delete fields[key]);
+
+        const pagination = new Pagination(
+            User.aggregate([
+                { $match: fields },
+                {
+                    $lookup: {
+                        from: 'groups',
+                        localField: 'group',
+                        foreignField: '_id',
+                        as: 'group'
+                    }
+                },
+                {
+                    $unwind: '$group'
+                },
+                {
+                    $match: {
+                        'group.groupCode': {
+                            $nin: [FACULTY_MANAGER, ADMIN]
+                        }
+                    }
+                }
+            ]),
+            queryString
+        );
+
+        return await pagination.paginating();
+    };
+
+    static updateUser = async ({ password, userId, userData }) => {
+        try {
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                {
+                    ...userData,
+                    birthday: new Date(userData.birthday)
+                },
+                {
+                    new: true
+                }
+            );
+
+            if (password) {
+                updatedUser.password = password;
+                await updatedUser.save();
+            }
+
+            return updatedUser;
         } catch (error) {
             throw error;
         }
@@ -104,7 +160,23 @@ class UserService {
                         },
                         {
                             $set: {
-                                levelYear: levelYear + 1
+                                levelYear
+                            },
+                            $push: {
+                                annualActivitiesProgress: {
+                                    $each: [
+                                        {
+                                            levelYear,
+                                            totalScore: 0,
+                                            numberOfRequiredActivity: 0,
+                                            numberOfPendingActivity: 0,
+                                            numberOfAcceptedActivity: 0,
+                                            numberOfRejectedActivity: 0,
+                                            numberOfResubmitedActivity: 0
+                                        }
+                                    ],
+                                    $position: levelYear
+                                }
                             }
                         }
                     ),
@@ -278,11 +350,104 @@ class UserService {
         }
     };
 
+    static updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
+        try {
+            const ACCEPTED_STATUS = 'đã duyệt';
+            const fieldOfStatus = {
+                'chờ duyệt': 'numberOfPendingActivity',
+                'đã duyệt': 'numberOfAcceptedActivity',
+                'từ chối': 'numberOfRejectedActivity',
+                'phải nộp lại': 'numberOfResubmitedActivity'
+            };
+
+            const index = levelYear - 1;
+
+            const updatedInfo = {
+                [`annualActivitiesProgress.${index}.${fieldOfStatus[status]}`]: 1,
+                [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1
+            };
+
+            if (!prevStatus) delete updatedInfo[`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`];
+            if (prevStatus === ACCEPTED_STATUS) {
+                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = -totalScore;
+            } else if (status === ACCEPTED_STATUS) {
+                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = totalScore;
+            }
+
+            const user = await User.findById(userId);
+
+            if (!user.annualActivitiesProgress[index]) {
+                await Promise.all(
+                    Array(levelYear)
+                        .fill(null)
+                        .reduce((arr, _null, index) => {
+                            if (!user.annualActivitiesProgress[index])
+                                return [
+                                    ...arr,
+                                    User.findByIdAndUpdate(userId, {
+                                        $push: {
+                                            annualActivitiesProgress: {
+                                                $each: [
+                                                    {
+                                                        levelYear: index + 1,
+                                                        totalScore: 0,
+                                                        numberOfRequiredActivity: 0,
+                                                        numberOfPendingActivity: 0,
+                                                        numberOfAcceptedActivity: 0,
+                                                        numberOfRejectedActivity: 0,
+                                                        numberOfResubmitedActivity: 0
+                                                    }
+                                                ],
+                                                $position: index
+                                            }
+                                        }
+                                    })
+                                ];
+
+                            return arr;
+                        }, [])
+                );
+            }
+
+            await User.findByIdAndUpdate(userId, {
+                $inc: updatedInfo
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static updateNumOfRequiredActivity = async ({ page, tables, isDesc }) => {
+        try {
+            const quantityDemanded = tables.reduce((quantityDemanded, table) => {
+                return quantityDemanded + table.quantityDemanded;
+            }, 0);
+
+            const updatedUserList = await User.updateMany(
+                {
+                    cohort: parseInt(page.pageStudentCohort),
+                    major: page.pageStudentMajor
+                },
+                {
+                    $inc: {
+                        [`annualActivitiesProgress.${page.pageStudentLevelYear - 1}.numberOfRequiredActivity`]: isDesc
+                            ? -quantityDemanded
+                            : quantityDemanded
+                    }
+                }
+            );
+
+            return updatedUserList;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static addGroupForUser = async ({ groupId, userId }) => {
         try {
             const result = await Promise.all([
                 PermissionService.getGroupById({ groupId }),
-                this.findUserAndPopulateGroupById({ id: userId })
+                this.getUserAndPopulateGroupById({ id: userId })
             ]);
 
             if (!result[0]) throw createError.NotFound('Chức vụ không tồn tại');

@@ -1,38 +1,37 @@
 import { LuListRestart } from 'react-icons/lu';
 import { MdSportsScore } from 'react-icons/md';
-import { Link } from 'react-router-dom';
 import { BsClipboard2X, BsClipboard2Check, BsClipboard2Minus } from 'react-icons/bs';
 
-const Quantity = ({ annualTaskProgress }) => {
+const Quantity = ({ annualActivitiesProgress }) => {
     const LIST_QUANTITY_OVERVIEW = [
         {
             text_heading: 'Hoạt động chờ duyệt',
-            quantity: annualTaskProgress?.pendingTask || 0,
+            quantity: annualActivitiesProgress?.numberOfPendingActivity || 0,
             icon_after: <BsClipboard2Minus />,
             color_border: '#f0635c'
         },
         {
             text_heading: 'Hoạt động đã duyệt',
-            quantity: annualTaskProgress?.completedTask || 0,
+            quantity: annualActivitiesProgress?.numberOfAcceptedActivity || 0,
             icon_after: <BsClipboard2Check />,
             color_border: '#f0635c'
         },
         {
             text_heading: 'Hoạt động bị từ chối',
-            quantity: annualTaskProgress?.rejectedTask || 0,
+            quantity: annualActivitiesProgress?.numberOfRejectedActivity || 0,
             icon_after: <BsClipboard2X />,
             color_border: '#3E97FF'
         },
         {
             text_heading: 'Hoạt động phải nộp lại',
-            quantity: annualTaskProgress?.resubmitedTask || 0,
+            quantity: annualActivitiesProgress?.numberOfResubmitedActivity || 0,
             icon_after: <LuListRestart />,
             color_border: '#6E6E6E'
         },
         {
             text_heading: 'Tổng điểm đã đạt',
             isTotalScore: true,
-            quantity: annualTaskProgress?.totalScore || 0,
+            quantity: annualActivitiesProgress?.totalScore || 0,
             icon_after: <MdSportsScore />,
             color_border: '#6E6E6E'
         }

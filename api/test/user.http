@@ -11,3 +11,6 @@ Content-Type: application/json
 
 ### Add group to user
 POST {{url}}/api/users/65e06f20580884a201b801d7/groups/65e07596147fc5e332b88986
+
+### Get user
+GET {{url}}/api/users?major=kỹ thuật phần mềm&cohort=17&limit=5&page=1

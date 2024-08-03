@@ -5,13 +5,18 @@ class Pagination {
     }
 
     paginating = async () => {
-        const page = this.queryString.page * 1;
-        const limit = this.queryString.limit * 1;
-        const currentNumNotifications = this.queryString.currentNumNotifications;
+        if (!this.queryString?.limit) return this.query;
+        const page = this.queryString?.page * 1;
+        const limit = this.queryString?.limit * 1;
+        const numOfDocs = this.queryString?.numOfDocs;
 
-        let skip = (page - 1) * limit + ((page - 1) * limit - currentNumNotifications);
-        if (skip < 0) skip = -skip;
-        return await this.query.limit(limit).skip(skip);
+        // The recipe: (page - 1) * limit not true when we delete or create element in current page
+        // numOfDocs help system to exactly paganate page if this occur
+        // skip is negative if we create new element in current page
+
+        const skip = Math.abs((page - 1) * limit + (numOfDocs ? (page - 1) * limit - numOfDocs : 0));
+
+        return await this.query.skip(skip).limit(limit);
     };
 }
 

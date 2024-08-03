@@ -9,7 +9,7 @@ const RadialBarChart = ({ children }) => {
         series: [...children.dataValue],
         options: {
             chart: {
-                type: 'radialBar',
+                type: 'radialBar'
             },
             colors: [...children.colors],
 
@@ -17,23 +17,23 @@ const RadialBarChart = ({ children }) => {
                 radialBar: {
                     dataLabels: {
                         name: {
-                            fontSize: '22px',
+                            fontSize: '22px'
                         },
                         value: {
-                            fontSize: '16px',
+                            fontSize: '16px'
                         },
                         total: {
                             show: true,
                             label: 'Tiến độ',
                             formatter: function () {
                                 return children.average + '%';
-                            },
-                        },
-                    },
-                },
+                            }
+                        }
+                    }
+                }
             },
-            labels: [...children.dataCategory],
-        },
+            labels: [...children.dataCategory]
+        }
     };
     return (
         <>
@@ -55,8 +55,8 @@ const SubChart = ({ caterogy, color }) => {
                 className="color"
                 style={{
                     backgroundColor: color,
-                    width: '70px',
-                    height: '25px',
+                    width: '50px',
+                    height: '25px'
                 }}
             ></div>
             <div className="sub" style={{ color: color }}>
@@ -82,7 +82,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
         '#f8674f',
         '#13098e',
         '#bc2b4d',
-        '#f91190',
+        '#f91190'
     ];
 
     let totalQuantityDemanded = 0;
@@ -93,9 +93,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
         totalProgress += item.value * item.quantityDemanded;
         return parseFloat(item.value.toFixed(2));
     });
-    const dataCategory = chartData.map((item) =>
-        capitalizeFirstLetter(item.caterogy),
-    );
+    const dataCategory = chartData.map((item) => capitalizeFirstLetter(item.caterogy));
     const average = (totalProgress / totalQuantityDemanded).toFixed(2);
     const [yearList, setYearList] = useState([]);
 
@@ -103,7 +101,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
         dataValue,
         dataCategory,
         average,
-        colors,
+        colors
     };
 
     useEffect(() => {
@@ -112,7 +110,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
             for (let i = 1; i <= auth.user?.levelYear; i++) {
                 yearsData.push({
                     value: i,
-                    label: `Năm ${i}`,
+                    label: `Năm ${i}`
                 });
             }
             setYearList(yearsData);
@@ -130,22 +128,18 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
                     }}
                     defaultValue={{
                         value: auth.user?.levelYear,
-                        label: `Năm ${auth.user?.levelYear}`,
+                        label: `Năm ${auth.user?.levelYear}`
                     }}
                     style={{
                         width: '120px',
-                        marginLeft: '20px',
+                        marginLeft: '20px'
                     }}
                     options={yearList}
                 />
             </header>
             {dataValue.length === 0 ? (
                 <div className="notify_nothing">
-                    <img
-                        src={search}
-                        className="notify_nothing_img"
-                        alt="search_image"
-                    />
+                    <img src={search} className="notify_nothing_img" alt="search_image" />
                     <span>Các nhóm chỉ tiêu chưa được tạo</span>
                 </div>
             ) : (
@@ -155,11 +149,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
                     </div>
                     <div className="chart__sub">
                         {dataCategory.map((item, index) => (
-                            <SubChart
-                                key={index}
-                                caterogy={item}
-                                color={colors[index]}
-                            />
+                            <SubChart key={index} caterogy={item} color={colors[index]} />
                         ))}
                     </div>
                 </div>

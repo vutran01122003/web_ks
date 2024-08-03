@@ -13,21 +13,16 @@ import {
     deleteNotification,
     markAllAsRead,
     deleteAllNotification,
-    getNotifications,
+    getNotifications
 } from '../../../redux/actions/notifyAction';
 
-function Notification({
-    notification,
-    auth,
-    handleToggleVisibleNotificationModal,
-}) {
+function Notification({ notification, auth, handleToggleVisibleNotificationModal }) {
     const dispatch = useDispatch();
     const notificationRef = useRef();
     const observer = useRef();
     const [visibleMoreModal, setVisibleMoreModal] = useState(false);
     const [currentNotificationId, setCurrentNotificationId] = useState(null);
-    const [visibleNtfItemMoreModal, setvisibleNtfItemMoreModal] =
-        useState(false);
+    const [visibleNtfItemMoreModal, setvisibleNtfItemMoreModal] = useState(false);
 
     const handleScrollToLastNotificationItemRef = useCallback(
         (elem) => {
@@ -40,9 +35,8 @@ function Notification({
                             recipientId: auth?.user._id,
                             page: notification.page + 1,
                             limit: 5,
-                            currentNumNotifications:
-                                notification.currentNumNotifications,
-                        }),
+                            currentNumNotifications: notification.currentNumNotifications
+                        })
                     );
                 }
             });
@@ -53,8 +47,8 @@ function Notification({
             notification.isLoading,
             notification.page,
             notification.maxPage,
-            notification.currentNumNotifications,
-        ],
+            notification.currentNumNotifications
+        ]
     );
 
     const setCurrentElemRef = (e) => {
@@ -70,10 +64,7 @@ function Notification({
     };
 
     const handleNtfItemMoreModalOuterClick = (e) => {
-        if (
-            notificationRef.current &&
-            !notificationRef.current.contains(e.target)
-        ) {
+        if (notificationRef.current && !notificationRef.current.contains(e.target)) {
             notification.current = null;
             setvisibleNtfItemMoreModal(false);
         }
@@ -85,14 +76,12 @@ function Notification({
     };
 
     const handleMarkAllAsRead = () => {
-        if (notification.unreadNotificationNum !== 0)
-            dispatch(markAllAsRead({ recipientId: auth?.user._id }));
+        if (notification.unreadNotificationNum !== 0) dispatch(markAllAsRead({ recipientId: auth?.user._id }));
         handleToggleVisibleMoreModal();
     };
 
     const handleDeleteAllNotification = () => {
-        if (notification.data.length !== 0)
-            dispatch(deleteAllNotification({ recipientId: auth?.user._id }));
+        if (notification.data.length !== 0) dispatch(deleteAllNotification({ recipientId: auth?.user._id }));
         handleToggleVisibleMoreModal();
     };
 
@@ -101,9 +90,11 @@ function Notification({
             updateReadStatus({
                 notificationId,
                 status: status,
-                recipientId: auth?.user._id,
-            }),
+                recipientId: auth?.user._id
+            })
         );
+
+        currentNotificationId(null);
         handleToggleVisibleNtfItemMoreModal();
     };
 
@@ -111,23 +102,17 @@ function Notification({
         dispatch(
             deleteNotification({
                 notificationId,
-                recipientId: auth?.user._id,
-            }),
+                recipientId: auth?.user._id
+            })
         );
         handleToggleVisibleNtfItemMoreModal();
     };
 
     useEffect(() => {
-        document.addEventListener(
-            'mousedown',
-            handleNtfItemMoreModalOuterClick,
-        );
+        document.addEventListener('mousedown', handleNtfItemMoreModalOuterClick);
 
         return () => {
-            document.removeEventListener(
-                'mousedown',
-                handleNtfItemMoreModalOuterClick,
-            );
+            document.removeEventListener('mousedown', handleNtfItemMoreModalOuterClick);
         };
     }, [notificationRef.current]);
 
@@ -138,8 +123,8 @@ function Notification({
                     recipientId: auth?.user._id,
                     limit: 5,
                     page: 1,
-                    currentNumNotifications: 0,
-                }),
+                    currentNumNotifications: 0
+                })
             );
     }, []);
 
@@ -153,27 +138,18 @@ function Notification({
                     onClickOutside={handleToggleVisibleMoreModal}
                     render={() => (
                         <div className="more_modal">
-                            <div
-                                className="more_modal_item read_btn"
-                                onClick={handleMarkAllAsRead}
-                            >
+                            <div className="more_modal_item read_btn" onClick={handleMarkAllAsRead}>
                                 <FaCheck />
                                 <span> Đánh dấu đã đọc tất cả</span>
                             </div>
-                            <div
-                                className="more_modal_item del_btn"
-                                onClick={handleDeleteAllNotification}
-                            >
+                            <div className="more_modal_item del_btn" onClick={handleDeleteAllNotification}>
                                 <AiFillDelete />
                                 <span>Xóa tất cả thông báo</span>
                             </div>
                         </div>
                     )}
                 >
-                    <div
-                        className="notification_more"
-                        onClick={handleToggleVisibleMoreModal}
-                    >
+                    <div className="notification_more" onClick={handleToggleVisibleMoreModal}>
                         <TfiMoreAlt />
                     </div>
                 </Tippy>
@@ -186,12 +162,7 @@ function Notification({
                             if (notificationItem.recipient) {
                                 isRead = notificationItem.isRead ? true : false;
                             } else {
-                                isRead =
-                                    notificationItem.readedUserList.includes(
-                                        auth?.user._id,
-                                    )
-                                        ? true
-                                        : false;
+                                isRead = notificationItem.readedUserList.includes(auth?.user._id) ? true : false;
                             }
 
                             return (
@@ -201,44 +172,30 @@ function Notification({
                                             ? handleScrollToLastNotificationItemRef
                                             : null
                                     }
-                                    key={notificationItem._id}
+                                    key={notificationItem._id + index}
                                     className={`notification_item ${
-                                        isRead
-                                            ? 'read_notification'
-                                            : 'unread_notification'
+                                        isRead ? 'read_notification' : 'unread_notification'
                                     } `}
                                 >
                                     <Link
                                         to={`${
-                                            notificationItem?.page
-                                                ? 'page/' +
-                                                  notificationItem.page.pageName
-                                                : null
+                                            notificationItem?.page ? 'page/' + notificationItem.page.pageName : null
                                         }`}
                                         className="notification_item_content_wrapper"
                                         onClick={() => {
                                             updateReadStatusNotificationItem({
-                                                notificationId:
-                                                    notificationItem._id,
-                                                status: !notificationItem.isRead,
+                                                notificationId: notificationItem._id,
+                                                status: !notificationItem.isRead
                                             });
 
                                             handleToggleVisibleNotificationModal();
                                         }}
                                     >
                                         <div className="notification_item_img_wrapper">
-                                            <img
-                                                src={
-                                                    notificationItem.sender
-                                                        ?.avatar
-                                                }
-                                                alt="avatar"
-                                            />
+                                            <img src={notificationItem.sender?.avatar} alt="avatar" />
                                         </div>
                                         <div className="notification_item_content">
-                                            <div className="notification_item_title">
-                                                {notificationItem.title}
-                                            </div>
+                                            <div className="notification_item_title">{notificationItem.title}</div>
                                             <div className="notification_item_note">
                                                 {`Ghi chú: ${
                                                     notificationItem.content
@@ -247,9 +204,7 @@ function Notification({
                                                 }`}
                                             </div>
                                             <div className="notification_item_datetime">
-                                                {moment(
-                                                    notificationItem.createdAt,
-                                                ).fromNow()}
+                                                {moment(notificationItem.createdAt).fromNow()}
                                             </div>
                                         </div>
                                     </Link>
@@ -265,38 +220,28 @@ function Notification({
                                             className="notification_item_more"
                                             onClick={(e) => {
                                                 setCurrentElemRef(e);
-                                                handleSetCurrentNotificationId(
-                                                    notificationItem._id,
-                                                );
+                                                handleSetCurrentNotificationId(notificationItem._id);
                                             }}
                                         >
                                             <IoMdMore />
-                                            {notificationItem._id ===
-                                                currentNotificationId &&
+                                            {notificationItem._id === currentNotificationId &&
                                                 visibleNtfItemMoreModal && (
                                                     <div className="more_modal notification_item_more_modal">
                                                         <div className="more_modal_item read_btn">
                                                             <FaCheck />
                                                             <span
                                                                 onClick={() => {
-                                                                    updateReadStatusNotificationItem(
-                                                                        {
-                                                                            notificationId:
-                                                                                notificationItem._id,
-                                                                            status: notificationItem.recipient
-                                                                                ? !notificationItem.isRead
-                                                                                : !notificationItem.readedUserList.includes(
-                                                                                      auth
-                                                                                          ?.user
-                                                                                          ?._id,
-                                                                                  ),
-                                                                        },
-                                                                    );
+                                                                    updateReadStatusNotificationItem({
+                                                                        notificationId: notificationItem._id,
+                                                                        status: notificationItem.recipient
+                                                                            ? !notificationItem.isRead
+                                                                            : !notificationItem.readedUserList.includes(
+                                                                                  auth?.user?._id
+                                                                              )
+                                                                    });
                                                                 }}
                                                             >
-                                                                {isRead
-                                                                    ? 'Đánh dấu chưa đọc'
-                                                                    : 'Đánh dấu đã đọc'}
+                                                                {isRead ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'}
                                                             </span>
                                                         </div>
                                                         <div className="more_modal_item del_btn">
@@ -304,12 +249,9 @@ function Notification({
 
                                                             <span
                                                                 onClick={() => {
-                                                                    deleteNotificationItem(
-                                                                        {
-                                                                            notificationId:
-                                                                                notificationItem._id,
-                                                                        },
-                                                                    );
+                                                                    deleteNotificationItem({
+                                                                        notificationId: notificationItem._id
+                                                                    });
                                                                 }}
                                                             >
                                                                 Xóa thông báo

@@ -3,11 +3,17 @@
     padding: 10px 20px;
     display: flex;
     flex-direction: column;
+    height: 87vh;
 
     .notify_nothing_header {
-        color: gray;
-        text-align: center;
-        margin-top: 200px;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgb(165, 165, 165);
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
     }
 }
 

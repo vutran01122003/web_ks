@@ -12,8 +12,8 @@ export const renderSideBar = ({ auth, page, levelYear }) => {
                             sub_page_type: page.pageType,
                             sub_name_menu: page.pageName,
                             sub_icon_before: '?',
-                            sub_to_link: `/page/${page.pageName}`,
-                        },
+                            sub_to_link: `/page/${page.pageName}`
+                        }
                     ];
                 }
                 return intialArr;
@@ -36,8 +36,8 @@ export const renderSideBar = ({ auth, page, levelYear }) => {
                             sub_page_type: page.pageType,
                             sub_name_menu: page.pageName,
                             sub_icon_before: '?',
-                            sub_to_link: `/page/${page.pageName}`,
-                        },
+                            sub_to_link: `/page/${page.pageName}`
+                        }
                     ];
                 }
                 return intialArr;
