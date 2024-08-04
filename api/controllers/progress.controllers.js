@@ -9,13 +9,13 @@ const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
 class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
         try {
-            const { pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
+            const { userId, pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
 
             const pageDetailsList = await ProgressService.getProgressByYear({
                 pageStudentMajor,
                 pageStudentLevelYear,
                 pageStudentCohort,
-                userId: res.locals.userId
+                userId: userId
             });
 
             const completedTasks = pageDetailsList.reduce((arr, page) => {

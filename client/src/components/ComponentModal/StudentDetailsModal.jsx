@@ -3,9 +3,12 @@ import { HiMiniXMark } from 'react-icons/hi2';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/actions/studentAction';
+import ConfirmModal from '../ComponentModal/ConfirmModal';
 
 function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
     const dispatch = useDispatch();
+
+    const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
 
     const dateParts = currentUserData?.birthday
         ? new Date(currentUserData?.birthday).toLocaleDateString().split('/')
@@ -18,16 +21,21 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
     const [userData, setUserData] = useState({
         userId: currentUserData?.userId || '',
         fullName: capitalizeFirstLetter(currentUserData?.fullName) || '',
+        gender: capitalizeFirstLetter(currentUserData?.gender) || '',
         email: currentUserData?.email || '',
         phone: currentUserData?.phone || '',
-        isActive: currentUserData?.isActive || false,
         birthday: dateParts
             ? `${dateParts[2]}-${addZeroPrefix(dateParts[1])}-${addZeroPrefix(dateParts[0])}`
             : dateParts,
         major: currentUserData?.major || '',
         cohort: currentUserData?.cohort || '',
+        isActive: currentUserData?.isActive || false,
         password: ''
     });
+
+    const onToggleConfirmModal = () => {
+        setIsVisibleConfirmModal((prev) => !prev);
+    };
 
     const onUpdateUser = () => {
         dispatch(
@@ -127,6 +135,25 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                                         value={userData.email}
                                         onChange={onChangeUserData}
                                     />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label className="label_item" htmlFor="gender">
+                                        Giới Tính:
+                                    </label>
+                                </td>
+                                <td>
+                                    <select
+                                        value={userData.gender}
+                                        className="select_item"
+                                        name="gender"
+                                        onChange={onChangeUserData}
+                                    >
+                                        <option value="nam">Nam</option>
+                                        <option value="nữ">Nữ</option>
+                                    </select>
                                 </td>
                             </tr>
 
@@ -277,7 +304,18 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                     <button className="close_btn" onClick={onToggleModal}>
                         Thoát
                     </button>
-                    <button className="update_btn" onClick={onUpdateUser}>
+
+                    {isVisibleConfirmModal && (
+                        <ConfirmModal
+                            headerContent="Cập Nhật Thông Tin Kỹ Sư"
+                            bodyContent="Bạn chắn chắn muốn cập nhật thông tin kỹ sư"
+                            noteContent="Nếu bạn thay đổi chuyên ngành hoặc khóa sinh viên thì toàn bộ tiến độ và điểm của sinh viên sẽ mất đi và không bao giờ khôi phục lại được. Vui lòng cân nhắc kỹ trước khi chỉnh sửa !"
+                            onAccept={onUpdateUser}
+                            toggleConfirmModalDisplay={onToggleConfirmModal}
+                        />
+                    )}
+
+                    <button className="update_btn" onClick={onToggleConfirmModal}>
                         Cập Nhật
                     </button>
                 </div>

@@ -82,8 +82,6 @@ class UserControllers {
             const userId = req.params.userId;
             const { password, ...userData } = req.body.userData;
 
-            console.log(userData);
-
             if (Object.keys(userData).some((key) => userData[key] === ''))
                 throw createError.BadRequest('Vui lòng nhập đầy đủ thông tin');
 

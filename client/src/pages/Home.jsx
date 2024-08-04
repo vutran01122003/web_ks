@@ -23,6 +23,7 @@ const Home = ({ auth }) => {
         if (auth?.user && groupCode === VITE_APP_TALENTED_ENGINEER_CODE && !progress.goalsInfoData[levelYear]) {
             dispatch(
                 getProgressByYear({
+                    userId: auth?.user._id,
                     studentMajor: auth.user?.major,
                     studentCohort: auth.user?.cohort,
                     studentLevelYear: levelYear

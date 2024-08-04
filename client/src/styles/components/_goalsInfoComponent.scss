@@ -59,14 +59,26 @@
             width: 100%;
             border-collapse: collapse;
 
+            .goal_info_header {
+                padding: 10px;
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                user-select: none;
+                text-align: center;
+            }
+
             td, th {
                 padding: 8px;
                 border: 1px solid #ddd;
             }
 
             .goal_info_body {
-                color: rgb(61, 61, 61);
-                font-weight: 600;
+                font-size: 14px;
+                font-weight: 500;
+                padding: 10px;
+                color: #4e545b;
+                text-align: center;
 
                 .goal_info_item {
                     text-align: center;

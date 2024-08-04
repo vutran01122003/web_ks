@@ -5,7 +5,7 @@ const { checkPermission } = require('../../middleware/permission');
 
 const router = require('express').Router();
 
-router.get('/progress', auth, checkPermission, progressControllers.getProgressByYear);
+router.get('/progress', auth, progressControllers.getProgressByYear);
 
 router.get('/progress/all', auth, checkPermission, progressControllers.getAllProgress);
 

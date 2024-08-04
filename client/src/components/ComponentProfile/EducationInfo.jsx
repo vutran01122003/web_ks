@@ -1,10 +1,10 @@
-import ComponentAvatar from '../ComponentAvatar/ComponentAvatar';
+import Avatar from '../ComponentAccount/ComponentAvatar';
 import LineItem from '../ComponentHome/LineItem';
 const EducationInfo = ({ auth }) => {
     return (
         <div className="education__info">
             <div className="info__text">
-                <ComponentAvatar size="large" />
+                <Avatar size="large" />
                 <LineItem info="Mã sinh viên" text={auth?.user?.userId || 'Chưa cập nhật'} className="id__info" />
             </div>
             <div className="main__info">

@@ -166,7 +166,6 @@ export const updateStatusPage =
                 }
             });
         } catch (error) {
-            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {

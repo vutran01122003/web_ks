@@ -6,6 +6,7 @@ import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
+import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
 
 const Student = () => {
     const LIMIT = 20;
@@ -17,11 +18,18 @@ const Student = () => {
 
     const [filterData, setFilterData] = useState({});
     const [pageNumber, setPageNumber] = useState(1);
-    const [isVisibleStudentDetailsModal, setIsVisibleStudentDetailsModal] = useState(false);
     const [currentUserData, setCurrentUserData] = useState(null);
+    const [isVisibleGoalDetailsModal, setIsVisibleGoalDetailsModal] = useState(false);
+    const [isVisibleStudentDetailsModal, setIsVisibleStudentDetailsModal] = useState(false);
 
     const onToggleVisibleStudentDetailsModal = (index) => {
         setIsVisibleStudentDetailsModal((prev) => !prev);
+        if (index === undefined) setCurrentUserData(null);
+        else setCurrentUserData(studentState.studentList[index]);
+    };
+
+    const onToggleGoalDetailsModal = (index) => {
+        setIsVisibleGoalDetailsModal((prev) => !prev);
         if (index === undefined) setCurrentUserData(null);
         else setCurrentUserData(studentState.studentList[index]);
     };
@@ -124,6 +132,10 @@ const Student = () => {
                 />
             )}
 
+            {isVisibleGoalDetailsModal && (
+                <GoalDetailsModal currentUserData={currentUserData} onToggleModalDisplay={onToggleGoalDetailsModal} />
+            )}
+
             <div className="container_st__manager">
                 <div className="body__data--st">
                     <div className="line__sort">
@@ -175,6 +187,7 @@ const Student = () => {
                                     <th>STT</th>
                                     <th>Mã Sinh Viên</th>
                                     <th>Họ Tên</th>
+                                    <th>Giới Tính</th>
                                     <th>Ngày Sinh</th>
                                     <th>Số Điện Thoại</th>
                                     <th>Trạng Thái</th>
@@ -198,6 +211,9 @@ const Student = () => {
                                             <td className="name_st">
                                                 {handleStringValue(capitalizeFirstLetter(student?.fullName || ''))}
                                             </td>
+                                            <td className="gender_st">
+                                                {handleStringValue(capitalizeFirstLetter(student?.gender || ''))}
+                                            </td>
                                             <td className="dob_st">
                                                 {student?.birthday
                                                     ? new Date(student.birthday).toLocaleDateString('en-GB')
@@ -211,7 +227,13 @@ const Student = () => {
                                                     {student.isActive ? 'Hoạt Động' : 'Đã Khóa'}
                                                 </span>
                                             </td>
-                                            <td>Xem Chi tiết</td>
+                                            <td
+                                                onClick={() => {
+                                                    onToggleGoalDetailsModal(index);
+                                                }}
+                                            >
+                                                Xem Chi tiết
+                                            </td>
                                             <td>
                                                 <abbr title="Chỉnh sửa thông tin">
                                                     <button

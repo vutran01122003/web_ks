@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import {
-    FaSquareFacebook,
-    FaLinkedin,
-    FaSquareXTwitter,
-} from 'react-icons/fa6';
+import { FaSquareFacebook, FaLinkedin, FaSquareXTwitter } from 'react-icons/fa6';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNewsDetails } from '../../redux/actions/newsAction';
 import { newsSelector } from '../../redux/selector';
 import ScrollToTopButton from '../../components/ScrollToTopButton/ScrollToTopButton';
-import Avatar from '../../components/ComponentAvatar/ComponentAvatar';
+import Avatar from '../../components/ComponentAccount/ComponentAvatar.jsx';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter.jsx';
 
 const NewsDetail = () => {
@@ -35,16 +31,10 @@ const NewsDetail = () => {
                 <>
                     <div className="pageNewsDetail">
                         <div className="pageNewsDetail__params">
-                            <Link
-                                to={`/page/${newsData.newsType}`}
-                                className="paramRoot"
-                            >
+                            <Link to={`/page/${newsData.newsType}`} className="paramRoot">
                                 {capitalizeFirstLetter(newsData.newsType)}
                             </Link>
-                            <Link
-                                href="#"
-                                className="paramCurrent breadcrumb-item"
-                            >
+                            <Link href="#" className="paramCurrent breadcrumb-item">
                                 {capitalizeFirstLetter(newsData.title)}
                             </Link>
                             <div className="shareNews">
@@ -62,19 +52,12 @@ const NewsDetail = () => {
                                     <h1>{newsData.title}</h1>
                                 </div>
                                 <div className="headerNew_info_wrapper">
-                                    <Avatar
-                                        url={newsData.author.cover}
-                                        size="small"
-                                    />
+                                    <Avatar url={newsData.author.cover} size="small" />
                                     <div className="headerNew_info">
-                                        <span className="headerNews__author">
-                                            {newsData.author.fullName}
-                                        </span>
+                                        <span className="headerNews__author">{newsData.author.fullName}</span>
 
                                         <span className="headerNews__time">
-                                            {moment(newsData.createdAt).format(
-                                                'DD/MM/YYYY HH:mm:ss',
-                                            )}
+                                            {moment(newsData.createdAt).format('DD/MM/YYYY HH:mm:ss')}
                                         </span>
                                     </div>
                                 </div>
@@ -82,7 +65,7 @@ const NewsDetail = () => {
                             <div
                                 className="contentNews"
                                 dangerouslySetInnerHTML={{
-                                    __html: newsData.content,
+                                    __html: newsData.content
                                 }}
                             ></div>
                         </div>

@@ -105,7 +105,6 @@ RowSchema.pre('deleteMany', async function (next) {
 
         return next();
     } catch (error) {
-        console.log(error);
         return next(error);
     }
 });

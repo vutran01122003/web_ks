@@ -1,4 +1,4 @@
-import ComponentAvatar from '../ComponentAvatar/ComponentAvatar';
+import Avatar from '../ComponentAccount/ComponentAvatar';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
 
 const LayoutInfo = ({ user, isDetailedRow }) => {
@@ -56,7 +56,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             <header className="heading-4">{heading}</header>
             <div className="content">
                 <div className="info__avatar">
-                    <ComponentAvatar size={`large ${isDetailedRow ? 'medium' : ''}`} />
+                    <Avatar size={`large ${isDetailedRow ? 'medium' : ''}`} />
                 </div>
                 <div className="info__text">
                     {userDataList.map((userData, index) => {

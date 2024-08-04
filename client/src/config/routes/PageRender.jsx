@@ -25,7 +25,6 @@ function PageRender() {
                     setNotFound(false);
                 })
                 .catch((e) => {
-                    console.log(e);
                     setPageComponent(null);
                     setNotFound(true);
                 });
@@ -40,7 +39,6 @@ function PageRender() {
                         setNotFound(false);
                     })
                     .catch((e) => {
-                        console.log(e);
                         setPageComponent(null);
                         setNotFound(true);
                     });

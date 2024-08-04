@@ -337,6 +337,7 @@
 .approve_modal {
     background: #fff;
     width: 480px;
+    max-width: 100%;
     border-radius: 5px;
     box-shadow: 0 0 1px #fff;
     border: 1px solid rgb(197, 194, 194);
@@ -658,6 +659,7 @@
 .note_modal {
     background: #fff;
     width: 480px;
+    max-width: 100%;
     border-radius: 5px;
     box-shadow: 0 0 1px #fff;
     border: 1px solid rgb(197, 194, 194);
@@ -1007,7 +1009,8 @@
 // Student details modal
 .student_details_modal {
     width: 500px;
-    height: 660px;
+    height: 680px;
+    max-width: 100%;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -1015,7 +1018,7 @@
 
     .student_details_body {
         flex: 1;
-        padding: 20px;
+        padding: 10px 20px;
 
         table {
             height: 100%;
@@ -1067,8 +1070,8 @@
     }
 
     .student_details_footer {
-        padding: 20px;
-        padding-top: 10px;
+        padding: 10px;
+        padding-bottom: 15px;
         display: flex;
         justify-content: space-around;
 
@@ -1095,6 +1098,50 @@
 
             &.update_btn {
                 background: #1677ff;
+            }
+        }
+    }
+}
+
+// Goal details modal
+.goal_details_modal {
+    width: 900px;
+    height: 600px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    
+    .goal_details_modal_header {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        padding: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        border-bottom: 1px solid rgb(229, 227, 227);
+    }
+
+    .goal_details_modal_body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .goal_details_modal_body_filter {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        .goal_details_modal_body_content {
+            flex: 1;
+            
+            .goals_info_container {
+                height: 100%;
+                box-shadow: unset;
             }
         }
     }

@@ -5,15 +5,14 @@ import { Tooltip } from 'antd';
 import { RiAdminLine } from 'react-icons/ri';
 import { TbGridDots } from 'react-icons/tb';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import ControlBoxAccount from './ComponentControl/ControlBoxAccount';
-import Avatar from '../ComponentAvatar/ComponentAvatar';
 import ImageMessenger from '../../assets/images/image_messenger.png';
 import ImageTask from '../../assets/images/image_task.png';
 import ImageNote from '../../assets/images/image_note.png';
 import Notification from './ComponentNotification/Notification';
 import { notificationSelector } from '../../redux/selector';
+import Account from '../ComponentAccount/ComponentAccount';
 
-const { VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
+const { VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
 
 const TopHeader = ({ auth }) => {
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
@@ -135,28 +134,14 @@ const TopHeader = ({ auth }) => {
                             )}
                         </div>
 
-                        <div className="border__account" ref={refBoxAccount}>
-                            <div className="btn_dropdown" onClick={() => setDropBoxAccount(!dropBoxAccount)}>
-                                <div className="info__user">
-                                    <div id="name__user">{auth?.user?.fullName}</div>
-                                    <div id="studentId__user">{'ID : ' + auth?.user?.userId}</div>
-                                </div>
-                                <Avatar
-                                    url={auth?.user.avatar}
-                                    size="small"
-                                    className={dropBoxAccount ? 'border__avatar' : ''}
-                                />
-                            </div>
-                            <div
-                                className={`box__drop--account ${
-                                    dropBoxAccount ? 'active_drop_box' : 'unactive_drop_box'
-                                }`}
-                            >
-                                <div className="pd__select">
-                                    <ControlBoxAccount setState={setDropBoxAccount} />
-                                </div>
-                            </div>
-                        </div>
+                        {auth?.user && (
+                            <Account
+                                userInfo={auth?.user}
+                                refBoxAccount={refBoxAccount}
+                                setDropBoxAccount={setDropBoxAccount}
+                                dropBoxAccount={dropBoxAccount}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

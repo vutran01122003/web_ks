@@ -30,6 +30,12 @@ const UserSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'group'
         },
+        gender: {
+            type: String,
+            enum: ['nam', 'nữ'],
+            default: 'nam',
+            lowercase: true
+        },
         birthday: {
             type: Schema.Types.Date,
             required: true
