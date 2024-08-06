@@ -191,7 +191,7 @@ const Student = () => {
                                     <th>Ngày Sinh</th>
                                     <th>Số Điện Thoại</th>
                                     <th>Trạng Thái</th>
-                                    <th>Chi tiết</th>
+                                    <th>Hoạt Động</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
@@ -231,8 +231,9 @@ const Student = () => {
                                                 onClick={() => {
                                                     onToggleGoalDetailsModal(index);
                                                 }}
+                                                className="goal_details_btn"
                                             >
-                                                Xem Chi tiết
+                                                Xem Chi Tiết
                                             </td>
                                             <td>
                                                 <abbr title="Chỉnh sửa thông tin">

@@ -84,7 +84,7 @@ const TopHeader = ({ auth }) => {
     });
 
     return (
-        <div className={`container__header ${determineAuth ? 'header_admin' : ''}`}>
+        <div className="container__header">
             <div className="tr__header">
                 <div className="flex__line">
                     <div className="line__firts">

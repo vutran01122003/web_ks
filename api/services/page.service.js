@@ -43,20 +43,6 @@ class PageService {
                     tables,
                     isDesc: false
                 });
-
-                let quantityDemanded = 0;
-
-                tables.forEach((table) => {
-                    quantityDemanded += table.quantityDemanded;
-                });
-
-                await UserService.updateAnnualTaskProgress({
-                    pageFaculty,
-                    pageStudentCohort,
-                    pageStudentMajor,
-                    pageStudentLevelYear,
-                    quantityDemanded
-                });
             }
 
             return {
@@ -65,7 +51,6 @@ class PageService {
                 data: createdPage
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

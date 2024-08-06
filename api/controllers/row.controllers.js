@@ -1,26 +1,18 @@
 const createError = require('http-errors');
-const { getLocalDatetime, toISOString } = require('../utils/getDatetime');
 const RowService = require('../services/row.service');
 const UploadService = require('../services/upload.service');
 const UserService = require('../services/user.service');
-const Page = require('../models/page.model');
 const Row = require('../models/row.model');
+
+const [PENDING_STATUS, RESUBMITED_STATUS] = ['chờ duyệt', 'phải nộp lại'];
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
-            const PENDING_STATUS = 'chờ duyệt';
             const rowData = JSON.parse(req.body.rowData);
-            const { totalScore, rowList, rowItemId } = await RowService.addRow({
-                data: rowData
-            });
 
-            await UserService.updateAnnualActivityProgress({
-                userId: rowData.user,
-                levelYear: rowData.levelYear,
-                prevStatus: null,
-                status: PENDING_STATUS,
-                totalScore
+            const { rowList, rowItemId } = await RowService.addRow({
+                data: rowData
             });
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
@@ -28,12 +20,20 @@ class RowControllers {
                 folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.userId}/${rowData.tableName}`
             });
 
-            await RowService.addProofFiles({
-                data: req.body,
-                uploadedFiles,
-                rowListId: rowList._id,
-                rowItemId
-            });
+            await Promise.all([
+                RowService.addProofFiles({
+                    data: req.body,
+                    uploadedFiles,
+                    rowListId: rowList._id,
+                    rowItemId
+                }),
+                UserService.updateAnnualActivityProgress({
+                    userId: rowData.user,
+                    levelYear: rowData.levelYear,
+                    prevStatus: null,
+                    status: PENDING_STATUS
+                })
+            ]);
 
             res.status(200).json({
                 msg: 'Thêm Thông Tin Thành Công',
@@ -48,20 +48,29 @@ class RowControllers {
         try {
             const rowData = JSON.parse(req.body.rowData);
             rowData.content = JSON.parse(rowData.content);
+            const { faculty, major, cohort, userId, tableName, rowListId, contentId, levelYear, user } = rowData;
 
             const updatedRow = await RowService.resubmitRow({ rowData });
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.userId}/${rowData.tableName}`
+                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
             });
 
-            await RowService.addProofFiles({
-                data: req.body,
-                uploadedFiles,
-                rowListId: rowData.rowListId,
-                rowItemId: rowData.contentId
-            });
+            await Promise.all([
+                RowService.addProofFiles({
+                    data: req.body,
+                    uploadedFiles,
+                    rowListId: rowListId,
+                    rowItemId: contentId
+                }),
+                UserService.updateAnnualActivityProgress({
+                    userId: user,
+                    levelYear: levelYear,
+                    prevStatus: RESUBMITED_STATUS,
+                    status: PENDING_STATUS
+                })
+            ]);
 
             res.status(200).json({
                 status: 200,
@@ -125,12 +134,13 @@ class RowControllers {
             const rowListId = req.params.rowId;
             const { contentIdList, prevStatus, status, noteValue, pageInfo, deadline, isTimedExtension, userId } =
                 req.body;
-            const { pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = pageInfo;
-            const deadlineDatetime = toISOString(deadline);
+
+            const deadlineDatetime = deadline ? new Date(deadline) : undefined;
+            const currentDatetime = new Date();
 
             if (isTimedExtension && !deadline) throw createError.BadRequest('Chưa nhập thời gian hạn gia');
 
-            if (deadline && getLocalDatetime().getTime() > deadlineDatetime.getTime())
+            if (deadlineDatetime && currentDatetime.getTime() > deadlineDatetime.getTime())
                 throw createError.BadRequest('Hạn nộp phải lớn hơn ngày giờ hiện tại');
 
             const { code, msg } = await RowService.updateRowStatus({
@@ -146,71 +156,10 @@ class RowControllers {
 
             await UserService.updateAnnualActivityProgress({
                 userId,
-                levelYear: pageStudentLevelYear,
+                levelYear: pageInfo.pageStudentLevelYear,
                 prevStatus,
                 status,
                 totalScore: row.content.id(contentIdList).totalScore
-            });
-
-            let quantityDemanded = 0;
-            let resubmitedTask = 0;
-            let completedTask = 0;
-            let rejectedTask = 0;
-            let pendingTask = 0;
-            let totalScore = 0;
-
-            const pages = await Page.find({
-                pageStudentMajor,
-                pageStudentLevelYear,
-                pageStudentCohort
-            });
-
-            const tables = pages.reduce((tables, page) => {
-                return [...tables, ...page.tables];
-            }, []);
-
-            const rowIdList = tables.reduce((rowIdList, table) => {
-                quantityDemanded += table.quantityDemanded;
-                return [...rowIdList, ...table.rowValueList];
-            }, []);
-
-            const rowList = await Row.find({ _id: { $in: rowIdList }, user: userId });
-
-            const contentList = rowList.reduce((contentList, rowItem) => {
-                return [...contentList, ...rowItem.content];
-            }, []);
-
-            contentList.forEach((content) => {
-                switch (content.status) {
-                    case 'đã duyệt':
-                        ++completedTask;
-                        totalScore += content.totalScore;
-                        break;
-                    case 'chờ duyệt':
-                        ++pendingTask;
-                        break;
-                    case 'từ chối':
-                        ++rejectedTask;
-                        break;
-                    case 'phải nộp lại':
-                        ++resubmitedTask;
-                        break;
-                    default:
-                        break;
-                }
-            });
-
-            await UserService.setAnnualTaskProgress({
-                data: {
-                    quantityDemanded,
-                    resubmitedTask,
-                    rejectedTask,
-                    completedTask,
-                    pendingTask,
-                    totalScore
-                },
-                pageInfo,
-                userId
             });
 
             res.status(200).json({

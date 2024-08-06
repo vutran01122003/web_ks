@@ -140,12 +140,20 @@
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid $line_color;
-
+            
             &__title {
                 font-size: 18px;
-                font-weight: 700;
+                font-weight: 600;
                 color: #222222;
                 text-transform: uppercase;
+            }
+
+            .deadline_info {
+                font-size: 12px;
+                font-weight: 400;
+                color: gray;
+                margin-left: 10px;
+                text-transform: capitalize;
             }
 
             .btn__close {
@@ -659,6 +667,9 @@
 .note_modal {
     background: #fff;
     width: 480px;
+    height: 200px;
+    max-height: 600px;
+    overflow: auto;
     max-width: 100%;
     border-radius: 5px;
     box-shadow: 0 0 1px #fff;
@@ -687,12 +698,12 @@
             }
 
             .note_time {
-                color: #333;
-                font-weight: 600;
+                color: #000;
+                font-weight: 700;
             }
 
             .note_value {
-                color: #000;
+                color: #333;
             }
         }
     }

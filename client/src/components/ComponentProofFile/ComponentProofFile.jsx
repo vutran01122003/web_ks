@@ -39,14 +39,13 @@ function ComponentProofFile({ files, setFiles }) {
             <label className="proof_title">Minh Chứng</label>
             <div className="proof_wrapper">
                 <div className="proof_upload">
-                    <h4>{`Tải lên :`} </h4>
                     <label className="icons_wrapper" htmlFor="insert_files">
                         <div className="insert_files_icon icon-item--proof">
                             <RiUpload2Fill />
                         </div>
 
                         <span className="files_type">
-                            (Giới hạn là 10 files; Kích thước file tối đa 10MB; Định dạng là PDF)
+                            Giới hạn là 10 files - Kích thước mỗi file tối đa là 10MB - Định dạng file là PDF
                         </span>
 
                         <input

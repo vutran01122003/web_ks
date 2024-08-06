@@ -230,8 +230,9 @@ function ProgressUI() {
                                     <td>{capitalizeFirstLetter(progressItem?.fullName)}</td>
                                     <td>{capitalizeFirstLetter(progressItem?.major)}</td>
                                     <td>
-                                        {(progressItem.completedTaskProgress?.completedTaskPrecent.toFixed(2) || 0) +
-                                            '%'}
+                                        {progressItem.completedTaskProgress?.completedTaskPrecent
+                                            ? progressItem.completedTaskProgress?.completedTaskPrecent.toFixed(2)
+                                            : 0}
                                     </td>
                                     <td>{progressItem.completedTaskProgress?.totalScore || 0}</td>
                                     <td>

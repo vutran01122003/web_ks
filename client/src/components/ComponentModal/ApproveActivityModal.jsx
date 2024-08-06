@@ -6,6 +6,8 @@ import GLOBALTYPES from '../../redux/actions/globalTypes';
 import { createUpdatedActivityNotification } from '../../redux/actions/notifyAction';
 import { formatTimeStr } from '../../utils/formatDatetime';
 
+const [ACCEPTED_STATUS, REJECTED_STATUS, RESUBMITED_STATUS] = ['đã duyệt', 'từ chối', 'phải nộp lại'];
+
 function ApproveActivityModal({
     auth,
     userData,
@@ -36,18 +38,14 @@ function ApproveActivityModal({
 
         let title = '';
         switch (status) {
-            case 'từ chối':
+            case REJECTED_STATUS:
                 title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn đã bị từ chối.`;
                 break;
-            case 'đã duyệt':
+            case ACCEPTED_STATUS:
                 title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn đã được chấp nhận.`;
                 break;
-            case 'phải nộp lại':
-                title = isTimedExtension
-                    ? `Hoạt động ${
-                          rowInfoData.tableInfo.tableName
-                      } của bạn đã được gia hạn thời gian nộp lại. Hạn nộp cuối là ${formatTimeStr(datetimeValue)}.`
-                    : `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn cần phải nộp lại.`;
+            case RESUBMITED_STATUS:
+                title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn cần phải nộp lại. ${datetimeValue && `Hạn nộp cuối là  ${formatTimeStr(datetimeValue)}`}`;
                 break;
             default:
                 title = `Hoạt động ${rowInfoData.tableInfo.tableName} của bạn đã xảy ra lỗi.`;
@@ -91,6 +89,7 @@ function ApproveActivityModal({
 
     const handleChangeVisiableStatusDateInput = (e) => {
         const boolean = e.target.value === 'true';
+        if (!boolean) setDateTimeValue('');
         setVisibleDateInput(boolean);
     };
 

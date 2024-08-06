@@ -3,6 +3,12 @@
     background-color: #fff;
     transition: all 0.2s;
 
+    &.sidebar {
+        .menu_wrapper {
+            background-color: #fff;
+        }
+    }
+
     .menu_wrapper {
         width: 320px;
         background-color: #fff;

@@ -62,7 +62,6 @@ class AccessService {
             const createdUser = new User({
                 userId,
                 fullName,
-                password,
                 birthday: new Date(year, month - 1, day).toLocaleDateString(),
                 major,
                 cohort,
@@ -82,6 +81,8 @@ class AccessService {
                     }
                 ]
             });
+
+            createdUser.encodePassword(password);
 
             await createdUser.save();
 

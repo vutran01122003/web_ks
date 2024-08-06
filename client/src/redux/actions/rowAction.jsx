@@ -1,5 +1,6 @@
 import { getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+const [RESUBMITED_STATUS] = ['phải nộp lại'];
 
 export const addRow =
     ({ formData }) =>
@@ -140,14 +141,29 @@ export const updateRowsStatus =
                 isTimedExtension
             });
 
-            dispatch({
-                type: GLOBALTYPES.ROW.REMOVE_ROW,
-                payload: {
-                    rowsType,
-                    rowId: rowListId,
-                    contentId: contentIdList[0]
-                }
-            });
+            if (prevStatus === RESUBMITED_STATUS && status === RESUBMITED_STATUS) {
+                dispatch({
+                    type: GLOBALTYPES.ROW.UPDATE_ROW,
+                    payload: {
+                        rowsType,
+                        rowId: rowListId,
+                        contentId: contentIdList[0],
+                        editedData: {
+                            noteValue,
+                            deadline: new Date(deadline).toISOString()
+                        }
+                    }
+                });
+            } else {
+                dispatch({
+                    type: GLOBALTYPES.ROW.REMOVE_ROW,
+                    payload: {
+                        rowsType,
+                        rowId: rowListId,
+                        contentId: contentIdList[0]
+                    }
+                });
+            }
 
             dispatch({
                 type: GLOBALTYPES.ALERT,

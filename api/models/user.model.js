@@ -81,19 +81,14 @@ const UserSchema = new Schema(
     }
 );
 
+UserSchema.methods.encodePassword = function (password) {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    this.password = hashedPassword;
+};
+
 UserSchema.methods.checkPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
-
-UserSchema.pre('save', function (next) {
-    try {
-        const hashedPassword = bcrypt.hashSync(this.password, 10);
-        this.password = hashedPassword;
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
 
 const User = conn.model(DOC, UserSchema);
 

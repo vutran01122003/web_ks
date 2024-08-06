@@ -9,14 +9,15 @@ class RowService {
             const { user, table, page, content } = data;
             const contentObj = JSON.parse(content);
 
-            let rowList = await Row.findOne({ user, table });
             let rowItemId = null;
-
-            let { pageData, totalScore } = await PageService.calculateTotalScoreOfRow({
-                pageId: page,
-                tableId: table,
-                content: contentObj
-            });
+            let [rowList, { pageData, totalScore }] = await Promise.all([
+                Row.findOne({ user, table }),
+                PageService.calculateTotalScoreOfRow({
+                    pageId: page,
+                    tableId: table,
+                    content: contentObj
+                })
+            ]);
 
             if (!rowList) {
                 rowList = new Row({
@@ -29,8 +30,7 @@ class RowService {
                 rowList.content[0].totalScore = totalScore;
                 rowItemId = rowList.content[rowList.content.length - 1]._id;
 
-                await rowList.save();
-                await PageService.addRowIntoTableOfPage({ page, table, rowList });
+                await Promise.all([rowList.save(), PageService.addRowIntoTableOfPage({ page, table, rowList })]);
             } else {
                 await this.checkquantityDemanded({ page, table, user, pageData });
 
@@ -43,9 +43,16 @@ class RowService {
 
             return {
                 rowList,
-                rowItemId,
-                totalScore
+                rowItemId
             };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static deleteRowByUserId = async ({ userId }) => {
+        try {
+            await Row.deleteMany({ user: userId });
         } catch (error) {
             throw error;
         }
@@ -99,11 +106,15 @@ class RowService {
             const row = await Row.findById(rowListId);
             const contentData = row.content.id(contentId);
 
+            if (contentData?.deadline && contentData.deadline.getTime() < new Date().getTime())
+                throw createError.BadRequest(
+                    `Đã quá hạn nộp là ${contentData?.deadline && contentData.deadline.toLocaleString('en-GB')}`
+                );
+
             contentData.status = 'chờ duyệt';
             contentData.addProofFiles = [];
             contentData.rowValue = content;
             contentData.totalScore = totalScore;
-            contentData.createdAt = new Date();
 
             const updatedRow = await Row.findOneAndUpdate(
                 { _id: rowListId, 'content._id': contentId },

@@ -178,6 +178,10 @@
             }
 
             .table__line__item {
+                &:hover {
+                    background-color: #f3f3f3d7;
+                }
+                
                 .line__item {
                     font-size: 14px;
                     font-weight: 500;
@@ -191,7 +195,7 @@
                     flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
-
+                    
                     .proof_files_download {
                         border-right: 1px solid #333;
                     }

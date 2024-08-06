@@ -54,18 +54,50 @@ function rowReducer(state = initialState, action) {
         }
 
         case GLOBALTYPES.ROW.REMOVE_ROW: {
-            const rowsType = action.payload.rowsType;
+            const { rowsType, rowId, contentId } = action.payload;
             return {
                 ...state,
                 [rowsType]: {
                     ...state[rowsType],
                     data: [
                         ...state[rowsType].data.filter(
-                            (row) =>
-                                !(row._id === action.payload.rowId && row.content[0]._id === action.payload.contentId)
+                            (row) => !(row._id === rowId && row.content[0]._id === contentId)
                         )
                     ],
                     currentRows: state.currentRows
+                }
+            };
+        }
+
+        case GLOBALTYPES.ROW.UPDATE_ROW: {
+            const { rowsType, rowId, contentId, editedData } = action.payload;
+
+            let index = null;
+            const rowList = [...state[rowsType].data];
+
+            const row = rowList.find((row, idx) => {
+                if (row._id === rowId && row.content[0]._id === contentId) {
+                    index = idx;
+                    return true;
+                }
+                return false;
+            });
+
+            rowList.splice(index, 1, {
+                ...row,
+                content: [
+                    {
+                        ...row.content[0],
+                        ...editedData
+                    }
+                ]
+            });
+
+            return {
+                ...state,
+                [rowsType]: {
+                    ...state[rowsType],
+                    data: rowList
                 }
             };
         }

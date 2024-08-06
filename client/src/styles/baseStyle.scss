@@ -1,0 +1,170 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:
+        -apple-system,
+        Segoe UI,
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif !important;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: $color_white;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+select {
+    min-width: 180px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    color: #333;
+    font-weight: 600;
+}
+
+.heading-4 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.text-danger {
+    color: $color_danger !important;
+}
+
+.display_none {
+    display: none !important;
+}
+
+.display_block {
+    display: block !important;
+}
+
+.breadcrumb-item::before {
+    display: inline-block;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    color: #6c757d;
+    content: '/';
+}
+
+// Dynamic page
+.dynamic_page_container {
+    padding: 10px;
+}
+
+// Table
+.container__table {
+    &:not(.margin-0) {
+        table {
+            min-height: 110px;
+        }
+    }
+}
+
+.toast {
+    top: 70px !important;
+    right: 15px !important;
+}
+
+// Loading
+.mesh-loader {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    .circle {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        background: #ffffff;
+        border-radius: 50%;
+        margin: -7px;
+        -webkit-animation: mesh 2.5s ease-in-out infinite;
+        animation: mesh 2.5s ease-in-out infinite -1.25s;
+    }
+
+    & > div .circle:last-child {
+        -webkit-animation-delay: 0s;
+        animation-delay: 0s;
+    }
+
+    & > div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+
+    & > div:last-child {
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+}
+
+@-webkit-keyframes mesh {
+    0% {
+        -webkit-transform-origin: 50% -100%;
+        transform-origin: 50% -100%;
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+
+    50% {
+        -webkit-transform-origin: 50% -100%;
+        transform-origin: 50% -100%;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+
+    50.00001% {
+        -webkit-transform-origin: 50% 200%;
+        transform-origin: 50% 200%;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform-origin: 50% 200%;
+        transform-origin: 50% 200%;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes mesh {
+    0% {
+        -webkit-transform-origin: 50% -100%;
+        transform-origin: 50% -100%;
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+
+    50% {
+        -webkit-transform-origin: 50% -100%;
+        transform-origin: 50% -100%;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+
+    50.00001% {
+        -webkit-transform-origin: 50% 200%;
+        transform-origin: 50% 200%;
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform-origin: 50% 200%;
+        transform-origin: 50% 200%;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

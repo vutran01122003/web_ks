@@ -97,6 +97,16 @@
                         color: #4e545b;
                         text-align: center;
                     }
+
+                    .goal_details_btn {
+                        transition: 0.1s linear;
+                        cursor: pointer;
+                        
+                        &:hover {
+                            color: #1c7ae6;
+                            text-decoration: underline;
+                        }
+                    }
         
                     .state {
                         &.hoat_dong {
@@ -121,10 +131,9 @@
                         }
                     }
                 }
-    
+
                 tr:hover {
                     background-color: #f3f3f3d7;
-                    cursor: pointer;
                 }
             }
         }

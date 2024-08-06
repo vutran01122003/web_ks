@@ -84,7 +84,12 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
         <div className={`wrap__modal`} onMouseUp={handleCloseModal}>
             <form className={`modal`}>
                 <div className="head__modal">
-                    <div className="head__modal__title ">{title}</div>
+                    <div className="head__modal__title ">
+                        <span>{title}</span>
+                        <span className="deadline_info">
+                            {rowInfo?.deadline && `(Hạn nộp: ${new Date(rowInfo?.deadline).toLocaleString('en-GB')})`}
+                        </span>
+                    </div>
                     <button type="button" className="btn__close" onClick={() => handleHideModal()}>
                         <IoCloseOutline />
                     </button>

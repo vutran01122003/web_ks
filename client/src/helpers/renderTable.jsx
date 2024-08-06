@@ -148,9 +148,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
 
                 if (buttonNameLabel === 'Gia Hạn') {
                     rowValueItemArr.push(
-                        rowValueItem?.deadline
-                            ? new Date(rowValueItem.deadline).toLocaleDateString('en-GB')
-                            : 'Không Có'
+                        rowValueItem?.deadline ? new Date(rowValueItem.deadline).toLocaleString('en-GB') : 'Không Có'
                     );
                 }
             }

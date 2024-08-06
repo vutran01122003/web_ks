@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const User = require('../models/user.model');
+const Row = require('../models/row.model');
 const PermissionService = require('./permission.service');
 const FacultyService = require('./faculty.service');
 const Pagination = require('../utils/Pagination');
@@ -61,6 +62,11 @@ class UserService {
                             $nin: [FACULTY_MANAGER, ADMIN]
                         }
                     }
+                },
+                {
+                    $sort: {
+                        fullName: -1
+                    }
                 }
             ]),
             queryString
@@ -71,21 +77,35 @@ class UserService {
 
     static updateUser = async ({ password, userId, userData }) => {
         try {
-            const updatedUser = await User.findByIdAndUpdate(
-                userId,
-                {
-                    ...userData,
-                    birthday: new Date(userData.birthday)
-                },
-                {
-                    new: true
-                }
-            );
+            const originalUser = await User.findByIdAndUpdate(userId, {
+                ...userData,
+                birthday: new Date(userData.birthday)
+            });
 
-            if (password) {
-                updatedUser.password = password;
-                await updatedUser.save();
+            const updatedUser = await User.findById(userId);
+
+            const isInfoDifferent =
+                originalUser.major !== updatedUser.major || originalUser.cohort !== updatedUser.cohort;
+
+            if (isInfoDifferent) {
+                updatedUser.annualActivitiesProgress = Array(updatedUser.levelYear)
+                    .fill(null)
+                    .map((_, index) => ({
+                        levelYear: index + 1,
+                        totalScore: 0,
+                        numberOfRequiredActivity: 0,
+                        numberOfPendingActivity: 0,
+                        numberOfAcceptedActivity: 0,
+                        numberOfRejectedActivity: 0,
+                        numberOfResubmitedActivity: 0
+                    }));
+
+                await Row.deleteMany({ user: userId });
             }
+
+            if (password) updatedUser.encodePassword(password);
+
+            if (isInfoDifferent || password) await updatedUser.save();
 
             return updatedUser;
         } catch (error) {
@@ -121,6 +141,7 @@ class UserService {
         }
     };
 
+    // Need Fix Right Now
     static updateUserActivityStatusByMajor = async ({
         progressPercentage,
         score,
@@ -190,29 +211,6 @@ class UserService {
         }
     };
 
-    static setAnnualTaskProgress = async ({ data, pageInfo, userId }) => {
-        try {
-            await User.findByIdAndUpdate(
-                userId,
-                {
-                    $set: {
-                        [`annualTaskProgress.${pageInfo.pageStudentLevelYear}`]: {
-                            ...data,
-                            completedTaskPrecent: Number.parseFloat(
-                                ((data.completedTask / data.quantityDemanded) * 100).toFixed(2)
-                            )
-                        }
-                    }
-                },
-                {
-                    new: true
-                }
-            );
-        } catch (error) {
-            throw error;
-        }
-    };
-
     static getAnnualTaskProgress = async ({ major, cohort, levelYear, sortProgress }) => {
         try {
             const studentList = await User.aggregate([
@@ -265,91 +263,6 @@ class UserService {
         }
     };
 
-    static updateAnnualTaskProgress = async ({
-        pageFaculty,
-        pageStudentMajor,
-        pageStudentCohort,
-        pageStudentLevelYear,
-        quantityDemanded,
-        isSubtract
-    }) => {
-        try {
-            if (!isSubtract) {
-                await User.updateMany(
-                    {
-                        faculty: pageFaculty,
-                        major: pageStudentMajor,
-                        cohort: Number.parseInt(pageStudentCohort),
-                        levelYear: Number.parseInt(pageStudentLevelYear),
-                        isActive: true,
-                        [`annualTaskProgress.${pageStudentLevelYear}`]: {
-                            $exists: false
-                        }
-                    },
-                    {
-                        $set: {
-                            [`annualTaskProgress.${pageStudentLevelYear}`]: {
-                                completedTaskPrecent: 0,
-                                totalScore: 0,
-                                quantityDemanded: 0,
-                                completedTasksNum: 0,
-                                updatedAt: new Date()
-                            }
-                        }
-                    }
-                );
-            }
-
-            await User.updateMany(
-                {
-                    faculty: pageFaculty.toLowerCase(),
-                    major: pageStudentMajor.toLowerCase(),
-                    cohort: Number.parseInt(pageStudentCohort),
-                    levelYear: Number.parseInt(pageStudentLevelYear),
-                    isActive: true,
-                    [`annualTaskProgress.${pageStudentLevelYear}`]: {
-                        $exists: true
-                    }
-                },
-                [
-                    {
-                        $set: {
-                            [`annualTaskProgress.${pageStudentLevelYear}`]: {
-                                completedTaskPrecent: {
-                                    $multiply: [
-                                        {
-                                            $divide: [
-                                                `$annualTaskProgress.${pageStudentLevelYear}.completedTasksNum`,
-                                                {
-                                                    $add: [
-                                                        `$annualTaskProgress.${pageStudentLevelYear}.quantityDemanded`,
-                                                        quantityDemanded
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        100
-                                    ]
-                                },
-                                completedTasksNum: `$annualTaskProgress.${pageStudentLevelYear}.completedTasksNum`,
-                                quantityDemanded: {
-                                    [isSubtract ? '$subtract' : '$add']: [
-                                        `$annualTaskProgress.${pageStudentLevelYear}.quantityDemanded`,
-                                        quantityDemanded
-                                    ]
-                                },
-                                totalScore: `$annualTaskProgress.${pageStudentLevelYear}.totalScore`,
-                                updatedAt: new Date()
-                            }
-                        }
-                    }
-                ]
-            );
-        } catch (error) {
-            throw error;
-        }
-    };
-
     static updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
         try {
             const ACCEPTED_STATUS = 'đã duyệt';
@@ -367,7 +280,10 @@ class UserService {
                 [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1
             };
 
+            if (prevStatus === status) return;
+
             if (!prevStatus) delete updatedInfo[`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`];
+
             if (prevStatus === ACCEPTED_STATUS) {
                 updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = -totalScore;
             } else if (status === ACCEPTED_STATUS) {
