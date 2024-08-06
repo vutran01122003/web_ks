@@ -5,8 +5,8 @@ import { IoSearch, IoRemoveCircleOutline, IoEyeOffOutline, IoEyeOutline } from '
 
 import { facultySelector, goalsSelector } from '../../redux/selector';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
-import { getTable, removeTable } from '../../redux/actions/tableAction';
-import { getPages, updateStatusPage } from '../../redux/actions/pageAction';
+import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
+import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import UpdateTableModal from '../ComponentModal/UpdateTableModal';
 import RemovePageModal from '../ComponentModal/RemovePageModal';
 import ComfirmModal from '../ComponentModal/ConfirmModal';
@@ -29,9 +29,10 @@ function GoalsManagement() {
 
     const [openAddTableModal, setOpenAddTableModal] = useState(false);
     const [openRemovePageModal, setOpenRemovePageModal] = useState(false);
-    const [vissibleUpdateStatusPageModal, setVissibleUpdateStatusPageModal] = useState(false);
+    const [isVisibleUpdateStatusPageModal, setIsVisibleUpdateStatusPageModal] = useState(false);
     const [isVisibleRemoveTableModal, setIsVisibleRemoveTableModal] = useState(false);
     const [isVisibleUpdateTableModal, setIsVisibleUpdateTableModal] = useState(false);
+    const [isVisibleUpdateStatusTableModal, setIsVisibleUpdateStatusTableModal] = useState(false);
 
     const handleOpenAddTableModal = ({ pageId, pageName }) => {
         setOpenAddTableModal(true);
@@ -67,14 +68,14 @@ function GoalsManagement() {
     };
 
     const onOpenUpdateStatusPageModal = ({ pageId, pageName, status }) => {
-        setVissibleUpdateStatusPageModal(true);
+        setIsVisibleUpdateStatusPageModal(true);
         setSubPageName(pageName);
         setPageId(pageId);
         setCurrentStatus(status);
     };
 
     const onHideUpdateStatusPageModal = () => {
-        setVissibleUpdateStatusPageModal(false);
+        setIsVisibleUpdateStatusPageModal(false);
     };
 
     const handleUpdateStatusPage = () => {
@@ -86,10 +87,28 @@ function GoalsManagement() {
         setOpenRemovePageModal(false);
     };
 
+    const handleToggleUpdateStatusTableModalDisplay = () => {
+        setIsVisibleUpdateStatusTableModal((prev) => !prev);
+    };
+
+    const onUpdateStatusTable = () => {
+        dispatch(
+            updateTable({
+                pageId: tableInfo.pageId,
+                table: {
+                    _id: tableInfo.tableId,
+                    isActive: !tableInfo.isActive
+                },
+                tableIndex: tableInfo.tableIndex
+            })
+        );
+        handleToggleUpdateStatusTableModalDisplay();
+    };
+
     const onGetPages = async () => {
         if (major && cohort && levelYear) {
             dispatch(
-                getPages({
+                getGoals({
                     pageStudentMajor: major.majorName,
                     pageStudentCohort: cohort.cohortName,
                     pageStudentLevelYear: Number.parseInt(levelYear)
@@ -117,6 +136,12 @@ function GoalsManagement() {
         setCohort('');
         setLevelYear('');
     }, [major]);
+
+    useEffect(() => {
+        dispatch({
+            type: GLOBALTYPES.GOALS.RESET_GOALS
+        });
+    }, []);
 
     return (
         <div className="goal_management_container">
@@ -195,26 +220,20 @@ function GoalsManagement() {
                     />
                 )}
 
-                {vissibleUpdateStatusPageModal && (
+                {isVisibleUpdateStatusPageModal && (
                     <ComfirmModal
                         headerContent={currentStatus ? 'Ẩn Nhóm Chỉ Tiêu' : 'Hiện Thị Nhóm Chỉ Tiếu'}
                         bodyContent={`Bạn chắc chắn muốn ${currentStatus ? 'ẩn' : 'hiện'} ${subPageName}`}
                         toggleConfirmModalDisplay={onHideUpdateStatusPageModal}
                         onAccept={handleUpdateStatusPage}
                     />
-                    // <RemovePageModal
-                    //     onHideUpdateStatusPageModal={onHideUpdateStatusPageModal}
-                    //     subPageName={subPageName}
-                    //     pageId={pageId}
-                    //     currentStatus={currentStatus}
-                    // />
                 )}
 
                 {isVisibleRemoveTableModal && (
                     <ComfirmModal
                         headerContent={`Xóa Chỉ Tiêu`}
                         bodyContent={`Bạn chắc chắn muốn xóa chỉ tiêu ${tableInfo.tableName}`}
-                        noteContent={`Sau khi xóa chỉ tiêu ${tableInfo.tableName} thì tiến độ hoàn thành và điểm số của sinh viên cho chỉ tiêu này sẽ mất đi`}
+                        noteContent={`Sau khi xóa chỉ tiêu ${tableInfo.tableName} thì tiến độ hoàn thành và điểm số của sinh viên cho chỉ tiêu này sẽ mất đi.`}
                         toggleConfirmModalDisplay={handleToggleRemoveTableModalDisplay}
                         onAccept={removeTableHandling}
                     />
@@ -224,6 +243,20 @@ function GoalsManagement() {
                     <UpdateTableModal
                         tableInfo={tableInfo}
                         toggleUpdateTableModalDisplay={handleToggleVisibleUpdateTableModal}
+                    />
+                )}
+
+                {isVisibleUpdateStatusTableModal && (
+                    <ComfirmModal
+                        headerContent={`${tableInfo.isActive ? 'Ẩn' : 'Hiển Thị'} Chỉ Tiêu ${tableInfo.tableName}`}
+                        bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'Ẩn' : 'Hiện'} chỉ tiêu ${tableInfo.tableName}`}
+                        noteContent={
+                            tableInfo.isActive
+                                ? `Chỉ tiêu ${tableInfo.tableName} sau khi ẩn đi thì quản lý khoa và sinh viên sẽ không thể tương tác và thấy được chỉ tiêu này. Tiến độ và điểm số của chỉ tiêu này vẫn sẽ được tính cho sinh viên.`
+                                : `Chỉ tiêu ${tableInfo.tableName} sau khi hiển thị thì cả quản lý khoa và sinh viên sẽ có thể tương tác và thấy được chỉ tiêu này.`
+                        }
+                        toggleConfirmModalDisplay={handleToggleUpdateStatusTableModalDisplay}
+                        onAccept={onUpdateStatusTable}
                     />
                 )}
 
@@ -256,7 +289,7 @@ function GoalsManagement() {
 
                                             <td>
                                                 {filteredPageItem.tables.length > 0 &&
-                                                    filteredPageItem.tables.map((table) => (
+                                                    filteredPageItem.tables.map((table, index) => (
                                                         <div key={table._id} className="activity_name">
                                                             <span>{capitalizeFirstLetter(table.tableName)}</span>
                                                             <div className="activity_btn_group">
@@ -275,6 +308,23 @@ function GoalsManagement() {
                                                                 >
                                                                     Sửa
                                                                 </span>
+
+                                                                <span
+                                                                    className={`activity_update_status_btn ${table.isActive ? 'inactive' : 'active'}`}
+                                                                    onClick={() => {
+                                                                        setTableInfo({
+                                                                            pageId: filteredPageItem._id,
+                                                                            tableId: table._id,
+                                                                            tableName: table.tableName,
+                                                                            isActive: table.isActive,
+                                                                            tableIndex: index
+                                                                        });
+                                                                        handleToggleUpdateStatusTableModalDisplay();
+                                                                    }}
+                                                                >
+                                                                    {table.isActive ? 'Ẩn' : 'Hiện'}
+                                                                </span>
+
                                                                 <span
                                                                     className="activity_delete_btn"
                                                                     onClick={() => {

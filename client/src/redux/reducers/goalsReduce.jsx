@@ -69,11 +69,13 @@ function goalsReduce(state = initialState, action) {
             };
         }
 
-        case GLOBALTYPES.GOALS.UPDATE_STATUS_GOAL: {
+        case GLOBALTYPES.GOALS.UPDATE_STATUS_PAGE: {
+            const { pageId, currentStatus } = action.payload;
             const goalList = [...state.filteredPage];
+
             for (let i = 0; i < goalList.length; i++) {
-                if (goalList[i]._id === action.payload.pageId) {
-                    goalList[i].isActive = !action.payload.currentStatus;
+                if (goalList[i]._id === pageId) {
+                    goalList[i].isActive = !currentStatus;
                     break;
                 }
             }
@@ -81,6 +83,30 @@ function goalsReduce(state = initialState, action) {
             return {
                 ...state,
                 filteredPages: goalList
+            };
+        }
+
+        case GLOBALTYPES.GOALS.UPDATE_STATUS_TABLE: {
+            const { pageId, tableIndex, status } = action.payload;
+
+            const goalList = [...state.filteredPage];
+            for (let i = 0; i < goalList.length; i++) {
+                if (goalList[i]._id === pageId) {
+                    goalList[i].tables[tableIndex].isActive = status;
+                    break;
+                }
+            }
+
+            return {
+                ...state,
+                filteredPages: goalList
+            };
+        }
+
+        case GLOBALTYPES.GOALS.RESET_GOALS: {
+            return {
+                filteredPage: [],
+                table: null
             };
         }
 

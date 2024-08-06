@@ -868,15 +868,16 @@
         gap: 10px;
 
         &>span:first-child {
-            font-weight: 500;
+            font-weight: 600;
             font-size: 16px;
         }
 
         &>span:last-child {
             font-weight: 400;
             color: gray;
-            font-size: 12px;
+            font-size: 14px;
             padding-bottom: 20px;
+            text-align: justify;
         }
     }
 

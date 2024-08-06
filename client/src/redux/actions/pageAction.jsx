@@ -39,21 +39,12 @@ export const getPages = (params) => async (dispatch) => {
     try {
         const res = await getDataApi('/pages', params);
 
-        if (params) {
-            dispatch({
-                type: GLOBALTYPES.GOALS.GET_GOALS,
-                payload: {
-                    pages: res?.data.data
-                }
-            });
-        } else {
-            dispatch({
-                type: GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES,
-                payload: {
-                    pages: res?.data.data
-                }
-            });
-        }
+        dispatch({
+            type: GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES,
+            payload: {
+                pages: res?.data.data
+            }
+        });
     } catch (error) {
         dispatch({
             type: GLOBALTYPES.ALERT,
@@ -61,7 +52,30 @@ export const getPages = (params) => async (dispatch) => {
                 error:
                     error.response?.data?.status === 401
                         ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
+                        : error?.response?.data.msg || 'Lấy dữ liệu trang thất bại'
+            }
+        });
+    }
+};
+
+export const getGoals = (params) => async (dispatch) => {
+    try {
+        const res = await getDataApi('/pages', params);
+
+        dispatch({
+            type: GLOBALTYPES.GOALS.GET_GOALS,
+            payload: {
+                pages: res?.data.data
+            }
+        });
+    } catch (error) {
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                error:
+                    error.response?.data?.status === 401
+                        ? 'Hết Phiên Đăng Nhập'
+                        : error?.response?.data.msg || 'Lấy dữ liệu nhóm chỉ tiêu thất bại'
             }
         });
     }
@@ -73,20 +87,24 @@ export const getPage =
         try {
             if (pathName.includes('/page/')) {
                 const res = await getDataApi(pathName);
+                const pageData = res.data.data;
 
-                dispatch({
-                    type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
-                    payload: {
-                        pathName,
-                        pageType: res?.data.data?.pageType,
-                        pageId: res?.data.data?._id,
-                        pageName: res?.data.data?.pageName,
-                        tables: res?.data.data.tables,
-                        pageLevelYear: res?.data.data.pageStudentLevelYear
-                    }
-                });
+                if (res.data.data) {
+                    dispatch({
+                        type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
+                        payload: {
+                            pathName,
+                            pageType: pageData.pageType,
+                            pageId: pageData._id,
+                            pageName: pageData.pageName,
+                            tables: pageData?.tables || [],
+                            pageLevelYear: pageData.pageStudentLevelYear
+                        }
+                    });
+                }
             }
         } catch (error) {
+            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -152,7 +170,7 @@ export const updateStatusPage =
             const res = await patchDataApi('/page', { pageId, currentStatus });
 
             dispatch({
-                type: GLOBALTYPES.GOALS.UPDATE_STATUS_GOAL,
+                type: GLOBALTYPES.GOALS.UPDATE_STATUS_PAGE,
                 payload: {
                     pageId,
                     currentStatus

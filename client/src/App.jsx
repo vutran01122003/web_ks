@@ -10,13 +10,11 @@ import SocketIO from './Socket.io';
 import NotFound from './pages/NotFound';
 import Alert from './components/ComponentToast/Alert';
 import PageRender from './config/routes/PageRender';
+import FirstLogin from './components/ComponentFirstLogin/FirstLogin';
 import { authSelector, facultySelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
-import { getPage } from './redux/actions/pageAction';
-import FirstLogin from './components/ComponentFirstLogin/FirstLogin';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
 import { getFacultyByName } from './redux/actions/facultyAction';
-import Loading from './components/ComponentToast/Loading';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -25,16 +23,11 @@ const App = () => {
     const location = useLocation();
     const pathName = location.pathname;
     const groupCode = auth?.user?.group.groupCode;
-    const { VITE_APP_TALENTED_ENGINEER_CODE } = import.meta.env;
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         dispatch(verifyAccessToken()).finally(() => setIsLoading(false));
     }, [dispatch]);
-
-    useEffect(() => {
-        if (VITE_APP_TALENTED_ENGINEER_CODE === groupCode) dispatch(getPage({ pathName }));
-    }, [dispatch, pathName]);
 
     useEffect(() => {
         if (auth?.user) {

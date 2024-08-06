@@ -6,7 +6,7 @@ import Logo_IUH from '../../assets/images/logo_iuh.png';
 import Logo_IUH_color_w from '../../assets/images/logo_iuh.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../../redux/selector';
-import { getPage, getPages } from '../../redux/actions/pageAction';
+import { getPages } from '../../redux/actions/pageAction';
 import { ARRAY_LIST_MENU } from '../../assets/data/menu';
 import { renderSideBar } from '../../helpers/renderSideBar';
 
@@ -53,10 +53,6 @@ const LayoutSideBar = ({ auth }) => {
         setSubMenu(newSubMenu);
     };
 
-    const handleGetPage = async ({ pathName }) => {
-        if (pathName) dispatch(getPage({ pathName }));
-    };
-
     const handleChangeLevelYear = (e) => {
         setLevelYear(e.target.value);
     };
@@ -76,8 +72,16 @@ const LayoutSideBar = ({ auth }) => {
     }, [menuRef, subMenu]);
 
     useEffect(() => {
-        if (auth?.user && VITE_APP_TALENTED_ENGINEER_CODE === auth?.user?.group.groupCode) dispatch(getPages());
-    }, [dispatch]);
+        if (auth?.user && VITE_APP_TALENTED_ENGINEER_CODE === auth?.user?.group.groupCode)
+            dispatch(
+                getPages({
+                    userId: auth.user._id,
+                    pageStudentMajor: auth.user.major,
+                    pageStudentCohort: auth.user.cohort,
+                    pageStudentLevelYear: levelYear
+                })
+            );
+    }, [dispatch, levelYear]);
 
     useEffect(() => {
         if (page?.pages) {
@@ -163,11 +167,6 @@ const LayoutSideBar = ({ auth }) => {
                                             className="sub_menu_item"
                                             to={item_sub?.sub_to_link}
                                             title={item_sub?.sub_name_menu}
-                                            onClick={() => {
-                                                handleGetPage({
-                                                    pathName: item_sub?.sub_to_link
-                                                });
-                                            }}
                                         >
                                             {item_sub?.sub_name_menu}
                                         </NavLink>

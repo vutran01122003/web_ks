@@ -124,13 +124,24 @@ export const removeTable =
     };
 
 export const updateTable =
-    ({ pageId, table }) =>
+    ({ pageId, table, tableIndex }) =>
     async (dispatch) => {
         try {
             const res = await patchDataApi('/table', {
                 pageId,
                 table
             });
+
+            if (tableIndex !== undefined) {
+                dispatch({
+                    type: GLOBALTYPES.GOALS.UPDATE_STATUS_TABLE,
+                    payload: {
+                        tableIndex,
+                        pageId,
+                        status: table.isActive
+                    }
+                });
+            }
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -139,6 +150,7 @@ export const updateTable =
                 }
             });
         } catch (error) {
+            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {

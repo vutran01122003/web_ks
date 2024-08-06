@@ -38,7 +38,7 @@ function GoalsInfo({ levelYear, goalsInfo }) {
                                         <td className="goal_info_item">{goals.tables[key]?.resubmitedTasksNum || 0}</td>
                                         <td className="goal_info_item">
                                             {goals.tables[key]?.quantityDemanded ===
-                                            goals.tables[key]?.completedTasksNum ? (
+                                            goals.tables[key]?.acceptedTasksNum ? (
                                                 <span className="goal_info_status goal_info_success_status">
                                                     Hoàn Thành
                                                 </span>

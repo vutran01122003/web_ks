@@ -84,13 +84,18 @@ class TableService {
         try {
             const page = await Page.findById(pageId).lean();
 
+            const updatedData = Object.keys(table).reduce((obj, key) => {
+                return {
+                    ...obj,
+                    ['tables.$.' + key]: table[key]
+                };
+            }, {});
+
             if (!page) throw createError.NotFound('Không tìm thấy page');
             await Page.findOneAndUpdate(
                 { _id: pageId, 'tables._id': table._id },
                 {
-                    $set: {
-                        'tables.$': table
-                    }
+                    $set: updatedData
                 }
             );
 

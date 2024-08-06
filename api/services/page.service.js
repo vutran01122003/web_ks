@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const Page = require('../models/page.model');
 const UserService = require('./user.service');
+const mongoose = require('mongoose');
 
 class PageService {
     static createPage = async (data) => {
@@ -55,10 +56,65 @@ class PageService {
         }
     };
 
-    static getPages = async (fields) => {
+    static getPages = async (fields, userId) => {
         try {
-            const pages = await Page.find(fields).lean();
+            const pages = await Page.aggregate([
+                {
+                    $match: {
+                        ...fields,
+                        isActive: true
+                    }
+                },
+                {
+                    $unwind: '$tables'
+                },
+                {
+                    $match: {
+                        'tables.isActive': true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'rows',
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }
+                                }
+                            }
+                        ],
+                        localField: 'tables.rowValueList',
+                        foreignField: '_id',
+                        as: 'tables.rowValueList'
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        pageName: { $first: '$pageName' },
+                        pageType: { $first: '$pageType' },
+                        pageFaculty: { $first: '$pageFaculty' },
+                        pageStudentMajor: { $first: '$pageStudentMajor' },
+                        pageStudentCohort: { $first: '$pageStudentCohort' },
+                        pageStudentLevelYear: { $first: '$pageStudentLevelYear' },
+                        isActive: { $first: '$isActive' },
+                        tables: {
+                            $push: '$tables'
+                        }
+                    }
+                }
+            ]);
+
             return pages;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getGoals = async (fields) => {
+        try {
+            const goals = await Page.find(fields);
+            return goals;
         } catch (error) {
             throw error;
         }
@@ -77,6 +133,11 @@ class PageService {
                 },
                 {
                     $unwind: '$tables'
+                },
+                {
+                    $match: {
+                        'tables.isActive': true
+                    }
                 },
                 {
                     $project: {
@@ -182,21 +243,57 @@ class PageService {
 
     static getPage = async ({ pageName, userId }) => {
         try {
-            const page = await Page.findOne({ pageName, isActive: true })
-                .populate({
-                    path: 'tables',
-                    populate: {
-                        path: 'rowValueList',
-                        model: 'row',
-                        select: 'content proofImageList',
-                        match: { user: userId }
+            const page = await Page.aggregate([
+                {
+                    $match: {
+                        pageName,
+                        isActive: true
                     }
-                })
-                .lean();
+                },
+                {
+                    $unwind: '$tables'
+                },
+                {
+                    $match: {
+                        'tables.isActive': true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'rows',
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }
+                                }
+                            }
+                        ],
+                        localField: 'tables.rowValueList',
+                        foreignField: '_id',
+                        as: 'tables.rowValueList'
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        pageName: { $first: '$pageName' },
+                        pageType: { $first: '$pageType' },
+                        pageFaculty: { $first: '$pageFaculty' },
+                        pageStudentMajor: { $first: '$pageStudentMajor' },
+                        pageStudentCohort: { $first: '$pageStudentCohort' },
+                        pageStudentLevelYear: { $first: '$pageStudentLevelYear' },
+                        isActive: { $first: '$isActive' },
+                        tables: {
+                            $push: '$tables'
+                        }
+                    }
+                }
+            ]);
+
             return {
                 status: 200,
                 msg: 'Lấy Dữ Liệu Trang Thành Công',
-                data: page
+                data: page[0]
             };
         } catch (error) {
             throw error;

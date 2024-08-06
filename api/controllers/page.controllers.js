@@ -18,19 +18,26 @@ class PageControllers {
 
     getPages = async (req, res, next) => {
         try {
-            const fields =
-                Object.keys(req.query).length > 0
-                    ? req.query
-                    : {
-                          isActive: true
-                      };
-            const pages = await pageService.getPages(fields);
+            const { userId, ...fields } = req.query;
+            let pages = [];
+
+            if (userId) {
+                const { pageStudentCohort, pageStudentLevelYear } = fields;
+
+                if (pageStudentCohort) fields.pageStudentCohort = parseInt(pageStudentCohort);
+                if (pageStudentLevelYear) fields.pageStudentLevelYear = parseInt(pageStudentLevelYear);
+
+                pages = await pageService.getPages(fields, userId);
+            } else {
+                pages = await pageService.getGoals(fields);
+            }
 
             res.status(200).json({
-                status: 'Lấy Toàn Bộ Page Thành Công',
-                data: pages || []
+                status: 'Lấy dữ liệu trang thành công',
+                data: pages
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -48,7 +55,9 @@ class PageControllers {
                 status: 'Lấy Toàn Bộ Hoạt Động Thành Công',
                 data: activities || []
             });
-        } catch (error) {}
+        } catch (error) {
+            next(error);
+        }
     };
 
     getPage = async (req, res, next) => {
