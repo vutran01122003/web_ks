@@ -1,6 +1,7 @@
 import no_image from '../../assets/images/no_image.jpg';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { toFullName } from '../../utils/handleString';
 
 export const NewsItem = ({ newsId, cover, title, summary, createdAt, author }) => {
     return (
@@ -15,7 +16,12 @@ export const NewsItem = ({ newsId, cover, title, summary, createdAt, author }) =
                     <div className="news_info">
                         <span className="createdAt_news">{moment(createdAt).format('DD/MM/YYYY HH:mm:ss')}</span>
                         {' Bởi '}
-                        <span className="news_author">{author.fullName}</span>
+                        <span className="news_author">
+                            {toFullName({
+                                lastName: author.lastName,
+                                firstName: author.firstName
+                            })}
+                        </span>
                     </div>
                     <div className={`news__summary`}>{summary}</div>
                 </div>

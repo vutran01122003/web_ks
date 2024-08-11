@@ -7,7 +7,7 @@ import { TiDeleteOutline } from 'react-icons/ti';
 import { FaPen } from 'react-icons/fa';
 import { getDataApi } from '../utils/fetchData';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import Avatar from '../components/ComponentAccount/ComponentAvatar';
 import { createCohort, createFaculty, getAllFaculties } from '../redux/actions/facultyAction';
 import { facultySelector } from '../redux/selector';
@@ -169,7 +169,12 @@ function Faculty() {
                                         <Avatar url={facultyManager.avatar} size="small" />
                                         <div className="manager_info_content">
                                             <span> {capitalizeFirstLetter(facultyManager.userId)} </span>
-                                            <span> {capitalizeFirstLetter(facultyManager.fullName)} </span>
+                                            <span>
+                                                {toFullName({
+                                                    lastName: facultyManager.lastName,
+                                                    firstName: facultyManager.firstName
+                                                })}
+                                            </span>
                                         </div>
                                     </div>
 
@@ -229,9 +234,10 @@ function Faculty() {
                             <td>{capitalizeFirstLetter(facultyItem.facultyName)}</td>
                             <td>
                                 {facultyItem.managerList.map((manager, index) => (
-                                    <div key={index} className="manager_item">{`${
-                                        manager.userId
-                                    }-${capitalizeFirstLetter(manager.fullName)}`}</div>
+                                    <div key={index} className="manager_item">{`${manager.userId}-${toFullName({
+                                        lastName: manager.lastName,
+                                        firstName: manager.firstName
+                                    })}`}</div>
                                 ))}
                             </td>
                             <td>

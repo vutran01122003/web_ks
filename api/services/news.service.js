@@ -18,7 +18,7 @@ class NewsService {
                 .populate({
                     path: 'author',
                     model: 'user',
-                    select: 'fullName avatar'
+                    select: 'lastName firstName avatar'
                 })
                 .lean()
                 .exec();
@@ -40,7 +40,7 @@ class NewsService {
                 .populate({
                     path: 'author',
                     model: 'user',
-                    select: 'fullName avatar'
+                    select: 'lastName firstName avatar'
                 })
                 .lean()
                 .exec();

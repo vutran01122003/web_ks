@@ -83,13 +83,20 @@ class ProgressControllers {
 
     getAllProgress = async (req, res, next) => {
         try {
-            const { major, cohort, levelYear, sortProgress } = req.query;
+            const { major, cohort, levelYear, userId, sortProgressPercentage, page, limit } = req.query;
 
             const studentList = await ProgressService.getAllProgress({
                 major,
                 cohort,
+                userId,
                 levelYear,
-                sortProgress
+                sort: {
+                    progressPercentage: parseInt(sortProgressPercentage)
+                },
+                queryString: {
+                    page,
+                    limit
+                }
             });
 
             res.status(200).json({
@@ -97,6 +104,7 @@ class ProgressControllers {
                 data: studentList
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

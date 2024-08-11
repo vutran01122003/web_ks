@@ -7,7 +7,7 @@ import { getNewsDetails } from '../../redux/actions/newsAction';
 import { newsSelector } from '../../redux/selector';
 import ScrollToTopButton from '../../components/ScrollToTopButton/ScrollToTopButton';
 import Avatar from '../../components/ComponentAccount/ComponentAvatar.jsx';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter.jsx';
+import { capitalizeFirstLetter, toFullName } from '../../utils/handleString.jsx';
 
 const NewsDetail = () => {
     const dispatch = useDispatch();
@@ -54,7 +54,12 @@ const NewsDetail = () => {
                                 <div className="headerNew_info_wrapper">
                                     <Avatar url={newsData.author.cover} size="small" />
                                     <div className="headerNew_info">
-                                        <span className="headerNews__author">{newsData.author.fullName}</span>
+                                        <span className="headerNews__author">
+                                            {toFullName({
+                                                firstName: newsData.author.firstName,
+                                                lastName: newsData.author.lastName
+                                            })}
+                                        </span>
 
                                         <span className="headerNews__time">
                                             {moment(newsData.createdAt).format('DD/MM/YYYY HH:mm:ss')}

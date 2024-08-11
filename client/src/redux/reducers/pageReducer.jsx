@@ -1,4 +1,4 @@
-import { removeElem } from '../../utils/handleArray';
+import { removeElem, replaceElem } from '../../utils/handleArray';
 import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
@@ -7,35 +7,39 @@ const initialState = {
     pageId: '',
     pageName: '',
     pageType: '',
-    pageLevelYear: 0,
-    tables: []
+    pageStudentLevelYear: 0
 };
 
 function pageReducer(state = initialState, action) {
     switch (action.type) {
         case GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES: {
+            const { pages, pageStudentLevelYear } = action.payload;
             return {
                 ...state,
-                pages: [...action.payload.pages]
+                pages: [...pages],
+                pageStudentLevelYear
             };
         }
 
-        case GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO: {
+        case GLOBALTYPES.PAGE.SET_PAGE_INFO: {
             return {
                 ...state,
-                pathName: action.payload.pathName,
-                pageId: action.payload.pageId,
-                pageName: action.payload.pageName,
-                pageType: action.payload.pageType,
-                pageLevelYear: action.payload.pageLevelYear,
-                tables: [...action.payload.tables]
+                ...action.payload
             };
         }
 
         case GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE: {
+            const { page } = action.payload;
+
+            const newPages = replaceElem({
+                elemId: page._id,
+                newElem: page,
+                elemList: [...state.pages]
+            });
+
             return {
                 ...state,
-                tables: [...action.payload.tables]
+                pages: newPages
             };
         }
 

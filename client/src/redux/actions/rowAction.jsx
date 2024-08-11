@@ -18,12 +18,12 @@ export const addRow =
                 ? await patchDataApi(`/rows/${parsedFormData.rowListId}`, formData)
                 : await postDataApi('/rows', formData);
 
-            const newPage = await getDataApi(JSON.parse(formData.get('rowData')).path);
+            const page = await getDataApi(JSON.parse(formData.get('rowData')).path);
 
             dispatch({
                 type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
                 payload: {
-                    tables: newPage?.data.data.tables
+                    page: page.data.data
                 }
             });
 

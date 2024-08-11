@@ -19,6 +19,10 @@ class PermissionService {
         }
     };
 
+    static getGroupsByGroupCode = async ({ groupCodeList }) => {
+        return await Group.find({ groupCode: { $in: groupCodeList } });
+    };
+
     static getAllGroup = async () => {
         try {
             const groups = await Group.find();

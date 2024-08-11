@@ -1,7 +1,7 @@
 const createError = require('http-errors');
 const Page = require('../models/page.model');
 const UserService = require('./user.service');
-const mongoose = require('mongoose');
+const convertToObjectId = require('../utils/convertToObjectId');
 
 class PageService {
     static createPage = async (data) => {
@@ -18,7 +18,10 @@ class PageService {
             } = data;
 
             const isExists = await Page.findOne({
-                pageName
+                pageName,
+                pageStudentCohort,
+                pageStudentMajor,
+                pageStudentLevelYear
             }).lean();
 
             if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
@@ -79,7 +82,7 @@ class PageService {
                         pipeline: [
                             {
                                 $match: {
-                                    $expr: { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }
+                                    $expr: { $eq: ['$user', convertToObjectId(userId)] }
                                 }
                             }
                         ],
@@ -264,7 +267,7 @@ class PageService {
                         pipeline: [
                             {
                                 $match: {
-                                    $expr: { $eq: ['$user', new mongoose.Types.ObjectId(userId)] }
+                                    $expr: { $eq: ['$user', convertToObjectId(userId)] }
                                 }
                             }
                         ],
@@ -324,7 +327,6 @@ class PageService {
 
     static updateStatusPage = async ({ pageId, currentStatus }) => {
         try {
-            console.log({ pageId, currentStatus });
             await Page.findByIdAndUpdate(
                 pageId,
                 {

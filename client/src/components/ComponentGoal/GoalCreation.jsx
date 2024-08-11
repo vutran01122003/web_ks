@@ -6,7 +6,7 @@ import { FaCaretRight } from 'react-icons/fa';
 import { IoIosAddCircle } from 'react-icons/io';
 import { MdOutlineAddCircle } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 import { getAllFaculties } from '../../redux/actions/facultyAction';
 import { facultySelector } from '../../redux/selector';
 import { createPage } from '../../redux/actions/pageAction';

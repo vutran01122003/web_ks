@@ -3,10 +3,10 @@ import GLOBALTYPES from '../actions/globalTypes';
 const initialState = {
     goalsInfoData: {},
     annualTaskProgress: {
+        isLoading: false,
         data: [],
-        page: 0,
-        maxPage: false,
-        currentRows: 0
+        page: 1,
+        isMaxPage: false
     }
 };
 
@@ -22,18 +22,27 @@ function progressReducer(state = initialState, action) {
             };
         }
 
-        case GLOBALTYPES.PROGRESS.GET_ANNUAL_TASK_PROGRESS: {
+        case GLOBALTYPES.PROGRESS.LOADING: {
             return {
                 ...state,
                 annualTaskProgress: {
                     ...state.annualTaskProgress,
-                    data:
-                        state.annualTaskProgress.page === 0
-                            ? [...action.payload.data]
-                            : [...state.annualTaskProgress.data, ...action.payload.data],
-                    maxPage: action.payload.data.length === 0 ? true : false,
-                    page: action.payload.page,
-                    currentRows: state.annualTaskProgress.currentRows + action.payload.data.length
+                    isLoading: action.payload.isLoading
+                }
+            };
+        }
+
+        case GLOBALTYPES.PROGRESS.GET_ANNUAL_TASK_PROGRESS: {
+            const { data, page } = action.payload;
+            const { annualTaskProgress } = state;
+
+            return {
+                ...state,
+                annualTaskProgress: {
+                    ...annualTaskProgress,
+                    data: [...annualTaskProgress.data, ...data],
+                    isMaxPage: data.length === 0 ? true : false,
+                    page: page
                 }
             };
         }
@@ -42,10 +51,10 @@ function progressReducer(state = initialState, action) {
             return {
                 ...state,
                 annualTaskProgress: {
+                    isLoading: false,
                     data: [],
-                    page: 0,
-                    maxPage: false,
-                    currentRows: 0
+                    page: 1,
+                    isMaxPage: false
                 }
             };
         }

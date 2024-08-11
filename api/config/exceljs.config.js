@@ -1,7 +1,8 @@
 const userColumn = [
     { header: 'STT', key: 's_no', width: 5 },
     { header: 'MSSV', key: 'userId', width: 10 },
-    { header: 'Họ và tên', key: 'fullName', width: 25 },
+    { header: 'Họ đệm', key: 'lastName', width: 25 },
+    { header: 'Tên', key: 'firstName', width: 25 },
     { header: 'Ngày sinh', key: 'birthday', width: 12 },
     { header: 'Khoa', key: 'faculty', width: 30 },
     { header: 'Chuyên ngành', key: 'major', width: 30 },
@@ -16,24 +17,27 @@ const addDataOfRow = (cell, colNumber, data) => {
             data.userId = cell.value;
             break;
         case 3:
-            data.fullName = cell.value;
+            data.lastName = cell.value;
             break;
         case 4:
-            data.birthday = cell.value;
+            data.firstName = cell.value;
             break;
         case 5:
-            data.faculty = cell.value;
+            data.birthday = cell.value;
             break;
         case 6:
-            data.major = cell.value;
+            data.faculty = cell.value;
             break;
         case 7:
-            data.cohort = cell.value;
+            data.major = cell.value;
             break;
         case 8:
-            data.email = cell.value;
+            data.cohort = cell.value;
             break;
         case 9:
+            data.email = cell.value;
+            break;
+        case 10:
             data.phone = cell.value;
             break;
         default:

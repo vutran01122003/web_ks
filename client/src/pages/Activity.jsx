@@ -8,7 +8,7 @@ import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDy
 import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import { getAllFaculties } from '../redux/actions/facultyAction';
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../utils/handleString';
 import { getActivities } from '../redux/actions/activitiesAction';
 import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 

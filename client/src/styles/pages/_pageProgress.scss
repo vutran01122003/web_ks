@@ -6,28 +6,39 @@
         background-color: #ffffff;
         box-shadow: 0px 0px 5px #dad8d869;
         border-radius: 3px;
-        padding: 15px;
-        height: calc(100vh - 70px - 10px);
+        height: calc(100vh - 68px - 10px);
 
         .completion_shedule_body {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             background-color: #fff;
-            padding-bottom: 20px;
+            gap: 10px;
 
             .line__sort__completion-Shedule {
-                padding: 10px 0px;
+                background: #fff;
+                padding: 10px;
                 border-bottom: 1px solid #dddddd;
 
                 .line__search {
                     display: flex;
-                    margin-bottom: 8px;
+                    flex-wrap: wrap;
+                    gap: 10px;
 
-                    .select_group {
+                    .filter_group {
                         display: flex;
-                        flex-wrap: wrap;
+
+                        input {
+                            min-width: 180px;
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            color: #333;
+                            font-weight: 600;
+                            outline: none;
+                        }
                     }
 
                     .btn_group {
-                        margin-left: 8px;
                         display: flex;
                         gap: 8px;
 
@@ -103,50 +114,57 @@
                 }
             }
 
-            .completion_shedule_table {
-                width: 100%;
-                border-collapse: collapse;
+            .completion_shedule_table_wrapper {
+                flex: 1;
+                overflow: auto;
 
-                .completion_shedule_header {
-                    .progress_header_fiter {
-                        margin-left: 5px;
-                        svg {
-                            position: relative;
-                            top: 2px;
+                .completion_shedule_table {
+                    width: 100%;
+                    overflow: auto;
+                    border-collapse: collapse;
+
+                    .completion_shedule_header {
+                        position: sticky;
+                        top: 0;
+                        background: #fff;
+                        
+                        .progress_header_filter {
+                            margin-left: 5px;
+                            svg {
+                                position: relative;
+                                top: 2px;
+                            }
                         }
                     }
-                }
+    
+                    tbody > tr {
+                        border-top: 1px solid #dddddd;
+                        height: 50px;
+                    }
+    
+                    tr:hover {
+                        background-color: #f3f3f35e;
+                        transition: all 0.15s;
+                    }
+    
+                    th {
+                        padding: 10px;
+                        text-align: left;
+                        font-size: 15px;
+                        color: #000;
+                        text-align: center;
+                    }
+    
+                    td {
+                        text-align: center;
+                        padding: 12px 10px;
+                        font-size: 14px;
+                        font-weight: 600;
 
-                tbody > tr {
-                    border-top: 1px solid #dddddd;
-                    height: 50px;
-                }
-
-                tr:hover {
-                    background-color: #f3f3f35e;
-                    transition: all 0.15s;
-                }
-
-                th {
-                    padding: 10px;
-                    text-align: left;
-                    font-size: 15px;
-                    color: #000;
-                }
-
-                td:first-child {
-                    font-weight: 700;
-                }
-
-                td {
-                    padding: 12px 10px;
-                    font-size: 14px;
-                    font-weight: 600;
-                }
-
-                th,
-                td {
-                    text-align: center;
+                        &:first-child {
+                            font-weight: 700;
+                        }
+                    }
                 }
             }
         }

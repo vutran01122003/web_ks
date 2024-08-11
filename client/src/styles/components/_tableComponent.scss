@@ -259,10 +259,6 @@
                     font-size: 20px;
                     transition: 0.1s linear;
 
-                    &.deny {
-                        cursor: not-allowed;
-                    }
-
                     &.inactive {
                         opacity: 0.5;
                         cursor: not-allowed;

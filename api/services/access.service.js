@@ -1,6 +1,8 @@
 const fetch = require('node-fetch');
 const User = require('../models/user.model');
 const moment = require('moment');
+const { createNewAnnualActivitiesProgress } = require('./user.service');
+const FacultyService = require('./faculty.service');
 
 const role = {
     engineer: '0001',
@@ -56,37 +58,43 @@ class AccessService {
 
     static register = async ({ data, groupId }) => {
         try {
-            const { userId, fullName, password, birthday, major, cohort, faculty, email, phone } = data;
+            const { userId, lastName, firstName, password, birthday, major, cohort, faculty, email, phone } = data;
             const [day, month, year] = birthday.split('/');
 
             const createdUser = new User({
                 userId,
-                fullName,
+                firstName,
+                lastName,
                 birthday: new Date(year, month - 1, day).toLocaleDateString(),
                 major,
                 cohort,
                 faculty,
                 email,
                 phone,
-                group: groupId,
-                annualActivitiesProgress: [
-                    {
-                        levelYear: 1,
-                        totalScore: 0,
-                        numberOfRequiredActivity: 0,
-                        numberOfPendingActivity: 0,
-                        numberOfAcceptedActivity: 0,
-                        numberOfRejectedActivity: 0,
-                        numberOfResubmitedActivity: 0
-                    }
-                ]
+                group: groupId
             });
 
             createdUser.encodePassword(password);
 
             await createdUser.save();
 
-            const populatedUser = await User.populate(createdUser, { path: 'group' });
+            const [populatedUser, currentLevelYear] = await Promise.all([
+                User.populate(createdUser, { path: 'group' }),
+                FacultyService.getCurrentLevelYearOfCohort({
+                    facultyName: faculty.toLowerCase(),
+                    majorName: major.toLowerCase(),
+                    cohortName: cohort
+                })
+            ]);
+
+            await createNewAnnualActivitiesProgress({
+                pageInfo: {
+                    pageStudentMajor: major,
+                    pageStudentCohort: cohort
+                },
+                currentLevelYear,
+                userId: populatedUser._id
+            });
 
             return populatedUser;
         } catch (error) {

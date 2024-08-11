@@ -150,7 +150,6 @@ export const updateTable =
                 }
             });
         } catch (error) {
-            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {

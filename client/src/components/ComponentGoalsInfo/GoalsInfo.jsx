@@ -1,7 +1,6 @@
-import { IoMdArrowDropright } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import search from '../../assets/images/search.png';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 
 function GoalsInfo({ levelYear, goalsInfo }) {
     return (

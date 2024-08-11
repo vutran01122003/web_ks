@@ -1,5 +1,5 @@
 import Avatar from '../ComponentAccount/ComponentAvatar';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
 
 const LayoutInfo = ({ user, isDetailedRow }) => {
     const { VITE_APP_ADMIN_CODE, VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE } = import.meta.env;
@@ -24,28 +24,31 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
     const userDataList = [
         {
             label: 'Mã Số',
-            value: user?.userId || 'Chưa cập nhật',
+            value: user?.userId || 'Chưa Cập Nhật',
             isShow: true
         },
         {
             label: 'Họ tên',
-            value: user?.fullName ? capitalizeFirstLetter(user?.fullName) : 'Chưa cập nhật',
+            value: toFullName({
+                lastName: user.lastName,
+                firstName: user.firstName
+            }),
             isShow: true
         },
         {
             label: 'Ngày sinh',
-            value: user?.birthday ? new Date(user?.birthday).toLocaleDateString('en-GB') : 'Chưa cập nhật',
+            value: user?.birthday ? new Date(user?.birthday).toLocaleDateString('en-GB') : 'Chưa Cập Nhật',
             isShow: isDetailedRow ? false : true
         },
         {
             label: 'Khoa',
-            value: user?.faculty ? capitalizeFirstLetter(user?.faculty) : 'Chưa cập nhật',
+            value: user?.faculty ? capitalizeFirstLetter(user?.faculty) : 'Chưa Cập Nhật',
             role: VITE_APP_FACULTY_MANAGER_CODE,
             isShow: true
         },
         {
             label: 'Ngành',
-            value: user?.major ? capitalizeFirstLetter(user?.major) : 'Chưa cập nhật',
+            value: user?.major ? capitalizeFirstLetter(user?.major) : 'Chưa Cập Nhật',
             role: VITE_APP_TALENTED_ENGINEER_CODE,
             isShow: isDetailedRow ? false : true
         }

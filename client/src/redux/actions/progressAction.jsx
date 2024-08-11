@@ -31,13 +31,13 @@ export const getProgressByYear =
     };
 
 export const getAnnualTaskProgress =
-    ({ major, levelYear, cohort, isCompleted, userId, sortProgress }) =>
+    ({ major, levelYear, cohort, isCompleted, userId, sortProgressPercentage, page, limit }) =>
     async (dispatch) => {
         try {
             dispatch({
-                type: GLOBALTYPES.ALERT,
+                type: GLOBALTYPES.PROGRESS.LOADING,
                 payload: {
-                    loading: true
+                    isLoading: true
                 }
             });
 
@@ -47,21 +47,16 @@ export const getAnnualTaskProgress =
                 cohort,
                 isCompleted,
                 userId,
-                sortProgress
+                sortProgressPercentage,
+                page,
+                limit
             });
 
             dispatch({
                 type: GLOBALTYPES.PROGRESS.GET_ANNUAL_TASK_PROGRESS,
                 payload: {
                     data: res.data.data,
-                    page: 0
-                }
-            });
-
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    loading: false
+                    page
                 }
             });
         } catch (error) {
@@ -72,6 +67,13 @@ export const getAnnualTaskProgress =
                         error?.response.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
                             : error?.response.data?.msg || 'Lấy Dữ Liệu Tiến Độ Hoàn Thành Thất Bại'
+                }
+            });
+        } finally {
+            dispatch({
+                type: GLOBALTYPES.PROGRESS.LOADING,
+                payload: {
+                    isLoading: false
                 }
             });
         }

@@ -1,17 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { LuTimerReset } from 'react-icons/lu';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaSortNumericDownAlt, FaSortNumericUpAlt } from 'react-icons/fa';
+import { FaSortNumericDown, FaSortNumericDownAlt } from 'react-icons/fa';
 import { getAnnualTaskProgress } from '../redux/actions/progressAction';
 
 import { authSelector, facultySelector, progressSelector } from '../redux/selector';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import StopSubmittingProofModal from '../components/ComponentModal/StopSubmittingProofModal';
 import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 
 function ProgressUI() {
+    const LIMIT = 15;
+    const observer = useRef();
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
     const progress = useSelector(progressSelector);
@@ -19,18 +21,53 @@ function ProgressUI() {
     const [cohort, setCohort] = useState('');
     const [major, setMajor] = useState('');
     const [levelYear, setLevelYear] = useState('');
+    const [userId, setUserId] = useState('');
     const [faculty, setFaculty] = useState(null);
-    const [sortProgress, setSortProgress] = useState(false);
+    const [sortProgressPercentage, setSortProgressPercentage] = useState(1);
     const [vissibleModal, setVissibleModal] = useState(false);
+    const [pageNumber, setPageNumber] = useState(1);
 
-    const handleSearchAnnualTaskProgress = () => {
+    const lastStudentElementRef = (node) => {
+        if (progress.annualTaskProgress.isLoading) return;
+        if (observer.current) observer.current.disconnect();
+
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !progress.annualTaskProgress.isMaxPage) {
+                setPageNumber((prev) => prev + 1);
+            }
+        });
+
+        if (node) observer.current.observe(node);
+    };
+
+    const onResetAnnualTaskProgress = ({ page, sortProgressPercentage }) => {
+        setPageNumber(page);
+
+        dispatch({
+            type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
+        });
+
+        handleSearchAnnualTaskProgress({
+            page,
+            sortProgressPercentage
+        });
+    };
+
+    const handleChangeUserIdValue = (e) => {
+        setUserId(e.target.value);
+    };
+
+    const handleSearchAnnualTaskProgress = ({ page, sortProgressPercentage }) => {
         if (cohort && major && levelYear) {
             dispatch(
                 getAnnualTaskProgress({
                     cohort: cohort?.cohortName,
                     major: major?.majorName,
+                    userId: userId.trim(),
                     levelYear,
-                    sortProgress
+                    sortProgressPercentage,
+                    page,
+                    limit: LIMIT
                 })
             );
         } else {
@@ -45,7 +82,13 @@ function ProgressUI() {
 
     const handleToggleSortProgress = () => {
         if (progress.annualTaskProgress.data.length === 0) return;
-        setSortProgress((prev) => !prev);
+
+        setSortProgressPercentage((prev) => -prev);
+
+        onResetAnnualTaskProgress({
+            page: 1,
+            sortProgressPercentage: -sortProgressPercentage
+        });
     };
 
     const handleVissbleStopSubmittingProofModal = () => {
@@ -74,10 +117,13 @@ function ProgressUI() {
     }, []);
 
     useEffect(() => {
-        if (progress.annualTaskProgress.data.length > 0 && cohort && major && levelYear) {
-            handleSearchAnnualTaskProgress();
+        if (cohort && major && levelYear && pageNumber > 1) {
+            handleSearchAnnualTaskProgress({
+                page: pageNumber,
+                sortProgressPercentage
+            });
         }
-    }, [sortProgress]);
+    }, [pageNumber, sortProgressPercentage]);
 
     useEffect(() => {
         if (facultyState.faculty) {
@@ -117,7 +163,7 @@ function ProgressUI() {
                 <div className="completion_shedule_body">
                     <div className="line__sort__completion-Shedule">
                         <div className="line__search">
-                            <div className="select_group">
+                            <div className="filter_group">
                                 <select
                                     onChange={(e) => {
                                         if (!e.target.value) {
@@ -179,10 +225,20 @@ function ProgressUI() {
                                                 >{`Năm ${cohort?.currentLevelYear - index} ${index === 0 ? '(Hiện tại)' : '(Đã kết thúc)'}`}</option>
                                             ))}
                                 </select>
+
+                                <input type="text" placeholder="Nhập Mã Sinh Viên" onChange={handleChangeUserIdValue} />
                             </div>
 
                             <div className="btn_group">
-                                <button className="search_btn" onClick={handleSearchAnnualTaskProgress}>
+                                <button
+                                    className="search_btn"
+                                    onClick={() =>
+                                        onResetAnnualTaskProgress({
+                                            page: 1,
+                                            sortProgressPercentage
+                                        })
+                                    }
+                                >
                                     <IoSearch />
                                     Tìm Kiếm
                                 </button>
@@ -202,50 +258,68 @@ function ProgressUI() {
                         </div>
                     </div>
 
-                    <table className="completion_shedule_table">
-                        <thead className="completion_shedule_header">
-                            <tr>
-                                <th>STT</th>
-                                <th>Mã Sinh Viên</th>
-                                <th>Tên Sinh Viên</th>
-                                <th>Chuyên Ngành</th>
-                                <th className="progress_header">
-                                    <span>Tiến Độ</span>
-                                    <span className="progress_header_fiter" onClick={handleToggleSortProgress}>
-                                        <abbr title={sortProgress ? 'Sắp xếp tăng dần' : 'Sắp xếp giảm dần'}>
-                                            {sortProgress ? <FaSortNumericUpAlt /> : <FaSortNumericDownAlt />}
-                                        </abbr>
-                                    </span>
-                                </th>
-                                <th>Điểm</th>
-                                <th>Tình trạng</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {progress.annualTaskProgress.data.map((progressItem, index) => (
-                                <tr key={progressItem?.userId}>
-                                    <td>{index + 1}</td>
-                                    <td>{progressItem?.userId}</td>
-                                    <td>{capitalizeFirstLetter(progressItem?.fullName)}</td>
-                                    <td>{capitalizeFirstLetter(progressItem?.major)}</td>
-                                    <td>
-                                        {progressItem.completedTaskProgress?.completedTaskPrecent
-                                            ? progressItem.completedTaskProgress?.completedTaskPrecent.toFixed(2)
-                                            : 0}
-                                    </td>
-                                    <td>{progressItem.completedTaskProgress?.totalScore || 0}</td>
-                                    <td>
-                                        {progressItem.completedTaskProgress?.completedTaskPrecent === 100
-                                            ? 'Hoàn Thành'
-                                            : 'Chưa Hoàn Thành'}
-                                    </td>
+                    <div className="completion_shedule_table_wrapper">
+                        <table className="completion_shedule_table">
+                            <thead className="completion_shedule_header">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã Sinh Viên</th>
+                                    <th>Tên Sinh Viên</th>
+                                    <th className="progress_header">
+                                        <span>Tổng Tiến Độ</span>
+                                        <span className="progress_header_filter" onClick={handleToggleSortProgress}>
+                                            {sortProgressPercentage ? <FaSortNumericDown /> : <FaSortNumericDownAlt />}
+                                        </span>
+                                    </th>
+                                    <th>Tổng Điểm</th>
+                                    <th>Tình trạng</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
 
-                    {progress.annualTaskProgress.data.length === 0 && <EmptyDataNotification />}
+                            <tbody>
+                                {progress.annualTaskProgress.data.map((progressItem, index) => {
+                                    const { progressData, lastName, firstName, userId } = progressItem;
+                                    const { numberOfAcceptedActivity, numberOfRequiredActivity, totalScore } =
+                                        progressData;
+
+                                    const completedProgressPrecent =
+                                        numberOfAcceptedActivity && numberOfRequiredActivity
+                                            ? (numberOfAcceptedActivity / numberOfRequiredActivity) * 100
+                                            : 0;
+
+                                    if (index + 1 === progress.annualTaskProgress.data.length)
+                                        return (
+                                            <tr key={userId + index} ref={lastStudentElementRef}>
+                                                <td>{index + 1}</td>
+                                                <td>{userId}</td>
+                                                <td>{toFullName({ firstName, lastName })}</td>
+                                                <td>{`${completedProgressPrecent.toFixed(2)}%`}</td>
+                                                <td>{totalScore || 0}</td>
+                                                <td>
+                                                    {completedProgressPrecent === 100
+                                                        ? 'Hoàn Thành'
+                                                        : 'Chưa Hoàn Thành'}
+                                                </td>
+                                            </tr>
+                                        );
+
+                                    return (
+                                        <tr key={userId + index}>
+                                            <td>{index + 1}</td>
+                                            <td>{userId}</td>
+                                            <td>{toFullName({ firstName, lastName })}</td>
+                                            <td>{`${completedProgressPrecent.toFixed(2)}%`}</td>
+                                            <td>{totalScore || 0}</td>
+                                            <td>
+                                                {completedProgressPrecent === 100 ? 'Hoàn Thành' : 'Chưa Hoàn Thành'}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                        {progress.annualTaskProgress.data.length === 0 && <EmptyDataNotification />}
+                    </div>
                 </div>
             </div>
         </div>

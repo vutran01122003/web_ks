@@ -1,5 +1,6 @@
 import ControlBoxAccount from '../ComponentHeader/ComponentControl/ControlBoxAccount';
 import Avatar from './ComponentAvatar';
+import { toFullName } from '../../utils/handleString';
 
 function Account({ inModal, userInfo, refBoxAccount, dropBoxAccount, setDropBoxAccount }) {
     const toggleBoxAccountDisplay = () => {
@@ -10,7 +11,9 @@ function Account({ inModal, userInfo, refBoxAccount, dropBoxAccount, setDropBoxA
         <div className={`border__account ${inModal && 'in_modal'}`} ref={refBoxAccount ? refBoxAccount : null}>
             <div className={`btn_dropdown ${inModal && 'in_modal'}`} onClick={toggleBoxAccountDisplay}>
                 <div className="info__user">
-                    <div id="name__user">{userInfo?.fullName || ''}</div>
+                    <div id="name__user">
+                        {toFullName({ lastName: userInfo.lastName, firstName: userInfo.firstName }) || ''}
+                    </div>
                     <div id="studentId__user">{`ID : ${userInfo?.userId || ''}`}</div>
                 </div>
                 <Avatar url={userInfo.avatar} size="small" className={dropBoxAccount ? 'border__avatar' : ''} />

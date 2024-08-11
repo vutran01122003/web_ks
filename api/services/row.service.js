@@ -1,7 +1,7 @@
 const Row = require('../models/row.model');
-const mongoose = require('mongoose');
 const createError = require('http-errors');
 const PageService = require('./page.service');
+const convertToObjectId = require('../utils/convertToObjectId');
 
 class RowService {
     static addRow = async ({ data }) => {
@@ -63,9 +63,9 @@ class RowService {
             const quantityDemanded = await Row.aggregate([
                 {
                     $match: {
-                        table: new mongoose.Types.ObjectId(table),
-                        user: new mongoose.Types.ObjectId(user),
-                        page: new mongoose.Types.ObjectId(page)
+                        table: convertToObjectId(table),
+                        user: convertToObjectId(user),
+                        page: convertToObjectId(page)
                     }
                 },
                 {

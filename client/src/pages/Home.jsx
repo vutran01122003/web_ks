@@ -8,6 +8,7 @@ import Quantity from '../components/ComponentQuantity/Quantity';
 import { progressSelector } from '../redux/selector';
 import { GoArrowRight } from 'react-icons/go';
 import { Link } from 'react-router-dom';
+import { toFullName } from '../utils/handleString';
 
 const Home = ({ auth }) => {
     const { VITE_APP_TALENTED_ENGINEER_CODE } = import.meta.env;
@@ -55,7 +56,14 @@ const Home = ({ auth }) => {
         <div className="pageHome ">
             <div className="information__welcome">
                 <div className="wecome__name">
-                    <span>Xin chào, {auth?.user?.fullName} !</span>
+                    <span>
+                        Xin chào,
+                        {toFullName({
+                            lastName: auth?.user?.lastName,
+                            firstName: auth?.user?.firstName
+                        })}
+                        !
+                    </span>
                     <div className="to__profile">
                         <Link to="/profile">
                             <GoArrowRight />
@@ -67,7 +75,7 @@ const Home = ({ auth }) => {
                 </div>
             </div>
 
-            {auth?.user.group.groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
+            {auth?.user.group.groupCode === VITE_APP_TALENTED_ENGINEER_CODE && auth.user?.annualActivitiesProgress && (
                 <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
             )}
 

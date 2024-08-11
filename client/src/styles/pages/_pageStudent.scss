@@ -70,13 +70,27 @@
                         position: sticky;
                         top: 0;
                         background: #fff;
-                        padding: 10px;
+                        padding: 10px 5px;
                         font-size: 13px;
                         font-weight: 700;
                         text-transform: uppercase;
                         user-select: none;
                         color: #333;
                         text-align: center;
+
+                       
+                        .th_name_sort_icon_wrapper {
+                            position: relative;
+                            top: 2px;
+                            font-size: 14px;
+                            margin-left: 5px;
+                            cursor: pointer;
+                            transition: 0.1s linear;
+
+                            &:hover {
+                                color: #000
+                            }
+                        }
                     }
                 }
     
@@ -93,7 +107,7 @@
                     td {
                         font-size: 14px;
                         font-weight: 500;
-                        padding: 10px;
+                        padding: 10px 5px;
                         color: #4e545b;
                         text-align: center;
                     }

@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import TableModal from '../ComponentModal/TableModal';
 import PreviewFilesModal from '../ComponentModal/PreviewFilesModal';
 import { authSelector } from '../../redux/selector';
-import GLOBALTYPES from '../../redux/actions/globalTypes';
 import TableContent from './TableContent';
 
 const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
-    const dispatch = useDispatch();
     const [useStateModal, setUseStateModal] = useState(false);
     const [openPreviewModal, setOpenPreviewModal] = useState(false);
     const [proofFilesData, setProofFilesData] = useState(null);
@@ -20,15 +18,6 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
     };
 
     const handleOpenModal = () => {
-        if (page.pageLevelYear !== auth.user.levelYear) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error: `Hoạt động năm ${page.pageLevelYear} đã kết thúc`
-                }
-            });
-            return;
-        }
         setUseStateModal(true);
     };
 
@@ -46,7 +35,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                         {!isDynamicRows && !isDetailedRow && (
                             <button
                                 className={`modal_btn_open ${
-                                    page.pageLevelYear === auth.user.levelYear ? 'active' : 'inactive'
+                                    page.pageStudentLevelYear === auth.user.levelYear ? 'active' : 'inactive'
                                 }`}
                                 onClick={handleOpenModal}
                             >

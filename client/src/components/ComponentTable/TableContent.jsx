@@ -235,15 +235,13 @@ function TableContent({ auth, row, page, setRowInfo, isDetailedRow, handleOpenMo
                                     }`}
                                 >
                                     <span
+                                        className={`edit_row ${item.editValue ? 'active' : 'inactive'}`}
                                         onClick={() => {
-                                            if (item.editValue && page.pageLevelYear === auth.user.levelYear) {
+                                            if (item.editValue) {
                                                 setRowInfo(item.rowInfo);
                                                 handleOpenModal();
                                             }
                                         }}
-                                        className={`edit_row ${item.editValue ? 'active' : 'inactive'} ${
-                                            page.pageLevelYear === auth.user.levelYear ? 'allow' : 'deny'
-                                        }`}
                                     >
                                         <FaEdit />
                                     </span>

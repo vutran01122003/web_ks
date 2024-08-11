@@ -1,5 +1,4 @@
 import { AiOutlineClose } from 'react-icons/ai';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { stopSubmittingProof } from '../../redux/actions/progressAction';

@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const Row = require('../models/row.model');
 const conn = require('../dbs/init.mongodb');
 const TableSchema = require('./tables.schema');
+const convertToObjectId = require('../utils/convertToObjectId');
 
 const [DOC, COL] = ['page', 'pages'];
 
@@ -23,7 +24,6 @@ const PageSchema = new Schema(
             enum: ['chỉ tiêu', 'tin tức'],
             default: 'chỉ tiêu'
         },
-        // Thuộc tính pageFaculty ràng buộc page chỉ xuất hiện ở trong khoa (Faculty) được chỉ định
         pageFaculty: {
             type: String,
             lowercase: true,
@@ -34,7 +34,6 @@ const PageSchema = new Schema(
                 message: 'pageFaculty is required when pageType is "Chỉ Tiêu".'
             }
         },
-        // Thuộc tính pageStudentMajor ràng buộc page chỉ xuất hiện ở trong chuyên ngành (Major) được chỉ định
         pageStudentMajor: {
             type: String,
             lowercase: true,
@@ -45,7 +44,6 @@ const PageSchema = new Schema(
                 message: 'pageStudentMajor is required when pageType is "Chỉ Tiêu".'
             }
         },
-        // Thuộc tính pageStudentCohort ràng buộc page chỉ xuất hiện ở trong khóa sinh viên (Cohort) được chỉ định
         pageStudentCohort: {
             type: Number,
             validate: {
@@ -55,8 +53,6 @@ const PageSchema = new Schema(
                 message: 'pageStudentCohort is required when pageType is "Chỉ Tiêu".'
             }
         },
-        // Thuộc tính pageStudentLevelYear ràng buộc page chỉ xuất hiện ở trong năm học (LevelYear) được chỉ định
-        // EX: Một sinh viên có ít nhất 4 năm học, mỗi năm học sẽ có các page ứng với các năm học của sinh viên
         pageStudentLevelYear: {
             type: Number,
             validate: {
@@ -67,8 +63,6 @@ const PageSchema = new Schema(
             }
         },
         tables: [TableSchema],
-        // Thuộc tính isActive có chức năng cho phép người dùng tương tác với page nếu là isActive là true và ngược lại
-        // Mặc định giá trị của isActive là true
         isActive: {
             type: Boolean,
             default: true
@@ -106,9 +100,9 @@ PageSchema.pre('findOneAndUpdate', async function (next) {
             const pageId = query._id;
 
             const tableDetail = await Page.aggregate([
-                { $match: { _id: new mongoose.Types.ObjectId(pageId) } },
+                { $match: { _id: convertToObjectId(pageId) } },
                 { $unwind: '$tables' },
-                { $match: { 'tables._id': new mongoose.Types.ObjectId(tableId) } }
+                { $match: { 'tables._id': convertToObjectId(tableId) } }
             ]).exec();
 
             await Row.deleteMany({

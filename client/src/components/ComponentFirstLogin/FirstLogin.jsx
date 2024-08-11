@@ -41,10 +41,19 @@ function FirstLogin({ userId, birthday }) {
                     <h1 className="heading__text">Cập Nhật Thông Tin </h1>
                     <FormControl
                         id="name_sv"
-                        label="Tên Sinh Viên"
+                        label="Họ Đệm"
                         type="text"
-                        name="fullName"
-                        placeholder="Nhập tên sinh viên"
+                        name="lastName"
+                        placeholder="Nhập họ đệm"
+                        onChange={handleChangeData}
+                    />
+
+                    <FormControl
+                        id="name_sv"
+                        label="Tên"
+                        type="text"
+                        name="firstName"
+                        placeholder="Nhập tên"
                         onChange={handleChangeData}
                     />
 

@@ -17,10 +17,17 @@ const UserSchema = new Schema(
             required: true,
             trim: true
         },
-        fullName: {
+        firstName: {
             type: String,
             lowercase: true,
-            required: true
+            required: true,
+            trim: true
+        },
+        lastName: {
+            type: String,
+            lowercase: true,
+            required: true,
+            trim: true
         },
         password: {
             type: String,
@@ -37,8 +44,7 @@ const UserSchema = new Schema(
             lowercase: true
         },
         birthday: {
-            type: Schema.Types.Date,
-            required: true
+            type: Schema.Types.Date
         },
         // Thuộc tính faculty cho biết khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
         faculty: {
@@ -72,7 +78,6 @@ const UserSchema = new Schema(
             lowercase: true
         },
         // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
-        annualTaskProgress: {},
         annualActivitiesProgress: [ProgressSchema]
     },
     {

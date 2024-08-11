@@ -42,7 +42,8 @@ export const getPages = (params) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES,
             payload: {
-                pages: res?.data.data
+                pages: res?.data.data,
+                pageStudentLevelYear: params.pageStudentLevelYear
             }
         });
     } catch (error) {
@@ -81,37 +82,27 @@ export const getGoals = (params) => async (dispatch) => {
     }
 };
 
-export const getPage =
-    ({ pathName }) =>
+export const setPageInfo =
+    ({ pageId, pageType, pageName, pathname }) =>
     async (dispatch) => {
         try {
-            if (pathName.includes('/page/')) {
-                const res = await getDataApi(pathName);
-                const pageData = res.data.data;
-
-                if (res.data.data) {
-                    dispatch({
-                        type: GLOBALTYPES.PAGE.DYNAMIC_PAGE_INFO,
-                        payload: {
-                            pathName,
-                            pageType: pageData.pageType,
-                            pageId: pageData._id,
-                            pageName: pageData.pageName,
-                            tables: pageData?.tables || [],
-                            pageLevelYear: pageData.pageStudentLevelYear
-                        }
-                    });
+            dispatch({
+                type: GLOBALTYPES.PAGE.SET_PAGE_INFO,
+                payload: {
+                    pageType,
+                    pageId,
+                    pageName,
+                    pathName: pathname
                 }
-            }
+            });
         } catch (error) {
-            console.log(error);
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy Dữ Liệu Trang Thất Bại'
+                            : error?.response?.data.msg || 'Cập nhật dữ liệu trang thất bại'
                 }
             });
         }

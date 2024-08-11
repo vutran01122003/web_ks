@@ -8,7 +8,8 @@ const ProgressSchema = new Schema({
     numberOfPendingActivity: Number,
     numberOfAcceptedActivity: Number,
     numberOfRejectedActivity: Number,
-    numberOfResubmitedActivity: Number
+    numberOfResubmitedActivity: Number,
+    progressPercentage: Number
 });
 
 module.exports = ProgressSchema;

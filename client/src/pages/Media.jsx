@@ -6,7 +6,7 @@ import { pageSelector } from '../redux/selector';
 import { createNews } from '../redux/actions/newsAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import { createPage } from '../redux/actions/pageAction';
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../utils/handleString';
 
 function MediaUi() {
     const coverRef = useRef();

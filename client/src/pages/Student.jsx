@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { facultySelector, studentSelector } from '../redux/selector';
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
 import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
+import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 
 const Student = () => {
     const LIMIT = 20;
@@ -18,6 +19,7 @@ const Student = () => {
 
     const [filterData, setFilterData] = useState({});
     const [pageNumber, setPageNumber] = useState(1);
+    const [sortByName, setSortByName] = useState(1);
     const [currentUserData, setCurrentUserData] = useState(null);
     const [isVisibleGoalDetailsModal, setIsVisibleGoalDetailsModal] = useState(false);
     const [isVisibleStudentDetailsModal, setIsVisibleStudentDetailsModal] = useState(false);
@@ -47,7 +49,7 @@ const Student = () => {
 
             if (node) observe.current.observe(node);
         },
-        [studentState.isLoading]
+        [studentState.isLoading, studentState.isMaxPage]
     );
 
     const onChangeFilterData = (e) => {
@@ -72,20 +74,9 @@ const Student = () => {
         return true;
     };
 
-    const onDispatchGetStudents = ({ filterData, limit, page }) => {
-        dispatch(
-            getStudents({
-                major: filterData.major.majorName,
-                cohort: filterData.cohort.cohortName,
-                status: filterData.status,
-                userId: filterData.userId,
-                limit: limit,
-                page: page
-            })
-        );
-    };
+    const onGetStudents = ({ page, sortByName }) => {
+        const { major, cohort, status, userId } = filterData;
 
-    const onClickGetStudentListBtn = () => {
         if (!isValidfilterData()) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -96,31 +87,45 @@ const Student = () => {
             return;
         }
 
+        dispatch(
+            getStudents({
+                major: major.majorName,
+                cohort: cohort.cohortName,
+                status: status,
+                userId: userId,
+                limit: LIMIT,
+                page: page,
+                sortByName
+            })
+        );
+    };
+
+    const onToggleSortByName = () => {
+        setSortByName((prev) => -prev);
+        onClickGetStudentListBtn({ page: 1, sortByName: -sortByName });
+    };
+
+    const onClickGetStudentListBtn = ({ page, sortByName }) => {
         setPageNumber(1);
+
         dispatch({
             type: GLOBALTYPES.STUDENT.RESET_STUDENT_LIST
         });
 
-        onDispatchGetStudents({ filterData, limit: LIMIT, page: 1 });
+        onGetStudents({ page, sortByName });
     };
 
-    const onGetStudentList = () => {
-        if (!isValidfilterData()) return;
-        onDispatchGetStudents({ filterData, limit: LIMIT, page: pageNumber });
-    };
+    useEffect(() => {
+        if (pageNumber > 1) {
+            onGetStudents({ page: pageNumber, sortByName });
+        }
+    }, [pageNumber, sortByName]);
 
     useEffect(() => {
         const temp = { ...filterData };
         if (temp?.cohort) delete temp.cohort;
-
         setFilterData(temp);
     }, [filterData?.major]);
-
-    useEffect(() => {
-        if (pageNumber > 1) {
-            onGetStudentList();
-        }
-    }, [pageNumber]);
 
     return (
         <>
@@ -175,7 +180,15 @@ const Student = () => {
                         </div>
 
                         <div className="search_wrapper">
-                            <button className="student_search_btn" onClick={onClickGetStudentListBtn}>
+                            <button
+                                className="student_search_btn"
+                                onClick={() => {
+                                    onClickGetStudentListBtn({
+                                        page: 1,
+                                        sortByName
+                                    });
+                                }}
+                            >
                                 Tìm Kiếm
                             </button>
                         </div>
@@ -186,9 +199,14 @@ const Student = () => {
                                 <tr>
                                     <th>STT</th>
                                     <th>Mã Sinh Viên</th>
-                                    <th>Họ Tên</th>
-                                    <th>Giới Tính</th>
+                                    <th className="th_name">
+                                        <span>Họ Tên</span>
+                                        <span className="th_name_sort_icon_wrapper" onClick={onToggleSortByName}>
+                                            {sortByName === 1 ? <FaSortAlphaDown /> : <FaSortAlphaDownAlt />}
+                                        </span>
+                                    </th>
                                     <th>Ngày Sinh</th>
+                                    <th>Giới Tính</th>
                                     <th>Số Điện Thoại</th>
                                     <th>Trạng Thái</th>
                                     <th>Hoạt Động</th>
@@ -209,15 +227,18 @@ const Student = () => {
                                             <td>{index + 1}</td>
                                             <td className="msv_st">{handleStringValue(student.userId)}</td>
                                             <td className="name_st">
-                                                {handleStringValue(capitalizeFirstLetter(student?.fullName || ''))}
-                                            </td>
-                                            <td className="gender_st">
-                                                {handleStringValue(capitalizeFirstLetter(student?.gender || ''))}
+                                                {toFullName({
+                                                    lastName: student.lastName,
+                                                    firstName: student.firstName
+                                                })}
                                             </td>
                                             <td className="dob_st">
                                                 {student?.birthday
                                                     ? new Date(student.birthday).toLocaleDateString('en-GB')
                                                     : handleStringValue('')}
+                                            </td>
+                                            <td className="gender_st">
+                                                {handleStringValue(capitalizeFirstLetter(student?.gender || ''))}
                                             </td>
                                             <td className="phone_st">{handleStringValue(student.phone)}</td>
                                             <td>

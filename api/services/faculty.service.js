@@ -22,7 +22,7 @@ class FacultyService {
             const populatedFaculty = createdFaculty.populate({
                 path: 'managerList',
                 model: 'user',
-                select: 'fullName userId'
+                select: 'lastName firstName userId'
             });
 
             return populatedFaculty;
@@ -243,7 +243,7 @@ class FacultyService {
     static getAllFaculties = async () => {
         try {
             const faculties = await Faculty.find({ isActive: true })
-                .populate({ path: 'managerList', model: 'user', select: 'fullName userId' })
+                .populate({ path: 'managerList', model: 'user', select: 'lastName firstName userId' })
                 .lean();
 
             const availableFaculties = faculties.filter((faculty) => faculty.isActive === true);
@@ -268,6 +268,20 @@ class FacultyService {
         try {
             const faculty = await Faculty.findOne({ facultyName });
             return faculty;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getCurrentLevelYearOfCohort = async ({ facultyName, majorName, cohortName }) => {
+        try {
+            const faculty = await Faculty.findOne({ facultyName });
+            const major = faculty.majors.find((major) => major.majorName === majorName);
+            const currentLevelYear = major.cohortList.find(
+                (cohort) => cohort.cohortName === parseInt(cohortName)
+            ).currentLevelYear;
+
+            return currentLevelYear;
         } catch (error) {
             throw error;
         }

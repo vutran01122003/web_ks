@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 
 export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
     const TABLE = {};
@@ -140,8 +140,11 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
 
             if (dynamicRowsInfo) {
                 rowValueItemArr = [
-                    dynamicRowsInfo?.user[0]?.userId,
-                    capitalizeFirstLetter(dynamicRowsInfo?.user[0]?.fullName),
+                    dynamicRowsInfo?.user[0]?.userId || 'Chưa Cập Nhật',
+                    toFullName({
+                        lastName: dynamicRowsInfo?.user[0]?.lastName,
+                        firstName: dynamicRowsInfo?.user[0]?.firstName
+                    }),
                     rowValueItem?.createdAt ? new Date(rowValueItem.createdAt).toLocaleDateString('en-GB') : 'Không có',
                     ...rowValueItemArr
                 ];

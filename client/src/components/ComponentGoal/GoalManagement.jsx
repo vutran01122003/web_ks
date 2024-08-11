@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IoSearch, IoRemoveCircleOutline, IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 
 import { facultySelector, goalsSelector } from '../../redux/selector';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import UpdateTableModal from '../ComponentModal/UpdateTableModal';
@@ -249,7 +249,7 @@ function GoalsManagement() {
                 {isVisibleUpdateStatusTableModal && (
                     <ComfirmModal
                         headerContent={`${tableInfo.isActive ? 'Ẩn' : 'Hiển Thị'} Chỉ Tiêu ${tableInfo.tableName}`}
-                        bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'Ẩn' : 'Hiện'} chỉ tiêu ${tableInfo.tableName}`}
+                        bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'ẩn' : 'hiện'} chỉ tiêu ${tableInfo.tableName}`}
                         noteContent={
                             tableInfo.isActive
                                 ? `Chỉ tiêu ${tableInfo.tableName} sau khi ẩn đi thì quản lý khoa và sinh viên sẽ không thể tương tác và thấy được chỉ tiêu này. Tiến độ và điểm số của chỉ tiêu này vẫn sẽ được tính cho sinh viên.`

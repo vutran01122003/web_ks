@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import search from '../../assets/images/search.png';
 import { Select } from 'antd';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 
 const RadialBarChart = ({ children }) => {
     const state = {

@@ -1,11 +1,10 @@
 const createError = require('http-errors');
-const PageService = require('../services/page.service');
 const UserService = require('../services/user.service');
 
 class UserControllers {
     updateUserActivityStatusByMajor = async (req, res, next) => {
         try {
-            const { major, cohort, levelYear } = req.body;
+            const { major, cohort } = req.body;
 
             await UserService.updateUserActivityStatusByMajor(req.body);
 
@@ -52,7 +51,7 @@ class UserControllers {
 
     getUsers = async (req, res, next) => {
         try {
-            const { limit, page, cohort, major, userId, status } = req.query;
+            const { limit, page, cohort, major, userId, status, sortByName } = req.query;
 
             const users = await UserService.getUsersByFields({
                 fields: {
@@ -64,6 +63,9 @@ class UserControllers {
                 queryString: {
                     limit,
                     page
+                },
+                sort: {
+                    firstName: parseInt(sortByName)
                 }
             });
 

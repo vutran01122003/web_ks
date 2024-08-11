@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/actions/studentAction';
 import ConfirmModal from '../ComponentModal/ConfirmModal';
@@ -20,7 +20,8 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
 
     const [userData, setUserData] = useState({
         userId: currentUserData?.userId || '',
-        fullName: capitalizeFirstLetter(currentUserData?.fullName) || '',
+        firstName: capitalizeFirstLetter(currentUserData?.firstName) || '',
+        lastName: capitalizeFirstLetter(currentUserData?.lastName) || '',
         gender: capitalizeFirstLetter(currentUserData?.gender) || '',
         email: currentUserData?.email || '',
         phone: currentUserData?.phone || '',
@@ -102,18 +103,37 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
 
                             <tr>
                                 <td>
-                                    <label className="label_item" htmlFor="fullname">
-                                        Họ Tên:
+                                    <label className="label_item" htmlFor="lastName">
+                                        Họ Đệm:
                                     </label>
                                 </td>
                                 <td>
                                     <input
                                         className="input_item"
-                                        id="fullname"
-                                        name="fullName"
+                                        id="lastName"
+                                        name="lastName"
                                         type="text"
-                                        placeholder="Nhập Họ Tên"
-                                        value={userData.fullName}
+                                        placeholder="Nhập Họ Đệm"
+                                        value={userData.lastName}
+                                        onChange={onChangeUserData}
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <label className="label_item" htmlFor="firstName">
+                                        Tên:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input
+                                        className="input_item"
+                                        id="firstName"
+                                        name="firstName"
+                                        type="text"
+                                        placeholder="Nhập Tên"
+                                        value={userData.firstName}
                                         onChange={onChangeUserData}
                                     />
                                 </td>
