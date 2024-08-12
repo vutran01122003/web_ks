@@ -2,21 +2,6 @@ const createError = require('http-errors');
 const UserService = require('../services/user.service');
 
 class UserControllers {
-    updateUserActivityStatusByMajor = async (req, res, next) => {
-        try {
-            const { major, cohort } = req.body;
-
-            await UserService.updateUserActivityStatusByMajor(req.body);
-
-            res.status(200).json({
-                status: 200,
-                msg: `Kết thúc hoạt động nộp minh chứng của sinh viên khóa ${cohort} ngành ${major}`
-            });
-        } catch (error) {
-            next(error);
-        }
-    };
-
     addGroupForUser = async (req, res, next) => {
         try {
             const { groupId, userId } = req.params;

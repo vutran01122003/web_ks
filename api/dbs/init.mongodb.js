@@ -7,8 +7,8 @@ const {
 const uri = `mongodb://${host}:${port}/${database}`;
 const conn = mongoose.createConnection(uri);
 
-conn.set('debug', true);
-conn.set('debug', { color: true });
+// conn.set('debug', true);
+// conn.set('debug', { color: true });
 
 conn.on('connected', function () {
     console.log('Connect to a MongoDB successful:::', this.name);

@@ -1,7 +1,7 @@
 .container__quantity {
     margin-bottom: 10px;
     margin-top: -50px;
-    padding: 0px 20px;
+    padding: 0px 30px;
 
     .body__quantity {
         display: flex;
@@ -9,12 +9,13 @@
 
         .item__quantity {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             width: 100%;
             padding: 10px;
             border-radius: 3px;
             transition: all 0.35s;
-            margin-left: 15px;
+            margin-left: 20px;
             background-color: #ffffff;
             box-shadow: 0px 0px 3px rgb(192, 188, 188);
 
@@ -22,26 +23,25 @@
                 border: none;
             }
 
-            .quantily__number {
-                width: 100%;
+            .text__heading {
+                flex: 1;
                 display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                color: #1a1919;
 
-                .text__heading {
+                span:last-child {
                     font-size: 14px;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    color: #1a1919;
                 }
+            }
 
-                .number__quantity {
-                    margin-top: 10px;
-                    text-transform: uppercase;
-                    font-size: 12px;
-                    font-weight: 600;
-                    color: #464444;
-                }
+            .number__quantity {
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: 600;
+                color: #464444;
             }
 
             .icon_size {

@@ -46,24 +46,19 @@ const UserSchema = new Schema(
         birthday: {
             type: Schema.Types.Date
         },
-        // Thuộc tính faculty cho biết khoa giảng dạy của sinh viên (Ví dụ: Khoa Công Nghệ Thông Tin,...)
         faculty: {
             type: String,
             lowercase: true
         },
-        // Thuộc tính major cho biết chuyên ngành của sinh viên (Ví Dụ: Kỹ Thuật Phần Mềm,...)
         major: {
-            type: String,
-            lowercase: true
+            type: String
         },
         // Thuộc tính cohort cho biết Khóa sinh viên nhập học (Ví Dụ: 17, 18, 19, 20,...)
         cohort: {
-            type: Number,
-            required: true
+            type: Number
         },
         levelYear: {
-            type: Number,
-            default: 1
+            type: Number
         },
         isActive: {
             type: Boolean,

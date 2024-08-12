@@ -7,17 +7,16 @@ const initialState = {
     pageId: '',
     pageName: '',
     pageType: '',
-    pageStudentLevelYear: 0
+    pageStudentLevelYear: ''
 };
 
 function pageReducer(state = initialState, action) {
     switch (action.type) {
         case GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES: {
-            const { pages, pageStudentLevelYear } = action.payload;
+            const { pages } = action.payload;
             return {
                 ...state,
-                pages: [...pages],
-                pageStudentLevelYear
+                pages: [...pages]
             };
         }
 

@@ -40,13 +40,13 @@ const Quantity = ({ annualActivitiesProgress }) => {
     const returnListQuantity = LIST_QUANTITY_OVERVIEW.map((QUANTITY_OVERVIEW, index) => {
         return (
             <div key={index} className="item__quantity">
-                <div className="icon_size">{QUANTITY_OVERVIEW.icon_after}</div>
-                <div className="quantily__number">
-                    <div className="text__heading">{QUANTITY_OVERVIEW.text_heading}</div>
-                    <div className="number__quantity">{`${QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'}: ${
-                        QUANTITY_OVERVIEW.quantity
-                    }`}</div>
+                <div className="text__heading">
+                    <span className="icon_size">{QUANTITY_OVERVIEW.icon_after}</span>
+                    <span>{QUANTITY_OVERVIEW.text_heading}</span>
                 </div>
+                <div className="number__quantity">{`${QUANTITY_OVERVIEW.isTotalScore ? 'Số điểm' : 'Số lượng'}: ${
+                    QUANTITY_OVERVIEW.quantity
+                }`}</div>
             </div>
         );
     });

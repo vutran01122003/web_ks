@@ -176,30 +176,15 @@ class FacultyService {
         }
     };
 
-    static updateCohortById = async ({ facultyId, majorId, cohortId, data }) => {
+    static updateCohortById = async ({ cohortId, majorId, facultyId, nextYearValue }) => {
         try {
-            let updatedCohort = null;
             const faculty = await Faculty.findById(facultyId);
             if (!faculty) throw createError.NotFound('Khoa không tồn tại');
 
-            const cohortList = faculty.majors.id(majorId).cohortList;
-            for (let i = 0; i < cohortList.length; i++) {
-                if (cohortList[i]._id == cohortId) {
-                    Object.keys(data).forEach((key) => {
-                        if (data.cohortName && cohortList.some((cohort) => cohort.cohortName === data.cohortName))
-                            throw createError.Conflict(`Khóa ${data.cohortName} đã tồn tại`);
-                        cohortList[i][key] = data[key];
-                    });
+            const cohort = await faculty.majors.id(majorId).cohortList.id(cohortId);
+            cohort.currentLevelYear = nextYearValue;
 
-                    updatedCohort = cohortList[i];
-                    break;
-                }
-            }
-
-            faculty.majors.id(majorId).cohortList = cohortList;
             await faculty.save();
-
-            return updatedCohort;
         } catch (error) {
             throw error;
         }

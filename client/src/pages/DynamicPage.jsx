@@ -17,29 +17,41 @@ const DynamicPage = () => {
     const [NEWS, GOAL] = ['tin tức', 'chỉ tiêu'];
 
     useEffect(() => {
-        if (page.pages.length > 0 && pathname && dynamicPage) {
-            const tableList = page.pages.find((page) => {
+        if (page.pages.length > 0 && dynamicPage) {
+            const pageData = page.pages.find((page) => {
                 if (page.pageName === dynamicPage) {
                     dispatch(
                         setPageInfo({
                             pageId: page._id,
                             pageType: page.pageType,
                             pageName: page.pageName,
-                            pathname: pathname
+                            pageStudentLevelYear: page.pageStudentLevelYear
                         })
                     );
                     return true;
                 }
                 return false;
-            }).tables;
+            });
+
+            const tableList = pageData?.tables || [];
+
             setTables(
                 tableList.map((table) => {
                     return renderTable({ table });
                 })
             );
         }
-    }, [page.pages, dynamicPage, pathname]);
+    }, [page.pages, dynamicPage]);
 
+    useEffect(() => {
+        if (pathname) {
+            dispatch(
+                setPageInfo({
+                    pathName: pathname
+                })
+            );
+        }
+    }, [pathname]);
     return (
         <div className="dynamic_page_container">
             {page?.pageType && page.pageType === GOAL && (

@@ -23,9 +23,13 @@
             font-weight: 600;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            white-space: nowrap;
 
             .to__profile {
                 cursor: pointer;
+                position: relative;
+                top: 6px;
 
                 svg {
                     color: #fff;

@@ -60,8 +60,14 @@ class PageControllers {
     };
 
     getPage = async (req, res, next) => {
+        const { major, cohort, faculty } = req.query;
         const page = await pageService.getPage({
-            pageName: req.params?.name,
+            fields: {
+                pageName: req.params?.name,
+                pageStudentMajor: major,
+                pageStudentCohort: parseInt(cohort),
+                pageFaculty: faculty
+            },
             userId: res.locals.userId
         });
 

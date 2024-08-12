@@ -125,7 +125,6 @@ class UserService {
 
             return updatedUser;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };
@@ -158,77 +157,109 @@ class UserService {
         }
     };
 
-    // Need Fix Right Now
     static updateUserActivityStatusByMajor = async ({
-        progressPercentage,
-        score,
+        conditions,
         major,
         cohort,
         levelYear,
-        updatedCohortData
+        updatedCohortData,
+        groupIdList
     }) => {
         try {
-            const { cohortId, majorId, facultyId, ...data } = updatedCohortData;
+            const { progressPercentage, score } = conditions;
+            const { nextYearValue } = updatedCohortData;
+            const index = levelYear - 1;
 
             const filterUser = {
                 major: major.toLowerCase(),
                 cohort: parseInt(cohort),
-                [`annualTaskProgress.${levelYear}.completedTaskPrecent`]: {
+                [`annualActivitiesProgress.${index}.progressPercentage`]: {
                     $lt: Number.parseFloat(progressPercentage)
                 },
-                [`annualTaskProgress.${levelYear}.totalScore`]: {
+                [`annualActivitiesProgress.${index}.totalScore`]: {
                     $lt: Number.parseFloat(score)
                 }
             };
 
-            if (!progressPercentage) delete filterUser[`annualTaskProgress.${levelYear}.completedTaskPrecent`];
-            if (!score) delete filterUser[`annualTaskProgress.${levelYear}.totalScore`];
+            if (!progressPercentage) delete filterUser[`annualActivitiesProgress.${index}.progressPercentage`];
+            if (!score) delete filterUser[`annualActivitiesProgress.${index}.totalScore`];
 
-            if (score || progressPercentage) {
-                await Promise.all([
-                    User.updateMany(filterUser, {
+            const invalidUserList = await User.find({
+                [`annualActivitiesProgress.${index}.progressPercentage`]: {
+                    $exists: false
+                },
+                group: {
+                    $nin: groupIdList
+                }
+            });
+
+            if (invalidUserList.length > 0)
+                await Promise.all(
+                    invalidUserList.map((invalidUser) =>
+                        this.createNewAnnualActivitiesProgress({
+                            pageInfo: {
+                                pageStudentCohort: invalidUser.cohort,
+                                pageStudentMajor: invalidUser.major
+                            },
+                            currentLevelYear: invalidUser.levelYear,
+                            userId: invalidUser._id
+                        })
+                    )
+                );
+
+            await Promise.all([
+                User.updateMany(
+                    {
+                        ...filterUser,
+                        group: {
+                            $nin: groupIdList
+                        }
+                    },
+                    {
                         $set: {
                             isActive: false
                         }
-                    }),
-                    User.updateMany(
-                        {
-                            major: major.toLowerCase(),
-                            cohort: parseInt(cohort)
+                    }
+                ),
+                User.updateMany(
+                    {
+                        major: major.toLowerCase(),
+                        cohort: parseInt(cohort),
+                        group: {
+                            $nin: groupIdList
+                        }
+                    },
+                    {
+                        $set: {
+                            levelYear: nextYearValue
                         },
-                        {
-                            $set: {
-                                levelYear
-                            },
-                            $push: {
-                                annualActivitiesProgress: {
-                                    $each: [
-                                        {
-                                            levelYear,
-                                            totalScore: 0,
-                                            numberOfRequiredActivity: 0,
-                                            numberOfPendingActivity: 0,
-                                            numberOfAcceptedActivity: 0,
-                                            numberOfRejectedActivity: 0,
-                                            numberOfResubmitedActivity: 0
-                                        }
-                                    ],
-                                    $position: levelYear
-                                }
+                        $push: {
+                            annualActivitiesProgress: {
+                                $each: [
+                                    {
+                                        levelYear: nextYearValue,
+                                        totalScore: 0,
+                                        numberOfRequiredActivity: 0,
+                                        numberOfPendingActivity: 0,
+                                        numberOfAcceptedActivity: 0,
+                                        numberOfRejectedActivity: 0,
+                                        numberOfResubmitedActivity: 0,
+                                        progressPercentage: 0
+                                    }
+                                ],
+                                $position: index + 1
                             }
                         }
-                    ),
-                    FacultyService.updateCohortById({ facultyId, majorId, cohortId, data })
-                ]);
-            } else {
-                throw createError.BadRequest('Phải có ít nhất là một điều kiện xét duyệt');
-            }
+                    }
+                ),
+                FacultyService.updateCohortById(updatedCohortData)
+            ]);
         } catch (error) {
             throw error;
         }
     };
 
-    static getAnnualTaskProgress = async ({ filterData, levelYear, sort, queryString }) => {
+    static getAnnualTaskProgress = async ({ filterData, levelYear, sortProgressPercentageValue, queryString }) => {
         try {
             const studentList = new Pagination(
                 User.aggregate([
@@ -252,35 +283,6 @@ class UserService {
                         }
                     },
                     {
-                        $addFields: {
-                            progressData: {
-                                $arrayElemAt: ['$annualActivitiesProgress', levelYear - 1]
-                            }
-                        }
-                    },
-                    {
-                        $set: {
-                            progressData: {
-                                $mergeObjects: [
-                                    '$progressData',
-                                    {
-                                        progressPercentage: {
-                                            $multiply: [
-                                                {
-                                                    $divide: [
-                                                        '$progressData.numberOfAcceptedActivity',
-                                                        '$progressData.numberOfRequiredActivity'
-                                                    ]
-                                                },
-                                                100
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    {
                         $project: {
                             userId: 1,
                             faculty: 1,
@@ -291,7 +293,15 @@ class UserService {
                             cohort: 1,
                             isActive: 1,
                             group: 1,
-                            progressData: 1
+                            progressData: {
+                                $arrayElemAt: ['$annualActivitiesProgress', levelYear - 1]
+                            }
+                        }
+                    },
+                    {
+                        $sort: {
+                            'progressData.progressPercentage': sortProgressPercentageValue,
+                            'progressData.totalScore': sortProgressPercentageValue
                         }
                     }
                 ]),
@@ -353,7 +363,27 @@ class UserService {
                     }
                 );
 
-                if ([prevStatus, status].includes(ACCEPTED_STATUS)) {
+                const keys = Object.keys(fieldOfStatus);
+                const annualActivityProgress = updatedUser.annualActivitiesProgress[index];
+                let isExistsNetigaveValue = false;
+
+                for (let i = 0; i < keys.length; i++) {
+                    const field = fieldOfStatus[keys[i]];
+                    if (annualActivityProgress[field] < 0) {
+                        await this.createNewAnnualActivitiesProgress({
+                            pageInfo: {
+                                pageStudentCohort: user.cohort,
+                                pageStudentMajor: user.major
+                            },
+                            currentLevelYear: user.levelYear,
+                            userId
+                        });
+                        isExistsNetigaveValue = true;
+                        break;
+                    }
+                }
+
+                if (!isExistsNetigaveValue && [prevStatus, status].includes(ACCEPTED_STATUS)) {
                     const { numberOfRequiredActivity, numberOfAcceptedActivity } =
                         updatedUser.annualActivitiesProgress[index];
 
@@ -367,10 +397,11 @@ class UserService {
         }
     };
 
-    static createNewAnnualActivitiesProgress = async ({ pageInfo, currentLevelYear, userId }) => {
+    static calculateCurrentActivitiesProgress = async ({ userId, pageInfo }) => {
         try {
             let pageIdList = [];
             let progressData = {};
+            const { pageStudentCohort, pageStudentMajor, pageStudentLevelYear } = pageInfo;
             const annualActivitiyProgress = {
                 numberOfRequiredActivity: 0,
                 numberOfPendingActivity: 0,
@@ -381,15 +412,13 @@ class UserService {
                 totalScore: 0
             };
 
-            const { pageStudentCohort, pageStudentMajor } = pageInfo;
-
-            const [user, pages] = await Promise.all([
-                User.findById(userId),
+            const [pages, user] = await Promise.all([
                 Page.find({
                     pageStudentCohort,
                     pageStudentMajor,
-                    pageStudentLevelYear: currentLevelYear
-                })
+                    pageStudentLevelYear
+                }),
+                User.findById(userId)
             ]);
 
             const tableList = pages.reduce((tableList, page) => {
@@ -425,31 +454,39 @@ class UserService {
                 }, annualActivitiyProgress);
             }
 
-            user.annualActivitiesProgress = Array(currentLevelYear)
-                .fill(null)
-                .map((_, index) => {
-                    if (index + 1 === currentLevelYear) {
-                        const numberOfAcceptedActivity = progressData?.numberOfAcceptedActivity || 0;
-                        const progressPercentage = numberOfRequiredActivity
-                            ? (numberOfAcceptedActivity / numberOfRequiredActivity) * 100
-                            : 0;
+            const progressPercentage = numberOfRequiredActivity
+                ? (progressData?.numberOfAcceptedActivity / numberOfRequiredActivity) * 100
+                : 0;
 
-                        return {
-                            levelYear: index + 1,
-                            ...annualActivitiyProgress,
-                            ...progressData,
-                            numberOfRequiredActivity,
-                            progressPercentage
-                        };
-                    }
-
-                    return {
-                        levelYear: index + 1,
-                        ...annualActivitiyProgress
-                    };
-                });
-
+            user.annualActivitiesProgress[pageStudentLevelYear - 1] = {
+                levelYear: pageStudentLevelYear,
+                ...annualActivitiyProgress,
+                ...progressData,
+                numberOfRequiredActivity,
+                progressPercentage
+            };
             await user.save();
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static createNewAnnualActivitiesProgress = async ({ pageInfo, currentLevelYear, userId }) => {
+        try {
+            await Promise.all(
+                Array(currentLevelYear)
+                    .fill(null)
+                    .map((_, index) =>
+                        this.calculateCurrentActivitiesProgress({
+                            userId,
+                            pageInfo: {
+                                pageStudentCohort: pageInfo.pageStudentCohort,
+                                pageStudentMajor: pageInfo.pageStudentMajor,
+                                pageStudentLevelYear: index + 1
+                            }
+                        })
+                    )
+            );
         } catch (error) {
             throw error;
         }

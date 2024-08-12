@@ -42,8 +42,7 @@ export const getPages = (params) => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.PAGE.GET_DYNAMIC_PAGES,
             payload: {
-                pages: res?.data.data,
-                pageStudentLevelYear: params.pageStudentLevelYear
+                pages: res?.data.data
             }
         });
     } catch (error) {
@@ -82,31 +81,26 @@ export const getGoals = (params) => async (dispatch) => {
     }
 };
 
-export const setPageInfo =
-    ({ pageId, pageType, pageName, pathname }) =>
-    async (dispatch) => {
-        try {
-            dispatch({
-                type: GLOBALTYPES.PAGE.SET_PAGE_INFO,
-                payload: {
-                    pageType,
-                    pageId,
-                    pageName,
-                    pathName: pathname
-                }
-            });
-        } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật dữ liệu trang thất bại'
-                }
-            });
-        }
-    };
+export const setPageInfo = (pageInfo) => async (dispatch) => {
+    try {
+        dispatch({
+            type: GLOBALTYPES.PAGE.SET_PAGE_INFO,
+            payload: {
+                ...pageInfo
+            }
+        });
+    } catch (error) {
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                error:
+                    error.response?.data?.status === 401
+                        ? 'Hết Phiên Đăng Nhập'
+                        : error?.response?.data.msg || 'Cập nhật dữ liệu trang thất bại'
+            }
+        });
+    }
+};
 
 export const removePage =
     ({ pageId }) =>

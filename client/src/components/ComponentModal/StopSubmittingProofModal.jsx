@@ -3,16 +3,17 @@ import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { stopSubmittingProof } from '../../redux/actions/progressAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 
 function StopSubmittingProofModal({
     cohort,
     major,
+    faculty,
     levelYear,
     handleHiddenStopSubmittingProofModal,
     updatedCohortData
 }) {
     const dispatch = useDispatch();
-
     const progressPercentageInputRef = useRef();
     const scoreInputRef = useRef();
 
@@ -71,10 +72,13 @@ function StopSubmittingProofModal({
         ) {
             dispatch(
                 stopSubmittingProof({
-                    progressPercentage,
-                    score,
+                    conditions: {
+                        progressPercentage: progressPercentage || 0,
+                        score: score || 0
+                    },
                     major,
                     cohort,
+                    faculty,
                     levelYear,
                     updatedCohortData
                 })
@@ -101,15 +105,15 @@ function StopSubmittingProofModal({
                 </div>
                 <div className="stop_submitting_proof_body">
                     <p className="stop_submitting_proof_body_content">
-                        {`Kết thúc hoạt động nộp minh chứng của năm ${levelYear} khóa ${cohort} ngành ${major}.`}
+                        {`${capitalizeFirstLetter(major)} - Khóa ${cohort} - Năm ${levelYear}`}
                     </p>
 
                     <ul className="stop_submitting_proof_body_notify">
-                        <li>{`Sinh viên không thể tiếp tục tham các hoạt động và nộp minh chứng của năm ${levelYear}.`}</li>
-                        <li>{`Sinh viên đạt điều kiện có thể tiếp tục tham gia các hoạt động và nộp minh chứng của năm ${
+                        <li>{`Sinh viên không thể tiếp tục tham gia các hoạt động và nộp minh chứng của năm ${levelYear}.`}</li>
+                        <li>{`Sinh viên đạt điều kiện sẽ tham gia các hoạt động và nộp minh chứng của năm ${
                             levelYear + 1
                         }.`}</li>
-                        <li>{`Sinh viên không đạt điều kiện sẽ bị khóa tài khoản và bị loại khỏi danh sách kỹ sư tài năng.`}</li>
+                        <li>{`Sinh viên không đạt điều kiện bị loại khỏi danh sách kỹ sư tài năng và khóa tài khoản.`}</li>
                     </ul>
 
                     <div className="condition_filter_wrapper">

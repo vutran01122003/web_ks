@@ -161,6 +161,14 @@
                         font-size: 14px;
                         font-weight: 600;
 
+                        &.active {
+                            color: #1677ff;
+                        }
+
+                        &.inactive {
+                            color: #f0635c;
+                        }
+
                         &:first-child {
                             font-weight: 700;
                         }

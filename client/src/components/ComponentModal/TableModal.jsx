@@ -21,6 +21,20 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
     const handleAddRow = (e) => {
         e.preventDefault();
 
+        const { _id, userId, faculty, major, cohort, levelYear } = auth?.user;
+        const { pageId, pageStudentLevelYear, pathName } = page;
+
+        if (levelYear > pageStudentLevelYear) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: `Hoạt động nộp minh chứng năm ${pageStudentLevelYear} đã kết thúc.`
+                }
+            });
+            handleHideModal();
+            return;
+        }
+
         if (
             thead.find((head) => {
                 return !head.requiredHeading && !row[head._id];
@@ -39,16 +53,17 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
         const formData = new FormData();
 
         let rowData = {
-            user: auth?.user._id,
-            userId: auth?.user.userId,
-            faculty: auth?.user.faculty,
-            major: auth?.user.major,
-            cohort: auth?.user.cohort,
-            levelYear: auth?.user.levelYear,
+            user: _id,
+            userId,
+            faculty,
+            major,
+            cohort,
+            levelYear,
             tableName: title,
-            page: page.pageId,
+            page: pageId,
+            pageStudentLevelYear,
             table: tableId,
-            path: page.pathName,
+            path: pathName,
             content: JSON.stringify(row)
         };
 

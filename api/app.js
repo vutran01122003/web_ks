@@ -91,7 +91,6 @@ app.use((err, req, res, next) => {
     }
 
     if (err) {
-        console.log(err);
         return res.status(err.status).json({
             status: err.status,
             msg: err.message

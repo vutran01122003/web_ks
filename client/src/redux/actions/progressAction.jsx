@@ -31,7 +31,7 @@ export const getProgressByYear =
     };
 
 export const getAnnualTaskProgress =
-    ({ major, levelYear, cohort, isCompleted, userId, sortProgressPercentage, page, limit }) =>
+    ({ major, levelYear, faculty, cohort, isCompleted, userId, sortProgressPercentage, page, limit }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -43,8 +43,9 @@ export const getAnnualTaskProgress =
 
             const res = await getDataApi('/progress/all', {
                 major,
-                levelYear,
+                faculty,
                 cohort,
+                levelYear,
                 isCompleted,
                 userId,
                 sortProgressPercentage,
@@ -80,7 +81,7 @@ export const getAnnualTaskProgress =
     };
 
 export const stopSubmittingProof =
-    ({ progressPercentage, score, major, cohort, levelYear, updatedCohortData }) =>
+    ({ conditions, major, cohort, faculty, levelYear, updatedCohortData }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -91,28 +92,28 @@ export const stopSubmittingProof =
             });
 
             const res = await postDataApi('/progress/updated-users', {
-                progressPercentage,
-                score,
+                conditions,
                 major,
                 cohort,
+                faculty,
                 levelYear,
                 updatedCohortData
             });
 
-            const faculty = await getDataApi(`/faculties/${updatedCohortData.facultyId}`);
+            const updatedFaculty = await getDataApi(`/faculties/${updatedCohortData.facultyId}`);
 
             dispatch({
                 type: GLOBALTYPES.FACULTY.UPDATE_FACULTY,
                 payload: {
                     facultyId: updatedCohortData.facultyId,
-                    newElem: faculty.data.data
+                    newElem: updatedFaculty.data.data
                 }
             });
 
             dispatch({
                 type: GLOBALTYPES.AUTH.UPDATE_LEVEL_YEAR,
                 payload: {
-                    levelYear: updatedCohortData.currentLevelYear
+                    levelYear: updatedCohortData.nextYearValue
                 }
             });
 

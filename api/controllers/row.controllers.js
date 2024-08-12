@@ -10,6 +10,10 @@ class RowControllers {
     addRow = async (req, res, next) => {
         try {
             const rowData = JSON.parse(req.body.rowData);
+            const { faculty, major, cohort, userId, tableName, user, levelYear, pageStudentLevelYear } = rowData;
+
+            if (pageStudentLevelYear < levelYear)
+                throw createError.BadRequest(`Đã kết thúc hoạt động nộp minh chứng năm ${pageStudentLevelYear}`);
 
             const { rowList, rowItemId } = await RowService.addRow({
                 data: rowData
@@ -17,7 +21,7 @@ class RowControllers {
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/${rowData.faculty}/${rowData.major}/${rowData.cohort}/${rowData.userId}/${rowData.tableName}`
+                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
             });
 
             await Promise.all([
@@ -28,8 +32,8 @@ class RowControllers {
                     rowItemId
                 }),
                 UserService.updateAnnualActivityProgress({
-                    userId: rowData.user,
-                    levelYear: rowData.levelYear,
+                    userId: user,
+                    levelYear: levelYear,
                     prevStatus: null,
                     status: PENDING_STATUS
                 })
@@ -40,7 +44,6 @@ class RowControllers {
                 data: rowList
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -49,7 +52,21 @@ class RowControllers {
         try {
             const rowData = JSON.parse(req.body.rowData);
             rowData.content = JSON.parse(rowData.content);
-            const { faculty, major, cohort, userId, tableName, rowListId, contentId, levelYear, user } = rowData;
+            const {
+                faculty,
+                major,
+                cohort,
+                userId,
+                tableName,
+                rowListId,
+                contentId,
+                levelYear,
+                pageStudentLevelYear,
+                user
+            } = rowData;
+
+            if (pageStudentLevelYear < levelYear)
+                throw createError.BadRequest(`Đã kết thúc hoạt động nộp minh chứng năm ${pageStudentLevelYear}`);
 
             const updatedRow = await RowService.resubmitRow({ rowData });
 

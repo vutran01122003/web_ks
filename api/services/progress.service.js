@@ -1,6 +1,7 @@
 const UserService = require('./user.service');
 const PageService = require('./page.service');
 const convertToObjectId = require('../utils/convertToObjectId');
+const FacultyService = require('./faculty.service');
 
 class ProgressService {
     static getProgressByYear = async ({ pageStudentMajor, pageStudentLevelYear, pageStudentCohort, userId }) => {
@@ -22,8 +23,22 @@ class ProgressService {
         }
     };
 
-    static getAllProgress = async ({ major, cohort, userId, levelYear, sort, queryString }) => {
+    static getAllProgress = async ({
+        major,
+        cohort,
+        faculty,
+        userId,
+        levelYear,
+        sortProgressPercentageValue,
+        queryString
+    }) => {
         try {
+            const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
+                facultyName: faculty,
+                majorName: major,
+                cohortName: cohort
+            });
+
             const filterData = {
                 major: major.toLowerCase(),
                 cohort: parseInt(cohort),
@@ -31,15 +46,17 @@ class ProgressService {
                     ? {
                           $regex: userId
                       }
-                    : userId
+                    : userId,
+                isActive: true
             };
 
+            if (levelYear < currentLevelYear) delete filterData.isActive;
             if (!userId) delete filterData.userId;
 
             const studentList = await UserService.getAnnualTaskProgress({
                 filterData,
                 levelYear,
-                sort,
+                sortProgressPercentageValue,
                 queryString
             });
 

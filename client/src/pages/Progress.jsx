@@ -23,9 +23,10 @@ function ProgressUI() {
     const [levelYear, setLevelYear] = useState('');
     const [userId, setUserId] = useState('');
     const [faculty, setFaculty] = useState(null);
-    const [sortProgressPercentage, setSortProgressPercentage] = useState(1);
+    const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
     const [vissibleModal, setVissibleModal] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);
+    const [isVisibleStopSubmitingProofBtn, setIsVisibleStopSubmitingProofBtn] = useState(false);
 
     const lastStudentElementRef = (node) => {
         if (progress.annualTaskProgress.isLoading) return;
@@ -63,6 +64,7 @@ function ProgressUI() {
                 getAnnualTaskProgress({
                     cohort: cohort?.cohortName,
                     major: major?.majorName,
+                    faculty: faculty.facultyName,
                     userId: userId.trim(),
                     levelYear,
                     sortProgressPercentage,
@@ -149,13 +151,14 @@ function ProgressUI() {
                     <StopSubmittingProofModal
                         cohort={cohort.cohortName}
                         major={major.majorName}
+                        faculty={faculty.facultyName}
                         levelYear={levelYear}
                         handleHiddenStopSubmittingProofModal={handleHiddenStopSubmittingProofModal}
                         updatedCohortData={{
                             facultyId: faculty._id,
                             majorId: major._id,
                             cohortId: cohort._id,
-                            currentLevelYear: cohort.currentLevelYear + 1
+                            nextYearValue: cohort.currentLevelYear + 1
                         }}
                     />
                 )}
@@ -232,27 +235,27 @@ function ProgressUI() {
                             <div className="btn_group">
                                 <button
                                     className="search_btn"
-                                    onClick={() =>
+                                    onClick={() => {
                                         onResetAnnualTaskProgress({
                                             page: 1,
                                             sortProgressPercentage
-                                        })
-                                    }
+                                        });
+                                        setIsVisibleStopSubmitingProofBtn(cohort?.currentLevelYear === levelYear);
+                                    }}
                                 >
                                     <IoSearch />
                                     Tìm Kiếm
                                 </button>
                                 <div className="line__flex">
-                                    {auth?.user.levelYear === levelYear &&
-                                        progress.annualTaskProgress.data.length > 0 && (
-                                            <button
-                                                className="btn__end_progress"
-                                                onClick={handleVissbleStopSubmittingProofModal}
-                                            >
-                                                <LuTimerReset />
-                                                Dừng Nộp Minh Chứng
-                                            </button>
-                                        )}
+                                    {isVisibleStopSubmitingProofBtn && progress.annualTaskProgress.data.length > 0 && (
+                                        <button
+                                            className="btn__end_progress"
+                                            onClick={handleVissbleStopSubmittingProofModal}
+                                        >
+                                            <LuTimerReset />
+                                            Dừng Nộp Minh Chứng
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -268,24 +271,22 @@ function ProgressUI() {
                                     <th className="progress_header">
                                         <span>Tổng Tiến Độ</span>
                                         <span className="progress_header_filter" onClick={handleToggleSortProgress}>
-                                            {sortProgressPercentage ? <FaSortNumericDown /> : <FaSortNumericDownAlt />}
+                                            {sortProgressPercentage === -1 ? (
+                                                <FaSortNumericDownAlt />
+                                            ) : (
+                                                <FaSortNumericDown />
+                                            )}
                                         </span>
                                     </th>
                                     <th>Tổng Điểm</th>
-                                    <th>Tình trạng</th>
+                                    <th>Trạng Thái</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {progress.annualTaskProgress.data.map((progressItem, index) => {
-                                    const { progressData, lastName, firstName, userId } = progressItem;
-                                    const { numberOfAcceptedActivity, numberOfRequiredActivity, totalScore } =
-                                        progressData;
-
-                                    const completedProgressPrecent =
-                                        numberOfAcceptedActivity && numberOfRequiredActivity
-                                            ? (numberOfAcceptedActivity / numberOfRequiredActivity) * 100
-                                            : 0;
+                                    const { progressData, lastName, firstName, userId, isActive } = progressItem;
+                                    const { progressPercentage, totalScore } = progressData;
 
                                     if (index + 1 === progress.annualTaskProgress.data.length)
                                         return (
@@ -293,12 +294,10 @@ function ProgressUI() {
                                                 <td>{index + 1}</td>
                                                 <td>{userId}</td>
                                                 <td>{toFullName({ firstName, lastName })}</td>
-                                                <td>{`${completedProgressPrecent.toFixed(2)}%`}</td>
+                                                <td>{`${progressPercentage ? progressPercentage.toFixed(2) : 0}%`}</td>
                                                 <td>{totalScore || 0}</td>
-                                                <td>
-                                                    {completedProgressPrecent === 100
-                                                        ? 'Hoàn Thành'
-                                                        : 'Chưa Hoàn Thành'}
+                                                <td className={isActive ? 'active' : 'inactive'}>
+                                                    {isActive ? 'Hoạt Động' : 'Đã Khóa'}
                                                 </td>
                                             </tr>
                                         );
@@ -308,10 +307,10 @@ function ProgressUI() {
                                             <td>{index + 1}</td>
                                             <td>{userId}</td>
                                             <td>{toFullName({ firstName, lastName })}</td>
-                                            <td>{`${completedProgressPrecent.toFixed(2)}%`}</td>
+                                            <td>{`${progressPercentage ? progressPercentage.toFixed(2) : 0}%`}</td>
                                             <td>{totalScore || 0}</td>
-                                            <td>
-                                                {completedProgressPrecent === 100 ? 'Hoàn Thành' : 'Chưa Hoàn Thành'}
+                                            <td className={isActive ? 'active' : 'inactive'}>
+                                                {isActive ? 'Hoạt Động' : 'Đã Khóa'}
                                             </td>
                                         </tr>
                                     );

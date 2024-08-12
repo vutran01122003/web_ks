@@ -13,12 +13,17 @@ export const addRow =
                 }
             });
 
-            const parsedFormData = JSON.parse(formData.get('rowData'));
-            const res = parsedFormData?.contentId
-                ? await patchDataApi(`/rows/${parsedFormData.rowListId}`, formData)
+            const { major, cohort, faculty, contentId, rowListId, path } = JSON.parse(formData.get('rowData'));
+
+            const res = contentId
+                ? await patchDataApi(`/rows/${rowListId}`, formData)
                 : await postDataApi('/rows', formData);
 
-            const page = await getDataApi(JSON.parse(formData.get('rowData')).path);
+            const page = await getDataApi(path, {
+                major,
+                cohort,
+                faculty
+            });
 
             dispatch({
                 type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,

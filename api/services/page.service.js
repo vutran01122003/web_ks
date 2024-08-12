@@ -244,12 +244,12 @@ class PageService {
         }
     };
 
-    static getPage = async ({ pageName, userId }) => {
+    static getPage = async ({ fields, userId }) => {
         try {
             const page = await Page.aggregate([
                 {
                     $match: {
-                        pageName,
+                        ...fields,
                         isActive: true
                     }
                 },
