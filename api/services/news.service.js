@@ -1,5 +1,5 @@
-const News = require('../models/news.model');
-const createError = require('http-errors');
+const News = require("../models/news.model");
+const createError = require("http-errors");
 
 class NewsService {
     static createNews = async ({ newsData }) => {
@@ -14,11 +14,11 @@ class NewsService {
     static getAllNews = async ({ newsType }) => {
         try {
             const news = await News.find({ newsType })
-                .select('cover title summary author createdAt')
+                .select("cover title summary author createdAt")
                 .populate({
-                    path: 'author',
-                    model: 'user',
-                    select: 'lastName firstName avatar'
+                    path: "author",
+                    model: "user",
+                    select: "lastName firstName avatar",
                 })
                 .lean()
                 .exec();
@@ -27,8 +27,8 @@ class NewsService {
 
             return {
                 status: 200,
-                msg: 'Lấy toàn bộ tin tức thành công',
-                data: news
+                msg: "Lấy toàn bộ tin tức thành công",
+                data: news,
             };
         } catch (error) {
             throw error;
@@ -38,19 +38,19 @@ class NewsService {
         try {
             const newsDetails = await News.findById(newsId)
                 .populate({
-                    path: 'author',
-                    model: 'user',
-                    select: 'lastName firstName avatar'
+                    path: "author",
+                    model: "user",
+                    select: "lastName firstName avatar",
                 })
                 .lean()
                 .exec();
 
-            if (!newsDetails) throw createError.NotFound('Bài Viết Không Tồn Tại');
+            if (!newsDetails) throw createError.NotFound("Bài Viết Không Tồn Tại");
 
             return {
                 status: 200,
-                msg: 'Lấy tin tức thành công',
-                data: newsDetails
+                msg: "Lấy tin tức thành công",
+                data: newsDetails,
             };
         } catch (error) {
             throw error;
@@ -59,22 +59,17 @@ class NewsService {
     static updateNews = async ({ newsId, newsData }) => {
         try {
             const updatedNews = await News.findByIdAndUpdate({ _id: newsId }, newsData, {
-                new: true
+                new: true,
             })
                 .lean()
                 .exec();
 
-            if (!updatedNews) {
-                return {
-                    status: 400,
-                    msg: 'Bài viết không tồn tại'
-                };
-            }
+            if (!updatedNews) throw createError.NotFound("Bài viết không tồn tại");
 
             return {
                 status: 200,
                 msg: `Cập nhật bài viết thành công`,
-                data: updatedNews
+                data: updatedNews,
             };
         } catch (error) {
             throw error;
@@ -84,16 +79,10 @@ class NewsService {
         try {
             const deletedNews = await News.findByIdAndDelete(newsId);
 
-            if (!deletedNews) {
-                return {
-                    status: 400,
-                    msg: 'Bài viết không tồn tại'
-                };
-            }
-
+            if (!deletedNews) throw createError.NotFound("Bài viết không tồn tại");
             return {
                 status: 200,
-                msg: 'Xóa bài viết thành công'
+                msg: "Xóa bài viết thành công",
             };
         } catch (error) {
             throw error;

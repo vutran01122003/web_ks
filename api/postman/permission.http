@@ -1,0 +1,166 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "userId": "21013481",
+    "password": "1111"
+}
+
+### Create group
+POST {{url}}/api/groups
+Content-Type: application/json
+
+{
+    "name": "Kỹ sư tài năng tạm thời",
+    "description": "nhóm người kstn tạm thời là những người chờ xét duyệt lên kstn chính thức bằng cách hoàn thành các chỉ tiêu hoặc nộp các tài liệu chứng minh bản thân có thể trở thành kstn",
+    "groupCode": "001"
+}
+
+### Get all group
+GET {{url}}/api/groups
+
+### Update group by id
+PATCH {{url}}/api/groups/65d9fbf433cfcd55b534007f
+Content-Type: application/json
+
+{
+    "groupCode": "003"
+}
+### Delete group
+Delete {{url}}/api/groups/65d9f95033cfcd55b5340077
+
+### Create role
+POST {{url}}/api/roles
+Content-Type: application/json
+
+{
+    "method": "patch",
+    "url": "/page",
+    "description": ""
+}
+
+### Delete role
+DELETE {{url}}/api/roles/65d869e64f4c55561ee57878
+
+
+### Add roles to the talent engineer's group
+POST {{url}}/api/groups/670cc61358c8cef6bf3f0dec/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+        "670cc56458c8cef6bf3f0d77",
+        "670cc56458c8cef6bf3f0d79",
+        "670cc56458c8cef6bf3f0d7d",
+        "670cc56458c8cef6bf3f0d8d",
+        "670cc56458c8cef6bf3f0d91",
+        "670cc56458c8cef6bf3f0d93",
+        "670cc56458c8cef6bf3f0d95",
+        "670cc56458c8cef6bf3f0d7f",
+        "670cc56458c8cef6bf3f0db7",
+        "670cc56458c8cef6bf3f0dbf",
+        "670cc56458c8cef6bf3f0dc3",
+        "670cc56458c8cef6bf3f0dc5",
+        "670cc56458c8cef6bf3f0dc7",
+        "670cc56458c8cef6bf3f0dc9",
+        "670cc56458c8cef6bf3f0de7",
+        "670cc56458c8cef6bf3f0de9",
+        "670cc56458c8cef6bf3f0dc1",
+        "670cc56458c8cef6bf3f0de1",
+        "670cc56458c8cef6bf3f0de3",
+        "670cc56458c8cef6bf3f0de5"
+    ]
+}
+
+### Add roles to the talent engineer manager's group
+POST {{url}}/api/groups/670cca0858c8cef6bf3f0df2/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+        "670cc56458c8cef6bf3f0d75",
+        "670cc56458c8cef6bf3f0d7b",
+        "670cc56458c8cef6bf3f0d7d",
+        "670cc56458c8cef6bf3f0d81",
+        "670cc56458c8cef6bf3f0d87",
+        "670cc56458c8cef6bf3f0d89",
+        "670cc56458c8cef6bf3f0d8b",
+        "670cc56458c8cef6bf3f0d8d",
+        "670cc56458c8cef6bf3f0d8f",
+        "670cc56458c8cef6bf3f0d91",
+        "670cc56458c8cef6bf3f0d7f",
+        "670cc56458c8cef6bf3f0d99",
+        "670cc56458c8cef6bf3f0d9b",
+        "670cc56458c8cef6bf3f0d9d",
+        "670cc56458c8cef6bf3f0d9f",
+        "670cc56458c8cef6bf3f0da1",
+        "670cc56458c8cef6bf3f0da3",
+        "670cc56458c8cef6bf3f0da5",
+        "670cc56458c8cef6bf3f0da7",
+        "670cc56458c8cef6bf3f0da9",
+        "670cc56458c8cef6bf3f0d85",
+        "670cc56458c8cef6bf3f0dad",
+        "670cc56458c8cef6bf3f0daf",
+        "670cc56458c8cef6bf3f0db1",
+        "670cc56458c8cef6bf3f0db3",
+        "670cc56458c8cef6bf3f0db5",
+        "670cc56458c8cef6bf3f0db9",
+        "670cc56458c8cef6bf3f0dbb",
+        "670cc56458c8cef6bf3f0dbd",
+        "670cc56458c8cef6bf3f0dbf",
+        "670cc56458c8cef6bf3f0d97",
+        "670cc56458c8cef6bf3f0dc3",
+        "670cc56458c8cef6bf3f0dc5",
+        "670cc56458c8cef6bf3f0dc7",
+        "670cc56458c8cef6bf3f0dc9",
+        "670cc56458c8cef6bf3f0dcb",
+        "670cc56458c8cef6bf3f0dab",
+        "670cc56458c8cef6bf3f0de7",
+        "670cc56458c8cef6bf3f0de9",
+        "670cc56458c8cef6bf3f0dc1",
+        "670cc56458c8cef6bf3f0d77"
+    ]
+}
+
+### Add roles to the admin's group
+POST {{url}}/api/groups/670cdd2e58c8cef6bf3f0df8/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+       "670cc56458c8cef6bf3f0d7d",
+       "670cc56458c8cef6bf3f0d8d",
+       "670cc56458c8cef6bf3f0d91",
+       "670cc56458c8cef6bf3f0d7f",
+       "670cc56458c8cef6bf3f0d9b",
+       "670cc56458c8cef6bf3f0da1",
+       "670cc56458c8cef6bf3f0da3",
+       "670cc56458c8cef6bf3f0da5",
+       "670cc56458c8cef6bf3f0dbf",
+       "670cc56458c8cef6bf3f0dc3",
+       "670cc56458c8cef6bf3f0dc5",
+       "670cc56458c8cef6bf3f0dc7",
+       "670cc56458c8cef6bf3f0dc9",
+       "670cc56458c8cef6bf3f0dcd",
+       "670cc56458c8cef6bf3f0dcf",
+       "670cc56458c8cef6bf3f0dd1",
+       "670cc56458c8cef6bf3f0dd3",
+       "670cc56458c8cef6bf3f0dd7",
+       "670cc56458c8cef6bf3f0dd9",
+       "670cc56458c8cef6bf3f0ddb",
+       "670cc56458c8cef6bf3f0ddd",
+       "670cc56458c8cef6bf3f0ddf",
+       "670cc56458c8cef6bf3f0dd5",
+       "670cc56458c8cef6bf3f0dc1",
+       "670cc56458c8cef6bf3f0de1"
+    ]
+}
+
+### Remove role to the groups
+DELETE {{url}}/api/groups/65d869d24f4c55561ee57872/roles/65d86a8b4f4c55561ee57883
+
+### Get all registered routes
+GET {{url}}/api/routes   

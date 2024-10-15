@@ -12,8 +12,16 @@ import { ImBin2 } from 'react-icons/im';
 import { IoMdAddCircle } from 'react-icons/io';
 import { LuView } from 'react-icons/lu';
 
+const { VITE_APP_GOAL_PAGE, VITE_APP_NEWS_PAGE } = import.meta.env;
+
 const PageManagement = () => {
-    const { VITE_APP_ADMIN_CODE, VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE } = import.meta.env;
+    const {
+        VITE_APP_ADMIN_CODE,
+        VITE_APP_TALENT_ENGINEER_CODE,
+        VITE_APP_FACULTY_MANAGER_CODE,
+        VITE_APP_GOAL_PAGE,
+        VITE_APP_NEWS_PAGE
+    } = import.meta.env;
 
     const { Search } = Input;
     const page = useSelector(pageSelector);
@@ -67,11 +75,11 @@ const PageManagement = () => {
             setPages((prev) => {
                 const menu = [...prev];
                 for (let menuItem of menu) {
-                    if (menuItem.dynamicPage && menuItem.dynamicPage === 'goals') {
+                    if (menuItem.dynamicPage && menuItem.dynamicPage === VITE_APP_GOAL_PAGE) {
                         menuItem = {
                             ...menuItem,
                             sub_menu_item: page.pages.reduce((initialArr, page) => {
-                                if (page.pageType === 'chỉ tiêu') {
+                                if (page.pageType === VITE_APP_GOAL_PAGE) {
                                     return [
                                         ...initialArr,
                                         {
@@ -155,7 +163,7 @@ const PageManagement = () => {
                                 let role = null;
 
                                 switch (menu_item?.role) {
-                                    case VITE_APP_TALENTED_ENGINEER_CODE: {
+                                    case VITE_APP_TALENT_ENGINEER_CODE: {
                                         role = 'Kỹ Sư Tài Năng';
                                         break;
                                     }
@@ -213,7 +221,8 @@ const PageManagement = () => {
                                                         <td className="">
                                                             {sub_menu_item?.sub_to_link.includes('/page/') && (
                                                                 <div className="sub_menu_item_btn_wrapper">
-                                                                    {sub_menu_item?.sub_page_type === 'chỉ tiêu' && (
+                                                                    {sub_menu_item?.sub_page_type ===
+                                                                        VITE_APP_GOAL_PAGE && (
                                                                         <>
                                                                             <div
                                                                                 className="btn_man-pages watch_table_btn"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom/dist';
@@ -39,7 +39,7 @@ const App = () => {
     if (isLoading) return null;
 
     return (
-        <>
+        <Fragment>
             <Alert />
             <Routes>
                 <Route path="/login" element={<Login />} />
@@ -48,12 +48,12 @@ const App = () => {
                     path="/"
                     element={
                         auth?.user ? (
-                            <>
+                            <Fragment>
                                 <Layout auth={auth} pathName={pathName} groupCode={groupCode} />
                                 <SocketIO auth={auth} />
-                            </>
+                            </Fragment>
                         ) : auth?.firstLogin ? (
-                            <FirstLogin userId={auth.firstLogin.userId} birthday={auth.firstLogin.birthday} />
+                            <FirstLogin />
                         ) : (
                             <Login />
                         )
@@ -67,7 +67,7 @@ const App = () => {
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
-        </>
+        </Fragment>
     );
 };
 

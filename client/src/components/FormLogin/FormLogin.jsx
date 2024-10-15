@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../redux/actions/authAction';
 import ComponentButton from '../ComponentButton/ComponentButton';
 import FormControl from '../ComponentForm/FormControl';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const RandomString = (length) => {
     const charRanDom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -26,10 +27,20 @@ const FormLogin = () => {
     const [userInputCaptcha, setUserInputCaptcha] = useState('');
     const [isCapcha, setIsCapcha] = useState(false);
 
+    const registerAccount = () => {
+        dispatch({
+            type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
+            payload: {
+                firstLogin: true
+            }
+        });
+    };
+
     const refreshCaptcha = () => {
         setUserInputCaptcha('');
         setCaptchaLogin(RandomString(4));
     };
+
     const handleInputChange = (e) => {
         setUserInputCaptcha(e.target.value.toUpperCase());
     };
@@ -43,8 +54,6 @@ const FormLogin = () => {
             setIsCapcha(false);
         }
     };
-
-    //----------------
 
     const handleChangeStudentId = (e) => {
         setUserId(e.target.value);
@@ -74,7 +83,7 @@ const FormLogin = () => {
                 <div className="heading_text--login">ĐĂNG NHẬP HỆ THỐNG</div>
                 <form onSubmit={handleSumbitFormLogin}>
                     <FormControl
-                        label="Tên đăng nhập"
+                        label="Mã sinh viên"
                         type="text"
                         id="user"
                         iconBefore={<RiAccountCircleFill />}
@@ -108,14 +117,13 @@ const FormLogin = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="tr__flex">
-                        {/* <div className="check__box--remb">
-                            <input type="checkbox" id="remember_account" defaultChecked />
-                            <label htmlFor="remember_account">Lưu đăng nhập</label>
-                        </div> */}
-                        {/* <Link to="#" className="btn_prm_password">Quên mật khẩu</Link> */}
-                    </div>
-                    <ComponentButton textButton="Đăng nhập" type="submit" onClick={handleSubmit} />
+                    <ComponentButton className="text-sm" textButton="ĐĂNG NHẬP" type="submit" onClick={handleSubmit} />
+                    <ComponentButton
+                        textButton="ĐĂNG KÝ BỔ SUNG"
+                        className="apply_btn text-sm"
+                        type="submit"
+                        onClick={registerAccount}
+                    />
                 </form>
             </div>
         </div>

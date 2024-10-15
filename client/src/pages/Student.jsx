@@ -8,11 +8,14 @@ import GLOBALTYPES from '../redux/actions/globalTypes';
 import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
 import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
+import ConfirmModal from '../components/ComponentModal/ConfirmModal';
+import { importUser } from '../redux/actions/excelAction';
 
 const Student = () => {
     const LIMIT = 20;
     const dispatch = useDispatch();
     const observe = useRef();
+    const fileRef = useRef();
 
     const facultyState = useSelector(facultySelector);
     const studentState = useSelector(studentSelector);
@@ -20,9 +23,28 @@ const Student = () => {
     const [filterData, setFilterData] = useState({});
     const [pageNumber, setPageNumber] = useState(1);
     const [sortByName, setSortByName] = useState(1);
+    const [file, setFile] = useState('');
     const [currentUserData, setCurrentUserData] = useState(null);
     const [isVisibleGoalDetailsModal, setIsVisibleGoalDetailsModal] = useState(false);
     const [isVisibleStudentDetailsModal, setIsVisibleStudentDetailsModal] = useState(false);
+
+    const handleFileSelected = (e) => {
+        const file = Array.from(e.target.files)[0];
+        setFile(file);
+    };
+
+    const onHiddenExcelModalDisplay = () => {
+        setFile('');
+        fileRef.current.value = '';
+    };
+
+    const onImportUser = () => {
+        const formData = new FormData();
+        formData.set('file', file);
+
+        dispatch(importUser(formData));
+        onHiddenExcelModalDisplay();
+    };
 
     const onToggleVisibleStudentDetailsModal = (index) => {
         setIsVisibleStudentDetailsModal((prev) => !prev);
@@ -141,6 +163,18 @@ const Student = () => {
                 <GoalDetailsModal currentUserData={currentUserData} onToggleModalDisplay={onToggleGoalDetailsModal} />
             )}
 
+            {file && (
+                <ConfirmModal
+                    headerContent={'Thêm Sinh Viên Mới'}
+                    bodyContent={'Bạn chắc chắn muốn thêm những sinh viên có trong file này không ?'}
+                    noteContent={
+                        'Yêu cầu định dạng excel và đặt đúng tên và vị trí các cột như sau: STT | MSSV | Họ đệm | Tên | Ngày sinh | Khoa | Chuyên ngành | Khóa | Email | Điện thoại'
+                    }
+                    toggleConfirmModalDisplay={onHiddenExcelModalDisplay}
+                    onAccept={onImportUser}
+                />
+            )}
+
             <div className="container_st__manager">
                 <div className="body__data--st">
                     <div className="line__sort">
@@ -191,6 +225,19 @@ const Student = () => {
                             >
                                 Tìm Kiếm
                             </button>
+                        </div>
+
+                        <div className="add_student_btn_wrapper">
+                            <label htmlFor="excelfile">Thêm Kỹ Sư</label>
+                            <input
+                                type="file"
+                                id="excelfile"
+                                name="excelfile"
+                                hidden
+                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                onChange={handleFileSelected}
+                                ref={fileRef}
+                            />
                         </div>
                     </div>
                     <div className="table_wrapper">

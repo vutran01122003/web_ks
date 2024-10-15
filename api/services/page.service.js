@@ -1,7 +1,9 @@
-const createError = require('http-errors');
-const Page = require('../models/page.model');
-const UserService = require('./user.service');
-const convertToObjectId = require('../utils/convertToObjectId');
+const createError = require("http-errors");
+const Page = require("../models/page.model");
+const UserService = require("./user.service");
+const convertToObjectId = require("../utils/convertToObjectId");
+
+const { GOAL_PAGE, NEWS_PAGE } = process.env;
 
 class PageService {
     static createPage = async (data) => {
@@ -14,24 +16,24 @@ class PageService {
                 pageFaculty,
                 pageStudentCohort,
                 pageStudentMajor,
-                pageStudentLevelYear
+                pageStudentLevelYear,
             } = data;
 
-            const isExists = await Page.findOne({
+            const page = await Page.findOne({
                 pageName,
                 pageStudentCohort,
                 pageStudentMajor,
-                pageStudentLevelYear
+                pageStudentLevelYear,
             }).lean();
 
-            if (isExists) throw createError(409, 'Tên Trang Đã Tồn Tại');
+            if (page) throw createError(409, "Tên Trang Đã Tồn Tại");
 
-            if (pageType === 'tin tức') {
+            if (pageType === NEWS_PAGE) {
                 createdPage = await Page.create({
                     pageName,
-                    pageType
+                    pageType,
                 });
-            } else if (pageType === 'chỉ tiêu') {
+            } else if (pageType === GOAL_PAGE) {
                 createdPage = await Page.create({
                     pageName,
                     pageFaculty,
@@ -39,20 +41,20 @@ class PageService {
                     pageStudentMajor,
                     pageStudentLevelYear,
                     tables,
-                    pageType
+                    pageType,
                 });
 
                 await UserService.updateNumOfRequiredActivity({
                     page: createdPage,
                     tables,
-                    isDesc: false
+                    isDesc: false,
                 });
             }
 
             return {
                 status: 201,
-                msg: `Tạo ${pageType === 'chỉ tiêu' ? 'Trang' : 'Loại Tin Tức'} Thành Công`,
-                data: createdPage
+                msg: `Tạo ${pageType === GOAL_PAGE ? "Trang" : "Loại Tin Tức"} Thành Công`,
+                data: createdPage,
             };
         } catch (error) {
             throw error;
@@ -65,47 +67,47 @@ class PageService {
                 {
                     $match: {
                         ...fields,
-                        isActive: true
-                    }
+                        isActive: true,
+                    },
                 },
                 {
-                    $unwind: '$tables'
+                    $unwind: "$tables",
                 },
                 {
                     $match: {
-                        'tables.isActive': true
-                    }
+                        "tables.isActive": true,
+                    },
                 },
                 {
                     $lookup: {
-                        from: 'rows',
+                        from: "rows",
                         pipeline: [
                             {
                                 $match: {
-                                    $expr: { $eq: ['$user', convertToObjectId(userId)] }
-                                }
-                            }
+                                    $expr: { $eq: ["$user", convertToObjectId(userId)] },
+                                },
+                            },
                         ],
-                        localField: 'tables.rowValueList',
-                        foreignField: '_id',
-                        as: 'tables.rowValueList'
-                    }
+                        localField: "tables.rowValueList",
+                        foreignField: "_id",
+                        as: "tables.rowValueList",
+                    },
                 },
                 {
                     $group: {
-                        _id: '$_id',
-                        pageName: { $first: '$pageName' },
-                        pageType: { $first: '$pageType' },
-                        pageFaculty: { $first: '$pageFaculty' },
-                        pageStudentMajor: { $first: '$pageStudentMajor' },
-                        pageStudentCohort: { $first: '$pageStudentCohort' },
-                        pageStudentLevelYear: { $first: '$pageStudentLevelYear' },
-                        isActive: { $first: '$isActive' },
+                        _id: "$_id",
+                        pageName: { $first: "$pageName" },
+                        pageType: { $first: "$pageType" },
+                        pageFaculty: { $first: "$pageFaculty" },
+                        pageStudentMajor: { $first: "$pageStudentMajor" },
+                        pageStudentCohort: { $first: "$pageStudentCohort" },
+                        pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
+                        isActive: { $first: "$isActive" },
                         tables: {
-                            $push: '$tables'
-                        }
-                    }
-                }
+                            $push: "$tables",
+                        },
+                    },
+                },
             ]);
 
             return pages;
@@ -131,36 +133,36 @@ class PageService {
                         pageStudentMajor,
                         pageStudentCohort: Number.parseInt(pageStudentCohort),
                         pageStudentLevelYear: Number.parseInt(pageStudentLevelYear),
-                        isActive: true
-                    }
+                        isActive: true,
+                    },
                 },
                 {
-                    $unwind: '$tables'
+                    $unwind: "$tables",
                 },
                 {
                     $match: {
-                        'tables.isActive': true
-                    }
+                        "tables.isActive": true,
+                    },
                 },
                 {
                     $project: {
-                        'tables.tableName': 1
-                    }
+                        "tables.tableName": 1,
+                    },
                 },
                 {
                     $group: {
                         _id: null,
                         tables: {
-                            $push: '$tables'
-                        }
-                    }
+                            $push: "$tables",
+                        },
+                    },
                 },
                 {
                     $project: {
                         _id: 0,
-                        tables: 1
-                    }
-                }
+                        tables: 1,
+                    },
+                },
             ]);
             return pages;
         } catch (error) {
@@ -171,7 +173,7 @@ class PageService {
     static getPageById = async ({ page }) => {
         try {
             const pageInfo = await Page.findOne({
-                _id: page
+                _id: page,
             });
             return pageInfo;
         } catch (error) {
@@ -183,7 +185,7 @@ class PageService {
         try {
             const pageInfo = await Page.findOne({
                 ...fields,
-                isActive: true
+                isActive: true,
             });
             return pageInfo;
         } catch (error) {
@@ -195,7 +197,7 @@ class PageService {
         try {
             let totalScore = 0;
             const pageData = await this.getPageById({ page: pageId });
-            if (!pageData) throw createError.NotFound('Trang Không Tồn Tại');
+            if (!pageData) throw createError.NotFound("Trang Không Tồn Tại");
 
             const table = pageData.tables.id(tableId);
 
@@ -212,17 +214,17 @@ class PageService {
                             ).score;
                             content[rowTitleItem._id] = {
                                 value: fixedValueOfContent,
-                                score
+                                score,
                             };
                             totalScore += score;
                         }
                     });
                 }
-            } else throw createError.NotFound('Chỉ tiêu không tồn tại');
+            } else throw createError.NotFound("Chỉ tiêu không tồn tại");
 
             return {
                 pageData,
-                totalScore
+                totalScore,
             };
         } catch (error) {
             throw error;
@@ -232,11 +234,11 @@ class PageService {
     static addRowIntoTableOfPage = async ({ page, table, rowList }) => {
         try {
             await Page.findOneAndUpdate(
-                { _id: page, 'tables._id': table },
+                { _id: page, "tables._id": table },
                 {
                     $push: {
-                        'tables.$.rowValueList': rowList._id
-                    }
+                        "tables.$.rowValueList": rowList._id,
+                    },
                 }
             );
         } catch (error) {
@@ -250,53 +252,53 @@ class PageService {
                 {
                     $match: {
                         ...fields,
-                        isActive: true
-                    }
+                        isActive: true,
+                    },
                 },
                 {
-                    $unwind: '$tables'
+                    $unwind: "$tables",
                 },
                 {
                     $match: {
-                        'tables.isActive': true
-                    }
+                        "tables.isActive": true,
+                    },
                 },
                 {
                     $lookup: {
-                        from: 'rows',
+                        from: "rows",
                         pipeline: [
                             {
                                 $match: {
-                                    $expr: { $eq: ['$user', convertToObjectId(userId)] }
-                                }
-                            }
+                                    $expr: { $eq: ["$user", convertToObjectId(userId)] },
+                                },
+                            },
                         ],
-                        localField: 'tables.rowValueList',
-                        foreignField: '_id',
-                        as: 'tables.rowValueList'
-                    }
+                        localField: "tables.rowValueList",
+                        foreignField: "_id",
+                        as: "tables.rowValueList",
+                    },
                 },
                 {
                     $group: {
-                        _id: '$_id',
-                        pageName: { $first: '$pageName' },
-                        pageType: { $first: '$pageType' },
-                        pageFaculty: { $first: '$pageFaculty' },
-                        pageStudentMajor: { $first: '$pageStudentMajor' },
-                        pageStudentCohort: { $first: '$pageStudentCohort' },
-                        pageStudentLevelYear: { $first: '$pageStudentLevelYear' },
-                        isActive: { $first: '$isActive' },
+                        _id: "$_id",
+                        pageName: { $first: "$pageName" },
+                        pageType: { $first: "$pageType" },
+                        pageFaculty: { $first: "$pageFaculty" },
+                        pageStudentMajor: { $first: "$pageStudentMajor" },
+                        pageStudentCohort: { $first: "$pageStudentCohort" },
+                        pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
+                        isActive: { $first: "$isActive" },
                         tables: {
-                            $push: '$tables'
-                        }
-                    }
-                }
+                            $push: "$tables",
+                        },
+                    },
+                },
             ]);
 
             return {
                 status: 200,
-                msg: 'Lấy Dữ Liệu Trang Thành Công',
-                data: page[0]
+                msg: "Lấy Dữ Liệu Trang Thành Công",
+                data: page[0],
             };
         } catch (error) {
             throw error;
@@ -306,19 +308,19 @@ class PageService {
     static removePage = async ({ pageId }) => {
         try {
             const page = await Page.findById(pageId);
-            if (!page) throw createError.NotFound('Trang không tồn tại');
+            if (!page) throw createError.NotFound("Trang không tồn tại");
 
             await UserService.updateNumOfRequiredActivity({
                 page: page,
                 tables: page.tables,
-                isDesc: true
+                isDesc: true,
             });
 
             await Page.findOneAndDelete({ _id: pageId });
 
             return {
                 status: 200,
-                msg: 'Xóa Trang Thành Công'
+                msg: "Xóa Trang Thành Công",
             };
         } catch (error) {
             throw error;
@@ -330,14 +332,14 @@ class PageService {
             await Page.findByIdAndUpdate(
                 pageId,
                 {
-                    isActive: !currentStatus
+                    isActive: !currentStatus,
                 },
                 { new: true }
             );
 
             return {
                 status: 200,
-                msg: 'Cập nhật trạng thái trang thành công'
+                msg: "Cập nhật trạng thái trang thành công",
             };
         } catch (error) {
             throw error;
@@ -351,47 +353,47 @@ class PageService {
                     $match: {
                         pageStudentMajor,
                         pageStudentLevelYear: pageStudentLevelYear * 1,
-                        pageStudentCohort: pageStudentCohort * 1
-                    }
+                        pageStudentCohort: pageStudentCohort * 1,
+                    },
                 },
                 {
-                    $unwind: '$tables'
+                    $unwind: "$tables",
                 },
                 {
                     $lookup: {
-                        from: 'rows',
-                        let: { rowIds: '$tables.rowValueList' },
+                        from: "rows",
+                        let: { rowIds: "$tables.rowValueList" },
                         pipeline: [
                             {
                                 $match: {
                                     $expr: {
-                                        $and: filterArr
-                                    }
-                                }
-                            }
+                                        $and: filterArr,
+                                    },
+                                },
+                            },
                         ],
-                        as: 'tables.rowValueList'
-                    }
+                        as: "tables.rowValueList",
+                    },
                 },
                 {
                     $group: {
-                        _id: '$_id',
-                        pageName: { $first: '$pageName' },
-                        pageType: { $first: '$pageType' },
-                        pageFaculty: { $first: '$pageFaculty' },
-                        pageStudentMajor: { $first: '$pageStudentMajor' },
-                        pageStudentCohort: { $first: '$pageStudentCohort' },
-                        pageStudentLevelYear: { $first: '$pageStudentLevelYear' },
+                        _id: "$_id",
+                        pageName: { $first: "$pageName" },
+                        pageType: { $first: "$pageType" },
+                        pageFaculty: { $first: "$pageFaculty" },
+                        pageStudentMajor: { $first: "$pageStudentMajor" },
+                        pageStudentCohort: { $first: "$pageStudentCohort" },
+                        pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
                         tables: {
-                            $push: '$tables'
-                        }
-                    }
+                            $push: "$tables",
+                        },
+                    },
                 },
                 {
                     $sort: {
-                        pageName: 1
-                    }
-                }
+                        pageName: 1,
+                    },
+                },
             ]);
 
             return pageDetailsList;

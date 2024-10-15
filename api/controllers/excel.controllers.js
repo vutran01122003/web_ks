@@ -1,19 +1,13 @@
-const excelService = require("../services/excel.service");
+const excelService = require('../services/excel.service');
 
 class ExcelController {
     exportUserQualified = async (req, res, next) => {
         try {
             const workbook = await excelService.exportUserQualified();
 
-            res.setHeader(
-                "Content-Type",
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            );
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
-            res.setHeader(
-                "Content-Disposition",
-                "attachment; filename=users.xlsx"
-            );
+            res.setHeader('Content-Disposition', 'attachment; filename=users.xlsx');
 
             workbook.xlsx
                 .write(res)
@@ -23,18 +17,10 @@ class ExcelController {
                     }
                 })
                 .catch((error) => {
-                    console.error("Error writing Excel file:", error);
-                    if (!res.headersSent) {
-                        res.status(500).json({
-                            error: "Internal Server Error",
-                        });
-                    }
+                    throw error;
                 });
         } catch (error) {
-            console.error("Error exporting users:", error);
-            if (!res.headersSent) {
-                res.status(404).json({ error: "Not Found" });
-            }
+            next(error);
         }
     };
 
@@ -43,11 +29,11 @@ class ExcelController {
             await excelService.importUser(req);
 
             res.status(200).json({
-                message: "File uploaded and processed successfully.",
+                status: 200,
+                msg: 'Thêm sinh viên mới thành công'
             });
         } catch (error) {
-            console.error("Error processing uploaded file:", error.message);
-            res.status(500).json({ error: "Internal Server Error" });
+            next(error);
         }
     };
 }

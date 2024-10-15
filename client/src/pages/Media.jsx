@@ -8,6 +8,8 @@ import GLOBALTYPES from '../redux/actions/globalTypes';
 import { createPage } from '../redux/actions/pageAction';
 import { capitalizeFirstLetter } from '../utils/handleString';
 
+const { VITE_APP_NEWS_PAGE } = import.meta.env;
+
 function MediaUi() {
     const coverRef = useRef();
     const newsTypeRef = useRef();
@@ -41,7 +43,7 @@ function MediaUi() {
             createPage({
                 pageData: {
                     pageName: newsTypeValue,
-                    pageType: 'tin tức'
+                    pageType: VITE_APP_NEWS_PAGE
                 }
             })
         );
@@ -105,7 +107,7 @@ function MediaUi() {
                         render={(attrs) => (
                             <div className="select_new_type_modal" tabIndex="-1" {...attrs}>
                                 {page.pages.map((currentPage) => {
-                                    if (currentPage.pageType === 'tin tức')
+                                    if (currentPage.pageType === VITE_APP_NEWS_PAGE)
                                         return (
                                             <div
                                                 onClick={() => {

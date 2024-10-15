@@ -13,12 +13,10 @@ const FormControl = ({
     disabled,
     onChange,
     name,
-    readonly,
+    readonly
 }) => {
     return (
-        <div
-            className={`component__input ${classNameRoot ? classNameRoot : ''}`}
-        >
+        <div className={`component__input ${classNameRoot ? classNameRoot : ''}`}>
             <label htmlFor={id}>{label}</label>
             <div className={classNameWrap}>
                 <div className={`line__input ${className}`}>

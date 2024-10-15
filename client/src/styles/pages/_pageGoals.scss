@@ -4,7 +4,7 @@
             background-color: #fafafa;
             border-radius: 3px;
             user-select: none;
-    
+
             .ant-tabs-nav-list {
                 flex-wrap: wrap;
                 .ant-tabs-tab {
@@ -16,22 +16,21 @@
                     margin: 0 8px;
                 }
             }
-            
         }
     }
-    
+
     // Goal Creation UI
     .wrap__goals {
-        padding: 0px 20px 20px 20px;
-    
+        padding: 10px 20px 10px 20px;
+
         &.modal {
             padding-top: 30px;
         }
-    
+
         .body__goals {
             .goals_info_wrapper {
                 display: inline-block;
-    
+
                 input {
                     padding: 8px 12px;
                     height: 40px;
@@ -42,16 +41,16 @@
                     border: 1px solid rgb(222, 221, 221);
                     min-width: 220px;
                 }
-    
+
                 .year_info_input {
                     cursor: not-allowed;
                 }
             }
-    
+
             .line__flex {
                 display: flex;
                 justify-content: space-between;
-    
+
                 > h1 {
                     color: #0153b1;
                     text-align: center;
@@ -65,7 +64,7 @@
                 display: flex;
                 margin: 20px 0px;
                 align-items: center;
-    
+
                 > label {
                     color: #0153b1;
                     font-size: 21px;
@@ -84,18 +83,17 @@
                     border-radius: 3px;
                 }
             }
-    
+
             .connection__table {
                 display: flex;
                 justify-content: center;
                 flex-wrap: wrap;
-    
+
                 .box__table {
-    
-                    &+.box__table {
+                    & + .box__table {
                         margin-top: 30px;
                     }
-    
+
                     width: 100%;
                     border: 1px solid #cccccc;
                     border-radius: 3px;
@@ -150,7 +148,7 @@
                         }
                     }
                 }
-    
+
                 .btn__delete {
                     button {
                         border: none;
@@ -163,7 +161,7 @@
                     padding: 20px 20px 0;
                     display: flex;
                     align-items: center;
-    
+
                     select {
                         height: 30px;
                         margin-left: 10px;
@@ -175,7 +173,7 @@
                         width: 100%;
                         outline: none;
                     }
-    
+
                     > label {
                         font-size: 18px;
                         font-weight: 500;
@@ -183,7 +181,7 @@
                         display: inline-block;
                         min-width: 150px;
                     }
-    
+
                     > input {
                         width: 100%;
                         height: 30px;
@@ -206,7 +204,7 @@
                         display: flex;
                         justify-content: right;
                         align-items: center;
-    
+
                         .btn__add-col {
                             width: max-content;
                             padding: 8px 12px;
@@ -218,13 +216,13 @@
                             svg {
                                 margin-right: 10px;
                             }
-    
+
                             &:active {
                                 transform: scale(0.9);
                             }
                         }
                     }
-    
+
                     > .tr__line--cols {
                         border-top: 1px solid #bbbbbb;
                         border-radius: 0px 0px 8px 8px;
@@ -232,7 +230,7 @@
                             width: 100%;
                             height: 100%;
                             display: flex;
-    
+
                             .add_value_col {
                                 background: #fff;
                                 padding: 10px;
@@ -240,7 +238,7 @@
                                 border-radius: 5px;
                                 width: 400px;
                                 max-width: 100%;
-    
+
                                 .add_fixed_heading {
                                     color: #222222;
                                     margin-bottom: 15px;
@@ -248,19 +246,19 @@
                                     justify-content: center;
                                     align-items: center;
                                     flex-direction: column;
-    
+
                                     span {
                                         font-size: small;
                                         font-weight: 400;
                                         color: gray;
                                     }
                                 }
-    
+
                                 .add_fixed_value_wrapper {
                                     display: flex;
                                     margin-bottom: 15px;
                                     gap: 5px;
-    
+
                                     .score_value_input,
                                     .fixed_value_input {
                                         width: 160px;
@@ -273,11 +271,11 @@
                                         font-weight: 600;
                                         font-size: 16px;
                                     }
-    
+
                                     .score_value_input {
                                         width: 100px;
                                     }
-    
+
                                     .add_fixed_value_btn {
                                         width: 120px;
                                         border-radius: 3px;
@@ -288,20 +286,20 @@
                                         outline: none;
                                         border: none;
                                         transition: 0.1s linear;
-    
+
                                         &:active {
                                             transform: scale(0.9);
                                         }
                                     }
                                 }
-    
+
                                 .fixed_value_item {
                                     display: flex;
                                     justify-content: space-between;
                                     gap: 10px;
                                     padding: 8px 12px;
                                     border-bottom: 1px solid rgb(227, 226, 226);
-    
+
                                     .fixed_value_wrapper {
                                         display: flex;
                                         align-items: center;
@@ -311,38 +309,38 @@
                                         flex: 1;
                                         overflow: hidden;
                                         text-overflow: ellipsis;
-    
+
                                         .fixed_value_icon {
                                             display: flex;
                                             align-items: center;
                                         }
-    
+
                                         .fixed_value {
                                             font-weight: 700;
                                             overflow: hidden;
                                             text-overflow: ellipsis;
                                         }
-    
+
                                         .score_value {
                                             color: gray;
                                             font-size: 14px;
                                             font-weight: 400;
                                         }
                                     }
-    
+
                                     .btn_del_fixed_value {
                                         display: flex;
                                         align-items: center;
                                         color: rgba(255, 0, 0, 0.715);
                                         transition: 0.1s linear;
-    
+
                                         &:hover {
                                             color: red;
                                         }
                                     }
                                 }
                             }
-    
+
                             .item__col {
                                 width: 100%;
                                 position: relative;
@@ -359,7 +357,7 @@
                                 font-weight: 500;
                                 outline: none;
                             }
-    
+
                             .del__col {
                                 display: flex;
                                 justify-content: center;
@@ -371,16 +369,16 @@
                                 color: rgba(255, 0, 0, 0.59);
                                 cursor: pointer;
                                 transition: 0.1s linear;
-    
+
                                 &:hover {
                                     color: red;
                                 }
-    
+
                                 &.top {
                                     top: 0;
                                 }
                             }
-    
+
                             .add__col {
                                 display: flex;
                                 justify-content: center;
@@ -392,7 +390,7 @@
                                 color: rgba(0, 128, 0, 0.525);
                                 cursor: pointer;
                                 transition: 0.1s linear;
-    
+
                                 &:hover {
                                     color: green;
                                 }
@@ -407,38 +405,38 @@
                 padding: 10px;
                 transition: 0.1s linear;
                 @include flex_center;
-                
+
                 svg {
                     margin-right: 10px;
                 }
-    
+
                 &:active {
                     transform: scale(0.9);
                 }
             }
-    
+
             .btn__add_table.active {
                 margin-left: auto;
             }
-    
+
             .btn__create--page {
                 width: max-content;
                 padding: 10px;
                 @include flex_center;
                 background-color: $main_color;
                 transition: 0.1s linear;
-    
+
                 svg {
                     margin-right: 10px;
                 }
-    
+
                 &:active {
                     transform: scale(0.9);
                 }
             }
         }
     }
-    
+
     // Goal Management UI
     .goal_management_container {
         .goal_management {
@@ -446,12 +444,12 @@
             flex-direction: column;
             padding: 0px 20px 20px 20px;
             gap: 5px;
-    
+
             .goal_management_filter {
                 display: flex;
                 gap: 10px;
                 margin-bottom: 10px;
-            
+
                 .search_btn {
                     display: flex;
                     align-items: center;
@@ -467,28 +465,30 @@
                     max-height: 40px;
                     min-width: 120px;
                     transition: 0.1s linear;
-    
+
                     &:active {
                         transform: scale(0.9);
                     }
                 }
             }
-    
+
             .goal_management_body {
                 display: flex;
                 flex: 1;
-    
+
                 .table_wrapper {
                     width: 100%;
-    
-                    table, td, th {
+
+                    table,
+                    td,
+                    th {
                         border: 1px solid #dddddd;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
-                            
+
                         th {
                             padding: 10px;
                             font-weight: 700;
@@ -497,14 +497,18 @@
                             user-select: none;
                             color: #333;
                         }
-    
+
                         td {
-                            padding: 10px;
                             font-size: 14px;
                             font-weight: 500;
+                            padding: 10px;
                             color: #333;
+
+                            &.activity_wrapper {
+                                padding: 0;
+                            }
                         }
-    
+
                         .btn_group {
                             .btn_item {
                                 display: flex;
@@ -513,55 +517,61 @@
                                 cursor: pointer;
                                 transition: 0.1s linear;
                                 margin: 10px;
-                          
-    
+
                                 &:hover {
                                     color: #1677ff;
                                     text-decoration: underline;
                                 }
-    
+
                                 &.remove_page_goal_btn,
-                                &.update_status_page_goal_btn{
+                                &.update_status_page_goal_btn {
                                     &:hover {
                                         color: #f0635c;
                                         text-decoration: underline;
                                     }
                                 }
-                           }
-        
-                           .icon_wrapper {
+                            }
+
+                            .icon_wrapper {
                                 position: relative;
                                 top: 2px;
                                 font-size: 18px;
                             }
                         }
-                        
-                        .page_name, .page_status {
+
+                        .page_name,
+                        .page_status {
                             text-align: center;
                         }
-    
+
                         .page_status {
                             font-weight: 600;
                             .active {
                                 color: #1677ff;
                             }
-    
+
                             .inactive {
-                                color: #f0635c
+                                color: #f0635c;
                             }
                         }
-    
+
                         .activity_name {
                             display: flex;
+                            padding: 10px;
                             justify-content: space-between;
                             align-items: center;
                             margin: 15px 0;
                             gap: 10px;
-    
+
+                            & + .activity_name {
+                                border-top: 1px solid #e3e3e3;
+                            }
+
                             .activity_btn_group {
+                                margin-left: 20px;
                                 display: flex;
                                 gap: 5px;
-    
+
                                 .activity_edit_btn,
                                 .activity_delete_btn,
                                 .activity_update_status_btn {
@@ -575,37 +585,37 @@
                                     user-select: none;
                                     cursor: pointer;
                                     transition: 0.1s linear;
-    
+
                                     &:active {
                                         transform: scale(0.9);
                                     }
                                 }
-                                
+
                                 .activity_edit_btn {
                                     border: 1px solid #1677ff;
                                     color: #1677ff;
-    
+
                                     &:hover {
                                         background: #1677ff;
                                         color: #fff;
                                     }
                                 }
-                                
+
                                 .activity_update_status_btn {
                                     &.inactive {
                                         border: 1px solid #f0635c;
                                         color: #f0635c;
-        
+
                                         &:hover {
                                             background: #f0635c;
                                             color: #fff;
                                         }
                                     }
-                                   
+
                                     &.active {
                                         border: 1px solid #1677ff;
                                         color: #1677ff;
-        
+
                                         &:hover {
                                             background: #1677ff;
                                             color: #fff;
@@ -617,7 +627,7 @@
                                     float: right;
                                     border: 1px solid #f0635c;
                                     color: #f0635c;
-    
+
                                     &:hover {
                                         background: #f0635c;
                                         color: #fff;
@@ -631,4 +641,3 @@
         }
     }
 }
-

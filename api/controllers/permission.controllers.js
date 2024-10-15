@@ -1,4 +1,4 @@
-const PermissionService = require('../services/permission.service');
+const PermissionService = require("../services/permission.service");
 
 class PermissionControllers {
     getRegistedRoutes = async (req, res, next) => {
@@ -11,15 +11,15 @@ class PermissionControllers {
                     route = middleware.route;
                     routes.push({
                         path: route.path,
-                        method: Object.keys(route.methods)[0]
+                        method: Object.keys(route.methods)[0],
                     });
-                } else if (middleware.name === 'router') {
+                } else if (middleware.name === "router") {
                     middleware.handle.stack.forEach(function (handler) {
                         route = handler.route;
                         route &&
                             routes.push({
                                 path: route.path,
-                                method: Object.keys(route.methods)[0]
+                                method: Object.keys(route.methods)[0],
                             });
                     });
                 }
@@ -29,14 +29,14 @@ class PermissionControllers {
                 routes.map((route) =>
                     PermissionService.createRole({
                         method: route.method,
-                        url: route.path
+                        url: route.path,
                     })
                 )
             );
 
             res.status(200).json({
                 status: 200,
-                data: routes
+                data: routes,
             });
         } catch (error) {
             next(error);
@@ -50,9 +50,9 @@ class PermissionControllers {
             const createdGroup = await PermissionService.createGroup({ name, description, groupCode });
 
             res.status(201).json({
-                msg: 'Tạo chức vụ thành công',
+                msg: "Tạo chức vụ thành công",
                 status: 201,
-                data: createdGroup
+                data: createdGroup,
             });
         } catch (error) {
             next(error);
@@ -65,8 +65,8 @@ class PermissionControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Lấy dữ liệu các chức vụ thành công',
-                data: groups
+                msg: "Lấy dữ liệu các chức vụ thành công",
+                data: groups,
             });
         } catch (error) {
             next(error);
@@ -82,8 +82,8 @@ class PermissionControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Cập nhật chức vụ thành công',
-                data: updatedGroup
+                msg: "Cập nhật chức vụ thành công",
+                data: updatedGroup,
             });
         } catch (error) {
             next(error);
@@ -97,9 +97,9 @@ class PermissionControllers {
             const deletedGroup = await PermissionService.deleteGroup({ groupId });
 
             res.status(200).json({
-                msg: 'Xóa chức vụ thành công',
+                msg: "Xóa chức vụ thành công",
                 status: 200,
-                data: deletedGroup
+                data: deletedGroup,
             });
         } catch (error) {
             next(error);
@@ -113,9 +113,9 @@ class PermissionControllers {
             const createdRole = await PermissionService.createRole({ name, method, description, url });
 
             res.status(201).json({
-                msg: 'Tạo quyền thành công',
+                msg: "Tạo quyền thành công",
                 status: 200,
-                data: createdRole
+                data: createdRole,
             });
         } catch (error) {
             next(error);
@@ -129,9 +129,9 @@ class PermissionControllers {
             const deletedRole = await PermissionService.deleteRole({ roleId });
 
             res.status(200).json({
-                msg: 'Xóa quyền thành công',
+                msg: "Xóa quyền thành công",
                 status: 200,
-                data: deletedRole
+                data: deletedRole,
             });
         } catch (error) {
             next(error);
@@ -146,9 +146,9 @@ class PermissionControllers {
             const result = await PermissionService.grantPermissionsToGroup({ roleIdList, groupId });
 
             res.status(200).json({
-                msg: 'Thêm quyền cho chức vụ thành công',
+                msg: "Thêm quyền cho chức vụ thành công",
                 status: 200,
-                data: result
+                data: result,
             });
         } catch (error) {
             next(error);
@@ -162,9 +162,9 @@ class PermissionControllers {
             const result = await PermissionService.revokePermissionsToGroup({ roleId, groupId });
 
             res.status(200).json({
-                msg: 'Thu hồi quyền cho chức vụ thành công',
+                msg: "Thu hồi quyền cho chức vụ thành công",
                 status: 200,
-                data: result
+                data: result,
             });
         } catch (error) {
             next(error);

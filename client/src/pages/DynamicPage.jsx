@@ -8,13 +8,14 @@ import LayoutTable from '../components/ComponentTable/LayoutTable';
 import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 import { setPageInfo } from '../redux/actions/pageAction';
 
+const { VITE_APP_GOAL_PAGE, VITE_APP_NEWS_PAGE } = import.meta.env;
+
 const DynamicPage = () => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
     const [tables, setTables] = useState([]);
     const { dynamicPage } = useParams();
     const { pathname } = useLocation();
-    const [NEWS, GOAL] = ['tin tức', 'chỉ tiêu'];
 
     useEffect(() => {
         if (page.pages.length > 0 && dynamicPage) {
@@ -54,7 +55,7 @@ const DynamicPage = () => {
     }, [pathname]);
     return (
         <div className="dynamic_page_container">
-            {page?.pageType && page.pageType === GOAL && (
+            {page?.pageType && page.pageType === VITE_APP_GOAL_PAGE && (
                 <>
                     {tables.length > 0 ? (
                         tables.map((table) => {
@@ -66,7 +67,7 @@ const DynamicPage = () => {
                 </>
             )}
 
-            {page?.pageType && page.pageType === NEWS && <News />}
+            {page?.pageType && page.pageType === VITE_APP_NEWS_PAGE && <News />}
         </div>
     );
 };

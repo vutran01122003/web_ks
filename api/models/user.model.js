@@ -1,83 +1,87 @@
-const conn = require('../dbs/init.mongodb');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const ProgressSchema = require('./progress.schema');
+const conn = require("../dbs/init.mongodb");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const ProgressSchema = require("./progress.schema");
 const { Schema } = mongoose;
 
-const [DOC, COL] = ['user', 'users'];
+const [DOC, COL] = ["user", "users"];
 
 const UserSchema = new Schema(
     {
         avatar: {
             type: String,
-            default: 'https://tesf.s3.ap-southeast-1.amazonaws.com/avatar/avatar_default/avatar_default.jpg'
+            default: "https://tesf.s3.ap-southeast-1.amazonaws.com/avatar/avatar_default/avatar_default.jpg",
         },
         userId: {
             type: String,
             required: true,
-            trim: true
+            unique: true,
+            trim: true,
         },
         firstName: {
             type: String,
             lowercase: true,
             required: true,
-            trim: true
+            trim: true,
         },
         lastName: {
             type: String,
             lowercase: true,
             required: true,
-            trim: true
+            trim: true,
         },
         password: {
             type: String,
-            trim: true
+            trim: true,
         },
         group: {
             type: Schema.Types.ObjectId,
-            ref: 'group'
+            ref: "group",
         },
         gender: {
             type: String,
-            enum: ['nam', 'nữ'],
-            default: 'nam',
-            lowercase: true
+            enum: ["nam", "nữ"],
+            default: "nam",
+            lowercase: true,
         },
         birthday: {
-            type: Schema.Types.Date
+            type: Schema.Types.Date,
         },
         faculty: {
             type: String,
-            lowercase: true
+            lowercase: true,
         },
         major: {
-            type: String
+            type: String,
+            lowercase: true,
         },
         // Thuộc tính cohort cho biết Khóa sinh viên nhập học (Ví Dụ: 17, 18, 19, 20,...)
         cohort: {
-            type: Number
+            type: Number,
         },
         levelYear: {
-            type: Number
+            type: Number,
         },
         isActive: {
             type: Boolean,
-            default: true
+            default: true,
         },
         email: {
             type: String,
-            lowercase: true
+            lowercase: true,
+            unique: true,
         },
         phone: {
             type: String,
-            lowercase: true
+            lowercase: true,
+            unique: true,
         },
         // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
-        annualActivitiesProgress: [ProgressSchema]
+        annualActivitiesProgress: [ProgressSchema],
     },
     {
         collection: COL,
-        timestamps: true
+        timestamps: true,
     }
 );
 

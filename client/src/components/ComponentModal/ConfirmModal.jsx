@@ -1,6 +1,6 @@
 import { AiOutlineClose } from 'react-icons/ai';
 
-function ComfirmModal({ headerContent, bodyContent, noteContent, onAccept, toggleConfirmModalDisplay }) {
+function ConfirmModal({ headerContent, bodyContent, noteContent, onAccept, toggleConfirmModalDisplay }) {
     return (
         <div
             className="modal_overlap"
@@ -32,4 +32,4 @@ function ComfirmModal({ headerContent, bodyContent, noteContent, onAccept, toggl
     );
 }
 
-export default ComfirmModal;
+export default ConfirmModal;

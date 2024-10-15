@@ -6,12 +6,19 @@ import { HiOutlineNewspaper, HiOutlineUserGroup, HiOutlineClipboardList } from '
 import { RiHome3Fill } from 'react-icons/ri';
 import { FaListCheck } from 'react-icons/fa6';
 
-const { VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
+const {
+    VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE,
+    VITE_APP_TALENT_ENGINEER_CODE,
+    VITE_APP_FACULTY_MANAGER_CODE,
+    VITE_APP_ADMIN_CODE,
+    VITE_APP_GOAL_PAGE,
+    VITE_APP_NEWS_PAGE
+} = import.meta.env;
 
 export const ARRAY_LIST_MENU = [
     {
         id: 0,
-        role: VITE_APP_TALENTED_ENGINEER_CODE,
+        roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
         name_menu: 'Tổng Quan',
         icon_before: <RiHome3Fill />,
         to_link: '/',
@@ -19,7 +26,7 @@ export const ARRAY_LIST_MENU = [
     },
     {
         id: 1,
-        role: VITE_APP_FACULTY_MANAGER_CODE,
+        roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Xét Duyệt Hoạt Động',
         icon_before: <FaListCheck />,
         to_link: '/activity',
@@ -27,7 +34,7 @@ export const ARRAY_LIST_MENU = [
     },
     {
         id: 2,
-        role: VITE_APP_FACULTY_MANAGER_CODE,
+        roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Thống Kê Tiến Độ Hoàn Thành',
         icon_before: <HiOutlineClipboardList />,
         to_link: '/progress',
@@ -35,7 +42,7 @@ export const ARRAY_LIST_MENU = [
     },
     {
         id: 3,
-        role: VITE_APP_FACULTY_MANAGER_CODE,
+        roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Quản lý Nhóm Chỉ Tiêu',
         icon_before: <TbTargetArrow />,
         to_link: '/goal',
@@ -43,7 +50,7 @@ export const ARRAY_LIST_MENU = [
     },
     {
         id: 4,
-        role: VITE_APP_ADMIN_CODE,
+        roles: [VITE_APP_ADMIN_CODE],
         name_menu: 'Quản Lý Trang',
         icon_before: <CgBrowser />,
         to_link: '/page-management',
@@ -51,7 +58,7 @@ export const ARRAY_LIST_MENU = [
     },
     {
         id: 5,
-        role: VITE_APP_FACULTY_MANAGER_CODE,
+        roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Tạo Tin Tức & Thông Báo',
         icon_before: <MdOutlineCreate />,
         to_link: '/media',
@@ -62,23 +69,23 @@ export const ARRAY_LIST_MENU = [
         name_menu: 'Tin Tức',
         allow: true,
         icon_before: <HiOutlineNewspaper />,
-        dynamicPage: 'news',
+        dynamicPage: VITE_APP_NEWS_PAGE,
         submenu: true,
         sub_menu_item: []
     },
     {
         id: 7,
         name_menu: 'Nhóm Chỉ Tiêu Năm',
-        role: VITE_APP_TALENTED_ENGINEER_CODE,
+        roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
         icon_before: <BiBookBookmark />,
-        dynamicPage: 'goals',
+        dynamicPage: VITE_APP_GOAL_PAGE,
         submenu: true,
         sub_menu_item: []
     },
     {
         id: 8,
         name_menu: 'Quản Lý Sinh Viên',
-        role: VITE_APP_FACULTY_MANAGER_CODE,
+        roles: [VITE_APP_FACULTY_MANAGER_CODE],
         to_link: '/student',
         icon_before: <HiOutlineUserGroup />,
         submenu: false
@@ -86,7 +93,7 @@ export const ARRAY_LIST_MENU = [
     {
         id: 9,
         name_menu: 'Quản Lý Khoa & Chuyên Ngành',
-        role: VITE_APP_ADMIN_CODE,
+        roles: [VITE_APP_ADMIN_CODE],
         to_link: '/faculty',
         icon_before: <MdOutlineSchool />,
         submenu: false
@@ -94,7 +101,7 @@ export const ARRAY_LIST_MENU = [
     {
         id: 10,
         name_menu: 'Phân Quyền Người Dùng',
-        role: VITE_APP_ADMIN_CODE,
+        roles: [VITE_APP_ADMIN_CODE],
         to_link: '/permission',
         icon_before: <MdManageAccounts />,
         submenu: false

@@ -1,12 +1,12 @@
-const UserService = require('./user.service');
-const PageService = require('./page.service');
-const convertToObjectId = require('../utils/convertToObjectId');
-const FacultyService = require('./faculty.service');
+const UserService = require("./user.service");
+const PageService = require("./page.service");
+const convertToObjectId = require("../utils/convertToObjectId");
+const FacultyService = require("./faculty.service");
 
 class ProgressService {
     static getProgressByYear = async ({ pageStudentMajor, pageStudentLevelYear, pageStudentCohort, userId }) => {
         try {
-            const filterArr = [{ $in: ['$_id', '$$rowIds'] }, { $eq: ['$user', convertToObjectId(userId)] }];
+            const filterArr = [{ $in: ["$_id", "$$rowIds"] }, { $eq: ["$user", convertToObjectId(userId)] }];
 
             if (!userId) filterArr.splice(1, 1);
 
@@ -14,7 +14,7 @@ class ProgressService {
                 pageStudentMajor,
                 pageStudentLevelYear,
                 pageStudentCohort,
-                filterArr
+                filterArr,
             });
 
             return pageDetailsList;
@@ -30,13 +30,13 @@ class ProgressService {
         userId,
         levelYear,
         sortProgressPercentageValue,
-        queryString
+        queryString,
     }) => {
         try {
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 facultyName: faculty,
                 majorName: major,
-                cohortName: cohort
+                cohortName: cohort,
             });
 
             const filterData = {
@@ -44,10 +44,10 @@ class ProgressService {
                 cohort: parseInt(cohort),
                 userId: userId
                     ? {
-                          $regex: userId
+                          $regex: userId,
                       }
                     : userId,
-                isActive: true
+                isActive: true,
             };
 
             if (levelYear < currentLevelYear) delete filterData.isActive;
@@ -57,7 +57,7 @@ class ProgressService {
                 filterData,
                 levelYear,
                 sortProgressPercentageValue,
-                queryString
+                queryString,
             });
 
             return studentList;

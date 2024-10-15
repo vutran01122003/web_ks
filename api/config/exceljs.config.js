@@ -35,7 +35,7 @@ const addDataOfRow = (cell, colNumber, data) => {
             data.cohort = cell.value;
             break;
         case 9:
-            data.email = cell.value;
+            data.email = cell.value.text;
             break;
         case 10:
             data.phone = cell.value;

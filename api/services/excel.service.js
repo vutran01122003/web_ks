@@ -1,56 +1,75 @@
-const ExcelJS = require('exceljs/dist/es5');
-const User = require('../models/user.model');
-const { userColumn, addDataOfRow } = require('../config/exceljs.config');
-const accessService = require('../services/access.service');
+const ExcelJS = require("exceljs/dist/es5");
+const { userColumn, addDataOfRow } = require("../config/exceljs.config");
+const AccessService = require("../services/access.service");
+const User = require("../models/user.model");
+const createHttpError = require("http-errors");
+
+const { TALENT_ENGINEER_CODE } = process.env;
 
 class ExcelService {
     static exportUserQualified = async () => {
-        const workbook = new ExcelJS.Workbook();
+        try {
+            const workbook = new ExcelJS.Workbook();
 
-        const sheet = workbook.addWorksheet('My Sheet');
+            const sheet = workbook.addWorksheet("My Sheet");
 
-        sheet.columns = userColumn;
+            sheet.columns = userColumn;
 
-        let counter = 1;
+            let counter = 1;
 
-        const userData = await User.find();
+            const userData = await User.find();
 
-        userData.forEach((user) => {
-            user.s_no = counter;
+            userData.forEach((user) => {
+                user.s_no = counter;
 
-            sheet.addRow(user);
-            counter++;
-        });
+                sheet.addRow(user);
+                counter++;
+            });
 
-        sheet.getRow(1).eachCell((cell) => {
-            cell.font = { bold: true };
-        });
+            sheet.getRow(1).eachCell((cell) => {
+                cell.font = { bold: true };
+            });
 
-        return workbook;
+            return workbook;
+        } catch (error) {
+            throw createHttpError.BadRequest("Lỗi xuất dữ liệu exel");
+        }
     };
 
     static importUser = async (req) => {
-        const workbook = new ExcelJS.Workbook();
-        const buffer = req.file.buffer;
+        try {
+            let prevRegisterUserList = [];
+            const workbook = new ExcelJS.Workbook();
+            const buffer = req.file.buffer;
 
-        await workbook.xlsx.load(buffer);
+            await workbook.xlsx.load(buffer);
 
-        const worksheet = workbook.getWorksheet(1);
+            const worksheet = workbook.getWorksheet(1);
 
-        // const registerData = [];
-        worksheet.eachRow((row, rowNumber) => {
-            if (rowNumber > 1) {
-                const data = {};
-                data.password = '1111';
-                row.eachCell((cell, colNumber) => {
-                    if (colNumber > 1) {
-                        addDataOfRow(cell, colNumber, data);
-                    }
-                });
-                accessService.register(data);
-                // registerData.push(data);
-            }
-        });
+            worksheet.eachRow((row, rowNumber) => {
+                if (rowNumber > 1) {
+                    const data = {};
+                    data.password = "1111";
+                    row.eachCell((cell, colNumber) => {
+                        if (colNumber > 1) {
+                            addDataOfRow(cell, colNumber, data);
+                        }
+                    });
+                    prevRegisterUserList.push(data);
+                }
+            });
+
+            await Promise.all(
+                prevRegisterUserList.map((prevRegisterUser) =>
+                    AccessService.register({
+                        data: prevRegisterUser,
+                        groupCode: TALENT_ENGINEER_CODE,
+                    })
+                )
+            );
+        } catch (error) {
+            throw createHttpError.BadRequest("Lỗi nhập dữ liệu exel");
+        }
     };
 }
 

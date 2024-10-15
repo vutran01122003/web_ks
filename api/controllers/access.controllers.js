@@ -1,21 +1,21 @@
-const accessService = require('../services/access.service');
-const jwtService = require('../services/jwt.service');
-const createError = require('http-errors');
-const PermissionService = require('../services/permission.service');
+const accessService = require("../services/access.service");
+const jwtService = require("../services/jwt.service");
+const createError = require("http-errors");
+const { TALENT_ENGINEER_CODE } = process.env;
 
 class AccessControllers {
     getInfoUser = async (req, res, next) => {
         try {
-            const accessToken = req?.headers['x-token'] || req.cookies?.accessToken;
+            const accessToken = req?.headers["x-token"] || req.cookies?.accessToken;
             const user = await accessService.getUserInfo(res.locals.userId);
 
-            if (!user.isActive) throw createError.BadRequest('Tài khoản đã bị khóa');
+            if (!user.isActive) throw createError.BadRequest("Tài khoản đã bị khóa");
 
             res.status(200).json({
                 user,
                 token: {
-                    accessToken
-                }
+                    accessToken,
+                },
             });
         } catch (error) {
             next(error);
@@ -26,39 +26,39 @@ class AccessControllers {
         try {
             const loggedUser = await accessService.login(req.body);
 
-            if (!loggedUser.isSuccessLogin) throw createError.Unauthorized('Đăng nhập không thành công');
+            if (!loggedUser.isSuccessLogin) throw createError.Unauthorized("Đăng nhập không thành công");
 
-            if (loggedUser.typePassword !== 'password') {
+            if (loggedUser.typePassword !== "password") {
                 return res.status(200).send({
-                    status: 'Đăng nhập thành công',
+                    status: "Đăng nhập thành công",
                     data: {
                         firstLogin: {
                             userId: req.body.userId,
-                            birthday: req.body.password
-                        }
-                    }
+                            birthday: req.body.password,
+                        },
+                    },
                 });
             }
 
-            if (loggedUser?.data && !loggedUser?.data.isActive) throw createError.BadRequest('Tài khoản đã bị khóa');
+            if (loggedUser?.data && !loggedUser?.data.isActive) throw createError.BadRequest("Tài khoản đã bị khóa");
 
             const accessToken = await jwtService.signAccessToken({
-                userData: loggedUser?.data
+                userData: loggedUser?.data,
             });
 
             res.status(200)
-                .cookie('accessToken', accessToken, {
+                .cookie("accessToken", accessToken, {
                     // httpOnly: true,
                     // secure: true
                 })
                 .send({
-                    status: 'Đăng nhập thành công',
+                    status: "Đăng nhập thành công",
                     data: {
                         user: loggedUser?.data,
                         token: {
-                            accessToken
-                        }
-                    }
+                            accessToken,
+                        },
+                    },
                 });
         } catch (error) {
             next(error);
@@ -68,28 +68,32 @@ class AccessControllers {
     register = async (req, res, next) => {
         try {
             const data = req.body;
-            const group = await PermissionService.getGroupByGroupCode({ groupCode: '002' });
-            const createdUser = await accessService.register({ data, groupId: group._id });
+            const groupCode = data.groupCode || TALENT_ENGINEER_CODE;
 
-            if (!createdUser) throw createError.BadRequest('Tạo tài khoản người dùng thất bại');
+            const createdUser = await accessService.register({
+                data,
+                groupCode,
+            });
+
+            if (!createdUser) throw createError.BadRequest("Tạo tài khoản người dùng thất bại");
 
             const accessToken = await jwtService.signAccessToken({
-                userData: createdUser
+                userData: createdUser,
             });
 
             res.status(201)
-                .cookie('accessToken', accessToken, {
-                    sameSite: 'none',
-                    secure: true
+                .cookie("accessToken", accessToken, {
+                    sameSite: "none",
+                    secure: true,
                 })
                 .send({
-                    status: 'Cập nhật thông tin thành công',
+                    status: "Cập nhật thông tin thành công",
                     data: {
                         user: createdUser,
                         token: {
-                            accessToken
-                        }
-                    }
+                            accessToken,
+                        },
+                    },
                 });
         } catch (error) {
             next(error);
@@ -99,13 +103,13 @@ class AccessControllers {
     logout = async (req, res, next) => {
         try {
             return res
-                .cookie('accessToken', '', {
+                .cookie("accessToken", "", {
                     httpOnly: true,
-                    sameSite: 'none',
-                    secure: true
+                    sameSite: "none",
+                    secure: true,
                 })
                 .send({
-                    status: 'Đăng xuất thành công'
+                    status: "Đăng xuất thành công",
                 });
         } catch (error) {
             next(error);

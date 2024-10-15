@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN_SECRET } = process.env;
 
 class JwtService {
@@ -8,7 +8,7 @@ class JwtService {
                 { userId: userData._id, roles: userData.roles },
                 ACCESS_TOKEN_SECRET,
                 {
-                    expiresIn: '5h'
+                    expiresIn: "5h",
                 },
                 (err, data) => {
                     if (err) {

@@ -14,9 +14,9 @@ POST {{url}}/api/faculties
 Content-Type: application/json
 
 {
-    "facultyName": "CNTT",
-    "managerIdList": ["65e06f20580884a201b801d7"],
-    "majorList": ["CNTT", "KTPM", "KHMT"]
+    "facultyName": "công nghệ thông tin",
+    "managerIdList": [],
+    "majorList": ["công nghệ thông tin", "kỹ thuật phần mềm", "khoa học máy tinh"]
 }
 
 ### Get faculties

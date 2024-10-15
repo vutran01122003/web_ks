@@ -10,13 +10,21 @@ import { getPages } from '../../redux/actions/pageAction';
 import { ARRAY_LIST_MENU } from '../../assets/data/menu';
 import { renderSideBar } from '../../helpers/renderSideBar';
 
+const {
+    VITE_APP_ADMIN_CODE,
+    VITE_APP_FACULTY_MANAGER_CODE,
+    VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE,
+    VITE_APP_TALENT_ENGINEER_CODE,
+    VITE_APP_GOAL_PAGE
+} = import.meta.env;
+
 const LayoutSideBar = ({ auth }) => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
     const [toggleMenu, setToggleMenu] = useState(false);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
-    const { VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE, VITE_APP_TALENTED_ENGINEER_CODE } = import.meta.env;
-    const determineAuth = [VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE].includes(auth?.user?.group.groupCode);
+    const groupCode = auth?.user?.group.groupCode;
+    const determineAuth = [VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE].includes(groupCode);
     const levelYearList = Array.from(Array(auth?.user?.levelYear || 1).keys()).map((x) => x + 1);
 
     const menuRef = useRef([
@@ -72,7 +80,7 @@ const LayoutSideBar = ({ auth }) => {
     }, [menuRef, subMenu]);
 
     useEffect(() => {
-        if (auth?.user && VITE_APP_TALENTED_ENGINEER_CODE === auth?.user?.group.groupCode)
+        if (auth?.user && [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(groupCode))
             dispatch(
                 getPages({
                     userId: auth.user._id,
@@ -92,7 +100,7 @@ const LayoutSideBar = ({ auth }) => {
     const renderArrMenu = ARRAY_LIST_MENU.map((item) => {
         return (
             <React.Fragment key={item.id}>
-                {item.allow || item.role === auth?.user.group.groupCode ? (
+                {item.allow || item.roles.includes(auth?.user.group.groupCode) ? (
                     <>
                         {item.submenu ? (
                             <div
@@ -108,7 +116,7 @@ const LayoutSideBar = ({ auth }) => {
                                         <span className={toggleMenu ? 'none_text__menu--item' : ''}>
                                             {item.name_menu}
                                         </span>
-                                        {item.dynamicPage === 'goals' && (
+                                        {item.dynamicPage === VITE_APP_GOAL_PAGE && (
                                             <select
                                                 className="level_year_list"
                                                 name="level_year_list"

@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { toFullName } from '../utils/handleString';
 
 const Home = ({ auth }) => {
-    const { VITE_APP_TALENTED_ENGINEER_CODE } = import.meta.env;
+    const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
     const dispatch = useDispatch();
     const progress = useSelector(progressSelector);
@@ -21,7 +21,11 @@ const Home = ({ auth }) => {
     const groupCode = auth?.user.group.groupCode;
 
     const handleGetProgressByYear = () => {
-        if (auth?.user && groupCode === VITE_APP_TALENTED_ENGINEER_CODE && !progress.goalsInfoData[levelYear]) {
+        if (
+            auth?.user &&
+            [VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) &&
+            !progress.goalsInfoData[levelYear]
+        ) {
             dispatch(
                 getProgressByYear({
                     userId: auth?.user._id,
@@ -57,12 +61,11 @@ const Home = ({ auth }) => {
             <div className="information__welcome">
                 <div className="wecome__name">
                     <span>
-                        Xin chào,
-                        {toFullName({
+                        {`Xin chào,
+                        ${toFullName({
                             lastName: auth?.user?.lastName,
                             firstName: auth?.user?.firstName
-                        })}
-                        !
+                        })}!`}
                     </span>
                     <div className="to__profile">
                         <Link to="/profile">
@@ -75,21 +78,22 @@ const Home = ({ auth }) => {
                 </div>
             </div>
 
-            {auth?.user.group.groupCode === VITE_APP_TALENTED_ENGINEER_CODE && auth.user?.annualActivitiesProgress && (
-                <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
-            )}
+            {[VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) &&
+                auth.user?.annualActivitiesProgress && (
+                    <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
+                )}
 
             <div className="container__top transform__animation--top">
                 <LayoutInfo user={auth?.user} />
                 <>
-                    {groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
+                    {[VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) && (
                         <LayoutChart chartData={chartData} auth={auth} setLevelYear={setLevelYear} />
                     )}
                 </>
             </div>
 
             <div>
-                {groupCode === VITE_APP_TALENTED_ENGINEER_CODE && (
+                {[VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) && (
                     <GoalsInfo levelYear={levelYear} goalsInfo={goalsInfo} />
                 )}
             </div>

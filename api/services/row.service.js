@@ -1,7 +1,7 @@
-const Row = require('../models/row.model');
-const createError = require('http-errors');
-const PageService = require('./page.service');
-const convertToObjectId = require('../utils/convertToObjectId');
+const Row = require("../models/row.model");
+const createError = require("http-errors");
+const PageService = require("./page.service");
+const convertToObjectId = require("../utils/convertToObjectId");
 
 class RowService {
     static addRow = async ({ data }) => {
@@ -15,15 +15,15 @@ class RowService {
                 PageService.calculateTotalScoreOfRow({
                     pageId: page,
                     tableId: table,
-                    content: contentObj
-                })
+                    content: contentObj,
+                }),
             ]);
 
             if (!rowList) {
                 rowList = new Row({
                     user,
                     table,
-                    page
+                    page,
                 });
 
                 rowList.content.push({ rowValue: contentObj });
@@ -43,7 +43,7 @@ class RowService {
 
             return {
                 rowList,
-                rowItemId
+                rowItemId,
             };
         } catch (error) {
             throw error;
@@ -65,28 +65,28 @@ class RowService {
                     $match: {
                         table: convertToObjectId(table),
                         user: convertToObjectId(user),
-                        page: convertToObjectId(page)
-                    }
+                        page: convertToObjectId(page),
+                    },
                 },
                 {
-                    $unwind: '$content'
+                    $unwind: "$content",
                 },
                 {
                     $group: {
-                        _id: '$_id',
-                        count: { $sum: 1 }
-                    }
+                        _id: "$_id",
+                        count: { $sum: 1 },
+                    },
                 },
                 {
                     $project: {
                         _id: 0,
-                        count: 1
-                    }
-                }
+                        count: 1,
+                    },
+                },
             ]);
 
             if (quantityDemanded[0] && quantityDemanded[0].count === pageData.tables.id(table).quantityDemanded)
-                throw createError.BadRequest('Số Lượng Đã Đạt Tối Đa');
+                throw createError.BadRequest("Số Lượng Đã Đạt Tối Đa");
 
             return quantityDemanded;
         } catch (error) {
@@ -100,34 +100,39 @@ class RowService {
             const { totalScore } = await PageService.calculateTotalScoreOfRow({
                 pageId: page,
                 tableId: table,
-                content
+                content,
             });
 
             const row = await Row.findById(rowListId);
+
+            if (!row) throw createError.NotFound("Hoạt động không tồn tại");
+
             const contentData = row.content.id(contentId);
 
             if (contentData?.deadline && contentData.deadline.getTime() < new Date().getTime())
                 throw createError.BadRequest(
-                    `Đã quá hạn nộp là ${contentData?.deadline && contentData.deadline.toLocaleString('en-GB')}`
+                    `Đã quá hạn nộp là ${contentData?.deadline && contentData.deadline.toLocaleString("en-GB")}`
                 );
 
-            contentData.status = 'chờ duyệt';
+            contentData.status = "chờ duyệt";
             contentData.addProofFiles = [];
             contentData.rowValue = content;
             contentData.totalScore = totalScore;
 
             const updatedRow = await Row.findOneAndUpdate(
-                { _id: rowListId, 'content._id': contentId },
+                { _id: rowListId, "content._id": contentId },
                 {
-                    'content.$': contentData
+                    "content.$": contentData,
                 },
                 { new: true }
             );
 
+            if (!updatedRow) throw createError.NotFound("Hoạt động không tồn tại");
+
             return {
                 status: 200,
-                msg: 'Nộp lại thành công',
-                data: updatedRow ? updatedRow : null
+                msg: "Nộp lại thành công",
+                data: updatedRow ? updatedRow : null,
             };
         } catch (error) {
             throw error;
@@ -136,20 +141,22 @@ class RowService {
 
     static addProofFiles = async ({ uploadedFiles, rowListId, rowItemId }) => {
         try {
-            await Row.findOneAndUpdate(
-                { _id: rowListId, 'content._id': rowItemId },
+            const updatedRow = await Row.findOneAndUpdate(
+                { _id: rowListId, "content._id": rowItemId },
                 {
                     $set: {
-                        'content.$.proofFilesList': uploadedFiles.map((uploadedFile) => ({
+                        "content.$.proofFilesList": uploadedFiles.map((uploadedFile) => ({
                             fileUrl: uploadedFile.Location,
-                            fileType: uploadedFile.Key.split('.').slice(-1)[0],
-                            originalName: uploadedFile.Key.split('/').slice(-1)[0],
+                            fileType: uploadedFile.Key.split(".").slice(-1)[0],
+                            originalName: uploadedFile.Key.split("/").slice(-1)[0],
                             Key: uploadedFile.key,
-                            Bucket: uploadedFile.Bucket
-                        }))
-                    }
+                            Bucket: uploadedFile.Bucket,
+                        })),
+                    },
                 }
             );
+
+            if (!updatedRow) throw createError.NotFound("Hoạt động không tồn tại");
         } catch (error) {
             throw error;
         }
@@ -164,7 +171,7 @@ class RowService {
         activity,
         pageStudentMajor,
         pageStudentCohort,
-        pageStudentLevelYear
+        pageStudentLevelYear,
     }) => {
         let rowStatus = null;
         let skip = (page - 1) * limit;
@@ -172,17 +179,17 @@ class RowService {
         if (removedDynamicRows > 0) skip = skip - removedDynamicRows;
 
         switch (rowsType) {
-            case 'pendingRows':
-                rowStatus = 'chờ duyệt';
+            case "pendingRows":
+                rowStatus = "chờ duyệt";
                 break;
-            case 'acceptedRows':
-                rowStatus = 'đã duyệt';
+            case "acceptedRows":
+                rowStatus = "đã duyệt";
                 break;
-            case 'rejectedRows':
-                rowStatus = 'từ chối';
+            case "rejectedRows":
+                rowStatus = "từ chối";
                 break;
-            case 'resubmitedRows':
-                rowStatus = 'phải nộp lại';
+            case "resubmitedRows":
+                rowStatus = "phải nộp lại";
                 break;
             default:
                 throw createError.BadRequest();
@@ -192,83 +199,83 @@ class RowService {
             const dynamicRows = await Row.aggregate([
                 {
                     $unwind: {
-                        path: '$content',
-                        preserveNullAndEmptyArrays: true
-                    }
+                        path: "$content",
+                        preserveNullAndEmptyArrays: true,
+                    },
                 },
                 {
                     $match: {
-                        'content.status': rowStatus
-                    }
+                        "content.status": rowStatus,
+                    },
                 },
 
                 {
                     $lookup: {
-                        from: 'pages',
-                        localField: 'page',
-                        foreignField: '_id',
-                        as: 'page'
-                    }
+                        from: "pages",
+                        localField: "page",
+                        foreignField: "_id",
+                        as: "page",
+                    },
                 },
                 {
                     $unwind: {
-                        path: '$page',
-                        preserveNullAndEmptyArrays: true
-                    }
+                        path: "$page",
+                        preserveNullAndEmptyArrays: true,
+                    },
                 },
                 {
                     $match: {
-                        'page.pageStudentMajor': pageStudentMajor,
-                        'page.pageStudentCohort': Number.parseInt(pageStudentCohort),
-                        'page.pageStudentLevelYear': Number.parseInt(pageStudentLevelYear)
-                    }
+                        "page.pageStudentMajor": pageStudentMajor,
+                        "page.pageStudentCohort": Number.parseInt(pageStudentCohort),
+                        "page.pageStudentLevelYear": Number.parseInt(pageStudentLevelYear),
+                    },
                 },
                 {
                     $lookup: {
-                        from: 'users',
-                        localField: 'user',
-                        foreignField: '_id',
-                        as: 'user'
-                    }
+                        from: "users",
+                        localField: "user",
+                        foreignField: "_id",
+                        as: "user",
+                    },
                 },
                 {
-                    $match: userFilterConditions
+                    $match: userFilterConditions,
                 },
                 {
-                    $skip: skip * 1
+                    $skip: skip * 1,
                 },
                 {
-                    $limit: limit * 1
+                    $limit: limit * 1,
                 },
                 {
                     $unwind: {
-                        path: '$page.tables',
-                        preserveNullAndEmptyArrays: true
-                    }
+                        path: "$page.tables",
+                        preserveNullAndEmptyArrays: true,
+                    },
                 },
                 {
                     $match: {
-                        'page.tables.tableName': activity,
+                        "page.tables.tableName": activity,
 
                         $expr: {
-                            $eq: ['$table', '$page.tables._id']
-                        }
-                    }
+                            $eq: ["$table", "$page.tables._id"],
+                        },
+                    },
                 },
                 {
                     $project: {
                         _id: 1,
                         user: 1,
                         page: 1,
-                        content: ['$content']
-                    }
-                }
+                        content: ["$content"],
+                    },
+                },
             ]);
 
             return {
                 status: 200,
                 msg: `Lấy dữ liệu chỉ tiêu ${rowStatus.toLowerCase()} thành công`,
-                data: dynamicRows
+                data: dynamicRows,
             };
         } catch (error) {
             throw error;
@@ -277,27 +284,29 @@ class RowService {
 
     static updateRowStatus = async ({ noteValue, rowListId, contentIdList, status, deadline, isTimedExtension }) => {
         try {
-            let content = '';
+            let content = "";
             switch (status) {
-                case 'phải nộp lại':
-                    content = `${isTimedExtension ? 'Gia hạn thành công' : 'Cho phép nộp lại thành công'} `;
+                case "phải nộp lại":
+                    content = `${isTimedExtension ? "Gia hạn thành công" : "Cho phép nộp lại thành công"} `;
                     break;
-                case 'đã duyệt':
-                    content = 'Duyệt thành công';
+                case "đã duyệt":
+                    content = "Duyệt thành công";
                     break;
-                case 'từ chối':
-                    content = 'Đã Từ chối hoạt động';
+                case "từ chối":
+                    content = "Đã Từ chối hoạt động";
                     break;
                 default:
-                    content = 'Có lỗi hệ thống xảy ra';
+                    content = "Có lỗi hệ thống xảy ra";
                     break;
             }
 
             const row = await Row.findById(rowListId);
 
-            if (row.content.id(contentIdList[0]).status !== 'phải nộp lại' && isTimedExtension) {
+            if (!row) throw createError.NotFound("Hoạt động không tồn tại");
+
+            if (row.content.id(contentIdList[0]).status !== "phải nộp lại" && isTimedExtension) {
                 status = row.content.id(contentIdList[0]).status;
-                content = 'Hoạt động đã được nộp lại trước đó';
+                content = "Hoạt động đã được nộp lại trước đó";
             }
 
             row.content.id(contentIdList[0]).status = status;
@@ -307,20 +316,20 @@ class RowService {
 
             if (noteValue) {
                 await Row.findOneAndUpdate(
-                    { _id: rowListId, 'content._id': contentIdList[0] },
+                    { _id: rowListId, "content._id": contentIdList[0] },
                     {
                         $push: {
-                            'content.$.note': {
-                                value: noteValue
-                            }
-                        }
+                            "content.$.note": {
+                                value: noteValue,
+                            },
+                        },
                     }
                 );
             }
 
             return {
                 code: 200,
-                msg: content
+                msg: content,
             };
         } catch (error) {
             throw error;

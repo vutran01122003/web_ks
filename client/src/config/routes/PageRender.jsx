@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../../redux/selector';
 
+const pages = import.meta.glob('../../pages/**/*.jsx');
+
 function PageRender() {
     const { page, id } = useParams();
     const location = useLocation();
     const pathName = location.pathname;
     const [PageComponent, setPageComponent] = useState(null);
     const [notFound, setNotFound] = useState(false);
-    const privatePages = [];
 
     const auth = useSelector(authSelector);
     const pageName = id
@@ -18,31 +19,15 @@ function PageRender() {
         : page?.replace(/\w/, page?.charAt(0).toUpperCase());
 
     useEffect(() => {
-        if (pathName.includes('/page/')) {
-            import(/* @vite-ignore */ '../../pages/DynamicPage')
-                .then((module) => {
-                    setPageComponent(module);
-                    setNotFound(false);
-                })
-                .catch((e) => {
-                    setPageComponent(null);
-                    setNotFound(true);
-                });
+        const pagePath = `../../pages/${pathName.includes('/page/') ? 'DynamicPage' : pageName}.jsx`;
+        if (pages[pagePath]) {
+            pages[pagePath]().then((module) => {
+                setPageComponent(module);
+                setNotFound(false);
+            });
         } else {
-            if (privatePages.includes(page) && !auth?.user.roles.includes('0004')) {
-                setNotFound(true);
-                setPageComponent(null);
-            } else {
-                import(/* @vite-ignore */ `../../pages/${pageName}`)
-                    .then((module) => {
-                        setPageComponent(module);
-                        setNotFound(false);
-                    })
-                    .catch((e) => {
-                        setPageComponent(null);
-                        setNotFound(true);
-                    });
-            }
+            setPageComponent(null);
+            setNotFound(true);
         }
     }, [page, id, setPageComponent, auth?.user, pathName]);
 

@@ -1,22 +1,22 @@
-const createError = require('http-errors');
-const User = require('../models/user.model');
-const Page = require('../models/page.model');
-const Row = require('../models/row.model');
-const PermissionService = require('./permission.service');
-const FacultyService = require('./faculty.service');
-const Pagination = require('../utils/Pagination');
-const [FACULTY_MANAGER, ADMIN] = ['003', '004'];
+const createError = require("http-errors");
+const User = require("../models/user.model");
+const Page = require("../models/page.model");
+const Row = require("../models/row.model");
+const PermissionService = require("./permission.service");
+const FacultyService = require("./faculty.service");
+const Pagination = require("../utils/Pagination");
+const [FACULTY_MANAGER, ADMIN] = ["003", "004"];
 const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUBMITED_STATUS] = [
-    'đã duyệt',
-    'chờ duyệt',
-    'từ chối',
-    'phải nộp lại'
+    "đã duyệt",
+    "chờ duyệt",
+    "từ chối",
+    "phải nộp lại",
 ];
 const STATUS = {
-    [PENDING_STATUS]: 'numberOfPendingActivity',
-    [ACCEPTED_STATUS]: 'numberOfAcceptedActivity',
-    [REJECTED_STATUS]: 'numberOfRejectedActivity',
-    [RESUBMITED_STATUS]: 'numberOfResubmitedActivity'
+    [PENDING_STATUS]: "numberOfPendingActivity",
+    [ACCEPTED_STATUS]: "numberOfAcceptedActivity",
+    [REJECTED_STATUS]: "numberOfRejectedActivity",
+    [RESUBMITED_STATUS]: "numberOfResubmitedActivity",
 };
 
 class UserService {
@@ -24,10 +24,10 @@ class UserService {
         try {
             let result = null;
 
-            if (id) result = await User.findById(id).populate('group').lean();
+            if (id) result = await User.findById(id).populate("group").lean();
             else if (idList.length > 0) result = await User.find({ _id: { $in: [...idList] } }).lean();
 
-            if (!result) throw createError.NotFound('Người dùng không tồn tại');
+            if (!result) throw createError.NotFound("Người dùng không tồn tại");
             return result;
         } catch (error) {
             throw error;
@@ -45,7 +45,7 @@ class UserService {
     static getUserByUserId = async ({ userId }) => {
         try {
             const user = await User.findOne({ userId: userId }).lean();
-            if (!user) throw createError.NotFound('Người dùng không tồn tại');
+            if (!user) throw createError.NotFound("Người dùng không tồn tại");
             return user;
         } catch (error) {
             throw error;
@@ -60,25 +60,25 @@ class UserService {
                 { $match: fields },
                 {
                     $lookup: {
-                        from: 'groups',
-                        localField: 'group',
-                        foreignField: '_id',
-                        as: 'group'
-                    }
+                        from: "groups",
+                        localField: "group",
+                        foreignField: "_id",
+                        as: "group",
+                    },
                 },
                 {
-                    $unwind: '$group'
+                    $unwind: "$group",
                 },
                 {
                     $match: {
-                        'group.groupCode': {
-                            $nin: [FACULTY_MANAGER, ADMIN]
-                        }
-                    }
+                        "group.groupCode": {
+                            $nin: [FACULTY_MANAGER, ADMIN],
+                        },
+                    },
                 },
                 {
-                    $sort: sort
-                }
+                    $sort: sort,
+                },
             ]),
             queryString
         );
@@ -90,8 +90,10 @@ class UserService {
         try {
             const originalUser = await User.findByIdAndUpdate(userId, {
                 ...userData,
-                birthday: new Date(userData.birthday)
+                birthday: new Date(userData.birthday),
             });
+
+            if (!originalUser) throw createError.NotFound("Người dùng không tồn tại");
 
             const updatedUser = await User.findById(userId);
             const { faculty, major, cohort } = updatedUser;
@@ -102,7 +104,7 @@ class UserService {
                 const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty,
                     majorName: major,
-                    cohortName: cohort
+                    cohortName: cohort,
                 });
 
                 updatedUser.levelYear = currentLevelYear;
@@ -111,12 +113,12 @@ class UserService {
                     this.createNewAnnualActivitiesProgress({
                         pageInfo: {
                             pageStudentCohort: cohort,
-                            pageStudentMajor: major
+                            pageStudentMajor: major,
                         },
                         currentLevelYear,
-                        userId
+                        userId,
                     }),
-                    Row.deleteMany({ user: userId })
+                    Row.deleteMany({ user: userId }),
                 ]);
             }
 
@@ -133,16 +135,16 @@ class UserService {
         try {
             const user = await User.findById(userId)
                 .populate({
-                    path: 'group',
-                    model: 'group',
+                    path: "group",
+                    model: "group",
                     populate: {
                         path: `method.${method}`,
-                        model: 'role'
-                    }
+                        model: "role",
+                    },
                 })
                 .lean();
 
-            if (!user) throw createError.NotFound('Người dùng không tồn tại');
+            if (!user) throw createError.NotFound("Người dùng không tồn tại");
 
             for (let i = 0; i < user.group.method[method].length; i++) {
                 const roleInfo = user.group.method[method][i];
@@ -163,7 +165,7 @@ class UserService {
         cohort,
         levelYear,
         updatedCohortData,
-        groupIdList
+        groupIdList,
     }) => {
         try {
             const { progressPercentage, score } = conditions;
@@ -174,11 +176,11 @@ class UserService {
                 major: major.toLowerCase(),
                 cohort: parseInt(cohort),
                 [`annualActivitiesProgress.${index}.progressPercentage`]: {
-                    $lt: Number.parseFloat(progressPercentage)
+                    $lt: Number.parseFloat(progressPercentage),
                 },
                 [`annualActivitiesProgress.${index}.totalScore`]: {
-                    $lt: Number.parseFloat(score)
-                }
+                    $lt: Number.parseFloat(score),
+                },
             };
 
             if (!progressPercentage) delete filterUser[`annualActivitiesProgress.${index}.progressPercentage`];
@@ -186,11 +188,11 @@ class UserService {
 
             const invalidUserList = await User.find({
                 [`annualActivitiesProgress.${index}.progressPercentage`]: {
-                    $exists: false
+                    $exists: false,
                 },
                 group: {
-                    $nin: groupIdList
-                }
+                    $nin: groupIdList,
+                },
             });
 
             if (invalidUserList.length > 0)
@@ -199,10 +201,10 @@ class UserService {
                         this.createNewAnnualActivitiesProgress({
                             pageInfo: {
                                 pageStudentCohort: invalidUser.cohort,
-                                pageStudentMajor: invalidUser.major
+                                pageStudentMajor: invalidUser.major,
                             },
                             currentLevelYear: invalidUser.levelYear,
-                            userId: invalidUser._id
+                            userId: invalidUser._id,
                         })
                     )
                 );
@@ -212,13 +214,13 @@ class UserService {
                     {
                         ...filterUser,
                         group: {
-                            $nin: groupIdList
-                        }
+                            $nin: groupIdList,
+                        },
                     },
                     {
                         $set: {
-                            isActive: false
-                        }
+                            isActive: false,
+                        },
                     }
                 ),
                 User.updateMany(
@@ -226,12 +228,12 @@ class UserService {
                         major: major.toLowerCase(),
                         cohort: parseInt(cohort),
                         group: {
-                            $nin: groupIdList
-                        }
+                            $nin: groupIdList,
+                        },
                     },
                     {
                         $set: {
-                            levelYear: nextYearValue
+                            levelYear: nextYearValue,
                         },
                         $push: {
                             annualActivitiesProgress: {
@@ -244,15 +246,15 @@ class UserService {
                                         numberOfAcceptedActivity: 0,
                                         numberOfRejectedActivity: 0,
                                         numberOfResubmitedActivity: 0,
-                                        progressPercentage: 0
-                                    }
+                                        progressPercentage: 0,
+                                    },
                                 ],
-                                $position: index + 1
-                            }
-                        }
+                                $position: index + 1,
+                            },
+                        },
                     }
                 ),
-                FacultyService.updateCohortById(updatedCohortData)
+                FacultyService.updateCohortById(updatedCohortData),
             ]);
         } catch (error) {
             throw error;
@@ -264,23 +266,23 @@ class UserService {
             const studentList = new Pagination(
                 User.aggregate([
                     {
-                        $match: filterData
+                        $match: filterData,
                     },
                     {
                         $lookup: {
-                            from: 'groups',
-                            localField: 'group',
-                            foreignField: '_id',
-                            as: 'group'
-                        }
+                            from: "groups",
+                            localField: "group",
+                            foreignField: "_id",
+                            as: "group",
+                        },
                     },
                     {
-                        $unwind: '$group'
+                        $unwind: "$group",
                     },
                     {
                         $match: {
-                            'group.groupCode': { $nin: ['003', '004'] }
-                        }
+                            "group.groupCode": { $nin: ["003", "004"] },
+                        },
                     },
                     {
                         $project: {
@@ -294,16 +296,16 @@ class UserService {
                             isActive: 1,
                             group: 1,
                             progressData: {
-                                $arrayElemAt: ['$annualActivitiesProgress', levelYear - 1]
-                            }
-                        }
+                                $arrayElemAt: ["$annualActivitiesProgress", levelYear - 1],
+                            },
+                        },
                     },
                     {
                         $sort: {
-                            'progressData.progressPercentage': sortProgressPercentageValue,
-                            'progressData.totalScore': sortProgressPercentageValue
-                        }
-                    }
+                            "progressData.progressPercentage": sortProgressPercentageValue,
+                            "progressData.totalScore": sortProgressPercentageValue,
+                        },
+                    },
                 ]),
                 queryString
             ).paginating();
@@ -316,19 +318,19 @@ class UserService {
 
     static updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
         try {
-            const ACCEPTED_STATUS = 'đã duyệt';
+            const ACCEPTED_STATUS = "đã duyệt";
             const fieldOfStatus = {
-                'chờ duyệt': 'numberOfPendingActivity',
-                'đã duyệt': 'numberOfAcceptedActivity',
-                'từ chối': 'numberOfRejectedActivity',
-                'phải nộp lại': 'numberOfResubmitedActivity'
+                "chờ duyệt": "numberOfPendingActivity",
+                "đã duyệt": "numberOfAcceptedActivity",
+                "từ chối": "numberOfRejectedActivity",
+                "phải nộp lại": "numberOfResubmitedActivity",
             };
 
             const index = levelYear - 1;
 
             const updatedInfo = {
                 [`annualActivitiesProgress.${index}.${fieldOfStatus[status]}`]: 1,
-                [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1
+                [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1,
             };
 
             if (prevStatus === status) return;
@@ -343,23 +345,25 @@ class UserService {
 
             const user = await User.findById(userId);
 
+            if (!user) throw createError.NotFound("Người dùng không tồn tại");
+
             if (!user.annualActivitiesProgress[index]) {
                 await this.createNewAnnualActivitiesProgress({
                     pageInfo: {
                         pageStudentCohort: user.cohort,
-                        pageStudentMajor: user.major
+                        pageStudentMajor: user.major,
                     },
                     currentLevelYear: user.levelYear,
-                    userId
+                    userId,
                 });
             } else {
                 const updatedUser = await User.findByIdAndUpdate(
                     userId,
                     {
-                        $inc: updatedInfo
+                        $inc: updatedInfo,
                     },
                     {
-                        new: true
+                        new: true,
                     }
                 );
 
@@ -367,16 +371,17 @@ class UserService {
                 const annualActivityProgress = updatedUser.annualActivitiesProgress[index];
                 let isExistsNetigaveValue = false;
 
+                // In the worst case, the negative value exists so we must reset and calculate all field
                 for (let i = 0; i < keys.length; i++) {
                     const field = fieldOfStatus[keys[i]];
                     if (annualActivityProgress[field] < 0) {
                         await this.createNewAnnualActivitiesProgress({
                             pageInfo: {
                                 pageStudentCohort: user.cohort,
-                                pageStudentMajor: user.major
+                                pageStudentMajor: user.major,
                             },
                             currentLevelYear: user.levelYear,
-                            userId
+                            userId,
                         });
                         isExistsNetigaveValue = true;
                         break;
@@ -409,17 +414,19 @@ class UserService {
                 numberOfRejectedActivity: 0,
                 numberOfResubmitedActivity: 0,
                 progressPercentage: 0,
-                totalScore: 0
+                totalScore: 0,
             };
 
             const [pages, user] = await Promise.all([
                 Page.find({
                     pageStudentCohort,
                     pageStudentMajor,
-                    pageStudentLevelYear
+                    pageStudentLevelYear,
                 }),
-                User.findById(userId)
+                User.findById(userId),
             ]);
+
+            if (!user) throw createError.NotFound("Người dùng không tồn tại");
 
             const tableList = pages.reduce((tableList, page) => {
                 pageIdList.push(page._id);
@@ -433,7 +440,7 @@ class UserService {
 
             const rows = await Row.find({
                 user: userId,
-                page: { $in: pageIdList }
+                page: { $in: pageIdList },
             });
 
             if (rows.length > 0) {
@@ -449,13 +456,15 @@ class UserService {
                     return {
                         ...annualActivityProgress,
                         [key]: annualActivityProgress[key] + 1,
-                        totalScore: status === ACCEPTED_STATUS ? totalScore + contentItem.totalScore : totalScore
+                        totalScore: status === ACCEPTED_STATUS ? totalScore + contentItem.totalScore : totalScore,
                     };
                 }, annualActivitiyProgress);
             }
 
+            const numberOfAcceptedActivity = progressData?.numberOfAcceptedActivity || 0;
+
             const progressPercentage = numberOfRequiredActivity
-                ? (progressData?.numberOfAcceptedActivity / numberOfRequiredActivity) * 100
+                ? (numberOfAcceptedActivity / numberOfRequiredActivity) * 100
                 : 0;
 
             user.annualActivitiesProgress[pageStudentLevelYear - 1] = {
@@ -463,7 +472,7 @@ class UserService {
                 ...annualActivitiyProgress,
                 ...progressData,
                 numberOfRequiredActivity,
-                progressPercentage
+                progressPercentage,
             };
             await user.save();
         } catch (error) {
@@ -482,8 +491,8 @@ class UserService {
                             pageInfo: {
                                 pageStudentCohort: pageInfo.pageStudentCohort,
                                 pageStudentMajor: pageInfo.pageStudentMajor,
-                                pageStudentLevelYear: index + 1
-                            }
+                                pageStudentLevelYear: index + 1,
+                            },
                         })
                     )
             );
@@ -509,15 +518,15 @@ class UserService {
                 cohort: parseInt(page.pageStudentCohort),
                 major: page.pageStudentMajor,
                 group: {
-                    $nin: groupIdList
-                }
+                    $nin: groupIdList,
+                },
             };
 
             const invalidUserList = await User.find({
                 ...filterData,
                 [`annualActivitiesProgress.${index}.numberOfRequiredActivity`]: {
-                    $exists: false
-                }
+                    $exists: false,
+                },
             }).lean();
 
             await Promise.all(
@@ -525,10 +534,10 @@ class UserService {
                     this.createNewAnnualActivitiesProgress({
                         pageInfo: {
                             pageStudentMajor: invalidUser.major,
-                            pageStudentCohort: invalidUser.cohort
+                            pageStudentCohort: invalidUser.cohort,
                         },
                         currentLevelYear: invalidUser.levelYear,
-                        userId: invalidUser._id
+                        userId: invalidUser._id,
                     })
                 )
             );
@@ -538,8 +547,8 @@ class UserService {
             const userList = await User.find({
                 ...filterData,
                 _id: {
-                    $nin: invalidUserIdList
-                }
+                    $nin: invalidUserIdList,
+                },
             });
 
             if (userList.length > 0)
@@ -567,19 +576,19 @@ class UserService {
         try {
             const result = await Promise.all([
                 PermissionService.getGroupById({ groupId }),
-                this.getUserAndPopulateGroupById({ id: userId })
+                this.getUserAndPopulateGroupById({ id: userId }),
             ]);
 
-            if (!result[0]) throw createError.NotFound('Chức vụ không tồn tại');
-            if (!result[1]) throw createError.NotFound('Người dùng không tồn tại');
+            if (!result[0]) throw createError.NotFound("Chức vụ không tồn tại");
+            if (!result[1]) throw createError.NotFound("Người dùng không tồn tại");
 
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
                 {
-                    group: groupId
+                    group: groupId,
                 },
                 {
-                    new: true
+                    new: true,
                 }
             );
 

@@ -2,7 +2,7 @@ import { Outlet, Navigate } from 'react-router-dom';
 import LayoutSideBar from '../ComponentMenu/LayoutSideBar';
 import TopHeader from '../ComponentHeader/TopHeader';
 
-const { VITE_APP_TALENTED_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
+const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
 
 function Layout({ auth, pathName, groupCode }) {
     return (
@@ -20,9 +20,9 @@ function Layout({ auth, pathName, groupCode }) {
                             <Navigate to="/faculty" replace />
                         )}
 
-                        {(pathName !== '/' ||
-                            pathName !== '/home' ||
-                            groupCode === VITE_APP_TALENTED_ENGINEER_CODE) && <Outlet />}
+                        {(pathName !== '/' || pathName !== '/home' || groupCode === VITE_APP_TALENT_ENGINEER_CODE) && (
+                            <Outlet />
+                        )}
                     </div>
                 </main>
             </div>

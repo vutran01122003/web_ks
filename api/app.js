@@ -1,20 +1,21 @@
-const express = require('express');
-const { MulterError } = require('multer');
-const createError = require('http-errors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const compression = require('compression');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
+const express = require("express");
+const { MulterError } = require("multer");
+const { ValidationError } = require("joi");
+const createError = require("http-errors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const compression = require("compression");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const app = express();
 
-require('./dbs/init.redis');
-require('./dbs/init.mongodb');
+require("./dbs/init.redis");
+require("./dbs/init.mongodb");
 
 const {
     morganType,
-    app: { clientDomain_v1, clientDomain_v2 }
-} = require('./config/config');
+    app: { clientDomain_v1, clientDomain_v2 },
+} = require("./config/config");
 
 // CORS config
 const whitelist = [clientDomain_v1, clientDomain_v2];
@@ -23,10 +24,10 @@ const corsOptions = {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true
+    credentials: true,
 };
 
 // MiddleWare
@@ -39,18 +40,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Router
-app.use('/api', require('./router/page'));
-app.use('/api', require('./router/access'));
-app.use('/api', require('./router/table'));
-app.use('/api', require('./router/news'));
-app.use('/api', require('./router/row'));
+app.use("/api", require("./router/page"));
+app.use("/api", require("./router/access"));
+app.use("/api", require("./router/table"));
+app.use("/api", require("./router/news"));
+app.use("/api", require("./router/row"));
 // app.use('/api', require('./router/chat'));
-app.use('/api', require('./router/faculty'));
-app.use('/api', require('./router/progress'));
-app.use('/api', require('./router/excel'));
-app.use('/api', require('./router/notification'));
-app.use('/api', require('./router/permission'));
-app.use('/api', require('./router/user'));
+app.use("/api", require("./router/faculty"));
+app.use("/api", require("./router/progress"));
+app.use("/api", require("./router/excel"));
+app.use("/api", require("./router/notification"));
+app.use("/api", require("./router/permission"));
+app.use("/api", require("./router/user"));
 
 // Catch NotFound
 app.use((req, res, next) => {
@@ -62,40 +63,49 @@ app.use((err, req, res, next) => {
     if (err instanceof MulterError) {
         let errInfo = {};
         switch (err.code) {
-            case 'LIMIT_FILE_SIZE':
+            case "LIMIT_FILE_SIZE":
                 errInfo = {
                     status: 413,
-                    msg: 'Kích thước file tối đa là 10MB'
+                    msg: "Kích thước file tối đa là 10MB",
                 };
                 break;
-            case 'LIMIT_FILE_COUNT':
+            case "LIMIT_FILE_COUNT":
                 errInfo = {
                     status: 413,
-                    msg: 'Giới hạn tải lên là 10 files'
+                    msg: "Giới hạn tải lên là 10 files",
                 };
                 break;
-            case 'LIMIT_UNEXPECTED_FILE':
+            case "LIMIT_UNEXPECTED_FILE":
                 errInfo = {
                     status: 422,
-                    msg: 'Định dạng file không đúng'
+                    msg: "Định dạng file không đúng",
                 };
                 break;
             default:
                 errInfo = {
                     status: 400,
-                    msg: 'Tải lên các files gặp sự cố'
+                    msg: "Tải lên các files gặp sự cố",
                 };
                 break;
         }
         return res.status(errInfo.status).json(errInfo);
     }
 
-    if (err) {
-        return res.status(err.status).json({
-            status: err.status,
-            msg: err.message
+    if (err instanceof ValidationError) {
+        return res.status(400).json({
+            status: 400,
+            msg: err.details[0].message,
+            path: err.details[0].path,
         });
     }
+
+    const statusCode = err?.status || 500;
+    const message = err?.message || "Có lỗi xảy ra";
+
+    return res.status(statusCode).json({
+        status: statusCode,
+        msg: message,
+    });
 });
 
 module.exports = app;

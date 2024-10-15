@@ -37,7 +37,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow }) => {
                                 className={`modal_btn_open ${
                                     page.pageStudentLevelYear === auth.user.levelYear ? 'active' : 'inactive'
                                 }`}
-                                onClick={handleOpenModal}
+                                onClick={page.pageStudentLevelYear === auth.user.levelYear ? handleOpenModal : null}
                             >
                                 Thêm hoạt động
                             </button>

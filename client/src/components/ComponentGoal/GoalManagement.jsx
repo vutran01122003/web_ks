@@ -9,7 +9,7 @@ import { getTable, removeTable, updateTable } from '../../redux/actions/tableAct
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import UpdateTableModal from '../ComponentModal/UpdateTableModal';
 import RemovePageModal from '../ComponentModal/RemovePageModal';
-import ComfirmModal from '../ComponentModal/ConfirmModal';
+import ConfirmModal from '../ComponentModal/ConfirmModal';
 import AddTableModal from '../ComponentModal/AddTableModal';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import EmptyDataNotification from '../ComponentEmptyData/EmptyDataNotification';
@@ -221,7 +221,7 @@ function GoalsManagement() {
                 )}
 
                 {isVisibleUpdateStatusPageModal && (
-                    <ComfirmModal
+                    <ConfirmModal
                         headerContent={currentStatus ? 'Ẩn Nhóm Chỉ Tiêu' : 'Hiện Thị Nhóm Chỉ Tiếu'}
                         bodyContent={`Bạn chắc chắn muốn ${currentStatus ? 'ẩn' : 'hiện'} ${subPageName}`}
                         toggleConfirmModalDisplay={onHideUpdateStatusPageModal}
@@ -230,7 +230,7 @@ function GoalsManagement() {
                 )}
 
                 {isVisibleRemoveTableModal && (
-                    <ComfirmModal
+                    <ConfirmModal
                         headerContent={`Xóa Chỉ Tiêu`}
                         bodyContent={`Bạn chắc chắn muốn xóa chỉ tiêu ${tableInfo.tableName}`}
                         noteContent={`Sau khi xóa chỉ tiêu ${tableInfo.tableName} thì tiến độ hoàn thành và điểm số của sinh viên cho chỉ tiêu này sẽ mất đi.`}
@@ -247,7 +247,7 @@ function GoalsManagement() {
                 )}
 
                 {isVisibleUpdateStatusTableModal && (
-                    <ComfirmModal
+                    <ConfirmModal
                         headerContent={`${tableInfo.isActive ? 'Ẩn' : 'Hiển Thị'} Chỉ Tiêu ${tableInfo.tableName}`}
                         bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'ẩn' : 'hiện'} chỉ tiêu ${tableInfo.tableName}`}
                         noteContent={
@@ -287,7 +287,7 @@ function GoalsManagement() {
                                                 )}
                                             </td>
 
-                                            <td>
+                                            <td className="activity_wrapper">
                                                 {filteredPageItem.tables.length > 0 &&
                                                     filteredPageItem.tables.map((table, index) => (
                                                         <div key={table._id} className="activity_name">

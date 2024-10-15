@@ -4,7 +4,7 @@
     background-color: $main_color;
     padding: 12px 0px;
     border: none;
-    margin: 10px 0px;
+    margin: 20px 0px;
     font-size: 18px;
     color: $color_white;
     font-weight: 600;
@@ -14,4 +14,8 @@
     &:hover {
         background-color: $main_color_hover;
     }
+}
+
+.text-sm {
+    font-size: 16px;
 }

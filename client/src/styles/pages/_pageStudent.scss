@@ -24,16 +24,18 @@
                 outline: none;
             }
 
-            .search_wrapper {
+            .search_wrapper,
+            .add_student_btn_wrapper {
                 display: flex;
               
-                button {
+                label, button {
                     height: 40px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     width: 120px;
                     border-radius: 3px;
+                    font-size: 14px;
                     border: none;
                     color: #fff;
                     background-color: #1677ff;
@@ -46,7 +48,6 @@
                     }
                 }
             }
-            
 
             > div:nth-child(2) {
                 > div{

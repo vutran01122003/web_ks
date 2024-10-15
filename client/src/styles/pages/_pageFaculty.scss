@@ -10,12 +10,13 @@
         text-align: center;
 
         th {
-            background: #8284e6;
+            border: 1px solid #dddddd;
+            background: #006fee;
             color: #fff;
+            padding: 8px;
         }
 
-        td,
-        th {
+        td {
             border: 1px solid #dddddd;
             padding: 0 4px;
         }

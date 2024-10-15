@@ -28,7 +28,7 @@
             text-transform: uppercase;
             color: #222222;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             border-bottom: 1px solid rgb(217, 216, 216);
         }
@@ -140,7 +140,7 @@
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid $line_color;
-            
+
             &__title {
                 font-size: 18px;
                 font-weight: 600;
@@ -804,18 +804,18 @@
     width: 450px;
     max-width: 100%;
     text-align: center;
-    
+
     .remove_page_body {
         display: flex;
         flex-direction: column;
         gap: 10px;
 
-        &>span:first-child {
+        & > span:first-child {
             font-weight: 500;
             font-size: 16px;
         }
 
-        &>span:last-child {
+        & > span:last-child {
             font-weight: 400;
             color: gray;
             font-size: 12px;
@@ -863,23 +863,23 @@
     width: 450px;
     max-width: 100%;
     text-align: center;
-    
+
     .confirm_modal_body {
         display: flex;
         flex-direction: column;
         gap: 10px;
 
-        &>span:first-child {
+        & > span:first-child {
             font-weight: 600;
             font-size: 16px;
         }
 
-        &>span:last-child {
+        & > span:last-child {
             font-weight: 400;
             color: gray;
             font-size: 14px;
             padding-bottom: 20px;
-            text-align: justify;
+            text-align: center;
         }
     }
 
@@ -1047,8 +1047,8 @@
                     font-weight: 600;
                 }
             }
-           
-            .input_item, 
+
+            .input_item,
             .select_item {
                 width: 100%;
                 height: 35px;
@@ -1059,7 +1059,7 @@
                 border: 1px solid #929292;
                 border-radius: 3px;
             }
-            
+
             .radio_group {
                 display: flex;
                 align-items: center;
@@ -1108,7 +1108,7 @@
 
             &.close_btn {
                 background: #f0635c;
-            }  
+            }
 
             &.update_btn {
                 background: #1677ff;
@@ -1125,7 +1125,7 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-    
+
     .goal_details_modal_header {
         position: -webkit-sticky;
         position: sticky;
@@ -1152,7 +1152,7 @@
 
         .goal_details_modal_body_content {
             flex: 1;
-            
+
             .goals_info_container {
                 height: 100%;
                 box-shadow: unset;
