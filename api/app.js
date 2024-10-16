@@ -104,7 +104,7 @@ app.use((err, req, res, next) => {
 
     return res.status(statusCode).json({
         status: statusCode,
-        msg: message,
+        msg: statusCode !== 500 ? message : "Có lỗi hệ thống xảy ra",
     });
 });
 

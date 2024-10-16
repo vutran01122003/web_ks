@@ -31,7 +31,7 @@ export const getProgressByYear =
     };
 
 export const getAnnualTaskProgress =
-    ({ major, levelYear, faculty, cohort, isCompleted, userId, sortProgressPercentage, page, limit }) =>
+    ({ major, levelYear, faculty, cohort, groupCode, isCompleted, userId, sortProgressPercentage, page, limit }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -45,6 +45,7 @@ export const getAnnualTaskProgress =
                 major,
                 faculty,
                 cohort,
+                groupCode,
                 levelYear,
                 isCompleted,
                 userId,

@@ -2,19 +2,15 @@ import { getDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from './globalTypes';
 
 export const getActivities =
-    ({ pageStudentMajor, pageStudentCohort, pageStudentLevelYear }) =>
+    ({ pageStudentMajor, pageStudentCohort, pageStudentLevelYear, pageTalentEngineerType }) =>
     async (dispatch) => {
         try {
             const res = await getDataApi(
-                `/page/activities?pageStudentMajor=${pageStudentMajor}&pageStudentCohort=${pageStudentCohort}&pageStudentLevelYear=${pageStudentLevelYear}`
+                `/page/activities?pageStudentMajor=${pageStudentMajor}&pageStudentCohort=${pageStudentCohort}&pageStudentLevelYear=${pageStudentLevelYear}&pageTalentEngineerType=${pageTalentEngineerType}`
             );
 
             const activities =
-                res.data.data.length > 0
-                    ? res.data.data[0].tables.map(
-                          (activity) => activity.tableName
-                      )
-                    : [];
+                res.data.data.length > 0 ? res.data.data[0].tables.map((activity) => activity.tableName) : [];
 
             dispatch({
                 type: GLOBALTYPES.ACTIVITIES.GET_ACTIVITIES,
@@ -29,8 +25,7 @@ export const getActivities =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Lấy Dữ Liệu Hoạt Động Thất Bại'
+                            : error?.response?.data.msg || 'Lấy Dữ Liệu Hoạt Động Thất Bại'
                 }
             });
         }

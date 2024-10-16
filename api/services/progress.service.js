@@ -4,7 +4,13 @@ const convertToObjectId = require("../utils/convertToObjectId");
 const FacultyService = require("./faculty.service");
 
 class ProgressService {
-    static getProgressByYear = async ({ pageStudentMajor, pageStudentLevelYear, pageStudentCohort, userId }) => {
+    static getProgressByYear = async ({
+        pageStudentMajor,
+        pageStudentLevelYear,
+        pageStudentCohort,
+        userId,
+        groupCode,
+    }) => {
         try {
             const filterArr = [{ $in: ["$_id", "$$rowIds"] }, { $eq: ["$user", convertToObjectId(userId)] }];
 
@@ -15,6 +21,7 @@ class ProgressService {
                 pageStudentLevelYear,
                 pageStudentCohort,
                 filterArr,
+                groupCode,
             });
 
             return pageDetailsList;
@@ -26,10 +33,11 @@ class ProgressService {
     static getAllProgress = async ({
         major,
         cohort,
+        groupCode,
         faculty,
         userId,
         levelYear,
-        sortProgressPercentageValue,
+        sortProgressPercentage,
         queryString,
     }) => {
         try {
@@ -56,7 +64,8 @@ class ProgressService {
             const studentList = await UserService.getAnnualTaskProgress({
                 filterData,
                 levelYear,
-                sortProgressPercentageValue,
+                groupCode,
+                sortProgressPercentage: sortProgressPercentage * 1,
                 queryString,
             });
 

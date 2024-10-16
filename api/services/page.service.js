@@ -3,7 +3,7 @@ const Page = require("../models/page.model");
 const UserService = require("./user.service");
 const convertToObjectId = require("../utils/convertToObjectId");
 
-const { GOAL_PAGE, NEWS_PAGE } = process.env;
+const { TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE, GOAL_PAGE, NEWS_PAGE } = process.env;
 
 class PageService {
     static createPage = async (data) => {
@@ -16,6 +16,7 @@ class PageService {
                 pageFaculty,
                 pageStudentCohort,
                 pageStudentMajor,
+                pageTalentEngineerType,
                 pageStudentLevelYear,
             } = data;
 
@@ -23,6 +24,7 @@ class PageService {
                 pageName,
                 pageStudentCohort,
                 pageStudentMajor,
+                pageTalentEngineerType,
                 pageStudentLevelYear,
             }).lean();
 
@@ -39,6 +41,7 @@ class PageService {
                     pageFaculty,
                     pageStudentCohort,
                     pageStudentMajor,
+                    pageTalentEngineerType,
                     pageStudentLevelYear,
                     tables,
                     pageType,
@@ -102,6 +105,7 @@ class PageService {
                         pageStudentMajor: { $first: "$pageStudentMajor" },
                         pageStudentCohort: { $first: "$pageStudentCohort" },
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
+                        pageTalentEngineerType: { $first: "$pageTalentEngineerType" },
                         isActive: { $first: "$isActive" },
                         tables: {
                             $push: "$tables",
@@ -125,7 +129,12 @@ class PageService {
         }
     };
 
-    static getActivities = async ({ pageStudentMajor, pageStudentCohort, pageStudentLevelYear }) => {
+    static getActivities = async ({
+        pageStudentMajor,
+        pageStudentCohort,
+        pageStudentLevelYear,
+        pageTalentEngineerType,
+    }) => {
         try {
             const pages = await Page.aggregate([
                 {
@@ -133,6 +142,7 @@ class PageService {
                         pageStudentMajor,
                         pageStudentCohort: Number.parseInt(pageStudentCohort),
                         pageStudentLevelYear: Number.parseInt(pageStudentLevelYear),
+                        pageTalentEngineerType: pageTalentEngineerType,
                         isActive: true,
                     },
                 },
@@ -346,15 +356,26 @@ class PageService {
         }
     };
 
-    static getPageDetailsList = async ({ pageStudentMajor, pageStudentLevelYear, pageStudentCohort, filterArr }) => {
+    static getPageDetailsList = async ({
+        pageStudentMajor,
+        pageStudentLevelYear,
+        pageStudentCohort,
+        groupCode,
+        filterArr,
+    }) => {
         try {
+            const fields = {
+                pageStudentMajor,
+                pageStudentLevelYear: +pageStudentLevelYear,
+                pageStudentCohort: +pageStudentCohort,
+            };
+
+            if ([TALENT_ENGINEER_TYPE, TEMPORARY_TALENT_ENGINEER_TYPE].includes(groupCode))
+                fields.pageTalentEngineerType = groupCode;
+
             const pageDetailsList = await Page.aggregate([
                 {
-                    $match: {
-                        pageStudentMajor,
-                        pageStudentLevelYear: pageStudentLevelYear * 1,
-                        pageStudentCohort: pageStudentCohort * 1,
-                    },
+                    $match: fields,
                 },
                 {
                     $unwind: "$tables",

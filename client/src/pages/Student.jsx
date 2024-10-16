@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
-import { facultySelector, studentSelector } from '../redux/selector';
-import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
-import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 import ConfirmModal from '../components/ComponentModal/ConfirmModal';
 import { importUser } from '../redux/actions/excelAction';
+import { facultySelector, studentSelector } from '../redux/selector';
+import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
+import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
+import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
+import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
 
 const Student = () => {
-    const LIMIT = 20;
+    const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
     const dispatch = useDispatch();
     const observe = useRef();
     const fileRef = useRef();
@@ -20,13 +21,22 @@ const Student = () => {
     const facultyState = useSelector(facultySelector);
     const studentState = useSelector(studentSelector);
 
-    const [filterData, setFilterData] = useState({});
+    const [userId, setUserId] = useState('');
+    const [major, setMajor] = useState('');
+    const [cohort, Setcohort] = useState('');
+    const [talentEngineerType, setTalentEngineerType] = useState('');
+    const [status, setStatus] = useState('');
+
     const [pageNumber, setPageNumber] = useState(1);
     const [sortByName, setSortByName] = useState(1);
     const [file, setFile] = useState('');
     const [currentUserData, setCurrentUserData] = useState(null);
     const [isVisibleGoalDetailsModal, setIsVisibleGoalDetailsModal] = useState(false);
     const [isVisibleStudentDetailsModal, setIsVisibleStudentDetailsModal] = useState(false);
+
+    const handleChangeUserId = (e) => {
+        setUserId(e.target.value);
+    };
 
     const handleFileSelected = (e) => {
         const file = Array.from(e.target.files)[0];
@@ -74,32 +84,13 @@ const Student = () => {
         [studentState.isLoading, studentState.isMaxPage]
     );
 
-    const onChangeFilterData = (e) => {
-        const value = e.target.value;
-        const key = e.target.name;
-
-        const temp = { ...filterData, [key]: value ? JSON.parse(value) : undefined };
-
-        if (temp[key] === undefined) delete temp[key];
-
-        setFilterData(temp);
-    };
-
     const handleStringValue = (stringValue) => {
         if (!stringValue) return 'Chưa Cập Nhật';
         return stringValue;
     };
 
-    const isValidfilterData = () => {
-        const keys = Object.keys(filterData);
-        if (!keys.includes('major') || !keys.includes('cohort')) return false;
-        return true;
-    };
-
     const onGetStudents = ({ page, sortByName }) => {
-        const { major, cohort, status, userId } = filterData;
-
-        if (!isValidfilterData()) {
+        if (!major || !cohort || !status) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -113,6 +104,7 @@ const Student = () => {
             getStudents({
                 major: major.majorName,
                 cohort: cohort.cohortName,
+                groupCode: talentEngineerType,
                 status: status,
                 userId: userId,
                 limit: LIMIT,
@@ -142,12 +134,6 @@ const Student = () => {
             onGetStudents({ page: pageNumber, sortByName });
         }
     }, [pageNumber, sortByName]);
-
-    useEffect(() => {
-        const temp = { ...filterData };
-        if (temp?.cohort) delete temp.cohort;
-        setFilterData(temp);
-    }, [filterData?.major]);
 
     return (
         <>
@@ -179,37 +165,22 @@ const Student = () => {
                 <div className="body__data--st">
                     <div className="line__sort">
                         <div className="filter_group">
-                            <select name="major" onChange={onChangeFilterData}>
-                                <option value="">Chọn Chuyên Ngành</option>
-                                {facultyState?.faculty &&
-                                    facultyState.faculty.majors.map((major) => (
-                                        <option key={major._id} value={JSON.stringify(major)}>
-                                            {capitalizeFirstLetter(major.majorName)}
-                                        </option>
-                                    ))}
-                            </select>
-
-                            <select name="cohort" onChange={onChangeFilterData}>
-                                <option value="">Chọn Khóa</option>
-                                {filterData.major &&
-                                    filterData.major.cohortList.map((cohort) => (
-                                        <option key={cohort._id} value={JSON.stringify(cohort)}>
-                                            {cohort.cohortName}
-                                        </option>
-                                    ))}
-                            </select>
-
-                            <select name="status" onChange={onChangeFilterData}>
-                                <option value="">Tất cả</option>
-                                <option value={true}>Đang Hoạt Động</option>
-                                <option value={false}>Đã Khóa</option>
-                            </select>
+                            <SearchFilterComponent
+                                setMajorValue={setMajor}
+                                setCohortValue={Setcohort}
+                                setTalentEngineerType={setTalentEngineerType}
+                                setStatus={setStatus}
+                                majorValue={major}
+                                cohortValue={cohort}
+                                talentEngineerType={talentEngineerType}
+                                statusValue={status}
+                            />
 
                             <input
                                 type="text"
                                 name="userId"
                                 placeholder="Nhập Mã Sinh Viên"
-                                onChange={onChangeFilterData}
+                                onChange={handleChangeUserId}
                             />
                         </div>
 

@@ -1,26 +1,30 @@
-const createError = require('http-errors');
-const FacultyService = require('../services/faculty.service');
-const ProgressService = require('../services/progress.service');
-const UserService = require('../services/user.service');
-const PermissionService = require('../services/permission.service');
-const [FACULTY_MANAGER, ADMIN] = ['003', '004'];
+const createError = require("http-errors");
+const FacultyService = require("../services/faculty.service");
+const ProgressService = require("../services/progress.service");
+const UserService = require("../services/user.service");
+const PermissionService = require("../services/permission.service");
+const [FACULTY_MANAGER, ADMIN] = ["003", "004"];
+const { VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE, TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE } =
+    process.env;
 const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
-    'đã duyệt',
-    'chờ duyệt',
-    'từ chối',
-    'phải nộp lại'
+    "đã duyệt",
+    "chờ duyệt",
+    "từ chối",
+    "phải nộp lại",
 ];
 
 class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
         try {
             const { userId, pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
+            const { groupCode } = res.locals.userData.group;
 
             const pageDetailsList = await ProgressService.getProgressByYear({
                 pageStudentMajor,
                 pageStudentLevelYear,
                 pageStudentCohort,
-                userId: userId
+                userId: userId,
+                groupCode,
             });
 
             const completedTasks = pageDetailsList.reduce((arr, page) => {
@@ -39,7 +43,7 @@ class ProgressControllers {
                         acceptedTasksNum: 0,
                         rejectedTasksNum: 0,
                         resubmitedTasksNum: 0,
-                        pendingTasksNum: 0
+                        pendingTasksNum: 0,
                     };
 
                     table.rowValueList[0]?.content.forEach((content) => {
@@ -71,15 +75,15 @@ class ProgressControllers {
                         quantityDemanded,
                         completedTasksNum,
                         percent: Number.parseFloat((completedTasksNum / quantityDemanded) * 100),
-                        tables
-                    }
+                        tables,
+                    },
                 ];
             }, []);
 
             res.status(200).json({
                 status: 200,
-                msg: 'Lấy Quá Trình Hoàn Thành Chỉ Tiêu Theo Năm Thành Công',
-                data: completedTasks
+                msg: "Lấy Quá Trình Hoàn Thành Chỉ Tiêu Theo Năm Thành Công",
+                data: completedTasks,
             });
         } catch (error) {
             next(error);
@@ -88,23 +92,25 @@ class ProgressControllers {
 
     getAllProgress = async (req, res, next) => {
         try {
-            const { major, cohort, faculty, levelYear, userId, sortProgressPercentage, page, limit } = req.query;
+            const { major, cohort, groupCode, faculty, levelYear, userId, sortProgressPercentage, page, limit } =
+                req.query;
             const studentList = await ProgressService.getAllProgress({
                 major,
                 cohort,
                 faculty,
                 userId,
                 levelYear,
-                sortProgressPercentageValue: parseInt(sortProgressPercentage),
+                groupCode,
+                sortProgressPercentage: parseInt(sortProgressPercentage),
                 queryString: {
                     page,
-                    limit
-                }
+                    limit,
+                },
             });
 
             res.status(200).json({
-                msg: 'Lấy danh sách tiến độ hoàn thành hoạt động thành công',
-                data: studentList
+                msg: "Lấy danh sách tiến độ hoàn thành hoạt động thành công",
+                data: studentList,
             });
         } catch (error) {
             next(error);
@@ -119,9 +125,9 @@ class ProgressControllers {
                 FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty,
                     majorName: major,
-                    cohortName: cohort
+                    cohortName: cohort,
                 }),
-                PermissionService.getGroupsByGroupCode({ groupCodeList: [FACULTY_MANAGER, ADMIN] })
+                PermissionService.getGroupsByGroupCode({ groupCodeList: [FACULTY_MANAGER, ADMIN] }),
             ]);
 
             const groupIdList = groupList.map((group) => group._id);
@@ -133,7 +139,7 @@ class ProgressControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: `Kết thúc hoạt động nộp minh chứng của sinh viên khóa ${cohort} ngành ${major}`
+                msg: `Kết thúc hoạt động nộp minh chứng của sinh viên khóa ${cohort} ngành ${major}`,
             });
         } catch (error) {
             next(error);

@@ -124,7 +124,6 @@ function MediaUi() {
 
                                 <div className="add_news_type_container">
                                     <div className="add_news_type_wrapper">
-                                        <label className="add_news_type_label">Thêm loại tin tức:</label>
                                         <input
                                             className="add_news_type_input"
                                             type="text"
@@ -140,7 +139,7 @@ function MediaUi() {
                         )}
                     >
                         <div onClick={handleToggleModal} className="select_new_type">
-                            {capitalizeFirstLetter(newsType) || 'Chọn loại tin tức'}
+                            {capitalizeFirstLetter(newsType) || 'Chọn Loại Tin Tức'}
                         </div>
                     </Tippy>
                 </div>
@@ -156,7 +155,7 @@ function MediaUi() {
                 />
 
                 <span className="file_input">
-                    <span className="file_input_wrapper">Ảnh bìa: </span>
+                    <span className="file_input_wrapper">Ảnh Bìa: </span>
                     <input
                         type="file"
                         onChange={(e) => {
@@ -169,7 +168,7 @@ function MediaUi() {
                 </span>
                 <ReactQuillComponent content={content} setContent={setContent} />
                 <div className="post_btn_wrapper">
-                    <button className="post_btn">Tạo bài viết</button>
+                    <button className="post_btn">Tạo Bài Viết</button>
                 </div>
             </form>
         </div>

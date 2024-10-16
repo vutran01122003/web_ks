@@ -33,17 +33,19 @@
 
                 input {
                     padding: 8px 12px;
-                    height: 40px;
+                    height: 41px;
                     font-weight: 600;
                     font-size: 14px;
                     background: none;
                     outline: none;
                     border: 1px solid rgb(222, 221, 221);
-                    min-width: 220px;
+                    width: 180px;
                 }
 
                 .year_info_input {
-                    cursor: not-allowed;
+                    &.not_allow {
+                        cursor: not-allowed;
+                    }
                 }
             }
 
@@ -530,12 +532,6 @@
                                         text-decoration: underline;
                                     }
                                 }
-                            }
-
-                            .icon_wrapper {
-                                position: relative;
-                                top: 2px;
-                                font-size: 18px;
                             }
                         }
 

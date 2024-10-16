@@ -1,11 +1,10 @@
-.filter_activity_wrapper {
+.search_filter_container {
     display: flex;
     align-items: center;
     gap: 10px;
 
-    .filter_activity {
+    .search_filter_wrapper {
         display: flex;
-        justify-content: center;
         align-items: center;
         flex-wrap: wrap;
 

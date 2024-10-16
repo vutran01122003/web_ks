@@ -41,9 +41,14 @@
 
             .select_new_type {
                 flex: 1;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
             }
 
             .select_new_type_label {
+                display: flex;
+                align-items: center;
                 padding: 8px 12px;
                 height: 45px;
                 outline: none;
@@ -55,7 +60,7 @@
             }
 
             .select_new_type_modal {
-                box-shadow: 0 0 5px gray;
+                box-shadow: 0 0 3px gray;
                 border-radius: 3px;
                 width: 100%;
                 background: #fff;
@@ -82,13 +87,8 @@
                         flex: 1;
                     }
 
-                    .add_news_type_label {
-                        color: gray;
-                    }
-
-                    .add_news_type_input,
-                    .add_news_type_label {
-                        font-weight: 600;
+                    .add_news_type_input {
+                        font-weight: 500;
                         height: 40px;
                         padding: 8px 12px;
                         outline: none;
@@ -131,7 +131,7 @@
             text-align: center;
 
             .post_btn {
-                width: 300px;
+                width: 200px;
                 max-width: 100%;
                 border: none;
                 outline: none;
@@ -140,7 +140,7 @@
                 font-weight: 600;
                 padding: 12px 20px;
                 background: #1c7ae6;
-                border-radius: 10px;
+                border-radius: 5px;
                 cursor: pointer;
                 transition: 0.1s linear;
 

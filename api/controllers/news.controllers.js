@@ -1,31 +1,31 @@
-const NewsService = require('../services/news.service');
-const UploadService = require('../services/upload.service');
-const createError = require('http-errors');
+const NewsService = require("../services/news.service");
+const UploadService = require("../services/upload.service");
+const createError = require("http-errors");
 
 class NewsControllers {
     createNews = async (req, res, next) => {
         try {
-            if (req.files.length <= 0) throw createError.BadRequest('Bài viết không có ảnh thu gọn');
+            if (req.files.length <= 0) throw createError.BadRequest("Bài viết không có ảnh thu gọn");
 
-            const userId = res.locals.userId;
+            const userId = res.locals.userData._id;
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `news_images`
+                folderName: `news_images`,
             });
 
             const createdNews = await NewsService.createNews({
                 newsData: {
                     ...req.body,
                     author: userId,
-                    cover: uploadedFiles[0].Location
-                }
+                    cover: uploadedFiles[0].Location,
+                },
             });
 
             res.status(201).json({
                 status: 201,
-                msg: 'Tạo tin tức thành công',
-                data: createdNews
+                msg: "Tạo tin tức thành công",
+                data: createdNews,
             });
         } catch (error) {
             next(error);
@@ -39,7 +39,7 @@ class NewsControllers {
             res.status(200).json({
                 status: news.status,
                 msg: news.msg,
-                data: news.data
+                data: news.data,
             });
         } catch (error) {
             next(error);
@@ -53,7 +53,7 @@ class NewsControllers {
             res.status(200).json({
                 status: newsDetails.status,
                 msg: newsDetails.msg,
-                data: newsDetails.data
+                data: newsDetails.data,
             });
         } catch (error) {
             next(error);
@@ -67,7 +67,7 @@ class NewsControllers {
             res.status(200).json({
                 data: updatedNews.data,
                 status: updatedNews.status,
-                msg: updatedNews.msg
+                msg: updatedNews.msg,
             });
         } catch (error) {
             next(error);
@@ -79,7 +79,7 @@ class NewsControllers {
 
         res.status(200).json({
             status: updatedNews.status,
-            msg: deletedNews.msg
+            msg: deletedNews.msg,
         });
     };
 }

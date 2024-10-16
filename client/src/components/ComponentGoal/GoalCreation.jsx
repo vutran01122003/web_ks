@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiSolidAddToQueue } from 'react-icons/bi';
 import Tippy from '@tippyjs/react/headless';
 import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from 'react-icons/ai';
@@ -6,20 +6,20 @@ import { FaCaretRight } from 'react-icons/fa';
 import { IoIosAddCircle } from 'react-icons/io';
 import { MdOutlineAddCircle } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { capitalizeFirstLetter } from '../../utils/handleString';
 import { getAllFaculties } from '../../redux/actions/facultyAction';
 import { facultySelector } from '../../redux/selector';
 import { createPage } from '../../redux/actions/pageAction';
 import ComponentButton from '../ComponentButton/ComponentButton';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import SearchFilterComponent from '../ComponentFilterData/SearchFilter';
 
-const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_GOAL_PAGE } = import.meta.env;
+const { VITE_APP_GOAL_PAGE } = import.meta.env;
 
 const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData }) => {
     const dispatch = useDispatch();
-    const faculty = useSelector(facultySelector);
+    const facultyState = useSelector(facultySelector);
+    const pageFaculty = facultyState.faculty;
     const [pageName, setPageName] = useState('');
-    const [pageFaculty, setPageFaculty] = useState('');
     const [pageStudentCohort, setPageStudentCohort] = useState('');
     const [pageStudentMajor, setPageStudentMajor] = useState('');
     const [pageStudentLevelYear, setPageStudentLevelYear] = useState('');
@@ -46,47 +46,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
             scoreType: FIXED_SCORE_TYPE
         }
     ]);
-
-    const handleChangeFacultySelect = (e) => {
-        if (!e.target.value) {
-            setPageFaculty('');
-            return;
-        }
-
-        setPageFaculty(JSON.parse(e.target.value));
-    };
-
-    const handleChangeMajorSelect = (e) => {
-        if (!e.target.value) {
-            setPageStudentMajor('');
-            return;
-        }
-
-        setPageStudentMajor(JSON.parse(e.target.value));
-    };
-
-    const handleChangeCohortSelect = (e) => {
-        if (!e.target.value) {
-            setPageStudentCohort('');
-            return;
-        }
-
-        const cohortInfo = JSON.parse(e.target.value);
-        setPageStudentCohort(cohortInfo);
-    };
-
-    const handleChangePageStudentLevelYear = (e) => {
-        setPageStudentLevelYear(e.target.value);
-    };
-
-    const handleChangeTalentEngineerTypeSelect = (e) => {
-        const groupCode = e.target.value;
-        setTalentEngineerType(groupCode);
-
-        if (groupCode === VITE_APP_TALENT_ENGINEER_CODE) {
-            setPageStudentLevelYear(pageStudentCohort.currentLevelYear);
-        }
-    };
 
     const addTable = () => {
         setTables([
@@ -205,9 +164,9 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
 
     const resetAllData = () => {
         setPageName('');
-        setPageFaculty('');
-        setPageStudentCohort('');
         setPageStudentMajor('');
+        setPageStudentCohort('');
+        setTalentEngineerType('');
         setPageStudentLevelYear('');
         setTables([
             {
@@ -279,16 +238,17 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 pageName,
                 pageType: VITE_APP_GOAL_PAGE,
                 pageFaculty: pageFaculty.facultyName,
-                pageStudentCohort: pageStudentCohort.cohortName,
+                pageStudentCohort: +pageStudentCohort.cohortName,
                 pageStudentMajor: pageStudentMajor.majorName,
-                pageStudentLevelYear,
+                pageTalentEngineerType: talentEngineerType,
+                pageStudentLevelYear: +pageStudentLevelYear,
                 tables: tables.map((table) => {
                     const tableData = {
                         tableName: table.tableName,
                         quantityDemanded: table.quantityDemanded,
                         description: table.description,
                         rowTitleList: table.rowTitleList,
-                        fixedScore: table.fixedScore
+                        fixedScore: +table.fixedScore
                     };
 
                     if (!table.fixedScore) delete table.fixedScore;
@@ -309,7 +269,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     };
 
     useEffect(() => {
-        if (faculty.facultyData.length === 0) dispatch(getAllFaculties());
+        if (facultyState.facultyData.length === 0) dispatch(getAllFaculties());
     }, []);
 
     useEffect(() => {
@@ -323,101 +283,21 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
         }
     }, [prevUpdatedTableData]);
 
-    // Reset filter
-    useEffect(() => {
-        setPageStudentMajor('');
-        setPageStudentCohort('');
-        setTalentEngineerType('');
-        setPageStudentLevelYear('');
-    }, [pageFaculty]);
-
-    useEffect(() => {
-        setPageStudentCohort('');
-        setTalentEngineerType('');
-        setPageStudentLevelYear('');
-    }, [pageStudentMajor]);
-
-    useEffect(() => {
-        setTalentEngineerType('');
-        setPageStudentLevelYear('');
-    }, [pageStudentCohort]);
-
-    useEffect(() => {
-        setPageStudentLevelYear('');
-    }, [talentEngineerType]);
-
     return (
         <div className="wrap__goals">
             <div className="body__goals">
                 {!handleAddTable && !handleUpdateTable && (
                     <div className="goals_info_wrapper">
                         <div className="faculty_info">
-                            <select value={JSON.stringify(pageFaculty)} onChange={handleChangeFacultySelect}>
-                                <option value="">Chọn Khoa</option>
-                                {faculty.facultyData.map((facultyItem) => (
-                                    <option key={facultyItem._id} value={JSON.stringify(facultyItem)}>
-                                        {capitalizeFirstLetter(facultyItem.facultyName)}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <select value={JSON.stringify(pageStudentMajor)} onChange={handleChangeMajorSelect}>
-                                <option value="">Chọn Chuyên Ngành</option>
-                                {pageFaculty && pageFaculty?.majors && (
-                                    <Fragment>
-                                        {pageFaculty.majors.map((majorItem) => (
-                                            <option key={majorItem._id} value={JSON.stringify(majorItem)}>
-                                                {capitalizeFirstLetter(majorItem?.majorName)}
-                                            </option>
-                                        ))}
-                                    </Fragment>
-                                )}
-                            </select>
-
-                            <select value={JSON.stringify(pageStudentCohort)} onChange={handleChangeCohortSelect}>
-                                <option value="">Chọn Khóa</option>
-                                {(pageStudentMajor || pageFaculty) && pageStudentMajor?.cohortList && (
-                                    <Fragment>
-                                        {pageStudentMajor.cohortList.map((cohort) => (
-                                            <option key={cohort._id} value={JSON.stringify(cohort)}>
-                                                {capitalizeFirstLetter(cohort?.cohortName)}
-                                            </option>
-                                        ))}
-                                    </Fragment>
-                                )}
-                            </select>
-
-                            <select value={talentEngineerType} onChange={handleChangeTalentEngineerTypeSelect}>
-                                <option value="">Chọn Đối Tượng</option>
-                                {(pageStudentMajor || pageFaculty) && pageStudentMajor?.cohortList && (
-                                    <Fragment>
-                                        <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng</option>
-                                        <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>
-                                            Kỹ Sư Tài Năng Bổ Sung
-                                        </option>
-                                    </Fragment>
-                                )}
-                            </select>
-
-                            <input
-                                className={
-                                    talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-                                        ? 'year_info_input'
-                                        : ''
-                                }
-                                type="text"
-                                readOnly={talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE ? false : true}
-                                onChange={
-                                    talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-                                        ? handleChangePageStudentLevelYear
-                                        : null
-                                }
-                                placeholder="Năm Học"
-                                value={
-                                    talentEngineerType === VITE_APP_TALENT_ENGINEER_CODE
-                                        ? pageStudentCohort.currentLevelYear || 1
-                                        : pageStudentLevelYear
-                                }
+                            <SearchFilterComponent
+                                setMajorValue={setPageStudentMajor}
+                                setCohortValue={setPageStudentCohort}
+                                setTalentEngineerType={setTalentEngineerType}
+                                setCurrentLevelYearValue={setPageStudentLevelYear}
+                                majorValue={pageStudentMajor}
+                                cohortValue={pageStudentCohort}
+                                talentEngineerType={talentEngineerType}
+                                currentLevelYearValue={pageStudentLevelYear}
                             />
                         </div>
                     </div>

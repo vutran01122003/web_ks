@@ -20,14 +20,21 @@ const STATUS = {
 };
 
 class UserService {
-    static getUserAndPopulateGroupById = async ({ id, idList }) => {
+    static getUserAndPopulateGroupById = async ({ id, idList, selectedFieldArr }) => {
         try {
             let result = null;
 
-            if (id) result = await User.findById(id).populate("group").lean();
-            else if (idList.length > 0) result = await User.find({ _id: { $in: [...idList] } }).lean();
+            if (id) {
+                result = await User.findById(id).populate("group").select(selectedFieldArr).lean();
+            } else if (idList.length > 0) {
+                result = await User.find({ _id: { $in: [...idList] } })
+                    .populate("group")
+                    .select(selectedFieldArr)
+                    .lean();
+            }
 
             if (!result) throw createError.NotFound("Người dùng không tồn tại");
+
             return result;
         } catch (error) {
             throw error;
@@ -52,7 +59,7 @@ class UserService {
         }
     };
 
-    static getUsersByFields = async ({ fields, queryString, sort }) => {
+    static getUsersByFields = async ({ fields, groupCode, queryString, sort }) => {
         Object.keys(fields).forEach((key) => fields[key] === undefined && delete fields[key]);
 
         const pagination = new Pagination(
@@ -71,9 +78,7 @@ class UserService {
                 },
                 {
                     $match: {
-                        "group.groupCode": {
-                            $nin: [FACULTY_MANAGER, ADMIN],
-                        },
+                        "group.groupCode": groupCode,
                     },
                 },
                 {
@@ -261,7 +266,13 @@ class UserService {
         }
     };
 
-    static getAnnualTaskProgress = async ({ filterData, levelYear, sortProgressPercentageValue, queryString }) => {
+    static getAnnualTaskProgress = async ({
+        filterData,
+        levelYear,
+        groupCode,
+        sortProgressPercentage,
+        queryString,
+    }) => {
         try {
             const studentList = new Pagination(
                 User.aggregate([
@@ -281,7 +292,7 @@ class UserService {
                     },
                     {
                         $match: {
-                            "group.groupCode": { $nin: ["003", "004"] },
+                            "group.groupCode": groupCode,
                         },
                     },
                     {
@@ -302,8 +313,8 @@ class UserService {
                     },
                     {
                         $sort: {
-                            "progressData.progressPercentage": sortProgressPercentageValue,
-                            "progressData.totalScore": sortProgressPercentageValue,
+                            "progressData.progressPercentage": sortProgressPercentage,
+                            "progressData.totalScore": sortProgressPercentage,
                         },
                     },
                 ]),

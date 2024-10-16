@@ -21,11 +21,9 @@
 @import './pages/pageChatbot';
 @import './pages/pageProgress';
 @import './pages/pageFaculty';
-@import './pages/pageActivity';
 @import './pages/pageNewsDetail';
 @import './pages/pageManagement';
 @import './pages/pageFirstLogin';
-
 
 // Component
 @import './components/tabs';
@@ -43,6 +41,7 @@
 @import './components/peddingGoalsComponent';
 @import './components/scrollBar';
 @import './components/scrollToTopButton';
+@import './components/searchFilterComponent';
 
 // Responsive
 @import './responsive/loginResponsive.scss';

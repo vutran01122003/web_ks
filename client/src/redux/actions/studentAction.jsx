@@ -2,7 +2,7 @@ import { getDataApi, patchDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from './globalTypes';
 
 export const getStudents =
-    ({ major, cohort, limit, page, status, userId, sortByName }) =>
+    ({ major, cohort, groupCode, limit, page, status, userId, sortByName }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -16,6 +16,7 @@ export const getStudents =
                 major,
                 cohort,
                 limit,
+                groupCode,
                 page,
                 status,
                 userId,

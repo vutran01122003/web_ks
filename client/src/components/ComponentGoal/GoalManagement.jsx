@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { IoIosAddCircleOutline } from 'react-icons/io';
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoSearch, IoRemoveCircleOutline, IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { IoSearch } from 'react-icons/io5';
 
-import { facultySelector, goalsSelector } from '../../redux/selector';
+import { goalsSelector } from '../../redux/selector';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
@@ -13,14 +12,15 @@ import ConfirmModal from '../ComponentModal/ConfirmModal';
 import AddTableModal from '../ComponentModal/AddTableModal';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import EmptyDataNotification from '../ComponentEmptyData/EmptyDataNotification';
+import SearchFilterComponent from '../ComponentFilterData/SearchFilter';
 
 function GoalsManagement() {
     const dispatch = useDispatch();
-    const facultyState = useSelector(facultySelector);
     const goals = useSelector(goalsSelector);
     const [major, setMajor] = useState('');
     const [cohort, setCohort] = useState('');
     const [levelYear, setLevelYear] = useState('');
+    const [talentEngineerType, setTalentEngineerType] = useState('');
 
     const [pageId, setPageId] = useState(null);
     const [subPageName, setSubPageName] = useState('');
@@ -111,7 +111,8 @@ function GoalsManagement() {
                 getGoals({
                     pageStudentMajor: major.majorName,
                     pageStudentCohort: cohort.cohortName,
-                    pageStudentLevelYear: Number.parseInt(levelYear)
+                    pageStudentLevelYear: Number.parseInt(levelYear),
+                    pageTalentEngineerType: talentEngineerType
                 })
             );
         } else {
@@ -133,11 +134,6 @@ function GoalsManagement() {
     }, [goals.table]);
 
     useEffect(() => {
-        setCohort('');
-        setLevelYear('');
-    }, [major]);
-
-    useEffect(() => {
         dispatch({
             type: GLOBALTYPES.GOALS.RESET_GOALS
         });
@@ -148,54 +144,16 @@ function GoalsManagement() {
             <div className="goal_management">
                 <div className="goal_management_filter">
                     <div className="goal_management_filter_select_group">
-                        <select
-                            className="item_filter"
-                            value={major ? JSON.stringify(major) : ''}
-                            onInput={(e) => {
-                                setMajor(e.target.value ? JSON.parse(e.target.value) : '');
-                            }}
-                        >
-                            <option value="">Chọn Chuyên Ngành</option>
-                            {facultyState.faculty.majors.map((major, index) => (
-                                <option value={JSON.stringify(major)} key={index}>
-                                    {capitalizeFirstLetter(major.majorName)}
-                                </option>
-                            ))}
-                        </select>
-                        <select
-                            className="item_filter"
-                            value={cohort ? JSON.stringify(cohort) : ''}
-                            onInput={(e) => {
-                                setCohort(e.target.value ? JSON.parse(e.target.value) : '');
-                            }}
-                        >
-                            <option value="">Chọn Khóa</option>
-                            {major?.cohortList &&
-                                major.cohortList.map((cohort, index) => (
-                                    <option value={JSON.stringify(cohort)} key={index}>
-                                        {cohort.cohortName}
-                                    </option>
-                                ))}
-                        </select>
-
-                        <select
-                            className="item_filter"
-                            value={levelYear}
-                            onInput={(e) => {
-                                setLevelYear(Number.parseInt(e.target.value));
-                            }}
-                        >
-                            <option value="">Chọn Năm</option>
-                            {cohort.currentLevelYear &&
-                                new Array(cohort.currentLevelYear)
-                                    .fill(0)
-                                    .map((_, index) => (
-                                        <option
-                                            value={cohort.currentLevelYear - index}
-                                            key={index}
-                                        >{`Năm ${cohort.currentLevelYear - index} ${index === 0 ? '(Hiện tại)' : '(Đã kết thúc)'}`}</option>
-                                    ))}
-                        </select>
+                        <SearchFilterComponent
+                            setMajorValue={setMajor}
+                            setCohortValue={setCohort}
+                            setTalentEngineerType={setTalentEngineerType}
+                            setCurrentLevelYearValue={setLevelYear}
+                            majorValue={major}
+                            cohortValue={cohort}
+                            talentEngineerType={talentEngineerType}
+                            currentLevelYearValue={levelYear}
+                        />
                     </div>
 
                     <button className="search_btn" onClick={onGetPages}>
@@ -261,17 +219,17 @@ function GoalsManagement() {
                 )}
 
                 <div className="goal_management_body">
-                    {goals.filteredPage.length > 0 ? (
-                        <div className="table_wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Nhóm Chỉ Tiêu</th>
-                                        <th>Trạng Thái</th>
-                                        <th>Chỉ Tiêu</th>
-                                        <th>Thao Tác Với Nhóm Chỉ Tiêu</th>
-                                    </tr>
-                                </thead>
+                    <div className="table_wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nhóm Chỉ Tiêu</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Chỉ Tiêu</th>
+                                    <th>Thao Tác Với Nhóm Chỉ Tiêu</th>
+                                </tr>
+                            </thead>
+                            {goals.filteredPage.length > 0 && (
                                 <tbody>
                                     {goals.filteredPage.map((filteredPageItem) => (
                                         <tr key={filteredPageItem._id}>
@@ -353,9 +311,6 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <div className="icon_wrapper">
-                                                        <IoIosAddCircleOutline />
-                                                    </div>
                                                     <span>Thêm Chỉ Tiêu Mới Vào Nhóm Chỉ Tiêu</span>
                                                 </div>
 
@@ -369,13 +324,6 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <div className="icon_wrapper">
-                                                        {filteredPageItem.isActive ? (
-                                                            <IoEyeOffOutline />
-                                                        ) : (
-                                                            <IoEyeOutline />
-                                                        )}
-                                                    </div>
                                                     <span>
                                                         {filteredPageItem.isActive
                                                             ? `Ẩn ${capitalizeFirstLetter(filteredPageItem.pageName)}`
@@ -392,20 +340,17 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <div className="icon_wrapper">
-                                                        <IoRemoveCircleOutline />
-                                                    </div>
                                                     <span>{`Xóa ${capitalizeFirstLetter(filteredPageItem.pageName)}`}</span>
                                                 </div>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <EmptyDataNotification />
-                    )}
+                            )}
+                        </table>
+
+                        {goals.filteredPage.length === 0 && <EmptyDataNotification />}
+                    </div>
                 </div>
             </div>
         </div>

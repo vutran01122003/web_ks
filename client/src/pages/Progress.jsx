@@ -2,30 +2,33 @@ import { useEffect, useRef, useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { LuTimerReset } from 'react-icons/lu';
 import { useDispatch, useSelector } from 'react-redux';
+import GLOBALTYPES from '../redux/actions/globalTypes';
 import { FaSortNumericDown, FaSortNumericDownAlt } from 'react-icons/fa';
 import { getAnnualTaskProgress } from '../redux/actions/progressAction';
-
 import { authSelector, facultySelector, progressSelector } from '../redux/selector';
-import GLOBALTYPES from '../redux/actions/globalTypes';
-import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
+import { toFullName } from '../utils/handleString';
 import StopSubmittingProofModal from '../components/ComponentModal/StopSubmittingProofModal';
 import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
+import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
 
 function ProgressUI() {
-    const LIMIT = 15;
+    const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
     const observer = useRef();
     const dispatch = useDispatch();
+
     const facultyState = useSelector(facultySelector);
+    const faculty = facultyState.faculty;
     const progress = useSelector(progressSelector);
     const auth = useSelector(authSelector);
-    const [cohort, setCohort] = useState('');
-    const [major, setMajor] = useState('');
-    const [levelYear, setLevelYear] = useState('');
+
     const [userId, setUserId] = useState('');
-    const [faculty, setFaculty] = useState(null);
-    const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
-    const [vissibleModal, setVissibleModal] = useState(false);
+    const [major, setMajor] = useState('');
+    const [cohort, setCohort] = useState('');
+    const [talentEngineerType, setTalentEngineerType] = useState('');
+    const [levelYear, setLevelYear] = useState('');
     const [pageNumber, setPageNumber] = useState(1);
+    const [vissibleModal, setVissibleModal] = useState(false);
+    const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
     const [isVisibleStopSubmitingProofBtn, setIsVisibleStopSubmitingProofBtn] = useState(false);
 
     const lastStudentElementRef = (node) => {
@@ -48,7 +51,7 @@ function ProgressUI() {
             type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
         });
 
-        handleSearchAnnualTaskProgress({
+        onSearchAnnualTaskProgress({
             page,
             sortProgressPercentage
         });
@@ -58,17 +61,18 @@ function ProgressUI() {
         setUserId(e.target.value);
     };
 
-    const handleSearchAnnualTaskProgress = ({ page, sortProgressPercentage }) => {
+    const onSearchAnnualTaskProgress = ({ page, sortProgressPercentage }) => {
         if (cohort && major && levelYear) {
             dispatch(
                 getAnnualTaskProgress({
-                    cohort: cohort?.cohortName,
-                    major: major?.majorName,
+                    cohort: cohort.cohortName,
+                    major: major.majorName,
+                    levelYear: +levelYear,
                     faculty: faculty.facultyName,
+                    groupCode: talentEngineerType,
                     userId: userId.trim(),
-                    levelYear,
-                    sortProgressPercentage,
-                    page,
+                    sortProgressPercentage: sortProgressPercentage * 1,
+                    page: +page,
                     limit: LIMIT
                 })
             );
@@ -80,6 +84,14 @@ function ProgressUI() {
                 }
             });
         }
+    };
+
+    const searchData = () => {
+        onResetAnnualTaskProgress({
+            page: 1,
+            sortProgressPercentage
+        });
+        setIsVisibleStopSubmitingProofBtn(cohort?.currentLevelYear === levelYear);
     };
 
     const handleToggleSortProgress = () => {
@@ -120,29 +132,12 @@ function ProgressUI() {
 
     useEffect(() => {
         if (cohort && major && levelYear && pageNumber > 1) {
-            handleSearchAnnualTaskProgress({
+            onSearchAnnualTaskProgress({
                 page: pageNumber,
                 sortProgressPercentage
             });
         }
     }, [pageNumber, sortProgressPercentage]);
-
-    useEffect(() => {
-        if (facultyState.faculty) {
-            setFaculty(facultyState.faculty);
-            setMajor('');
-            setCohort('');
-            setLevelYear('');
-        }
-    }, [facultyState.faculty]);
-
-    useEffect(() => {
-        setCohort('');
-    }, [major]);
-
-    useEffect(() => {
-        setLevelYear('');
-    }, [cohort]);
 
     return auth?.user ? (
         <div className="completion_shedule_container">
@@ -166,83 +161,19 @@ function ProgressUI() {
                 <div className="completion_shedule_body">
                     <div className="line__sort__completion-Shedule">
                         <div className="line__search">
-                            <div className="filter_group">
-                                <select
-                                    onChange={(e) => {
-                                        if (!e.target.value) {
-                                            setMajor('');
-                                            return;
-                                        }
-                                        setMajor(JSON.parse(e.target.value));
-                                    }}
-                                    value={major ? JSON.stringify(major) : ''}
-                                >
-                                    <option value="">Chọn Chuyên Ngành</option>
-                                    {faculty?.majors.map((majorItem) => (
-                                        <option key={majorItem._id} value={JSON.stringify(majorItem)}>
-                                            {capitalizeFirstLetter(majorItem.majorName)}
-                                        </option>
-                                    ))}
-                                </select>
-
-                                <select
-                                    onChange={(e) => {
-                                        if (!e.target.value) {
-                                            setCohort('');
-                                            return;
-                                        }
-                                        setCohort(JSON.parse(e.target.value));
-                                    }}
-                                    value={cohort ? JSON.stringify(cohort) : ''}
-                                >
-                                    <option value="">Chọn Khóa</option>
-                                    {major &&
-                                        major?.cohortList &&
-                                        major.cohortList.map((cohortItem) => (
-                                            <option key={cohortItem._id} value={JSON.stringify(cohortItem)}>
-                                                {cohortItem.cohortName}
-                                            </option>
-                                        ))}
-                                </select>
-
-                                <select
-                                    onChange={(e) => {
-                                        const year = e.target.value;
-                                        if (!year) {
-                                            setLevelYear('');
-                                            return;
-                                        }
-                                        setLevelYear(Number.parseInt(e.target.value));
-                                    }}
-                                    value={levelYear || ''}
-                                >
-                                    <option value="">Chọn Năm Học</option>
-
-                                    {cohort &&
-                                        new Array(cohort?.currentLevelYear)
-                                            .fill(0)
-                                            .map((_, index) => (
-                                                <option
-                                                    value={cohort?.currentLevelYear - index}
-                                                    key={index}
-                                                >{`Năm ${cohort?.currentLevelYear - index} ${index === 0 ? '(Hiện tại)' : '(Đã kết thúc)'}`}</option>
-                                            ))}
-                                </select>
-
-                                <input type="text" placeholder="Nhập Mã Sinh Viên" onChange={handleChangeUserIdValue} />
-                            </div>
-
+                            <SearchFilterComponent
+                                setMajorValue={setMajor}
+                                setCohortValue={setCohort}
+                                setCurrentLevelYearValue={setLevelYear}
+                                setTalentEngineerType={setTalentEngineerType}
+                                majorValue={major}
+                                cohortValue={cohort}
+                                talentEngineerType={talentEngineerType}
+                                currentLevelYearValue={levelYear}
+                            />
+                            <input type="text" placeholder="Nhập Mã Sinh Viên" onChange={handleChangeUserIdValue} />
                             <div className="btn_group">
-                                <button
-                                    className="search_btn"
-                                    onClick={() => {
-                                        onResetAnnualTaskProgress({
-                                            page: 1,
-                                            sortProgressPercentage
-                                        });
-                                        setIsVisibleStopSubmitingProofBtn(cohort?.currentLevelYear === levelYear);
-                                    }}
-                                >
+                                <button className="search_btn" onClick={searchData}>
                                     <IoSearch />
                                     Tìm Kiếm
                                 </button>

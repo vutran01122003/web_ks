@@ -2,35 +2,32 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Tabs, Input } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { activitiesSelector, authSelector, facultySelector, rowSelector } from '../redux/selector';
+import { authSelector, rowSelector } from '../redux/selector';
 import { getDynamicRows } from '../redux/actions/rowAction';
 import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDynamicRows';
 import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { getAllFaculties } from '../redux/actions/facultyAction';
-import { capitalizeFirstLetter } from '../utils/handleString';
-import { getActivities } from '../redux/actions/activitiesAction';
+
 import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
+import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
 
 const ActivityUi = () => {
-    const auth = useSelector(authSelector);
-    const row = useSelector(rowSelector);
-    const faculty = useSelector(facultySelector);
-    const activity = useSelector(activitiesSelector);
     const observer = useRef();
     const dispatch = useDispatch();
+
+    const auth = useSelector(authSelector);
+    const row = useSelector(rowSelector);
+
     const [refreshTabTrigger, setRefreshTabTrigger] = useState(false);
+    const [majorValue, setMajorValue] = useState({});
+    const [cohortValue, setCohortValue] = useState({});
+    const [talentEngineerType, setTalentEngineerType] = useState('');
+    const [currentLevelYearValue, setCurrentLevelYearValue] = useState('');
+    const [activityValue, setActivityValue] = useState('');
     const [userData, setUserData] = useState({
         userId: '',
         major: ''
     });
-
-    const [majorValue, setMajorValue] = useState({});
-    const [cohortValue, setCohortValue] = useState({});
-    const [majorsValue, setMajorsValue] = useState([]);
-    const [currentLevelYearValue, setCurrentLevelYearValue] = useState(0);
-    const [activityValue, setActivityValue] = useState('');
-
     const [nextPage, setNextPage] = useState({
         pendingRows: 1,
         acceptedRows: 1,
@@ -39,29 +36,7 @@ const ActivityUi = () => {
     });
 
     const [tab, setTab] = useState('pendingRows');
-    const limit = 10;
-
-    const handleMajorValue = (e) => {
-        setCohortValue({});
-        setCurrentLevelYearValue(0);
-        setActivityValue('');
-        setMajorValue(JSON.parse(e.target.value || '{}'));
-    };
-
-    const handleCohortValue = (e) => {
-        setCurrentLevelYearValue(0);
-        setActivityValue('');
-        setCohortValue(JSON.parse(e.target.value || '{}'));
-    };
-
-    const handleCurrentLevelYear = (e) => {
-        setActivityValue('');
-        setCurrentLevelYearValue(Number.parseInt(e.target.value));
-    };
-
-    const handleActivityValue = (e) => {
-        setActivityValue(e.target.value);
-    };
+    const limit = import.meta.env.VITE_APP_API_LIMIT;
 
     const handleRefreshTab = () => {
         dispatch({
@@ -131,33 +106,13 @@ const ActivityUi = () => {
     ];
 
     useEffect(() => {
-        if (faculty.facultyData.length === 0) dispatch(getAllFaculties());
-    }, []);
-
-    useEffect(() => {
-        if (faculty?.facultyData.length > 0 && auth?.user?.faculty) {
-            setMajorsValue(
-                faculty?.facultyData.find((facultyItem) => facultyItem.facultyName === auth?.user?.faculty).majors
-            );
-        }
-    }, [faculty?.facultyData]);
-
-    useEffect(() => {
-        if (majorValue?.majorName && cohortValue?.cohortName && currentLevelYearValue > 0) {
-            dispatch(
-                getActivities({
-                    pageStudentCohort: cohortValue.cohortName,
-                    pageStudentLevelYear: currentLevelYearValue,
-                    pageStudentMajor: majorValue.majorName
-                })
-            );
-        } else {
-            dispatch({
-                type: GLOBALTYPES.ACTIVITIES.RESET_ACTIVITIES
-            });
-        }
-
-        if (majorValue?.majorName && cohortValue?.cohortName && currentLevelYearValue > 0 && activityValue) {
+        if (
+            majorValue?.majorName &&
+            cohortValue?.cohortName &&
+            currentLevelYearValue > 0 &&
+            talentEngineerType &&
+            activityValue
+        ) {
             dispatch(
                 getDynamicRows({
                     tab,
@@ -184,7 +139,8 @@ const ActivityUi = () => {
         majorValue?.majorName,
         cohortValue?.cohortName,
         currentLevelYearValue,
-        activityValue
+        activityValue,
+        talentEngineerType
     ]);
 
     return (
@@ -192,48 +148,19 @@ const ActivityUi = () => {
             {auth?.user && (
                 <div className="container__tables">
                     <div className="body__tables">
-                        <div className="filter_activity_wrapper heading__text_lg">
-                            <div className="filter_activity">
-                                <select onInput={handleMajorValue}>
-                                    <option value="">Chọn Chuyên Ngành</option>
-                                    {majorsValue.map((major, index) => (
-                                        <option key={index} value={JSON.stringify(major)}>
-                                            {capitalizeFirstLetter(major.majorName)}
-                                        </option>
-                                    ))}
-                                </select>
-
-                                <select onInput={handleCohortValue} value={JSON.stringify(cohortValue)}>
-                                    <option value="">Chọn khóa</option>
-                                    {majorValue?.cohortList &&
-                                        majorValue?.cohortList.length > 0 &&
-                                        majorValue?.cohortList.map((cohort, index) => (
-                                            <option key={index} value={JSON.stringify(cohort)}>
-                                                {`Khóa ${cohort.cohortName}`}
-                                            </option>
-                                        ))}
-                                </select>
-
-                                <select onInput={handleCurrentLevelYear} value={currentLevelYearValue}>
-                                    <option value={0}>Chọn Năm</option>
-                                    {cohortValue?.currentLevelYear &&
-                                        new Array(cohortValue?.currentLevelYear).fill(0).map((_, index) => (
-                                            <option key={index} value={cohortValue?.currentLevelYear - index}>
-                                                {`Năm ${cohortValue?.currentLevelYear - index} ${index === 0 ? '(Hiện tại)' : '(Đã kết thúc)'}`}
-                                            </option>
-                                        ))}
-                                </select>
-                                <select value={activityValue} onInput={handleActivityValue}>
-                                    <option value="">Chọn Hoạt Động</option>
-                                    {currentLevelYearValue &&
-                                        activity.length > 0 &&
-                                        activity.map((activity, index) => (
-                                            <option key={index} value={activity}>
-                                                {capitalizeFirstLetter(activity)}
-                                            </option>
-                                        ))}
-                                </select>
-                            </div>
+                        <div className="filter_group">
+                            <SearchFilterComponent
+                                setMajorValue={setMajorValue}
+                                setCohortValue={setCohortValue}
+                                setTalentEngineerType={setTalentEngineerType}
+                                setCurrentLevelYearValue={setCurrentLevelYearValue}
+                                setActivityValue={setActivityValue}
+                                majorValue={majorValue}
+                                cohortValue={cohortValue}
+                                talentEngineerType={talentEngineerType}
+                                currentLevelYearValue={currentLevelYearValue}
+                                activityValue={activityValue}
+                            />
                         </div>
                         <Tabs
                             onChange={handleChangeTabValue}
