@@ -1,54 +1,62 @@
-const conn = require('../dbs/init.mongodb');
-const mongoose = require('mongoose');
+const conn = require("../dbs/init.mongodb");
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const [DOC, COL] = ['faculty', 'faculties'];
+const [DOC, COL] = ["faculty", "faculties"];
 
 const FacultySchema = new Schema(
     {
         facultyName: {
             type: String,
             lowercase: true,
-            unique: true
+            unique: true,
         },
         managerList: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user'
-            }
+                ref: "user",
+            },
         ],
         isActive: {
             type: Boolean,
-            default: true
+            default: true,
         },
         majors: [
             {
                 majorName: {
                     type: String,
-                    lowercase: true
+                    lowercase: true,
                 },
                 isActive: {
                     type: Boolean,
-                    default: true
+                    default: true,
                 },
                 cohortList: [
                     new mongoose.Schema(
                         {
                             cohortName: {
-                                type: Number
+                                type: Number,
                             },
                             currentLevelYear: {
                                 type: Number,
-                                default: 1
-                            }
+                                default: 1,
+                            },
+                            additionalApplyData: {
+                                levelYear: Number,
+                                isActive: Boolean,
+                            },
+                            isActive: {
+                                type: Boolean,
+                                default: true,
+                            },
                         },
                         {
-                            timestamps: true
+                            timestamps: true,
                         }
-                    )
-                ]
-            }
-        ]
+                    ),
+                ],
+            },
+        ],
     },
     { timestamps: true, collection: COL }
 );

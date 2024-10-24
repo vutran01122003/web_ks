@@ -1,9 +1,4 @@
-import {
-    deleteDataApi,
-    getDataApi,
-    patchDataApi,
-    postDataApi,
-} from '../../utils/fetchData';
+import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from './globalTypes';
 
 export const createUpdatedActivityNotification =
@@ -15,7 +10,7 @@ export const createUpdatedActivityNotification =
                 content,
                 senderId,
                 recipientId,
-                pageId,
+                pageId
             });
         } catch (error) {
             dispatch({
@@ -24,9 +19,8 @@ export const createUpdatedActivityNotification =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Tạo thông báo thất bại',
-                },
+                            : error?.response?.data.msg || 'Tạo thông báo thất bại'
+                }
             });
         }
     };
@@ -35,15 +29,12 @@ export const getNumUnreadNotification =
     ({ userId }) =>
     async (dispatch) => {
         try {
-            const res = await getDataApi(
-                `/notifications/${userId}/unread-notifications`,
-            );
+            const res = await getDataApi(`/notifications/${userId}/unread-notifications`);
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.GET_NUM_UNREAD_NOTIFICATION,
                 payload: {
-                    numUnreadNotifications:
-                        res.data.data.numUnreadNotifications,
-                },
+                    numUnreadNotifications: res.data.data.numUnreadNotifications
+                }
             });
         } catch (error) {
             dispatch({
@@ -52,9 +43,8 @@ export const getNumUnreadNotification =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Tạo thông báo thất bại',
-                },
+                            : error?.response?.data.msg || 'Tạo thông báo thất bại'
+                }
             });
         }
     };
@@ -66,28 +56,30 @@ export const getNotifications =
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.LOADING_NOTIFICATIONS,
                 payload: {
-                    isLoading: true,
-                },
+                    isLoading: true
+                }
             });
 
             const res = await getDataApi(
-                `/notifications/${recipientId}?page=${page}&limit=${limit}&currentNumNotifications=${currentNumNotifications}`,
+                `/notifications/${recipientId}?page=${page}&limit=${limit}&currentNumNotifications=${currentNumNotifications}`
             );
+
+            console.log(res.data.data);
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS,
                 payload: {
                     data: res.data.data,
                     recipientId: recipientId,
-                    page,
-                },
+                    page
+                }
             });
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.LOADING_NOTIFICATIONS,
                 payload: {
-                    isLoading: false,
-                },
+                    isLoading: false
+                }
             });
         } catch (error) {
             dispatch({
@@ -96,9 +88,8 @@ export const getNotifications =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Lấy dữ liệu thông báo thất bại',
-                },
+                            : error?.response?.data.msg || 'Lấy dữ liệu thông báo thất bại'
+                }
             });
         }
     };
@@ -107,21 +98,18 @@ export const updateReadStatus =
     ({ notificationId, status, recipientId }) =>
     async (dispatch) => {
         try {
-            await patchDataApi(
-                `/notifications/${notificationId}/updated-status`,
-                {
-                    status,
-                    recipientId,
-                },
-            );
+            await patchDataApi(`/notifications/${notificationId}/updated-status`, {
+                status,
+                recipientId
+            });
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.UPDATE_STATUS_READ_NOTIFICATION,
                 payload: {
                     notificationId,
                     recipientId,
-                    status,
-                },
+                    status
+                }
             });
         } catch (error) {
             dispatch({
@@ -130,9 +118,8 @@ export const updateReadStatus =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Cập nhật trạng thái đọc thất bại',
-                },
+                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
+                }
             });
         }
     };
@@ -142,14 +129,14 @@ export const deleteNotification =
     async (dispatch) => {
         try {
             await deleteDataApi(`/notifications/${notificationId}`, {
-                recipientId,
+                recipientId
             });
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.DELETE_NOTIFICATION,
                 payload: {
-                    notificationId,
-                },
+                    notificationId
+                }
             });
         } catch (error) {
             dispatch({
@@ -158,9 +145,8 @@ export const deleteNotification =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Cập nhật trạng thái đọc thất bại',
-                },
+                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
+                }
             });
         }
     };
@@ -170,14 +156,14 @@ export const markAllAsRead =
     async (dispatch) => {
         try {
             await patchDataApi('/notifications/updated-status', {
-                recipientId,
+                recipientId
             });
 
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.MARK_ALL_AS_READ,
                 payload: {
-                    recipientId,
-                },
+                    recipientId
+                }
             });
         } catch (error) {
             dispatch({
@@ -186,9 +172,8 @@ export const markAllAsRead =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Cập nhật trạng thái đọc thất bại',
-                },
+                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
+                }
             });
         }
     };
@@ -198,11 +183,11 @@ export const deleteAllNotification =
     async (dispatch) => {
         try {
             await deleteDataApi('/notifications', {
-                recipientId,
+                recipientId
             });
 
             dispatch({
-                type: GLOBALTYPES.NOTIFICATION.DELETE_ALL_OTIFICATION,
+                type: GLOBALTYPES.NOTIFICATION.DELETE_ALL_OTIFICATION
             });
         } catch (error) {
             dispatch({
@@ -211,9 +196,8 @@ export const deleteAllNotification =
                     error:
                         error.response?.data?.status === 401
                             ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Cập nhật trạng thái đọc thất bại',
-                },
+                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
+                }
             });
         }
     };

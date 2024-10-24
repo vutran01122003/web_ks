@@ -5,6 +5,7 @@ import { progressSelector } from '../../redux/selector';
 import { useEffect, useState } from 'react';
 import Account from '../ComponentAccount/ComponentAccount';
 import { AiOutlineClose } from 'react-icons/ai';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
                 userId: currentUserData._id,
                 studentCohort: currentUserData.cohort,
                 studentMajor: currentUserData.major,
-                studentLevelYear: currentUserData.levelYear
+                studentLevelYear: levelYear
             })
         );
     };
@@ -31,36 +32,39 @@ function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
     };
 
     useEffect(() => {
+        dispatch({
+            type: GLOBALTYPES.PROGRESS.RESET_GOALS_INFO_DATA
+        });
         onGetProgress();
     }, [levelYear]);
 
     return (
-        progress?.goalsInfoData[levelYear] && (
-            <div className="modal_overlap" onMouseUp={onHiddenModal}>
-                <div className="box_wrapper goal_details_modal">
-                    <div className="goal_details_modal_header">Thống Kê Chi Tiết Hoạt Động</div>
-                    <div className="modal_close_icon_wrapper" onClick={onToggleModalDisplay}>
-                        <AiOutlineClose />
+        <div className="modal_overlap" onMouseUp={onHiddenModal}>
+            <div className="box_wrapper goal_details_modal">
+                <div className="goal_details_modal_header">Thống Kê Chi Tiết Hoạt Động</div>
+                <div className="modal_close_icon_wrapper" onClick={onToggleModalDisplay}>
+                    <AiOutlineClose />
+                </div>
+                <div className="goal_details_modal_body">
+                    <div className="goal_details_modal_body_filter">
+                        <Account userInfo={currentUserData} inModal={true} />
+                        <select onChange={onChangeLevelYear} value={levelYear}>
+                            {Array(currentUserData.levelYear)
+                                .fill(null)
+                                .map((_, index) => (
+                                    <option key={index} value={index + 1}>{`Năm ${index + 1}`}</option>
+                                ))}
+                        </select>
                     </div>
-                    <div className="goal_details_modal_body">
-                        <div className="goal_details_modal_body_filter">
-                            <Account userInfo={currentUserData} inModal={true} />
-                            <select onChange={onChangeLevelYear} value={levelYear}>
-                                {Array(levelYear)
-                                    .fill(null)
-                                    .map((_, index) => (
-                                        <option key={index} value={index + 1}>{`Năm ${index + 1}`}</option>
-                                    ))}
-                            </select>
-                        </div>
 
+                    {progress.goalsInfoData[levelYear] && (
                         <div className="goal_details_modal_body_content">
                             <GoalsInfo levelYear={levelYear} goalsInfo={progress.goalsInfoData[levelYear]} />
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
-        )
+        </div>
     );
 }
 

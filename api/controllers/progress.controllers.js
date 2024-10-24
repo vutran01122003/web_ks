@@ -3,9 +3,7 @@ const FacultyService = require("../services/faculty.service");
 const ProgressService = require("../services/progress.service");
 const UserService = require("../services/user.service");
 const PermissionService = require("../services/permission.service");
-const [FACULTY_MANAGER, ADMIN] = ["003", "004"];
-const { VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE, TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE } =
-    process.env;
+
 const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
     "đã duyệt",
     "chờ duyệt",
@@ -13,10 +11,13 @@ const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
     "phải nộp lại",
 ];
 
+const { TALENT_ENGINEER_CODE, TEMPORARY_TALENT_ENGINEER_CODE } = process.env;
+
 class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
         try {
             const { userId, pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
+
             const { groupCode } = res.locals.userData.group;
 
             const pageDetailsList = await ProgressService.getProgressByYear({
@@ -119,27 +120,47 @@ class ProgressControllers {
 
     updateUserActivityStatusByMajor = async (req, res, next) => {
         try {
-            const { major, cohort, faculty, levelYear } = req.body;
+            const { major, cohort, faculty, levelYear, groupCode, conditions, updatedCohortData } = req.body;
 
-            const [currentLevelYear, groupList] = await Promise.all([
+            const [currentLevelYear, group] = await Promise.all([
                 FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty,
                     majorName: major,
                     cohortName: cohort,
                 }),
-                PermissionService.getGroupsByGroupCode({ groupCodeList: [FACULTY_MANAGER, ADMIN] }),
+                PermissionService.getGroupByGroupCode(groupCode),
             ]);
-
-            const groupIdList = groupList.map((group) => group._id);
 
             if (levelYear < currentLevelYear)
                 throw createError.BadRequest(`Hoạt động nộp minh chứng năm ${levelYear} đã kết thúc`);
 
-            await UserService.updateUserActivityStatusByMajor({ ...req.body, groupIdList });
+            await UserService.updateUserActivityStatusByMajor({
+                conditions,
+                major,
+                cohort: +cohort,
+                levelYear: +levelYear,
+                updatedCohortData,
+                groupData: {
+                    groupCode: groupCode,
+                    groupId: group._id,
+                },
+            });
 
+            if (groupCode === TEMPORARY_TALENT_ENGINEER_CODE) {
+                await FacultyService.updateAdditionalApplyCohort({
+                    facultyName: faculty,
+                    majorName: major,
+                    cohortName: cohort,
+                    levelYear,
+                    isActive: false,
+                });
+            }
             res.status(200).json({
                 status: 200,
-                msg: `Kết thúc hoạt động nộp minh chứng của sinh viên khóa ${cohort} ngành ${major}`,
+                msg:
+                    group.groupCode === TALENT_ENGINEER_CODE
+                        ? `Kết thúc hoạt động nộp minh chứng`
+                        : "Kết thúc hoạt động xét tuyển bổ sung",
             });
         } catch (error) {
             next(error);

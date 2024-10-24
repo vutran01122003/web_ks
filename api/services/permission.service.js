@@ -23,6 +23,14 @@ class PermissionService {
         return await Group.find({ groupCode: { $in: groupCodeList } });
     };
 
+    static getGroupByGroupCode = async (groupCode) => {
+        const group = await Group.findOne({ groupCode });
+
+        if (!group) throw createError.NotFound("Chức vụ không tồn tại");
+
+        return group;
+    };
+
     static getAllGroup = async () => {
         try {
             const groups = await Group.find();
@@ -36,19 +44,6 @@ class PermissionService {
     static getGroupById = async ({ groupId }) => {
         try {
             const group = await Group.findById(groupId);
-
-            if (!group) throw createError.NotFound("Chức vụ không tồn tại");
-
-            return group;
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static getGroupByGroupCode = async ({ groupCode }) => {
-        try {
-            const group = await Group.findOne({ groupCode });
-
             if (!group) throw createError.NotFound("Chức vụ không tồn tại");
 
             return group;
@@ -73,7 +68,7 @@ class PermissionService {
         try {
             const deletedGroup = await Group.findByIdAndDelete(groupId);
 
-            if (!deletedGroup) throw createError.NotFound("Nhóm không tồn tại");
+            if (!deletedGroup) throw createError.NotFound("Chức vụ không tồn tại");
 
             return deletedGroup;
         } catch (error) {
@@ -116,7 +111,7 @@ class PermissionService {
         try {
             const group = Group.findById(groupId);
 
-            if (!group) throw createError.NotFound("Nhóm không tồn tại");
+            if (!group) throw createError.NotFound("Chức vụ không tồn tại");
 
             const role = Role.find({
                 _id: {

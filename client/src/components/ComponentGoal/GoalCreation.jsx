@@ -268,6 +268,8 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
         }
     };
 
+    console.log(prevUpdatedTableData);
+
     useEffect(() => {
         if (facultyState.facultyData.length === 0) dispatch(getAllFaculties());
     }, []);
@@ -277,7 +279,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
             setTables([
                 {
                     ...prevUpdatedTableData,
-                    scoreType: prevUpdatedTableData.fixedScore !== undefined ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
+                    scoreType: prevUpdatedTableData.fixedScore ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
                 }
             ]);
         }
@@ -568,7 +570,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                     />
                     {!handleAddTable && !handleUpdateTable && (
                         <ComponentButton
-                            textButton="Tạo Trang"
+                            textButton="Tạo Nhóm Chỉ Tiêu"
                             onClick={handleCreatePage}
                             type="button"
                             className="btn__create--page"

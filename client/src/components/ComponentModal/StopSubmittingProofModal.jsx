@@ -10,6 +10,7 @@ function StopSubmittingProofModal({
     major,
     faculty,
     levelYear,
+    groupCode,
     handleHiddenStopSubmittingProofModal,
     updatedCohortData
 }) {
@@ -80,6 +81,7 @@ function StopSubmittingProofModal({
                     cohort,
                     faculty,
                     levelYear,
+                    groupCode,
                     updatedCohortData
                 })
             );

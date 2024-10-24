@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { LuTimerReset } from 'react-icons/lu';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,8 @@ import { toFullName } from '../utils/handleString';
 import StopSubmittingProofModal from '../components/ComponentModal/StopSubmittingProofModal';
 import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
+
+const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
 function ProgressUI() {
     const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
@@ -30,6 +32,13 @@ function ProgressUI() {
     const [vissibleModal, setVissibleModal] = useState(false);
     const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
     const [isVisibleStopSubmitingProofBtn, setIsVisibleStopSubmitingProofBtn] = useState(false);
+
+    const additionalApplyData =
+        major && cohort && talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
+            ? facultyState.faculty.majors
+                  .find((_major) => _major.majorName === major.majorName)
+                  .cohortList.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalApplyData
+            : null;
 
     const lastStudentElementRef = (node) => {
         if (progress.annualTaskProgress.isLoading) return;
@@ -139,6 +148,14 @@ function ProgressUI() {
         }
     }, [pageNumber, sortProgressPercentage]);
 
+    useEffect(() => {
+        if (progress.annualTaskProgress.data.length > 0) {
+            dispatch({
+                type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
+            });
+        }
+    }, [major, cohort, talentEngineerType, levelYear]);
+
     return auth?.user ? (
         <div className="completion_shedule_container">
             <div className="completion_shedule_wrapper">
@@ -148,6 +165,7 @@ function ProgressUI() {
                         major={major.majorName}
                         faculty={faculty.facultyName}
                         levelYear={levelYear}
+                        groupCode={talentEngineerType}
                         handleHiddenStopSubmittingProofModal={handleHiddenStopSubmittingProofModal}
                         updatedCohortData={{
                             facultyId: faculty._id,
@@ -178,14 +196,24 @@ function ProgressUI() {
                                     Tìm Kiếm
                                 </button>
                                 <div className="line__flex">
-                                    {isVisibleStopSubmitingProofBtn && progress.annualTaskProgress.data.length > 0 && (
-                                        <button
-                                            className="btn__end_progress"
-                                            onClick={handleVissbleStopSubmittingProofModal}
-                                        >
-                                            <LuTimerReset />
-                                            Dừng Nộp Minh Chứng
-                                        </button>
+                                    {((talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE &&
+                                        additionalApplyData.levelYear === levelYear &&
+                                        additionalApplyData.isActive) ||
+                                        talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) && (
+                                        <Fragment>
+                                            {isVisibleStopSubmitingProofBtn &&
+                                                progress.annualTaskProgress.data.length > 0 && (
+                                                    <button
+                                                        className="btn__end_progress"
+                                                        onClick={handleVissbleStopSubmittingProofModal}
+                                                    >
+                                                        <LuTimerReset />
+                                                        {talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
+                                                            ? 'Dừng Xét Tuyển Bổ Sung'
+                                                            : 'Dừng Nộp Minh Chứng'}
+                                                    </button>
+                                                )}
+                                        </Fragment>
                                     )}
                                 </div>
                             </div>

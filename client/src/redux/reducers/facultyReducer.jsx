@@ -37,7 +37,7 @@ function facultyReducer(state = initialState, action) {
             const newData = replaceElem({ elemId, newElem, elemList });
 
             return {
-                ...state,
+                faculty: newElem,
                 facultyData: newData
             };
         }

@@ -220,6 +220,7 @@ const ActivityUi = () => {
                                                 <ComponentDynamicRows
                                                     index={index}
                                                     rowsType={tab}
+                                                    talentEngineerType={talentEngineerType}
                                                     dynamicRows={dynamicRows}
                                                 />
                                             </div>
@@ -231,6 +232,7 @@ const ActivityUi = () => {
                                             <ComponentDynamicRows
                                                 index={index}
                                                 rowsType={tab}
+                                                talentEngineerType={talentEngineerType}
                                                 dynamicRows={dynamicRows}
                                             />
                                         </div>

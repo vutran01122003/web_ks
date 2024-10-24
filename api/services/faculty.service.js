@@ -146,6 +146,54 @@ class FacultyService {
         }
     };
 
+    static getCohortByName = async ({ facultyName, majorName, cohortName }) => {
+        try {
+            const faculty = await Faculty.findOne({ facultyName });
+
+            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
+
+            const major = faculty.majors.find((major) => major.majorName === majorName);
+
+            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+
+            const cohort = major.cohortList.find((cohort) => cohort.cohortName === parseInt(cohortName));
+
+            return cohort;
+        } catch (error) {
+            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+        }
+    };
+
+    static updateAdditionalApplyCohort = async ({ facultyName, majorName, cohortName, levelYear, isActive }) => {
+        try {
+            const faculty = await Faculty.findOne({ facultyName });
+
+            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
+
+            const major = faculty.majors.find((major) => major.majorName === majorName);
+
+            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+
+            const cohort = major.cohortList.find((cohort) => cohort.cohortName === parseInt(cohortName));
+
+            if (isActive) {
+                cohort.additionalApplyData = {
+                    levelYear,
+                    isActive,
+                };
+            } else {
+                cohort.additionalApplyData = {
+                    levelYear,
+                    isActive,
+                };
+            }
+
+            await faculty.save();
+        } catch (error) {
+            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+        }
+    };
+
     static deleteCohortById = async ({ facultyId, majorId, cohortId }) => {
         try {
             let deletedCohort = null;

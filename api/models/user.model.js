@@ -62,6 +62,9 @@ const UserSchema = new Schema(
         levelYear: {
             type: Number,
         },
+        additionalYears: {
+            type: [Number],
+        },
         isActive: {
             type: Boolean,
             default: true,

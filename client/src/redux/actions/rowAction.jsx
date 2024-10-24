@@ -124,7 +124,8 @@ export const updateRowsStatus =
         prevStatus,
         status,
         deadline,
-        isTimedExtension
+        isTimedExtension,
+        groupCode
     }) =>
     async (dispatch) => {
         try {
@@ -143,7 +144,8 @@ export const updateRowsStatus =
                 status,
                 noteValue,
                 deadline,
-                isTimedExtension
+                isTimedExtension,
+                groupCode
             });
 
             if (prevStatus === RESUBMITED_STATUS && status === RESUBMITED_STATUS) {

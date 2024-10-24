@@ -123,7 +123,7 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                             <tr>
                                 <td>
                                     <label className="label_item" htmlFor="firstName">
-                                        Tên:
+                                        Tên Sinh Viên:
                                     </label>
                                 </td>
                                 <td>
@@ -142,7 +142,7 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                             <tr>
                                 <td>
                                     <label className="label_item" htmlFor="email">
-                                        Email:
+                                        Địa Chỉ Email:
                                     </label>
                                 </td>
                                 <td>

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoSearch } from 'react-icons/io5';
 
@@ -210,8 +210,8 @@ function GoalsManagement() {
                         bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'ẩn' : 'hiện'} chỉ tiêu ${tableInfo.tableName}`}
                         noteContent={
                             tableInfo.isActive
-                                ? `Chỉ tiêu ${tableInfo.tableName} sau khi ẩn đi thì quản lý khoa và sinh viên sẽ không thể tương tác và thấy được chỉ tiêu này. Tiến độ và điểm số của chỉ tiêu này vẫn sẽ được tính cho sinh viên.`
-                                : `Chỉ tiêu ${tableInfo.tableName} sau khi hiển thị thì cả quản lý khoa và sinh viên sẽ có thể tương tác và thấy được chỉ tiêu này.`
+                                ? `Chỉ tiêu ${tableInfo.tableName} sẽ không thể tương tác và thấy được sau khi ẩn đi. Tiến độ và điểm số của sinh viên cho chỉ tiêu này sẽ không bị ảnh hưởng.`
+                                : `Chỉ tiêu ${tableInfo.tableName} sẽ có thể tương tác và thấy được chỉ tiêu này sau khi hiện thị.`
                         }
                         toggleConfirmModalDisplay={handleToggleUpdateStatusTableModalDisplay}
                         onAccept={onUpdateStatusTable}

@@ -6,6 +6,7 @@ const Row = require("../models/row.model");
 const FacultyService = require("../services/faculty.service");
 
 const [PENDING_STATUS, RESUBMITED_STATUS] = ["chờ duyệt", "phải nộp lại"];
+const { TALENT_ENGINEER_CODE } = process.env;
 
 class RowControllers {
     addRow = async (req, res, next) => {
@@ -160,11 +161,22 @@ class RowControllers {
                 deadline,
                 isTimedExtension,
                 userId: _id,
+                groupCode,
             } = req.body;
 
             const levelYear = pageInfo.pageStudentLevelYear;
 
-            const user = await UserService.getUserById(_id);
+            const user = await UserService.getUserAndPopulateGroupById({ id: _id });
+
+            if (!user.isActive) throw createError.BadRequest("Người dùng đã bị khóa tài khoản");
+            if (user.group.groupCode !== groupCode) {
+                throw createError.BadRequest(
+                    `Sinh viên này không còn là ${
+                        groupCode === TALENT_ENGINEER_CODE ? "kỹ sư tài năng" : "kỹ sư tài năng bổ sung"
+                    }`
+                );
+            }
+
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 facultyName: user.faculty,
                 majorName: user.major,

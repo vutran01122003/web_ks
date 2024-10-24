@@ -184,7 +184,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                               tableName: dynamicTable.tableName
                           },
                           pageInfo: {
-                              pageId: dynamicTable._id,
+                              pageId: dynamicRowsInfo.page._id,
                               pageName: dynamicRowsInfo.page.pageName,
                               pageStudentMajor: dynamicRowsInfo.page.pageStudentMajor,
                               pageStudentLevelYear: dynamicRowsInfo.page.pageStudentLevelYear,

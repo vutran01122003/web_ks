@@ -84,13 +84,12 @@ class NotificationService {
                             select: "avatar fullname",
                         },
                     ])
-                    .sort({ createdAt: -1 })
-                    .lean(),
+                    .sort({ createdAt: -1 }),
                 queryString
             );
 
             const notifications = await pagination.paginating();
-
+            console.log(notifications);
             return notifications;
         } catch (error) {
             throw error;

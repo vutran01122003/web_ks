@@ -21,7 +21,15 @@ const ROW_STATUS = {
     resubmitedRows: 'phải nộp lại'
 };
 
-function TableContent({ auth, row, page, setRowInfo, isDetailedRow, handleOpenModal, handleOpenPreviewFilesModal }) {
+function TableContent({
+    auth,
+    row,
+    setRowInfo,
+    isDetailedRow,
+    handleOpenModal,
+    handleOpenPreviewFilesModal,
+    talentEngineerType
+}) {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
     const [visibleDetailedRowModal, setVisibleDetailedRowModal] = useState(false);
@@ -134,6 +142,7 @@ function TableContent({ auth, row, page, setRowInfo, isDetailedRow, handleOpenMo
                                     rowInfoData={item.rowInfoData}
                                     handleHiddenConfirmModal={handleHiddenConfirmModal}
                                     userData={item?.userData}
+                                    groupCode={talentEngineerType}
                                 />
                             )}
 

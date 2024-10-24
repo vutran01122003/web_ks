@@ -11,6 +11,7 @@ import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
 import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
 import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
+import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
 
 const Student = () => {
     const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
@@ -185,30 +186,32 @@ const Student = () => {
                         </div>
 
                         <div className="search_wrapper">
-                            <button
-                                className="student_search_btn"
-                                onClick={() => {
-                                    onClickGetStudentListBtn({
-                                        page: 1,
-                                        sortByName
-                                    });
-                                }}
-                            >
-                                Tìm Kiếm
-                            </button>
-                        </div>
+                            <div className="btn_group">
+                                <button
+                                    className="student_search_btn"
+                                    onClick={() => {
+                                        onClickGetStudentListBtn({
+                                            page: 1,
+                                            sortByName
+                                        });
+                                    }}
+                                >
+                                    Tìm Kiếm
+                                </button>
 
-                        <div className="add_student_btn_wrapper">
-                            <label htmlFor="excelfile">Thêm Kỹ Sư</label>
-                            <input
-                                type="file"
-                                id="excelfile"
-                                name="excelfile"
-                                hidden
-                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                onChange={handleFileSelected}
-                                ref={fileRef}
-                            />
+                                <div className="add_student_btn_wrapper">
+                                    <label htmlFor="excelfile">Thêm Kỹ Sư</label>
+                                    <input
+                                        type="file"
+                                        id="excelfile"
+                                        name="excelfile"
+                                        hidden
+                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                        onChange={handleFileSelected}
+                                        ref={fileRef}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="table_wrapper">
@@ -290,6 +293,8 @@ const Student = () => {
                                     ))}
                             </tbody>
                         </table>
+
+                        {studentState.studentList.length === 0 && <EmptyDataNotification />}
                     </div>
                 </div>
             </div>

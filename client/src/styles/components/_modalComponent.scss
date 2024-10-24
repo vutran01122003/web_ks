@@ -29,7 +29,7 @@
             color: #222222;
             text-align: center;
             padding: 12px;
-            font-size: 16px;
+            font-size: 20px;
             border-bottom: 1px solid rgb(217, 216, 216);
         }
 
@@ -351,9 +351,10 @@
     border: 1px solid rgb(197, 194, 194);
 
     .approve_modal_header {
+        position: relative;
         padding: 10px;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         border-bottom: 1px solid rgb(197, 194, 194);
         font-size: 12px;
         color: #333;
@@ -971,6 +972,10 @@
 
 // Modal close button
 .modal_close_btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     height: 30px;
     width: 30px;
     display: flex;
@@ -1040,7 +1045,7 @@
             width: 100%;
 
             tr {
-                height: 50px;
+                height: 47px;
 
                 > td:first-child {
                     width: 140px;
@@ -1087,7 +1092,7 @@
     .student_details_footer {
         display: flex;
         justify-content: space-around;
-        padding-bottom: 10px;
+        padding: 15px 0px;
 
         button {
             padding: 8px 12px;

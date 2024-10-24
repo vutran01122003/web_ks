@@ -26,7 +26,6 @@ function SearchFilterComponent({
     const auth = useSelector(authSelector);
     const facultyState = useSelector(facultySelector);
     const activities = useSelector(activitiesSelector);
-    const myFaculty = auth?.user.faculty;
     const [majorValueList, setMajorValueList] = useState([]);
 
     const handleMajorValue = (e) => {
@@ -98,12 +97,11 @@ function SearchFilterComponent({
     }, []);
 
     useEffect(() => {
-        if (facultyState?.facultyData.length > 0 && myFaculty) {
-            setMajorValueList(
-                facultyState?.facultyData.find((facultyItem) => facultyItem.facultyName === myFaculty).majors
-            );
+        const facultyData = facultyState?.faculty;
+        if (facultyData) {
+            setMajorValueList(facultyData.majors);
         }
-    }, [facultyState?.facultyData]);
+    }, [facultyState?.faculty]);
 
     useEffect(() => {
         if (setActivityValue) {
@@ -152,14 +150,14 @@ function SearchFilterComponent({
                     {Object.keys(cohortValue).length > 0 && (
                         <Fragment>
                             <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng</option>
-                            <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng Bổ Sung</option>
+                            <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>KSTN Tạm Thời</option>
                         </Fragment>
                     )}
                 </select>
 
                 {setStatus && (
                     <select value={statusValue} onChange={handleStatusValue}>
-                        <option value="">Tất cả</option>
+                        <option value="">Trạng Thái</option>
                         <option value={true}>Đang Hoạt Động</option>
                         <option value={false}>Đã Khóa</option>
                     </select>

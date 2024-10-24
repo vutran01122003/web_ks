@@ -52,7 +52,7 @@ class AccessService {
                     majorName: major.toLowerCase(),
                     cohortName: +cohort,
                 }),
-                PermissionService.getGroupByGroupCode({ groupCode }),
+                PermissionService.getGroupByGroupCode(groupCode),
             ]);
 
             const createdUser = new User({

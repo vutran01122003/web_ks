@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const Page = require("../models/page.model");
 const UserService = require("./user.service");
 const convertToObjectId = require("../utils/convertToObjectId");
+const FacultyService = require("./faculty.service");
 
 const { TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE, GOAL_PAGE, NEWS_PAGE } = process.env;
 
@@ -27,6 +28,16 @@ class PageService {
                 pageTalentEngineerType,
                 pageStudentLevelYear,
             }).lean();
+
+            if (pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_TYPE) {
+                await FacultyService.updateAdditionalApplyCohort({
+                    facultyName: pageFaculty,
+                    majorName: pageStudentMajor,
+                    cohortName: +pageStudentCohort,
+                    levelYear: pageStudentLevelYear,
+                    isActive: true,
+                });
+            }
 
             if (page) throw createError(409, "Tên Trang Đã Tồn Tại");
 
@@ -60,6 +71,7 @@ class PageService {
                 data: createdPage,
             };
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

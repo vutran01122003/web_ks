@@ -59,6 +59,13 @@ function progressReducer(state = initialState, action) {
             };
         }
 
+        case GLOBALTYPES.PROGRESS.RESET_GOALS_INFO_DATA: {
+            return {
+                ...state,
+                goalsInfoData: {}
+            };
+        }
+
         default:
             return state;
     }

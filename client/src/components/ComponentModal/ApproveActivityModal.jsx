@@ -18,7 +18,8 @@ function ApproveActivityModal({
     rowInfoData,
     handleHiddenConfirmModal,
     rowsType,
-    isTimedExtension
+    isTimedExtension,
+    groupCode
 }) {
     const dispatch = useDispatch();
     const [noteValue, setNoteValue] = useState('');
@@ -67,7 +68,8 @@ function ApproveActivityModal({
                 rowListId: rowInfoData.rowListId,
                 contentIdList: rowInfoData.contentIdList,
                 deadline: datetimeValue,
-                isTimedExtension
+                isTimedExtension,
+                groupCode
             })
         );
 

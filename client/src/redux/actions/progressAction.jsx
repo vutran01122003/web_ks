@@ -16,6 +16,8 @@ export const getProgressByYear =
                     levelYear: studentLevelYear
                 }
             });
+
+            console.log(res);
         } catch (error) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -82,7 +84,7 @@ export const getAnnualTaskProgress =
     };
 
 export const stopSubmittingProof =
-    ({ conditions, major, cohort, faculty, levelYear, updatedCohortData }) =>
+    ({ conditions, major, cohort, groupCode, faculty, levelYear, updatedCohortData }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -98,6 +100,7 @@ export const stopSubmittingProof =
                 cohort,
                 faculty,
                 levelYear,
+                groupCode,
                 updatedCohortData
             });
 
@@ -108,13 +111,6 @@ export const stopSubmittingProof =
                 payload: {
                     facultyId: updatedCohortData.facultyId,
                     newElem: updatedFaculty.data.data
-                }
-            });
-
-            dispatch({
-                type: GLOBALTYPES.AUTH.UPDATE_LEVEL_YEAR,
-                payload: {
-                    levelYear: updatedCohortData.nextYearValue
                 }
             });
 

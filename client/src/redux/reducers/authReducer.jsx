@@ -13,16 +13,6 @@ function authReducer(state = initialState, action) {
             };
         }
 
-        case GLOBALTYPES.AUTH.UPDATE_LEVEL_YEAR: {
-            return {
-                ...state,
-                user: {
-                    ...state.user,
-                    levelYear: action.payload.levelYear
-                }
-            };
-        }
-
         default:
             return state;
     }

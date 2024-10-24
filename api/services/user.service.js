@@ -5,7 +5,7 @@ const Row = require("../models/row.model");
 const PermissionService = require("./permission.service");
 const FacultyService = require("./faculty.service");
 const Pagination = require("../utils/Pagination");
-const [FACULTY_MANAGER, ADMIN] = ["003", "004"];
+
 const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUBMITED_STATUS] = [
     "đã duyệt",
     "chờ duyệt",
@@ -18,6 +18,7 @@ const STATUS = {
     [REJECTED_STATUS]: "numberOfRejectedActivity",
     [RESUBMITED_STATUS]: "numberOfResubmitedActivity",
 };
+const { TALENT_ENGINEER_TYPE, TALENT_ENGINEER_CODE } = process.env;
 
 class UserService {
     static getUserAndPopulateGroupById = async ({ id, idList, selectedFieldArr }) => {
@@ -170,12 +171,13 @@ class UserService {
         cohort,
         levelYear,
         updatedCohortData,
-        groupIdList,
+        groupData,
     }) => {
         try {
             const { progressPercentage, score } = conditions;
             const { nextYearValue } = updatedCohortData;
             const index = levelYear - 1;
+            const isTalentEngineer = groupData.groupCode === TALENT_ENGINEER_TYPE;
 
             const filterUser = {
                 major: major.toLowerCase(),
@@ -188,19 +190,14 @@ class UserService {
                 },
             };
 
-            if (!progressPercentage) delete filterUser[`annualActivitiesProgress.${index}.progressPercentage`];
-            if (!score) delete filterUser[`annualActivitiesProgress.${index}.totalScore`];
-
             const invalidUserList = await User.find({
                 [`annualActivitiesProgress.${index}.progressPercentage`]: {
                     $exists: false,
                 },
-                group: {
-                    $nin: groupIdList,
-                },
+                group: groupData.groupId,
             });
 
-            if (invalidUserList.length > 0)
+            if (invalidUserList.length > 0) {
                 await Promise.all(
                     invalidUserList.map((invalidUser) =>
                         this.createNewAnnualActivitiesProgress({
@@ -213,14 +210,13 @@ class UserService {
                         })
                     )
                 );
+            }
 
             await Promise.all([
                 User.updateMany(
                     {
                         ...filterUser,
-                        group: {
-                            $nin: groupIdList,
-                        },
+                        group: groupData.groupId,
                     },
                     {
                         $set: {
@@ -232,36 +228,63 @@ class UserService {
                     {
                         major: major.toLowerCase(),
                         cohort: parseInt(cohort),
-                        group: {
-                            $nin: groupIdList,
-                        },
                     },
                     {
                         $set: {
-                            levelYear: nextYearValue,
-                        },
-                        $push: {
-                            annualActivitiesProgress: {
-                                $each: [
-                                    {
-                                        levelYear: nextYearValue,
-                                        totalScore: 0,
-                                        numberOfRequiredActivity: 0,
-                                        numberOfPendingActivity: 0,
-                                        numberOfAcceptedActivity: 0,
-                                        numberOfRejectedActivity: 0,
-                                        numberOfResubmitedActivity: 0,
-                                        progressPercentage: 0,
-                                    },
-                                ],
-                                $position: index + 1,
+                            levelYear: isTalentEngineer ? nextYearValue : levelYear,
+                            [`annualActivitiesProgress.${isTalentEngineer ? index + 1 : index}`]: {
+                                levelYear: isTalentEngineer ? nextYearValue : levelYear,
+                                totalScore: 0,
+                                numberOfRequiredActivity: 0,
+                                numberOfPendingActivity: 0,
+                                numberOfAcceptedActivity: 0,
+                                numberOfRejectedActivity: 0,
+                                numberOfResubmitedActivity: 0,
+                                progressPercentage: 0,
                             },
                         },
+                        // $push: {
+                        //     annualActivitiesProgress: {
+                        //         $each: [
+                        //             {
+                        //                 levelYear: isTalentEngineer ? nextYearValue : levelYear,
+                        //                 totalScore: 0,
+                        //                 numberOfRequiredActivity: 0,
+                        //                 numberOfPendingActivity: 0,
+                        //                 numberOfAcceptedActivity: 0,
+                        //                 numberOfRejectedActivity: 0,
+                        //                 numberOfResubmitedActivity: 0,
+                        //                 progressPercentage: 0,
+                        //             },
+                        //         ],
+                        //         // If user is the temporary talent engineer, replace the temporary activity progress with the official activy progress
+                        //         $position: isTalentEngineer ? index + 1 : index,
+                        //     },
+                        // },
                     }
                 ),
-                FacultyService.updateCohortById(updatedCohortData),
+                isTalentEngineer ? FacultyService.updateCohortById(updatedCohortData) : null,
             ]);
+
+            if (!isTalentEngineer) {
+                const group = await PermissionService.getGroupByGroupCode(TALENT_ENGINEER_CODE);
+
+                await User.updateMany(
+                    {
+                        major: major.toLowerCase(),
+                        cohort: parseInt(cohort),
+                        group: groupData.groupId,
+                        isActive: true,
+                    },
+                    {
+                        $set: {
+                            group: group._id,
+                        },
+                    }
+                );
+            }
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };
@@ -521,16 +544,13 @@ class UserService {
                 return quantityDemanded + table.quantityDemanded;
             }, 0);
 
-            const groupList = await PermissionService.getGroupsByGroupCode({ groupCodeList: [FACULTY_MANAGER, ADMIN] });
-
-            const groupIdList = groupList.map((group) => group._id);
+            const group = await PermissionService.getGroupByGroupCode(page.pageTalentEngineerType);
+            const groupId = group._id;
 
             const filterData = {
                 cohort: parseInt(page.pageStudentCohort),
                 major: page.pageStudentMajor,
-                group: {
-                    $nin: groupIdList,
-                },
+                group: groupId,
             };
 
             const invalidUserList = await User.find({
