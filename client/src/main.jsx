@@ -4,7 +4,7 @@ import './styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import StoreProvide from './redux/store';
 
-import RenderGetSizeWindow from './components/ComponentWindow/RenderGetSizeWindow.jsx';
+import RenderGetSizeWindow from './components/Window/RenderGetSizeWindow.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <RenderGetSizeWindow>
@@ -13,5 +13,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <App />
             </StoreProvide>
         </BrowserRouter>
-    </RenderGetSizeWindow>,
+    </RenderGetSizeWindow>
 );

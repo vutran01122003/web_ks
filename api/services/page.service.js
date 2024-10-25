@@ -71,7 +71,6 @@ class PageService {
                 data: createdPage,
             };
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

@@ -1,6 +1,6 @@
 import LogoIUH from '../assets/images/logo_iuh_full.png';
 import ImageIntro2 from '../assets/images/image_intro.png';
-import FormLogin from '../components/FormLogin/FormLogin';
+import FormLogin from '../components/Login/FormLogin';
 
 import { useSelector } from 'react-redux';
 import { authSelector } from '../redux/selector';

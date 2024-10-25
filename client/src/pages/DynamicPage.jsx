@@ -4,8 +4,8 @@ import { useLocation, useParams } from 'react-router-dom';
 import { pageSelector } from '../redux/selector';
 import { renderTable } from '../helpers/renderTable';
 import News from '../pages/News';
-import LayoutTable from '../components/ComponentTable/LayoutTable';
-import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
+import LayoutTable from '../components/Table/LayoutTable';
+import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
 import { setPageInfo } from '../redux/actions/pageAction';
 
 const { VITE_APP_GOAL_PAGE, VITE_APP_NEWS_PAGE } = import.meta.env;

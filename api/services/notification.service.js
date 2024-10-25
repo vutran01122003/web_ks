@@ -89,7 +89,7 @@ class NotificationService {
             );
 
             const notifications = await pagination.paginating();
-            console.log(notifications);
+
             return notifications;
         } catch (error) {
             throw error;

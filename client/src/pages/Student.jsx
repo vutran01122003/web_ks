@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
-import ConfirmModal from '../components/ComponentModal/ConfirmModal';
+import ConfirmModal from '../components/Modal/ConfirmModal';
 import { importUser } from '../redux/actions/excelAction';
 import { facultySelector, studentSelector } from '../redux/selector';
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
-import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
-import StudentDetailsModal from '../components/ComponentModal/StudentDetailsModal';
-import GoalDetailsModal from '../components/ComponentModal/GoalDetailsModal';
-import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
+import SearchFilterComponent from '../components/Filter/SearchFilter';
+import StudentDetailsModal from '../components/Modal/StudentDetailsModal';
+import GoalDetailsModal from '../components/Modal/GoalDetailsModal';
+import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
 
 const Student = () => {
     const LIMIT = import.meta.env.VITE_APP_API_LIMIT;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import LayoutInfo from '../components/ComponentHome/LayoutInfo';
-import LayoutChart from '../components/ComponentHome/LayoutChart';
+import LayoutInfo from '../components/Home/LayoutInfo';
+import LayoutChart from '../components/Home/LayoutChart';
 import { useDispatch, useSelector } from 'react-redux';
-import GoalsInfo from '../components/ComponentGoalsInfo/GoalsInfo';
+import GoalsInfo from '../components/Goal/GoalsInfo';
 import { getProgressByYear } from '../redux/actions/progressAction';
 import Quantity from '../components/ComponentQuantity/Quantity';
 import { progressSelector } from '../redux/selector';

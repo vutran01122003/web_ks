@@ -4,12 +4,12 @@ import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, rowSelector } from '../redux/selector';
 import { getDynamicRows } from '../redux/actions/rowAction';
-import ComponentDynamicRows from '../components/ComponentDynamicRows/ComponentDynamicRows';
+import ComponentDynamicRow from '../components/DynamicRow/ComponentDynamicRow';
 import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 
-import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
-import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
+import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+import SearchFilterComponent from '../components/Filter/SearchFilter';
 
 const ActivityUi = () => {
     const observer = useRef();
@@ -217,7 +217,7 @@ const ActivityUi = () => {
                                                 className="last"
                                                 key={dynamicRows?._id + index}
                                             >
-                                                <ComponentDynamicRows
+                                                <ComponentDynamicRow
                                                     index={index}
                                                     rowsType={tab}
                                                     talentEngineerType={talentEngineerType}
@@ -229,7 +229,7 @@ const ActivityUi = () => {
 
                                     return (
                                         <div key={dynamicRows?._id + index}>
-                                            <ComponentDynamicRows
+                                            <ComponentDynamicRow
                                                 index={index}
                                                 rowsType={tab}
                                                 talentEngineerType={talentEngineerType}

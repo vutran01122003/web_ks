@@ -8,7 +8,7 @@ import { FaPen } from 'react-icons/fa';
 import { getDataApi } from '../utils/fetchData';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
-import Avatar from '../components/ComponentAccount/ComponentAvatar';
+import Avatar from '../components/Account/ComponentAvatar';
 import { createCohort, createFaculty, getAllFaculties } from '../redux/actions/facultyAction';
 import { facultySelector } from '../redux/selector';
 

@@ -7,9 +7,9 @@ import { FaSortNumericDown, FaSortNumericDownAlt } from 'react-icons/fa';
 import { getAnnualTaskProgress } from '../redux/actions/progressAction';
 import { authSelector, facultySelector, progressSelector } from '../redux/selector';
 import { toFullName } from '../utils/handleString';
-import StopSubmittingProofModal from '../components/ComponentModal/StopSubmittingProofModal';
-import EmptyDataNotification from '../components/ComponentEmptyData/EmptyDataNotification';
-import SearchFilterComponent from '../components/ComponentFilterData/SearchFilter';
+import StopSubmittingProofModal from '../components/Modal/StopSubmittingProofModal';
+import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+import SearchFilterComponent from '../components/Filter/SearchFilter';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 

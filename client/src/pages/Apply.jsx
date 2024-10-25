@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import LogoIUH from '../assets/images/logo_iuh.png';
-import ComponentProofFile from '../components/ComponentProofFile/ComponentProofFile';
-import ComponentButton from '../components/ComponentButton/ComponentButton';
+import ComponentProofFile from '../components/ProofFile/ComponentProofFile';
+import ComponentButton from '../components/Button/ComponentButton';
 import { GrClose } from 'react-icons/gr';
 const Apply = () => {
     const [files, setFiles] = useState([]);

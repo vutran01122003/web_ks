@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { NewsItem } from '../components/ComponentNews/NewsItem';
+import { NewsItem } from '../components/News/NewsItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllNews } from '../redux/actions/newsAction';
 import { newsSelector, pageSelector } from '../redux/selector';

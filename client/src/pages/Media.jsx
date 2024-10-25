@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
-import ReactQuillComponent from '../components/ComponentReactQuill/ReactQuillComponent';
+import ReactQuillComponent from '../components/ReactQuill/ReactQuillComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../redux/selector';
 import { createNews } from '../redux/actions/newsAction';

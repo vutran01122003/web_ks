@@ -16,8 +16,6 @@ export const getProgressByYear =
                     levelYear: studentLevelYear
                 }
             });
-
-            console.log(res);
         } catch (error) {
             dispatch({
                 type: GLOBALTYPES.ALERT,

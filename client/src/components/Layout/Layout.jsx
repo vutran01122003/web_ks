@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import LayoutSideBar from '../ComponentMenu/LayoutSideBar';
-import TopHeader from '../ComponentHeader/TopHeader';
+import LayoutSideBar from '../Menu/LayoutSideBar';
+import TopHeader from './TopHeader';
 
 const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
 

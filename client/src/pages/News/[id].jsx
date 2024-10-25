@@ -5,8 +5,8 @@ import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNewsDetails } from '../../redux/actions/newsAction';
 import { newsSelector } from '../../redux/selector';
-import ScrollToTopButton from '../../components/ScrollToTopButton/ScrollToTopButton';
-import Avatar from '../../components/ComponentAccount/ComponentAvatar.jsx';
+import ScrollToTopButton from '../../components/Button/ScrollToTopButton.jsx';
+import Avatar from '../../components/Account/ComponentAvatar.jsx';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString.jsx';
 
 const NewsDetail = () => {

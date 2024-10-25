@@ -64,8 +64,6 @@ export const getNotifications =
                 `/notifications/${recipientId}?page=${page}&limit=${limit}&currentNumNotifications=${currentNumNotifications}`
             );
 
-            console.log(res.data.data);
-
             dispatch({
                 type: GLOBALTYPES.NOTIFICATION.GET_NOTIFICATIONS,
                 payload: {
