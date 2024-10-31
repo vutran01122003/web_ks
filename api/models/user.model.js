@@ -1,8 +1,7 @@
-const conn = require("../dbs/init.mongodb");
-const mongoose = require("mongoose");
+const { Schema } = require("mongoose");
 const bcrypt = require("bcrypt");
+const conn = require("../dbs/init.mongodb");
 const ProgressSchema = require("./progress.schema");
-const { Schema } = mongoose;
 
 const [DOC, COL] = ["user", "users"];
 
@@ -10,7 +9,7 @@ const UserSchema = new Schema(
     {
         avatar: {
             type: String,
-            default: "https://tesf.s3.ap-southeast-1.amazonaws.com/avatar/avatar_default/avatar_default.jpg",
+            default: process.env.S3_DEFAULT_AVATAR,
         },
         userId: {
             type: String,
@@ -59,10 +58,12 @@ const UserSchema = new Schema(
         cohort: {
             type: Number,
         },
+        // Cấp bậc năm học của sinh viên (1, 2, 3, 4, 5, ...)
         levelYear: {
             type: Number,
         },
-        additionalYears: {
+        // Cấp bậc năm học đăng ký bổ sung của sinh viên (1, 2, 3, 4, 5, ...)
+        additionalLevelYears: {
             type: [Number],
         },
         isActive: {

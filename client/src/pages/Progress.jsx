@@ -33,11 +33,11 @@ function ProgressUI() {
     const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
     const [isVisibleStopSubmitingProofBtn, setIsVisibleStopSubmitingProofBtn] = useState(false);
 
-    const additionalApplyData =
+    const additionalRegisterInfo =
         major && cohort && talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
             ? facultyState.faculty.majors
                   .find((_major) => _major.majorName === major.majorName)
-                  .cohortList.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalApplyData
+                  .cohortList.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalRegisterInfo
             : null;
 
     const lastStudentElementRef = (node) => {
@@ -197,8 +197,8 @@ function ProgressUI() {
                                 </button>
                                 <div className="line__flex">
                                     {((talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE &&
-                                        additionalApplyData.levelYear === levelYear &&
-                                        additionalApplyData.isActive) ||
+                                        additionalRegisterInfo.levelYear === levelYear &&
+                                        additionalRegisterInfo.isActive) ||
                                         talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) && (
                                         <Fragment>
                                             {isVisibleStopSubmitingProofBtn &&
@@ -245,7 +245,8 @@ function ProgressUI() {
                             <tbody>
                                 {progress.annualTaskProgress.data.map((progressItem, index) => {
                                     const { progressData, lastName, firstName, userId, isActive } = progressItem;
-                                    const { progressPercentage, totalScore } = progressData;
+                                    const progressPercentage = progressData?.progressPercentage ?? 0;
+                                    const totalScore = progressData?.totalScore ?? 0;
 
                                     if (index + 1 === progress.annualTaskProgress.data.length)
                                         return (
@@ -253,8 +254,8 @@ function ProgressUI() {
                                                 <td>{index + 1}</td>
                                                 <td>{userId}</td>
                                                 <td>{toFullName({ firstName, lastName })}</td>
-                                                <td>{`${progressPercentage ? progressPercentage.toFixed(2) : 0}%`}</td>
-                                                <td>{totalScore || 0}</td>
+                                                <td>{`${progressPercentage.toFixed(2)}%`}</td>
+                                                <td>{totalScore}</td>
                                                 <td className={isActive ? 'active' : 'inactive'}>
                                                     {isActive ? 'Hoạt Động' : 'Đã Khóa'}
                                                 </td>
@@ -266,8 +267,8 @@ function ProgressUI() {
                                             <td>{index + 1}</td>
                                             <td>{userId}</td>
                                             <td>{toFullName({ firstName, lastName })}</td>
-                                            <td>{`${progressPercentage ? progressPercentage.toFixed(2) : 0}%`}</td>
-                                            <td>{totalScore || 0}</td>
+                                            <td>{`${progressPercentage.toFixed(2)}%`}</td>
+                                            <td>{totalScore}</td>
                                             <td className={isActive ? 'active' : 'inactive'}>
                                                 {isActive ? 'Hoạt Động' : 'Đã Khóa'}
                                             </td>

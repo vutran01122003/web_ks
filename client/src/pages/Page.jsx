@@ -1,7 +1,7 @@
 import { Input } from 'antd';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { ARRAY_LIST_MENU } from '../assets/data/menu';
+import { ARRAY_LIST_MENU } from '../shared/menu';
 import AddTableModal from '../components/AddTableModal';
 import RemoveTableModal from '../components/RemoveTableModal';
 import ViewTablesModal from '../components/ViewTablesModal';
@@ -12,16 +12,9 @@ import { ImBin2 } from 'react-icons/im';
 import { IoMdAddCircle } from 'react-icons/io';
 import { LuView } from 'react-icons/lu';
 
-const { VITE_APP_GOAL_PAGE, VITE_APP_NEWS_PAGE } = import.meta.env;
-
 const PageManagement = () => {
-    const {
-        VITE_APP_ADMIN_CODE,
-        VITE_APP_TALENT_ENGINEER_CODE,
-        VITE_APP_FACULTY_MANAGER_CODE,
-        VITE_APP_GOAL_PAGE,
-        VITE_APP_NEWS_PAGE
-    } = import.meta.env;
+    const { VITE_APP_ADMIN_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_GOAL_PAGE } =
+        import.meta.env;
 
     const { Search } = Input;
     const page = useSelector(pageSelector);

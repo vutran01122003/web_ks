@@ -35,6 +35,7 @@ class AccessService {
     static register = async ({ data, groupCode }) => {
         try {
             const { userId, lastName, firstName, password, birthday, major, cohort, faculty, email, phone } = data;
+            let levelYear = 0;
 
             const result = await Promise.all([
                 User.findOne({ userId }),
@@ -46,14 +47,7 @@ class AccessService {
             if (result[1]) throw createHttpError.Conflict("Email đã tồn tại");
             if (result[2]) throw createHttpError.Conflict("Số điện thoại đã tồn tại");
 
-            const [currentLevelYear, group] = await Promise.all([
-                FacultyService.getCurrentLevelYearOfCohort({
-                    facultyName: faculty.toLowerCase(),
-                    majorName: major.toLowerCase(),
-                    cohortName: +cohort,
-                }),
-                PermissionService.getGroupByGroupCode(groupCode),
-            ]);
+            const group = await PermissionService.getGroupByGroupCode(groupCode);
 
             const createdUser = new User({
                 userId,
@@ -68,8 +62,28 @@ class AccessService {
                 group: group._id,
             });
 
-            if ([TALENT_ENGINEER_CODE, TEMPORARY_TALENT_ENGINEER_CODE].includes(groupCode))
-                createdUser.levelYear = currentLevelYear;
+            if (TALENT_ENGINEER_CODE === groupCode) {
+                levelYear = await FacultyService.getCurrentLevelYearOfCohort({
+                    facultyName: faculty.toLowerCase(),
+                    majorName: major.toLowerCase(),
+                    cohortName: +cohort,
+                });
+                createdUser.levelYear = levelYear;
+            } else if (TEMPORARY_TALENT_ENGINEER_CODE === groupCode) {
+                const additionalRegisterInfo = await FacultyService.getAdditionalRegisterInfo({
+                    facultyName: faculty.toLowerCase(),
+                    majorName: major.toLowerCase(),
+                    cohortName: +cohort,
+                });
+
+                levelYear = additionalRegisterInfo.levelYear;
+
+                if (!additionalRegisterInfo.isActive)
+                    throw createHttpError.BadRequest("Năm học đăng ký bổ sung đã kết thúc");
+
+                createdUser.levelYear = levelYear;
+                createdUser.additionalLevelYears.push(levelYear);
+            }
 
             createdUser.encodePassword(password);
 
@@ -82,12 +96,13 @@ class AccessService {
                     pageStudentMajor: major,
                     pageStudentCohort: cohort,
                 },
-                currentLevelYear,
+                currentLevelYear: levelYear,
                 userId: populatedUser._id,
             });
 
             return populatedUser;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

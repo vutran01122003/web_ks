@@ -3,6 +3,8 @@ const PageService = require("./page.service");
 const convertToObjectId = require("../utils/convertToObjectId");
 const FacultyService = require("./faculty.service");
 
+const { TEMPORARY_TALENT_ENGINEER_CODE } = process.env;
+
 class ProgressService {
     static getProgressByYear = async ({
         pageStudentMajor,
@@ -55,11 +57,13 @@ class ProgressService {
                           $regex: userId,
                       }
                     : userId,
+                additionalLevelYears: { $in: [+levelYear] },
                 isActive: true,
             };
 
             if (levelYear < currentLevelYear) delete filterData.isActive;
             if (!userId) delete filterData.userId;
+            if (groupCode !== TEMPORARY_TALENT_ENGINEER_CODE) delete filterData.additionalLevelYears;
 
             const studentList = await UserService.getAnnualTaskProgress({
                 filterData,
@@ -71,6 +75,7 @@ class ProgressService {
 
             return studentList;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

@@ -1,4 +1,5 @@
 import { postDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const importUser = (formData) => async (dispatch) => {
@@ -12,14 +13,10 @@ export const importUser = (formData) => async (dispatch) => {
             }
         });
     } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:
-                    error.response?.data?.status === 401
-                        ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Thêm sinh viên thất bại'
-            }
+        notifyError({
+            error,
+            dispatch,
+            defaultMessage: 'Thêm sinh viên thất bại'
         });
     }
 };

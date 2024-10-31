@@ -1,5 +1,5 @@
-import GoalsCreation from '../components/ComponentGoal/GoalCreation';
-import GoalsManagement from '../components/ComponentGoal/GoalManagement';
+import GoalsCreation from '../components/Goal/GoalCreation';
+import GoalsManagement from '../components/Goal/GoalManagement';
 import { Tabs } from 'antd';
 
 function GoalManagement() {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../redux/actions/authAction';
 import ComponentButton from '../Button/ComponentButton';
@@ -7,6 +7,7 @@ import FormControl from '../Form/FormControl';
 import { getAllFaculties } from '../../redux/actions/facultyAction';
 import { facultySelector } from '../../redux/selector';
 import { capitalizeFirstLetter } from '../../utils/handleString';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
@@ -25,6 +26,20 @@ function FirstLogin() {
     const [data, setData] = useState({});
     const [majorList, setMajorList] = useState([]);
     const [cohortList, setCohortList] = useState([]);
+    const [isValid, setIsValid] = useState(false);
+
+    const onCheckInfo = () => {
+        if (data?.major && data?.faculty && data?.cohort && data?.levelYear) {
+            setIsValid(true);
+        } else {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Vui lòng nhập thông tin đầy đủ'
+                }
+            });
+        }
+    };
 
     const handleChangeData = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -62,152 +77,186 @@ function FirstLogin() {
 
     useEffect(() => {
         if (data.cohort) {
-            const levelYear = cohortList.find((cohort) => cohort.cohortName === +data.cohort)?.currentLevelYear;
-            setData((prev) => ({ ...prev, levelYear: levelYear || 1 }));
+            const additionalRegisterInfo = cohortList.find(
+                (cohort) => cohort.cohortName === +data.cohort
+            )?.additionalRegisterInfo;
+
+            if (additionalRegisterInfo?.isActive) {
+                setData((prev) => ({ ...prev, levelYear: additionalRegisterInfo.levelYear }));
+            } else {
+                setData((prev) => ({ ...prev, levelYear: '' }));
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: {
+                        error: 'Chuyên ngành của khóa hiện tại không thể đăng ký bổ sung'
+                    }
+                });
+            }
         }
     }, [data?.cohort]);
 
     return (
         <div className="container__fisrt--login">
             <div className="form__update--info">
-                <form className="">
-                    <h1 className="heading__text">ĐĂNG KÝ BỔ SUNG KỸ SƯ TÀI NĂNG</h1>
-                    <FormControl
-                        id="name_sv"
-                        label="Họ Đệm"
-                        type="text"
-                        name="lastName"
-                        placeholder="Nguyễn Văn"
-                        value={data?.lastName || ''}
-                        onChange={handleChangeData}
-                    />
+                <h1 className="heading__text">{isValid ? 'Thông Tin Sinh Viên' : 'ĐĂNG KÝ BỔ SUNG'}</h1>
+                <form>
+                    {!isValid && (
+                        <Fragment>
+                            <ComponentSelectOption
+                                id="faculty"
+                                name="faculty"
+                                label="Khoa"
+                                labelOptionNull="Chọn khoa"
+                                value={data?.faculty || ''}
+                                options={facultyData.map((faculty) => ({
+                                    labelOption: capitalizeFirstLetter(faculty.facultyName),
+                                    value: faculty.facultyName
+                                }))}
+                                onChange={handleChangeData}
+                            />
 
-                    <FormControl
-                        id="name_sv"
-                        label="Tên Sinh Viên"
-                        type="text"
-                        name="firstName"
-                        value={data?.firstName || ''}
-                        placeholder="An"
-                        onChange={handleChangeData}
-                    />
+                            <ComponentSelectOption
+                                id="major"
+                                name="major"
+                                label="Chuyên Ngành"
+                                labelOptionNull="Chọn ngành học"
+                                value={data?.major || ''}
+                                options={
+                                    majorList.length > 0
+                                        ? majorList.map((major) => ({
+                                              labelOption: capitalizeFirstLetter(major.majorName),
+                                              value: major.majorName
+                                          }))
+                                        : []
+                                }
+                                onChange={handleChangeData}
+                            />
 
-                    <FormControl
-                        i="password_new"
-                        label="Mật Khẩu"
-                        type="password"
-                        name="password"
-                        value={data?.password || ''}
-                        placeholder="Nhập mật khẩu"
-                        onChange={handleChangeData}
-                    />
+                            <ComponentSelectOption
+                                id="cohort"
+                                label="Khóa Sinh Viên"
+                                name="cohort"
+                                labelOptionNull="Chọn khóa"
+                                value={data?.cohort || ''}
+                                options={
+                                    cohortList
+                                        ? cohortList.map((cohort) => ({
+                                              labelOption: cohort.cohortName,
+                                              value: +cohort.cohortName
+                                          }))
+                                        : []
+                                }
+                                onChange={handleChangeData}
+                            />
 
-                    <FormControl
-                        id="msv"
-                        label="Mã Sinh Viên"
-                        name="userId"
-                        value={data?.userId || ''}
-                        placeholder="Nhập mã sinh viên"
-                        onChange={handleChangeData}
-                    />
+                            <FormControl
+                                id="lvlYear"
+                                label="Năm Đăng Ký Bổ Sung"
+                                name="levelYear"
+                                value={data?.levelYear || ''}
+                                readonly={true}
+                                placeholder="Năm Đăng Ký"
+                                onChange={handleChangeData}
+                                classNameInputItem="not_allow"
+                            />
 
-                    <FormControl
-                        id="bir"
-                        type="date"
-                        label="Ngày Sinh"
-                        name="birthday"
-                        value={data?.birthday || ''}
-                        data-date-format="DD MMMM YYYY"
-                        placeholder="Nhập ngày sinh"
-                        onChange={handleChangeData}
-                    />
+                            <ComponentButton
+                                textButton="Tiếp Tục"
+                                className="apply_btn text-sm"
+                                type="button"
+                                onClick={onCheckInfo}
+                            />
+                        </Fragment>
+                    )}
 
-                    <ComponentSelectOption
-                        id="gd"
-                        name="gender"
-                        label="Giới Tính"
-                        labelOptionNull="Chọn giới tính"
-                        value={data?.gender || ''}
-                        options={[
-                            {
-                                labelOption: 'Nam',
-                                value: 'nam'
-                            },
-                            {
-                                labelOption: 'Nữ',
-                                value: 'nữ'
-                            }
-                        ]}
-                        onChange={handleChangeData}
-                    />
+                    {isValid && (
+                        <Fragment>
+                            <FormControl
+                                id="name_sv"
+                                label="Họ Đệm"
+                                type="text"
+                                name="lastName"
+                                placeholder="Nguyễn Văn"
+                                value={data?.lastName || ''}
+                                onChange={handleChangeData}
+                            />
 
-                    <ComponentSelectOption
-                        id="faculty"
-                        name="faculty"
-                        label="Khoa"
-                        labelOptionNull="Chọn khoa"
-                        value={data?.faculty || ''}
-                        options={facultyData.map((faculty) => ({
-                            labelOption: capitalizeFirstLetter(faculty.facultyName),
-                            value: faculty.facultyName
-                        }))}
-                        onChange={handleChangeData}
-                    />
+                            <FormControl
+                                id="name_sv"
+                                label="Tên Sinh Viên"
+                                type="text"
+                                name="firstName"
+                                value={data?.firstName || ''}
+                                placeholder="An"
+                                onChange={handleChangeData}
+                            />
 
-                    <ComponentSelectOption
-                        id="major"
-                        name="major"
-                        label="Chuyên Ngành"
-                        labelOptionNull="Chọn ngành học"
-                        value={data?.major || ''}
-                        options={
-                            majorList.length > 0
-                                ? majorList.map((major) => ({
-                                      labelOption: capitalizeFirstLetter(major.majorName),
-                                      value: major.majorName
-                                  }))
-                                : []
-                        }
-                        onChange={handleChangeData}
-                    />
+                            <FormControl
+                                i="password_new"
+                                label="Mật Khẩu"
+                                type="password"
+                                name="password"
+                                value={data?.password || ''}
+                                placeholder="Nhập mật khẩu"
+                                onChange={handleChangeData}
+                            />
 
-                    <ComponentSelectOption
-                        id="cohort"
-                        label="Khóa Sinh Viên"
-                        name="cohort"
-                        labelOptionNull="Chọn khóa"
-                        value={data?.cohort || ''}
-                        options={
-                            cohortList
-                                ? cohortList.map((cohort) => ({
-                                      labelOption: cohort.cohortName,
-                                      value: +cohort.cohortName
-                                  }))
-                                : []
-                        }
-                        onChange={handleChangeData}
-                    />
+                            <FormControl
+                                id="msv"
+                                label="Mã Sinh Viên"
+                                name="userId"
+                                value={data?.userId || ''}
+                                placeholder="Nhập mã sinh viên"
+                                onChange={handleChangeData}
+                            />
 
-                    <FormControl
-                        id="lvlYear"
-                        label="Năm Học"
-                        name="levelYear"
-                        value={data?.levelYear || ''}
-                        readonly={true}
-                        placeholder="Năm hiện tại"
-                        onChange={handleChangeData}
-                    />
+                            <FormControl
+                                id="bir"
+                                type="date"
+                                label="Ngày Sinh"
+                                name="birthday"
+                                value={data?.birthday || ''}
+                                data-date-format="DD MMMM YYYY"
+                                placeholder="Nhập ngày sinh"
+                                onChange={handleChangeData}
+                            />
 
-                    <FormControl label="Email" name="email" placeholder="Nhập email" onChange={handleChangeData} />
+                            <ComponentSelectOption
+                                id="gd"
+                                name="gender"
+                                label="Giới Tính"
+                                labelOptionNull="Chọn giới tính"
+                                value={data?.gender || ''}
+                                options={[
+                                    {
+                                        labelOption: 'Nam',
+                                        value: 'nam'
+                                    },
+                                    {
+                                        labelOption: 'Nữ',
+                                        value: 'nữ'
+                                    }
+                                ]}
+                                onChange={handleChangeData}
+                            />
 
-                    <FormControl
-                        label="Số điện thoại liên hệ"
-                        name="phone"
-                        placeholder="Nhập số điện thoại liên hệ"
-                        onChange={handleChangeData}
-                    />
+                            <FormControl
+                                label="Email"
+                                name="email"
+                                placeholder="Nhập email"
+                                onChange={handleChangeData}
+                            />
 
-                    <ComponentButton textButton="Lưu thông tin" type="submit" onClick={handleSumbitForm} />
+                            <FormControl
+                                label="Số điện thoại liên hệ"
+                                name="phone"
+                                placeholder="Nhập số điện thoại liên hệ"
+                                onChange={handleChangeData}
+                            />
+
+                            <ComponentButton textButton="Lưu thông tin" type="submit" onClick={handleSumbitForm} />
+                        </Fragment>
+                    )}
                 </form>
             </div>
         </div>

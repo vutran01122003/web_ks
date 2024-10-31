@@ -41,7 +41,7 @@ const FacultySchema = new Schema(
                                 type: Number,
                                 default: 1,
                             },
-                            additionalApplyData: {
+                            additionalRegisterInfo: {
                                 levelYear: Number,
                                 isActive: Boolean,
                             },

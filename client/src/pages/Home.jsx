@@ -4,7 +4,7 @@ import LayoutChart from '../components/Home/LayoutChart';
 import { useDispatch, useSelector } from 'react-redux';
 import GoalsInfo from '../components/Goal/GoalsInfo';
 import { getProgressByYear } from '../redux/actions/progressAction';
-import Quantity from '../components/ComponentQuantity/Quantity';
+import Quantity from '../components/Notification/Quantity';
 import { progressSelector } from '../redux/selector';
 import { GoArrowRight } from 'react-icons/go';
 import { Link } from 'react-router-dom';
@@ -56,16 +56,16 @@ const Home = ({ auth }) => {
         }
     }, [progress.goalsInfoData, levelYear]);
 
-    return (
+    return [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(groupCode) ? (
         <div className="pageHome ">
             <div className="information__welcome">
                 <div className="wecome__name">
                     <span>
                         {`Xin chào,
-                        ${toFullName({
-                            lastName: auth?.user?.lastName,
-                            firstName: auth?.user?.firstName
-                        })}!`}
+                    ${toFullName({
+                        lastName: auth?.user?.lastName,
+                        firstName: auth?.user?.firstName
+                    })}!`}
                     </span>
                     <div className="to__profile">
                         <Link to="/profile">
@@ -98,7 +98,7 @@ const Home = ({ auth }) => {
                 )}
             </div>
         </div>
-    );
+    ) : null;
 };
 
 export default Home;

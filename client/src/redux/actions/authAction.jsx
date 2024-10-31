@@ -1,4 +1,5 @@
 import { getDataApi, postDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const login =
@@ -115,14 +116,10 @@ export const verifyAccessToken = () => async (dispatch) => {
             });
         }
     } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:
-                    error.response?.data?.status === 401
-                        ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Tải trang thất bại'
-            }
+        notifyError({
+            dispatch,
+            error,
+            defaultMessage: 'Tải trang thất bại'
         });
     }
 };

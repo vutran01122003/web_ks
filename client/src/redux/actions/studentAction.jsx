@@ -1,4 +1,5 @@
 import { getDataApi, patchDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const getStudents =
@@ -31,14 +32,10 @@ export const getStudents =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy danh sách kỹ sư tài năng thất bại'
-                }
+            notifyError({
+                error,
+                dispatch,
+                defaultMessage: 'Lấy danh sách kỹ sư tài năng thất bại'
             });
         } finally {
             dispatch({
@@ -73,14 +70,10 @@ export const updateUser =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật thông tin người dùng thất bại'
-                }
+            notifyError({
+                error,
+                dispatch,
+                defaultMessage: 'Cập nhật thông tin người dùng thất bại'
             });
         }
     };

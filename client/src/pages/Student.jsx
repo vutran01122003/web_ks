@@ -183,33 +183,33 @@ const Student = () => {
                                 placeholder="Nhập Mã Sinh Viên"
                                 onChange={handleChangeUserId}
                             />
-                        </div>
 
-                        <div className="search_wrapper">
-                            <div className="btn_group">
-                                <button
-                                    className="student_search_btn"
-                                    onClick={() => {
-                                        onClickGetStudentListBtn({
-                                            page: 1,
-                                            sortByName
-                                        });
-                                    }}
-                                >
-                                    Tìm Kiếm
-                                </button>
+                            <div className="search_wrapper">
+                                <div className="btn_group">
+                                    <button
+                                        className="student_search_btn"
+                                        onClick={() => {
+                                            onClickGetStudentListBtn({
+                                                page: 1,
+                                                sortByName
+                                            });
+                                        }}
+                                    >
+                                        Tìm Kiếm
+                                    </button>
 
-                                <div className="add_student_btn_wrapper">
-                                    <label htmlFor="excelfile">Thêm Kỹ Sư</label>
-                                    <input
-                                        type="file"
-                                        id="excelfile"
-                                        name="excelfile"
-                                        hidden
-                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                        onChange={handleFileSelected}
-                                        ref={fileRef}
-                                    />
+                                    <div className="add_student_btn_wrapper">
+                                        <label htmlFor="excelfile">Thêm Kỹ Sư</label>
+                                        <input
+                                            type="file"
+                                            id="excelfile"
+                                            name="excelfile"
+                                            hidden
+                                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                            onChange={handleFileSelected}
+                                            ref={fileRef}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

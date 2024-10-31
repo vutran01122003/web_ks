@@ -1,4 +1,5 @@
 import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const createUpdatedActivityNotification =
@@ -13,14 +14,10 @@ export const createUpdatedActivityNotification =
                 pageId
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Tạo thông báo thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Tạo thông báo thất bại'
             });
         }
     };
@@ -37,14 +34,10 @@ export const getNumUnreadNotification =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Tạo thông báo thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy dữ liệu số lượng thông báo chưa đọc thất bại'
             });
         }
     };
@@ -80,14 +73,10 @@ export const getNotifications =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy dữ liệu thông báo thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy dữ liệu thông báo thất bại'
             });
         }
     };
@@ -110,14 +99,10 @@ export const updateReadStatus =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Cập nhật trạng thái đọc thất bại'
             });
         }
     };
@@ -137,14 +122,10 @@ export const deleteNotification =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Xóa thông báo thất bại'
             });
         }
     };
@@ -164,14 +145,10 @@ export const markAllAsRead =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Đánh dấu đã đọc tất cả thất bại'
             });
         }
     };
@@ -188,14 +165,10 @@ export const deleteAllNotification =
                 type: GLOBALTYPES.NOTIFICATION.DELETE_ALL_OTIFICATION
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật trạng thái đọc thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Xóa toàn bộ thông báo thất bại'
             });
         }
     };

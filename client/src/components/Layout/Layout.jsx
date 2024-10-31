@@ -2,7 +2,17 @@ import { Outlet, Navigate } from 'react-router-dom';
 import LayoutSideBar from '../Menu/LayoutSideBar';
 import TopHeader from './TopHeader';
 
-const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
+const {
+    VITE_APP_TALENT_ENGINEER_CODE,
+    VITE_APP_FACULTY_MANAGER_CODE,
+    VITE_APP_ADMIN_CODE,
+    VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
+} = import.meta.env;
+
+const defaultPathMapping = {
+    [VITE_APP_FACULTY_MANAGER_CODE]: '/activity',
+    [VITE_APP_ADMIN_CODE]: '/faculty'
+};
 
 function Layout({ auth, pathName, groupCode }) {
     return (
@@ -12,17 +22,15 @@ function Layout({ auth, pathName, groupCode }) {
                 <main>
                     <TopHeader auth={auth} />
                     <div className="main">
-                        {(pathName === '/' || pathName === '/home') && groupCode === VITE_APP_FACULTY_MANAGER_CODE && (
-                            <Navigate to="/activity" replace />
-                        )}
+                        {['/', '/home'].includes(pathName) &&
+                            [VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE].includes(groupCode) && (
+                                <Navigate to={defaultPathMapping[groupCode]} replace />
+                            )}
 
-                        {(pathName === '/' || pathName === '/home') && groupCode === VITE_APP_ADMIN_CODE && (
-                            <Navigate to="/faculty" replace />
-                        )}
-
-                        {(pathName !== '/' || pathName !== '/home' || groupCode === VITE_APP_TALENT_ENGINEER_CODE) && (
-                            <Outlet />
-                        )}
+                        {(!['/', '/home'].includes(pathName) ||
+                            [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(
+                                groupCode
+                            )) && <Outlet />}
                     </div>
                 </main>
             </div>

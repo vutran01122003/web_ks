@@ -17,7 +17,6 @@ const {
 
 export const ARRAY_LIST_MENU = [
     {
-        id: 0,
         roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
         name_menu: 'Tổng Quan',
         icon_before: <RiHome3Fill />,
@@ -25,7 +24,6 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 1,
         roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Xét Duyệt Hoạt Động',
         icon_before: <FaListCheck />,
@@ -33,7 +31,6 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 2,
         roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Thống Kê Tiến Độ Hoàn Thành',
         icon_before: <HiOutlineClipboardList />,
@@ -41,7 +38,6 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 3,
         roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Quản lý Nhóm Chỉ Tiêu',
         icon_before: <TbTargetArrow />,
@@ -49,15 +45,13 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 4,
         roles: [VITE_APP_ADMIN_CODE],
         name_menu: 'Quản Lý Trang',
         icon_before: <CgBrowser />,
-        to_link: '/page-management',
+        to_link: '/page',
         submenu: false
     },
     {
-        id: 5,
         roles: [VITE_APP_FACULTY_MANAGER_CODE],
         name_menu: 'Tạo Tin Tức & Thông Báo',
         icon_before: <MdOutlineCreate />,
@@ -65,7 +59,6 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 6,
         name_menu: 'Tin Tức',
         allow: true,
         icon_before: <HiOutlineNewspaper />,
@@ -74,7 +67,6 @@ export const ARRAY_LIST_MENU = [
         sub_menu_item: []
     },
     {
-        id: 7,
         name_menu: 'Nhóm Chỉ Tiêu Năm',
         roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
         icon_before: <BiBookBookmark />,
@@ -83,7 +75,6 @@ export const ARRAY_LIST_MENU = [
         sub_menu_item: []
     },
     {
-        id: 8,
         name_menu: 'Quản Lý Sinh Viên',
         roles: [VITE_APP_FACULTY_MANAGER_CODE],
         to_link: '/student',
@@ -91,7 +82,6 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 9,
         name_menu: 'Quản Lý Khoa & Chuyên Ngành',
         roles: [VITE_APP_ADMIN_CODE],
         to_link: '/faculty',
@@ -99,7 +89,6 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        id: 10,
         name_menu: 'Phân Quyền Người Dùng',
         roles: [VITE_APP_ADMIN_CODE],
         to_link: '/permission',

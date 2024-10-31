@@ -176,17 +176,10 @@ class FacultyService {
 
             const cohort = major.cohortList.find((cohort) => cohort.cohortName === parseInt(cohortName));
 
-            if (isActive) {
-                cohort.additionalApplyData = {
-                    levelYear,
-                    isActive,
-                };
-            } else {
-                cohort.additionalApplyData = {
-                    levelYear,
-                    isActive,
-                };
-            }
+            cohort.additionalRegisterInfo = {
+                levelYear,
+                isActive,
+            };
 
             await faculty.save();
         } catch (error) {
@@ -317,6 +310,16 @@ class FacultyService {
             return currentLevelYear;
         } catch (error) {
             throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+        }
+    };
+
+    static getAdditionalRegisterInfo = async ({ facultyName, majorName, cohortName }) => {
+        try {
+            const cohort = await this.getCohortByName({ facultyName, majorName, cohortName });
+
+            return cohort.additionalRegisterInfo;
+        } catch (error) {
+            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu đăng ký bổ sung");
         }
     };
 }

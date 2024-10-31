@@ -1,5 +1,6 @@
 import GLOBALTYPES from './globalTypes';
 import { getDataApi, postDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 
 export const getProgressByYear =
     ({ userId, studentMajor, studentCohort, studentLevelYear }) =>
@@ -17,15 +18,10 @@ export const getProgressByYear =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response.data?.msg ||
-                              'Lấy Dữ Liệu Tiến Trình Hoàn Thành Chỉ Tiêu Theo Năm Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy Dữ Liệu Tiến Trình Hoàn Thành Chỉ Tiêu Theo Năm Thất Bại'
             });
         }
     };
@@ -62,14 +58,10 @@ export const getAnnualTaskProgress =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response.data?.msg || 'Lấy Dữ Liệu Tiến Độ Hoàn Thành Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy Dữ Liệu Tiến Độ Hoàn Thành Thất Bại'
             });
         } finally {
             dispatch({
@@ -119,14 +111,10 @@ export const stopSubmittingProof =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response.data?.msg || 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
             });
         }
     };

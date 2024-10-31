@@ -1,4 +1,5 @@
 import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const addTable =
@@ -22,14 +23,10 @@ export const addTable =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Thêm chỉ tiêu thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Thêm chỉ tiêu thất bại'
             });
         }
     };
@@ -47,14 +44,10 @@ export const getTables =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy dữ liệu các chỉ tiêu thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy dữ liệu các chỉ tiêu thất bại'
             });
         }
     };
@@ -75,14 +68,10 @@ export const getTable =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy dữ liệu chỉ tiêu thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy dữ liệu chỉ tiêu thất bại'
             });
         }
     };
@@ -111,14 +100,10 @@ export const removeTable =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Xóa chỉ tiêu thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Xóa chỉ tiêu thất bại'
             });
         }
     };
@@ -150,14 +135,10 @@ export const updateTable =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error?.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập nhật chỉ tiêu thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Cập nhật chỉ tiêu thất bại'
             });
         }
     };

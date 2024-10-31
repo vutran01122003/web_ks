@@ -1,5 +1,6 @@
 import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import notifyError from '../../utils/notifyError';
 
 export const createPage =
     ({ pageData, resetAllData }) =>
@@ -23,14 +24,10 @@ export const createPage =
 
             if (resetAllData) resetAllData();
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Tạo Trang Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Tạo Trang Thất Bại'
             });
         }
     };
@@ -46,14 +43,10 @@ export const getPages = (params) => async (dispatch) => {
             }
         });
     } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:
-                    error.response?.data?.status === 401
-                        ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Lấy dữ liệu trang thất bại'
-            }
+        notifyError({
+            dispatch,
+            error,
+            defaultMessage: 'Lấy dữ liệu trang thất bại'
         });
     }
 };
@@ -69,14 +62,10 @@ export const getGoals = (params) => async (dispatch) => {
             }
         });
     } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:
-                    error.response?.data?.status === 401
-                        ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Lấy dữ liệu nhóm chỉ tiêu thất bại'
-            }
+        notifyError({
+            dispatch,
+            error,
+            defaultMessage: 'Lấy dữ liệu nhóm chỉ tiêu thất bại'
         });
     }
 };
@@ -90,14 +79,10 @@ export const setPageInfo = (pageInfo) => async (dispatch) => {
             }
         });
     } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:
-                    error.response?.data?.status === 401
-                        ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg || 'Cập nhật dữ liệu trang thất bại'
-            }
+        notifyError({
+            dispatch,
+            error,
+            defaultMessage: 'Cập nhật dữ liệu trang thất bại'
         });
     }
 };
@@ -129,14 +114,10 @@ export const removePage =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Xóa Trang Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Xóa Trang Thất Bại'
             });
         }
     };
@@ -169,14 +150,10 @@ export const updateStatusPage =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Cập Nhật Trạng Thái Trang Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Cập Nhật Trạng Thái Trang Thất Bại'
             });
         }
     };

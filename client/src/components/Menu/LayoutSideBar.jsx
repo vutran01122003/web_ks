@@ -7,7 +7,7 @@ import Logo_IUH_color_w from '../../assets/images/logo_iuh.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../../redux/selector';
 import { getPages } from '../../redux/actions/pageAction';
-import { ARRAY_LIST_MENU } from '../../assets/data/menu';
+import { ARRAY_LIST_MENU } from '../../shared/menu';
 import { renderSideBar } from '../../helpers/renderSideBar';
 
 const {
@@ -97,17 +97,17 @@ const LayoutSideBar = ({ auth }) => {
         }
     }, [JSON.stringify(page.pages), levelYear]);
 
-    const renderArrMenu = ARRAY_LIST_MENU.map((item) => {
+    const renderArrMenu = ARRAY_LIST_MENU.map((item, index) => {
         return (
-            <React.Fragment key={item.id}>
+            <React.Fragment key={index}>
                 {item.allow || item.roles.includes(auth?.user.group.groupCode) ? (
                     <>
                         {item.submenu ? (
                             <div
-                                key={item.id}
-                                className={`item_menu_a ${subMenu[item.id] ? 'active_item' : 'unactive_item'} `}
+                                key={index}
+                                className={`item_menu_a ${subMenu[index] ? 'active_item' : 'unactive_item'} `}
                                 onClick={(e) => {
-                                    if (e.target.name !== 'level_year_list') handleSubMenu(item.id);
+                                    if (e.target.name !== 'level_year_list') handleSubMenu(index);
                                 }}
                             >
                                 <div className="item_menu_contain_submenu">
@@ -123,7 +123,7 @@ const LayoutSideBar = ({ auth }) => {
                                                 value={levelYear}
                                                 onChange={(e) => {
                                                     handleChangeLevelYear(e);
-                                                    handleRefreshSubMenu(item.id);
+                                                    handleRefreshSubMenu(index);
                                                 }}
                                             >
                                                 {levelYearList.map((levelYearItem) => {
@@ -142,7 +142,7 @@ const LayoutSideBar = ({ auth }) => {
                                 ) : (
                                     <div
                                         className={`icon_active_sub ${
-                                            subMenu[item.id] ? 'active_icon' : 'unactive_icon'
+                                            subMenu[index] ? 'active_icon' : 'unactive_icon'
                                         }`}
                                     >
                                         <IoMdArrowDropright />
@@ -150,7 +150,7 @@ const LayoutSideBar = ({ auth }) => {
                                 )}
                             </div>
                         ) : (
-                            <NavLink key={item.id} className="item_menu_a" to={item.to_link}>
+                            <NavLink key={index} className="item_menu_a" to={item.to_link}>
                                 <span>
                                     {item.icon_before}
                                     <span className={toggleMenu ? 'none_text__menu--item' : ''}>{item.name_menu}</span>
@@ -162,10 +162,10 @@ const LayoutSideBar = ({ auth }) => {
                             <div
                                 className="box_sub_menu_item"
                                 ref={(ref) => {
-                                    if (ref) menuRef.current[item.id] = ref;
+                                    if (ref) menuRef.current[index] = ref;
                                 }}
                                 style={{
-                                    height: `${subMenu[item.id] ? heightBoxSub[item.id] : '0px'}`
+                                    height: `${subMenu[index] ? heightBoxSub[index] : '0px'}`
                                 }}
                             >
                                 {item.sub_menu_item.map((item_sub) => {

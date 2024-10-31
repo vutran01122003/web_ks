@@ -47,6 +47,15 @@ class PageService {
                     pageType,
                 });
             } else if (pageType === GOAL_PAGE) {
+                const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
+                    facultyName: pageFaculty,
+                    majorName: pageStudentMajor,
+                    cohortName: pageStudentCohort,
+                });
+
+                if (currentLevelYear > pageStudentLevelYear)
+                    throw createError.BadRequest("Không thể tạo nhóm chỉ tiêu cho năm học đã kết thúc");
+
                 createdPage = await Page.create({
                     pageName,
                     pageFaculty,

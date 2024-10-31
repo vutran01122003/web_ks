@@ -134,10 +134,11 @@ function GoalsManagement() {
     }, [goals.table]);
 
     useEffect(() => {
-        dispatch({
-            type: GLOBALTYPES.GOALS.RESET_GOALS
-        });
-    }, []);
+        if (goals.filteredPage.length > 0)
+            dispatch({
+                type: GLOBALTYPES.GOALS.RESET_GOALS
+            });
+    }, [major, cohort, levelYear, talentEngineerType]);
 
     return (
         <div className="goal_management_container">

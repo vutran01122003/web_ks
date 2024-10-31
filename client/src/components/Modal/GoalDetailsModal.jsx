@@ -41,10 +41,13 @@ function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
     return (
         <div className="modal_overlap" onMouseUp={onHiddenModal}>
             <div className="box_wrapper goal_details_modal">
-                <div className="goal_details_modal_header">Thống Kê Chi Tiết Hoạt Động</div>
-                <div className="modal_close_icon_wrapper" onClick={onToggleModalDisplay}>
-                    <AiOutlineClose />
+                <div className="goal_details_modal_header">
+                    <span>Thống Kê Chi Tiết Hoạt Động</span>
+                    <div className="modal_close_icon_wrapper" onClick={onToggleModalDisplay}>
+                        <AiOutlineClose />
+                    </div>
                 </div>
+
                 <div className="goal_details_modal_body">
                     <div className="goal_details_modal_body_filter">
                         <Account userInfo={currentUserData} inModal={true} />

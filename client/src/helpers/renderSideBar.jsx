@@ -1,4 +1,4 @@
-import { ARRAY_LIST_MENU } from '../assets/data/menu';
+import { ARRAY_LIST_MENU } from '../shared/menu';
 
 const { VITE_APP_GOAL_PAGE, VITE_APP_NEWS_PAGE } = import.meta.env;
 

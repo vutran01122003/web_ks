@@ -1,4 +1,4 @@
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -8,6 +8,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { TiMediaRecord } from 'react-icons/ti';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import { renderTable } from '../../helpers/renderTable';
+import client from '../../config/aws.config';
 
 function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
     pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
@@ -26,14 +27,6 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
     const handleChangePdfIndex = (index) => {
         setPdfIndex(index);
     };
-
-    const client = new S3Client({
-        region: 'ap-southeast-1',
-        credentials: {
-            accessKeyId: 'AKIAQ3LTMVZSFJ6OYNXV',
-            secretAccessKey: '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'
-        }
-    });
 
     const handleMouseUpDetailedRowModal = (e) => {
         if (e.target === e.currentTarget) {
@@ -62,7 +55,7 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
             .then((data) => {
                 setPdfList(data.map((item) => new Blob([item], { type: 'application/pdf' })));
             })
-            .catch(() => {
+            .catch((error) => {
                 dispatch({
                     type: GLOBALTYPES.ALERT,
                     payload: {

@@ -19,7 +19,6 @@ import {
 function Notification({ notification, auth, handleToggleVisibleNotificationModal }) {
     const dispatch = useDispatch();
     const notificationRef = useRef();
-    s;
     const observer = useRef();
     const [visibleMoreModal, setVisibleMoreModal] = useState(false);
     const [currentNotificationId, setCurrentNotificationId] = useState(null);

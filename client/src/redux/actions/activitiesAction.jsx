@@ -1,4 +1,5 @@
 import { getDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const getActivities =
@@ -19,14 +20,10 @@ export const getActivities =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy Dữ Liệu Hoạt Động Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy Dữ Liệu Hoạt Động Thất Bại'
             });
         }
     };

@@ -1,4 +1,5 @@
 import { getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
+import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
 export const createFaculty =
@@ -25,15 +26,10 @@ export const createFaculty =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Tạo Khoa mới thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Tạo Khoa mới thất bại'
             });
         }
     };
@@ -49,15 +45,10 @@ export const getAllFaculties = () => async (dispatch) => {
             }
         });
     } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error:
-                    error.response?.data?.status === 401
-                        ? 'Hết Phiên Đăng Nhập'
-                        : error?.response?.data.msg ||
-                          'Lấy dữ liệu khoa mới thất bại'
-            }
+        notifyError({
+            dispatch,
+            error,
+            defaultMessage: 'Lấy dữ liệu khoa mới thất bại'
         });
     }
 };
@@ -66,12 +57,9 @@ export const createCohort =
     ({ facultyId, majorId, cohortName }) =>
     async (dispatch) => {
         try {
-            const res = await postDataApi(
-                `/faculties/${facultyId}/majors/${majorId}/cohorts`,
-                {
-                    cohortName
-                }
-            );
+            const res = await postDataApi(`/faculties/${facultyId}/majors/${majorId}/cohorts`, {
+                cohortName
+            });
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -80,15 +68,10 @@ export const createCohort =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Tạo khóa sinh viên thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Tạo khóa sinh viên thất bại'
             });
         }
     };
@@ -97,22 +80,14 @@ export const updateLevelYearOfCohort =
     ({ currentLevelYear, facultyId, majorId, cohortId }) =>
     async (dispatch) => {
         try {
-            await patchDataApi(
-                `/faculties/${facultyId}/majors/${majorId}/cohorts/${cohortId}`,
-                {
-                    currentLevelYear: currentLevelYear
-                }
-            );
+            await patchDataApi(`/faculties/${facultyId}/majors/${majorId}/cohorts/${cohortId}`, {
+                currentLevelYear: currentLevelYear
+            });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Cập nhật khóa sinh viên thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Cập nhật khóa sinh viên thất bại'
             });
         }
     };
@@ -123,15 +98,10 @@ export const getFacultyById =
         try {
             await getDataApi(`/faculties/${facultyId}`);
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Lấy dữ liệu khoa thất bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy dữ liệu khoa thất bại'
             });
         }
     };
@@ -148,15 +118,10 @@ export const getFacultyByName =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg ||
-                              'Lấy dữ liệu khoa thất bại'
-                }
+            notifyError({
+                error,
+                dispatch,
+                defaultMessage: 'Lấy dữ liệu khoa thất bại'
             });
         }
     };

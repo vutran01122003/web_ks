@@ -1,5 +1,6 @@
 import { getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import notifyError from '../../utils/notifyError';
 const [RESUBMITED_STATUS] = ['phải nộp lại'];
 
 export const addRow =
@@ -39,14 +40,10 @@ export const addRow =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Thêm Hoạt Động Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Thêm Hoạt Động Thất Bại'
             });
         }
     };
@@ -94,14 +91,10 @@ export const getDynamicRows =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Lấy Dữ Liệu Chỉ Tiêu Chờ Duyệt Thất Bại'
             });
         } finally {
             dispatch({
@@ -179,14 +172,10 @@ export const updateRowsStatus =
                 }
             });
         } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error:
-                        error.response?.data?.status === 401
-                            ? 'Hết Phiên Đăng Nhập'
-                            : error?.response?.data.msg || 'Duyệt Chỉ Tiêu Thất Bại'
-                }
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Duyệt Chỉ Tiêu Thất Bại'
             });
         }
     };

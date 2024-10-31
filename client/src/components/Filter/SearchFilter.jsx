@@ -150,7 +150,7 @@ function SearchFilterComponent({
                     {Object.keys(cohortValue).length > 0 && (
                         <Fragment>
                             <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng</option>
-                            <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>KSTN Tạm Thời</option>
+                            <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>Xét Tuyển Bổ Sung</option>
                         </Fragment>
                     )}
                 </select>

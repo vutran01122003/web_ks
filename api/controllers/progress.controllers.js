@@ -95,6 +95,7 @@ class ProgressControllers {
         try {
             const { major, cohort, groupCode, faculty, levelYear, userId, sortProgressPercentage, page, limit } =
                 req.query;
+
             const studentList = await ProgressService.getAllProgress({
                 major,
                 cohort,
