@@ -15,14 +15,14 @@ class FacultyService {
                 managerList: managerIdList,
                 majors: majorList.map((major) => ({
                     majorName: major,
-                    cohortList: [],
-                })),
+                    cohortList: []
+                }))
             });
 
             const populatedFaculty = createdFaculty.populate({
                 path: "managerList",
                 model: "user",
-                select: "lastName firstName userId",
+                select: "lastName firstName userId"
             });
 
             return populatedFaculty;
@@ -41,7 +41,7 @@ class FacultyService {
 
             if (!faculty.majors.some((major) => major.majorName === majorName.trim().toLowerCase())) {
                 faculty.majors.push({
-                    majorName,
+                    majorName
                 });
                 await faculty.save();
             } else throw createHttpError.Conflict("Chuyên ngành đã tồn tại");
@@ -49,7 +49,7 @@ class FacultyService {
             return {
                 msg: `Chuyên ngành ${majorName} đã được tạo thành công`,
                 status: 201,
-                data: faculty.majors[faculty.majors.length - 1],
+                data: faculty.majors[faculty.majors.length - 1]
             };
         } catch (error) {
             throw error;
@@ -120,7 +120,7 @@ class FacultyService {
                 throw createHttpError.Conflict(`Khóa ${cohortName} đã tồn tại`);
 
             cohortList.push({
-                cohortName,
+                cohortName
             });
 
             await faculty.save();
@@ -128,7 +128,7 @@ class FacultyService {
             return {
                 status: 201,
                 msg: `Khóa ${cohortName} được tạo thành công`,
-                data: cohortList[cohortList.length - 1],
+                data: cohortList[cohortList.length - 1]
             };
         } catch (error) {
             throw error;
@@ -178,7 +178,7 @@ class FacultyService {
 
             cohort.additionalRegisterInfo = {
                 levelYear,
-                isActive,
+                isActive
             };
 
             await faculty.save();
@@ -228,7 +228,7 @@ class FacultyService {
             }
 
             const updatedFaculty = await Faculty.findByIdAndUpdate(facultyId, data, {
-                new: true,
+                new: true
             }).lean();
 
             if (!updatedFaculty) throw createHttpError.NotFound("Khoa không tồn tại");
@@ -248,7 +248,7 @@ class FacultyService {
             return {
                 status: 200,
                 msg: `Xóa khoa ${deletedFaculty.facultyName} thành công`,
-                data: deletedFaculty,
+                data: deletedFaculty
             };
         } catch (error) {
             throw error;

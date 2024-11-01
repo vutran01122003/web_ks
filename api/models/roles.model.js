@@ -1,7 +1,7 @@
-const conn = require('../dbs/init.mongodb');
-const mongoose = require('mongoose');
+const conn = require("../dbs/init.mongodb");
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const [DOC, COL] = ['role', 'roles'];
+const [DOC, COL] = ["role", "roles"];
 
 const RoleSchema = new Schema(
     {
@@ -11,12 +11,12 @@ const RoleSchema = new Schema(
         },
         method: {
             type: String,
-            enum: ['get', 'post', 'patch', 'delete'],
+            enum: ["get", "post", "patch", "delete"],
             required: true
         },
         description: {
             type: String,
-            default: 'Không có mô tả'
+            default: "Không có mô tả"
         }
     },
     {

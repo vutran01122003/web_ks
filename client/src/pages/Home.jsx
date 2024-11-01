@@ -78,10 +78,13 @@ const Home = ({ auth }) => {
                 </div>
             </div>
 
-            {[VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) &&
-                auth.user?.annualActivitiesProgress && (
-                    <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
-                )}
+            {VITE_APP_TALENT_ENGINEER_CODE === groupCode && auth.user?.annualActivitiesProgress && (
+                <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
+            )}
+
+            {VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE === groupCode && auth.user?.annualTemporaryActivitiesProgress && (
+                <Quantity annualActivitiesProgress={auth.user.annualTemporaryActivitiesProgress[levelYear - 1]} />
+            )}
 
             <div className="container__top transform__animation--top">
                 <LayoutInfo user={auth?.user} />

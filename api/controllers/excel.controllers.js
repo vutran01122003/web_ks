@@ -1,13 +1,13 @@
-const excelService = require('../services/excel.service');
+const excelService = require("../services/excel.service");
 
 class ExcelController {
     exportUserQualified = async (req, res, next) => {
         try {
             const workbook = await excelService.exportUserQualified();
 
-            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-            res.setHeader('Content-Disposition', 'attachment; filename=users.xlsx');
+            res.setHeader("Content-Disposition", "attachment; filename=users.xlsx");
 
             workbook.xlsx
                 .write(res)
@@ -30,7 +30,7 @@ class ExcelController {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Thêm sinh viên mới thành công'
+                msg: "Thêm sinh viên mới thành công"
             });
         } catch (error) {
             next(error);

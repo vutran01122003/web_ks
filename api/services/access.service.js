@@ -82,7 +82,6 @@ class AccessService {
                     throw createHttpError.BadRequest("Năm học đăng ký bổ sung đã kết thúc");
 
                 createdUser.levelYear = levelYear;
-                createdUser.additionalLevelYears.push(levelYear);
             }
 
             createdUser.encodePassword(password);
@@ -91,18 +90,21 @@ class AccessService {
 
             const populatedUser = await User.populate(createdUser, { path: "group" });
 
-            await createNewAnnualActivitiesProgress({
-                pageInfo: {
-                    pageStudentMajor: major,
-                    pageStudentCohort: cohort,
-                },
-                currentLevelYear: levelYear,
-                userId: populatedUser._id,
-            });
+            if ([TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE].includes(groupCode)) {
+                await createNewAnnualActivitiesProgress({
+                    pageInfo: {
+                        pageFaculty: faculty.toLowerCase(),
+                        pageStudentMajor: major.toLowerCase(),
+                        pageStudentCohort: +cohort,
+                        pageTalentEngineerType: groupCode,
+                    },
+                    currentLevelYear: levelYear,
+                    userId: populatedUser._id,
+                });
+            }
 
             return populatedUser;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

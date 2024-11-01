@@ -11,7 +11,7 @@ class UserControllers {
             res.status(200).json({
                 msg: "Thêm chức vụ cho người dùng thành công",
                 status: 200,
-                data: updatedUser,
+                data: updatedUser
             });
         } catch (error) {
             next(error);
@@ -27,7 +27,7 @@ class UserControllers {
             res.status(200).json({
                 msg: "Lấy dữ liệu người dùng thành công",
                 status: 200,
-                data: user,
+                data: user
             });
         } catch (error) {
             next(error);
@@ -43,22 +43,22 @@ class UserControllers {
                     cohort: parseInt(cohort),
                     major,
                     isActive: status ? status === "true" : undefined,
-                    userId: userId ? { $regex: userId } : undefined,
+                    userId: userId ? { $regex: userId } : undefined
                 },
                 groupCode,
                 queryString: {
                     limit,
-                    page,
+                    page
                 },
                 sort: {
-                    firstName: parseInt(sortByName),
-                },
+                    firstName: parseInt(sortByName)
+                }
             });
 
             res.status(200).json({
                 msg: "Lấy danh sách người dùng thành công",
                 status: 200,
-                data: users,
+                data: users
             });
         } catch (error) {
             next(error);
@@ -78,7 +78,7 @@ class UserControllers {
             res.status(200).json({
                 msg: "Cập nhật thông tin người dùng thành công",
                 status: 200,
-                data: updatedUser,
+                data: updatedUser
             });
         } catch (error) {
             next(error);

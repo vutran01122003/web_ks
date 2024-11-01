@@ -14,7 +14,7 @@ class NotificationService {
                     sender: senderId,
                     recipient: recipientId,
                     page: pageId,
-                    isRead: false,
+                    isRead: false
                 });
 
                 createdNotification.banedUserList = undefined;
@@ -27,13 +27,13 @@ class NotificationService {
                     {
                         path: "page",
                         model: "page",
-                        select: "pageName tables",
+                        select: "pageName tables"
                     },
                     {
                         path: "sender",
                         model: "user",
-                        select: "avatar fullname",
-                    },
+                        select: "avatar fullname"
+                    }
                 ]);
                 _io.to(socketId).emit("notify", populatedCreatedNotification);
             } else {
@@ -42,15 +42,15 @@ class NotificationService {
                     content,
                     sender: senderId,
                     banedUserList: [],
-                    readedUserList: [],
+                    readedUserList: []
                 });
 
                 const populatedCreatedNotification = await createdNotification.populate([
                     {
                         path: "sender",
                         model: "user",
-                        select: "avatar fullname",
-                    },
+                        select: "avatar fullname"
+                    }
                 ]);
                 _io.emit("notify", populatedCreatedNotification);
             }
@@ -68,21 +68,21 @@ class NotificationService {
                     $or: [
                         { recipient: recipientId },
                         {
-                            $and: [{ recipient: { $exists: false } }, { banedUserList: { $nin: [recipientId] } }],
-                        },
-                    ],
+                            $and: [{ recipient: { $exists: false } }, { banedUserList: { $nin: [recipientId] } }]
+                        }
+                    ]
                 })
                     .populate([
                         {
                             path: "page",
                             model: "page",
-                            select: "pageName tables",
+                            select: "pageName tables"
                         },
                         {
                             path: "sender",
                             model: "user",
-                            select: "avatar fullname",
-                        },
+                            select: "avatar fullname"
+                        }
                     ])
                     .sort({ createdAt: -1 }),
                 queryString
@@ -106,10 +106,10 @@ class NotificationService {
             if (notification?.recipient) {
                 updatedNotification = await Notification.findOneAndUpdate(
                     {
-                        _id: notificationId,
+                        _id: notificationId
                     },
                     {
-                        isRead: status,
+                        isRead: status
                     },
                     { new: true }
                 );
@@ -133,24 +133,24 @@ class NotificationService {
                 Notification.updateMany(
                     {
                         recipient: recipientId,
-                        isRead: false,
+                        isRead: false
                     },
                     {
-                        isRead: true,
+                        isRead: true
                     }
                 ),
                 Notification.updateMany(
                     {
                         recipient: { $exists: false },
                         readedUserList: { $nin: [recipientId] },
-                        banedUserList: { $nin: [recipientId] },
+                        banedUserList: { $nin: [recipientId] }
                     },
                     {
                         $push: {
-                            readedUserList: recipientId,
-                        },
+                            readedUserList: recipientId
+                        }
                     }
-                ),
+                )
             ]);
         } catch (error) {
             throw error;
@@ -163,7 +163,7 @@ class NotificationService {
 
             if (notification.recipient) {
                 await Notification.findByIdAndRemove({
-                    _id: notificationId,
+                    _id: notificationId
                 });
             } else {
                 if (notification.banedUserList.includes(recipientId)) return;
@@ -179,17 +179,17 @@ class NotificationService {
         try {
             await Promise.all([
                 Notification.deleteMany({
-                    recipient: recipientId,
+                    recipient: recipientId
                 }),
                 Notification.updateMany(
                     {
                         recipient: { $exists: false },
-                        banedUserList: { $nin: [recipientId] },
+                        banedUserList: { $nin: [recipientId] }
                     },
                     {
-                        $push: { banedUserList: recipientId },
+                        $push: { banedUserList: recipientId }
                     }
-                ),
+                )
             ]);
         } catch (error) {
             throw error;
@@ -204,9 +204,9 @@ class NotificationService {
                     {
                         recipient: { $exists: false },
                         readedUserList: { $nin: [recipientId] },
-                        banedUserList: { $nin: [recipientId] },
-                    },
-                ],
+                        banedUserList: { $nin: [recipientId] }
+                    }
+                ]
             }).count();
 
             return numUnreadNotifications;

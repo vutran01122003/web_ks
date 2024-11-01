@@ -20,8 +20,10 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             heading = 'Thông Tin Giảng Viên';
             break;
         case VITE_APP_TALENT_ENGINEER_CODE:
-        case VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE:
             heading = 'Thông Tin Sinh Viên';
+            break;
+        case VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE:
+            heading = 'Thông Tin Sinh Viên Đăng Ký Bổ Sung';
             break;
         default:
             break;

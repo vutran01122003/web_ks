@@ -1,6 +1,6 @@
-const conn = require('../dbs/init.mongodb');
-const mongoose = require('mongoose');
-const [COL, DOC] = ['notifications', 'notification'];
+const conn = require("../dbs/init.mongodb");
+const mongoose = require("mongoose");
+const [COL, DOC] = ["notifications", "notification"];
 const NotificationSchema = new mongoose.Schema(
     {
         title: {
@@ -9,19 +9,19 @@ const NotificationSchema = new mongoose.Schema(
         },
         sender: {
             type: mongoose.Types.ObjectId,
-            ref: 'user',
+            ref: "user",
             required: true
         },
         // Nếu thuộc tính recipient không tồn tại thì thông báo sẽ được gửi cho toàn bộ mọi người
         recipient: {
             type: mongoose.Types.ObjectId,
-            ref: 'user'
+            ref: "user"
         },
         // Thuộc tính Page chỉ hoạt động khi liên quan đến xét duyệt hoạt động
         // Chức năng: Điều hướng sinh viên đến page chứa hoạt động được xét duyệt
         page: {
             type: mongoose.Types.ObjectId,
-            ref: 'page'
+            ref: "page"
         },
         isRead: Boolean,
         banedUserList: Array,

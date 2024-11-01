@@ -4,7 +4,7 @@ function validateResource(schema) {
             const payload = {
                 body: req.body,
                 params: req.params,
-                query: req.query,
+                query: req.query
             };
 
             if (Object.keys(req.body).length === 0) delete payload.body;

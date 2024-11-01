@@ -11,7 +11,7 @@ class PageControllers {
             res.status(201).json({
                 status: createdPage.status,
                 msg: createdPage.msg,
-                data: createdPage.data,
+                data: createdPage.data
             });
         } catch (error) {
             next(error);
@@ -39,7 +39,7 @@ class PageControllers {
 
             res.status(200).json({
                 status: "Lấy dữ liệu trang thành công",
-                data: pages,
+                data: pages
             });
         } catch (error) {
             next(error);
@@ -53,12 +53,12 @@ class PageControllers {
                 pageStudentMajor,
                 pageStudentCohort,
                 pageStudentLevelYear,
-                pageTalentEngineerType,
+                pageTalentEngineerType
             });
 
             return res.status(200).json({
                 status: "Lấy Toàn Bộ Hoạt Động Thành Công",
-                data: activities || [],
+                data: activities || []
             });
         } catch (error) {
             next(error);
@@ -72,7 +72,7 @@ class PageControllers {
             pageName: req.params?.name,
             pageStudentMajor: major,
             pageStudentCohort: parseInt(cohort),
-            pageFaculty: faculty,
+            pageFaculty: faculty
         };
 
         if ([TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE].includes(groupCode))
@@ -80,14 +80,14 @@ class PageControllers {
 
         const page = await pageService.getPage({
             fields,
-            userId: res.locals.userData._id,
+            userId: res.locals.userData._id
         });
 
         try {
             res.status(200).json({
                 status: page.status,
                 data: page.data,
-                msg: page.msg,
+                msg: page.msg
             });
         } catch (error) {
             next(error);
@@ -102,7 +102,7 @@ class PageControllers {
 
             res.status(200).json({
                 status: updatedPage.status,
-                msg: updatedPage.msg,
+                msg: updatedPage.msg
             });
         } catch (error) {
             next(error);
@@ -117,7 +117,7 @@ class PageControllers {
 
             res.status(200).json({
                 status: removedPage.status,
-                msg: removedPage.msg,
+                msg: removedPage.msg
             });
         } catch (error) {
             next(error);

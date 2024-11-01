@@ -1,7 +1,7 @@
-const conn = require('../dbs/init.mongodb');
-const mongoose = require('mongoose');
+const conn = require("../dbs/init.mongodb");
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const [DOC, COL] = ['group', 'groups'];
+const [DOC, COL] = ["group", "groups"];
 
 const GroupSchema = new Schema(
     {
@@ -24,25 +24,25 @@ const GroupSchema = new Schema(
             get: [
                 {
                     type: Schema.Types.ObjectId,
-                    ref: 'role'
+                    ref: "role"
                 }
             ],
             post: [
                 {
                     type: Schema.Types.ObjectId,
-                    ref: 'role'
+                    ref: "role"
                 }
             ],
             patch: [
                 {
                     type: Schema.Types.ObjectId,
-                    ref: 'role'
+                    ref: "role"
                 }
             ],
             delete: [
                 {
                     type: Schema.Types.ObjectId,
-                    ref: 'role'
+                    ref: "role"
                 }
             ]
         }

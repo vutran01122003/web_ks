@@ -63,7 +63,7 @@ class ExcelService {
                 prevRegisterUserList.map((prevRegisterUser) =>
                     AccessService.register({
                         data: prevRegisterUser,
-                        groupCode: TALENT_ENGINEER_CODE,
+                        groupCode: TALENT_ENGINEER_CODE
                     })
                 )
             );

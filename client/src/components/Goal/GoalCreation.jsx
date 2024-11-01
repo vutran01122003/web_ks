@@ -298,6 +298,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 cohortValue={pageStudentCohort}
                                 talentEngineerType={talentEngineerType}
                                 currentLevelYearValue={pageStudentLevelYear}
+                                isLevelYearInput={true}
                             />
                         </div>
                     </div>

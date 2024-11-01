@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 const Row = require("../models/row.model");
 const conn = require("../dbs/init.mongodb");
 const TableSchema = require("./tables.schema");
-const convertToObjectId = require("../utils/convertToObjectId");
 
 const { GOAL_PAGE, NEWS_PAGE, TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE } = process.env;
 const [DOC, COL] = ["page", "pages"];
@@ -14,7 +13,7 @@ const PageSchema = new Schema(
         pageName: {
             type: String,
             lowercase: true,
-            trim: true,
+            trim: true
         },
         // Thuộc tính pageType quy định loại page của hệ thống.
         // Trong hệ thống chỉ có 2 loại page động là page "chỉ tiêu" và page "tin tức".
@@ -23,7 +22,7 @@ const PageSchema = new Schema(
             type: String,
             lowercase: true,
             enum: [GOAL_PAGE, NEWS_PAGE],
-            default: GOAL_PAGE,
+            default: GOAL_PAGE
         },
         pageTalentEngineerType: {
             type: String,
@@ -32,8 +31,8 @@ const PageSchema = new Schema(
                 validator: function () {
                     return this.pageType === "chỉ tiêu";
                 },
-                message: 'pageTalentEngineerType is required when pageType is "Chỉ Tiêu".',
-            },
+                message: 'pageTalentEngineerType is required when pageType is "Chỉ Tiêu".'
+            }
         },
         pageFaculty: {
             type: String,
@@ -42,8 +41,8 @@ const PageSchema = new Schema(
                 validator: function () {
                     return this.pageType === "chỉ tiêu";
                 },
-                message: 'pageFaculty is required when pageType is "Chỉ Tiêu".',
-            },
+                message: 'pageFaculty is required when pageType is "Chỉ Tiêu".'
+            }
         },
         pageStudentMajor: {
             type: String,
@@ -52,8 +51,8 @@ const PageSchema = new Schema(
                 validator: function () {
                     return this.pageType === "chỉ tiêu";
                 },
-                message: 'pageStudentMajor is required when pageType is "Chỉ Tiêu".',
-            },
+                message: 'pageStudentMajor is required when pageType is "Chỉ Tiêu".'
+            }
         },
         pageStudentCohort: {
             type: Number,
@@ -61,8 +60,8 @@ const PageSchema = new Schema(
                 validator: function () {
                     return this.pageType === "chỉ tiêu";
                 },
-                message: 'pageStudentCohort is required when pageType is "Chỉ Tiêu".',
-            },
+                message: 'pageStudentCohort is required when pageType is "Chỉ Tiêu".'
+            }
         },
         pageStudentLevelYear: {
             type: Number,
@@ -70,18 +69,18 @@ const PageSchema = new Schema(
                 validator: function () {
                     return this.pageType === "chỉ tiêu";
                 },
-                message: 'pageStudentLevelYear is required when pageType is "Chỉ Tiêu".',
-            },
+                message: 'pageStudentLevelYear is required when pageType is "Chỉ Tiêu".'
+            }
         },
         tables: [TableSchema],
         isActive: {
             type: Boolean,
-            default: true,
-        },
+            default: true
+        }
     },
     {
         collection: COL,
-        timestamps: true,
+        timestamps: true
     }
 );
 
@@ -90,11 +89,7 @@ PageSchema.pre("findOneAndDelete", async function (next) {
         const { _id } = this.getQuery();
         const page = await Page.findById(_id);
 
-        const rowValueIdList = page.tables.reduce((initialArr, table) => {
-            return [...initialArr, ...table.rowValueList];
-        }, []);
-
-        await Row.deleteMany({ _id: { $in: rowValueIdList } });
+        await Row.deleteMany({ table: { $in: page.tables.map((table) => table._id) } });
         next();
     } catch (error) {
         next(error);
@@ -103,24 +98,15 @@ PageSchema.pre("findOneAndDelete", async function (next) {
 
 PageSchema.pre("findOneAndUpdate", async function (next) {
     try {
-        const query = this.getQuery();
         const update = this.getUpdate();
 
         if (update?.$pull && update.$pull?.tables) {
             const tableId = update.$pull.tables._id;
-            const pageId = query._id;
-
-            const tableDetail = await Page.aggregate([
-                { $match: { _id: convertToObjectId(pageId) } },
-                { $unwind: "$tables" },
-                { $match: { "tables._id": convertToObjectId(tableId) } },
-            ]).exec();
 
             await Row.deleteMany({
-                _id: { $in: tableDetail[0]?.tables.rowValueList },
+                table: tableId
             });
         }
-
         next();
     } catch (error) {
         next(error);

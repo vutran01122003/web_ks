@@ -1,6 +1,6 @@
-const createError = require('http-errors');
-const TableService = require('../services/table.service');
-const PageService = require('../services/page.service');
+const createError = require("http-errors");
+const TableService = require("../services/table.service");
+const PageService = require("../services/page.service");
 
 class TableControllers {
     getTable = async (req, res, next) => {
@@ -13,7 +13,7 @@ class TableControllers {
             res.status(200).json({
                 table,
                 status: 200,
-                msg: 'Lấy dữ liệu bảng thành công'
+                msg: "Lấy dữ liệu bảng thành công"
             });
         } catch (error) {
             next(error);
@@ -47,6 +47,7 @@ class TableControllers {
                 status: removedTable.status
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -58,7 +59,7 @@ class TableControllers {
 
             res.status(200).json({
                 status: updatedTable.status,
-                msg: 'Cập nhật chỉ tiêu thành công'
+                msg: "Cập nhật chỉ tiêu thành công"
             });
         } catch (error) {
             next(error);

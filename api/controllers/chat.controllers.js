@@ -1,6 +1,6 @@
-const modelGemini = require('../config/gemini');
-const createError = require('http-errors');
-const ChatService = require('../services/chat.service');
+const modelGemini = require("../config/gemini");
+const createError = require("http-errors");
+const ChatService = require("../services/chat.service");
 const { model, generationConfig, safetySettings } = modelGemini();
 
 class ChatControllers {
@@ -9,13 +9,13 @@ class ChatControllers {
             const userInput = req.body.userInput;
             const typeChat = req.body.typeChat;
 
-            if (userInput.length <= 0) throw createError.BadRequest('Dữ liệu vào trống');
+            if (userInput.length <= 0) throw createError.BadRequest("Dữ liệu vào trống");
             const data = await ChatService.getData(typeChat);
 
-            const parts = [...data.input, { text: `input: ${userInput}` }, { text: 'output: ' }];
+            const parts = [...data.input, { text: `input: ${userInput}` }, { text: "output: " }];
 
             const result = await model.generateContent({
-                contents: [{ role: 'user', parts }],
+                contents: [{ role: "user", parts }],
                 generationConfig,
                 safetySettings
             });

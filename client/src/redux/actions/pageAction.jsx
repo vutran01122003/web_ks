@@ -1,6 +1,7 @@
 import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import notifyError from '../../utils/notifyError';
+import { getFacultyByName } from './facultyAction';
 
 export const createPage =
     ({ pageData, resetAllData }) =>
@@ -23,6 +24,7 @@ export const createPage =
             });
 
             if (resetAllData) resetAllData();
+            if (pageData.pageFaculty) dispatch(getFacultyByName({ facultyName: pageData.pageFaculty }));
         } catch (error) {
             notifyError({
                 dispatch,

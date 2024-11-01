@@ -15,15 +15,15 @@ class RowService {
                 PageService.calculateTotalScoreOfRow({
                     pageId: page,
                     tableId: table,
-                    content: contentObj,
-                }),
+                    content: contentObj
+                })
             ]);
 
             if (!rowList) {
                 rowList = new Row({
                     user,
                     table,
-                    page,
+                    page
                 });
 
                 rowList.content.push({ rowValue: contentObj });
@@ -43,7 +43,7 @@ class RowService {
 
             return {
                 rowList,
-                rowItemId,
+                rowItemId
             };
         } catch (error) {
             throw error;
@@ -65,24 +65,24 @@ class RowService {
                     $match: {
                         table: convertToObjectId(table),
                         user: convertToObjectId(user),
-                        page: convertToObjectId(page),
-                    },
+                        page: convertToObjectId(page)
+                    }
                 },
                 {
-                    $unwind: "$content",
+                    $unwind: "$content"
                 },
                 {
                     $group: {
                         _id: "$_id",
-                        count: { $sum: 1 },
-                    },
+                        count: { $sum: 1 }
+                    }
                 },
                 {
                     $project: {
                         _id: 0,
-                        count: 1,
-                    },
-                },
+                        count: 1
+                    }
+                }
             ]);
 
             if (quantityDemanded[0] && quantityDemanded[0].count === pageData.tables.id(table).quantityDemanded)
@@ -100,7 +100,7 @@ class RowService {
             const { totalScore } = await PageService.calculateTotalScoreOfRow({
                 pageId: page,
                 tableId: table,
-                content,
+                content
             });
 
             const row = await Row.findById(rowListId);
@@ -122,7 +122,7 @@ class RowService {
             const updatedRow = await Row.findOneAndUpdate(
                 { _id: rowListId, "content._id": contentId },
                 {
-                    "content.$": contentData,
+                    "content.$": contentData
                 },
                 { new: true }
             );
@@ -132,7 +132,7 @@ class RowService {
             return {
                 status: 200,
                 msg: "Nộp lại thành công",
-                data: updatedRow ? updatedRow : null,
+                data: updatedRow ? updatedRow : null
             };
         } catch (error) {
             throw error;
@@ -150,9 +150,9 @@ class RowService {
                             fileType: uploadedFile.Key.split(".").slice(-1)[0],
                             originalName: uploadedFile.Key.split("/").slice(-1)[0],
                             Key: uploadedFile.key,
-                            Bucket: uploadedFile.Bucket,
-                        })),
-                    },
+                            Bucket: uploadedFile.Bucket
+                        }))
+                    }
                 }
             );
 
@@ -172,6 +172,7 @@ class RowService {
         pageStudentMajor,
         pageStudentCohort,
         pageStudentLevelYear,
+        pageTalentEngineerType
     }) => {
         let rowStatus = null;
         let skip = (page - 1) * limit;
@@ -198,84 +199,85 @@ class RowService {
         try {
             const dynamicRows = await Row.aggregate([
                 {
-                    $unwind: {
-                        path: "$content",
-                        preserveNullAndEmptyArrays: true,
-                    },
+                    $lookup: {
+                        from: "users",
+                        localField: "user",
+                        foreignField: "_id",
+                        as: "user"
+                    }
                 },
                 {
-                    $match: {
-                        "content.status": rowStatus,
-                    },
+                    $match: userFilterConditions
                 },
-
                 {
                     $lookup: {
                         from: "pages",
                         localField: "page",
                         foreignField: "_id",
-                        as: "page",
-                    },
+                        as: "page"
+                    }
                 },
                 {
                     $unwind: {
                         path: "$page",
-                        preserveNullAndEmptyArrays: true,
-                    },
+                        preserveNullAndEmptyArrays: true
+                    }
                 },
                 {
                     $match: {
                         "page.pageStudentMajor": pageStudentMajor,
                         "page.pageStudentCohort": Number.parseInt(pageStudentCohort),
                         "page.pageStudentLevelYear": Number.parseInt(pageStudentLevelYear),
-                    },
+                        "page.pageTalentEngineerType": pageTalentEngineerType
+                    }
                 },
                 {
-                    $lookup: {
-                        from: "users",
-                        localField: "user",
-                        foreignField: "_id",
-                        as: "user",
-                    },
+                    $unwind: {
+                        path: "$content",
+                        preserveNullAndEmptyArrays: true
+                    }
                 },
                 {
-                    $match: userFilterConditions,
+                    $match: {
+                        "content.status": rowStatus
+                    }
+                },
+
+                {
+                    $skip: skip * 1
                 },
                 {
-                    $skip: skip * 1,
-                },
-                {
-                    $limit: limit * 1,
+                    $limit: limit * 1
                 },
                 {
                     $unwind: {
                         path: "$page.tables",
-                        preserveNullAndEmptyArrays: true,
-                    },
+                        preserveNullAndEmptyArrays: true
+                    }
                 },
                 {
                     $match: {
                         "page.tables.tableName": activity,
 
                         $expr: {
-                            $eq: ["$table", "$page.tables._id"],
-                        },
-                    },
+                            $eq: ["$table", "$page.tables._id"]
+                        }
+                    }
                 },
                 {
                     $project: {
                         _id: 1,
                         user: 1,
                         page: 1,
-                        content: ["$content"],
-                    },
-                },
+                        content: ["$content"]
+                    }
+                }
             ]);
 
             return {
                 status: 200,
                 msg: `Lấy dữ liệu chỉ tiêu ${rowStatus.toLowerCase()} thành công`,
-                data: dynamicRows,
+                data: dynamicRows
             };
         } catch (error) {
             throw error;
@@ -320,16 +322,16 @@ class RowService {
                     {
                         $push: {
                             "content.$.note": {
-                                value: noteValue,
-                            },
-                        },
+                                value: noteValue
+                            }
+                        }
                     }
                 );
             }
 
             return {
                 code: 200,
-                msg: content,
+                msg: content
             };
         } catch (error) {
             throw error;

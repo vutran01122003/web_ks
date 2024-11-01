@@ -63,9 +63,6 @@ const UserSchema = new Schema(
             type: Number,
         },
         // Cấp bậc năm học đăng ký bổ sung của sinh viên (1, 2, 3, 4, 5, ...)
-        additionalLevelYears: {
-            type: [Number],
-        },
         isActive: {
             type: Boolean,
             default: true,
@@ -81,6 +78,7 @@ const UserSchema = new Schema(
             unique: true,
         },
         // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
+        annualTemporaryActivitiesProgress: [ProgressSchema],
         annualActivitiesProgress: [ProgressSchema],
     },
     {

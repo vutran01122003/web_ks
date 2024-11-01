@@ -7,13 +7,13 @@ class ChatService {
             return {
                 status: 201,
                 msg: "Lấy dữ liệu thành công",
-                input: chat.data,
+                input: chat.data
             };
         } catch (error) {
             return {
                 status: 400,
                 msg: "Lấy dữ liệu thất bại",
-                data: error,
+                data: error
             };
         }
     };
@@ -23,13 +23,13 @@ class ChatService {
             return {
                 status: 201,
                 msg: "Lấy dữ liệu thành công",
-                type,
+                type
             };
         } catch (error) {
             return {
                 status: 400,
                 msg: "Lấy dữ liệu thất bại",
-                data: error,
+                data: error
             };
         }
     };

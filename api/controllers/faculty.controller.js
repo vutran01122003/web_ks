@@ -17,13 +17,13 @@ class FacultyController {
                 facultyName,
                 userDataList,
                 managerIdList,
-                majorList,
+                majorList
             });
 
             res.status(200).json({
                 status: 200,
                 msg: `Tạo khoa ${facultyName} thành công`,
-                data: createdFaculty,
+                data: createdFaculty
             });
         } catch (error) {
             next(error);
@@ -40,7 +40,7 @@ class FacultyController {
             res.status(200).json({
                 status: 200,
                 msg: "Cập nhật thông tin khoa thành công",
-                data: updatedFaculty,
+                data: updatedFaculty
             });
         } catch (error) {
             next(error);
@@ -55,7 +55,7 @@ class FacultyController {
 
             return res.status(200).json({
                 status: deletedFaculty.status,
-                msg: deletedFaculty.msg,
+                msg: deletedFaculty.msg
             });
         } catch (error) {
             next(error);
@@ -80,7 +80,7 @@ class FacultyController {
             return res.status(200).json({
                 status: 200,
                 msg: "Lấy dữ liệu khoa thành công",
-                data: faculty,
+                data: faculty
             });
         } catch (error) {
             next(error);
@@ -95,7 +95,7 @@ class FacultyController {
             return res.status(200).json({
                 status: 200,
                 msg: "Lấy dữ liệu khoa thành công",
-                data: faculty,
+                data: faculty
             });
         } catch (error) {
             next(error);
@@ -111,7 +111,7 @@ class FacultyController {
             return res.status(201).json({
                 msg: createdMajor.msg,
                 data: createdMajor.data,
-                status: createdMajor.status,
+                status: createdMajor.status
             });
         } catch (error) {
             next(error);
@@ -127,7 +127,7 @@ class FacultyController {
             res.status(200).json({
                 status: 200,
                 msg: "Lấy dữ liệu chuyên ngành thành công",
-                data: major,
+                data: major
             });
         } catch (error) {
             next(error);
@@ -144,7 +144,7 @@ class FacultyController {
             res.status(200).json({
                 status: 200,
                 msg: "Cập nhật chuyên ngành thành công",
-                data: updatedMajor,
+                data: updatedMajor
             });
         } catch (error) {
             next(error);
@@ -159,7 +159,7 @@ class FacultyController {
             res.status(200).json({
                 status: 200,
                 msg: "Xóa chuyên ngành thành công",
-                data: deletedMajor,
+                data: deletedMajor
             });
         } catch (error) {
             next(error);
@@ -174,13 +174,13 @@ class FacultyController {
             const createdCohort = await FacultyService.createCohort({
                 facultyId,
                 majorId,
-                cohortName,
+                cohortName
             });
 
             return res.status(200).json({
                 msg: createdCohort.msg,
                 status: createdCohort.status,
-                data: createdCohort.data,
+                data: createdCohort.data
             });
         } catch (error) {
             next(error);
@@ -196,7 +196,7 @@ class FacultyController {
             res.status(200).json({
                 msg: "Lấy danh sách khóa sinh viên thành công",
                 status: 200,
-                data: cohort,
+                data: cohort
             });
         } catch (error) {
             next(error);
@@ -210,13 +210,13 @@ class FacultyController {
             const deletedCohort = await FacultyService.deleteCohortById({
                 majorId,
                 facultyId,
-                cohortId,
+                cohortId
             });
 
             res.status(200).json({
                 msg: "Xóa khóa sinh viên thành công",
                 status: 200,
-                data: deletedCohort,
+                data: deletedCohort
             });
         } catch (error) {
             next(error);
@@ -232,13 +232,13 @@ class FacultyController {
                 majorId,
                 facultyId,
                 cohortId,
-                data,
+                data
             });
 
             res.status(200).json({
                 msg: "Cập nhật khóa sinh viên thành công",
                 status: 200,
-                data: updatedCohort,
+                data: updatedCohort
             });
         } catch (error) {
             next(error);

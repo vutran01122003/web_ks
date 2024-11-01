@@ -13,7 +13,7 @@ class TableService {
 
             const isExistsTable = await Page.find({
                 _id: pageId,
-                "tables.tableName": { $in: tableNameList },
+                "tables.tableName": { $in: tableNameList }
             }).lean();
 
             if (isExistsTable.length > 0) throw createError.Conflict("Tên chỉ tiêu đã tồn tại");
@@ -22,11 +22,11 @@ class TableService {
                 pageId,
                 {
                     $push: {
-                        tables: { $each: tables },
-                    },
+                        tables: { $each: tables }
+                    }
                 },
                 {
-                    new: true,
+                    new: true
                 }
             );
 
@@ -35,13 +35,13 @@ class TableService {
             await UserService.updateNumOfRequiredActivity({
                 page,
                 tables,
-                isDesc: false,
+                isDesc: false
             });
 
             return {
                 msg: "Thêm chỉ tiêu thành công",
                 page: updatedPage,
-                status: 201,
+                status: 201
             };
         } catch (error) {
             throw error;
@@ -58,24 +58,24 @@ class TableService {
                 { _id: pageId },
                 {
                     $pull: {
-                        tables: { _id: tableId },
-                    },
+                        tables: { _id: tableId }
+                    }
                 },
                 {
-                    new: true,
+                    new: true
                 }
             );
 
             await UserService.updateNumOfRequiredActivity({
                 page,
                 tables: [page.tables.id(tableId)],
-                isDesc: true,
+                isDesc: true
             });
 
             return {
                 msg: "Xóa chỉ tiêu thành công",
                 page: updatedPage,
-                status: 201,
+                status: 201
             };
         } catch (error) {
             throw error;
@@ -91,14 +91,14 @@ class TableService {
             const updatedData = Object.keys(table).reduce((obj, key) => {
                 return {
                     ...obj,
-                    ["tables.$." + key]: table[key],
+                    ["tables.$." + key]: table[key]
                 };
             }, {});
 
             const updatedPage = await Page.findOneAndUpdate(
                 { _id: pageId, "tables._id": table._id },
                 {
-                    $set: updatedData,
+                    $set: updatedData
                 }
             );
 
@@ -106,7 +106,7 @@ class TableService {
 
             return {
                 status: 200,
-                msg: "Cập nhật chỉ tiêu thành công",
+                msg: "Cập nhật chỉ tiêu thành công"
             };
         } catch (error) {
             throw error;

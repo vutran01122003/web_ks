@@ -10,13 +10,13 @@ const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUBMITED_STATUS] = [
     "đã duyệt",
     "chờ duyệt",
     "từ chối",
-    "phải nộp lại",
+    "phải nộp lại"
 ];
 const STATUS = {
     [PENDING_STATUS]: "numberOfPendingActivity",
     [ACCEPTED_STATUS]: "numberOfAcceptedActivity",
     [REJECTED_STATUS]: "numberOfRejectedActivity",
-    [RESUBMITED_STATUS]: "numberOfResubmitedActivity",
+    [RESUBMITED_STATUS]: "numberOfResubmitedActivity"
 };
 const { TALENT_ENGINEER_TYPE, TALENT_ENGINEER_CODE } = process.env;
 
@@ -26,12 +26,11 @@ class UserService {
             let result = null;
 
             if (id) {
-                result = await User.findById(id).populate("group").select(selectedFieldArr).lean();
+                result = await User.findById(id).populate("group").select(selectedFieldArr);
             } else if (idList.length > 0) {
                 result = await User.find({ _id: { $in: [...idList] } })
                     .populate("group")
-                    .select(selectedFieldArr)
-                    .lean();
+                    .select(selectedFieldArr);
             }
 
             if (!result) throw createError.NotFound("Người dùng không tồn tại");
@@ -71,20 +70,20 @@ class UserService {
                         from: "groups",
                         localField: "group",
                         foreignField: "_id",
-                        as: "group",
-                    },
+                        as: "group"
+                    }
                 },
                 {
-                    $unwind: "$group",
+                    $unwind: "$group"
                 },
                 {
                     $match: {
-                        "group.groupCode": groupCode,
-                    },
+                        "group.groupCode": groupCode
+                    }
                 },
                 {
-                    $sort: sort,
-                },
+                    $sort: sort
+                }
             ]),
             queryString
         );
@@ -96,12 +95,12 @@ class UserService {
         try {
             const originalUser = await User.findByIdAndUpdate(userId, {
                 ...userData,
-                birthday: new Date(userData.birthday),
+                birthday: new Date(userData.birthday)
             });
 
             if (!originalUser) throw createError.NotFound("Người dùng không tồn tại");
 
-            const updatedUser = await User.findById(userId);
+            const updatedUser = await this.getUserAndPopulateGroupById({ id: userId });
             const { faculty, major, cohort } = updatedUser;
 
             const isInfoDifferent = originalUser.major !== major || originalUser.cohort !== cohort;
@@ -110,7 +109,7 @@ class UserService {
                 const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty,
                     majorName: major,
-                    cohortName: cohort,
+                    cohortName: cohort
                 });
 
                 updatedUser.levelYear = currentLevelYear;
@@ -118,13 +117,15 @@ class UserService {
                 await Promise.all([
                     this.createNewAnnualActivitiesProgress({
                         pageInfo: {
-                            pageStudentCohort: cohort,
-                            pageStudentMajor: major,
+                            pageTalentEngineerType: updatedUser.group.groupCode,
+                            pageFaculty: faculty.toLowerCase(),
+                            pageStudentCohort: +cohort,
+                            pageStudentMajor: major.toLowerCase()
                         },
                         currentLevelYear,
-                        userId,
+                        userId
                     }),
-                    Row.deleteMany({ user: userId }),
+                    Row.deleteMany({ user: userId })
                 ]);
             }
 
@@ -145,8 +146,8 @@ class UserService {
                     model: "group",
                     populate: {
                         path: `method.${method}`,
-                        model: "role",
-                    },
+                        model: "role"
+                    }
                 })
                 .lean();
 
@@ -167,34 +168,36 @@ class UserService {
 
     static updateUserActivityStatusByMajor = async ({
         conditions,
+        faculty,
         major,
         cohort,
         levelYear,
         updatedCohortData,
-        groupData,
+        groupData
     }) => {
         try {
+            const index = levelYear - 1;
+            const { groupId, groupCode } = groupData;
+            const studentInfo = { faculty, major, cohort, group: groupId };
             const { progressPercentage, score } = conditions;
             const { nextYearValue } = updatedCohortData;
-            const index = levelYear - 1;
-            const isTalentEngineer = groupData.groupCode === TALENT_ENGINEER_TYPE;
+            const isTalentEngineer = groupCode === TALENT_ENGINEER_TYPE;
 
             const filterUser = {
-                major: major.toLowerCase(),
-                cohort: parseInt(cohort),
+                ...studentInfo,
                 [`annualActivitiesProgress.${index}.progressPercentage`]: {
-                    $lt: Number.parseFloat(progressPercentage),
+                    $lt: Number.parseFloat(progressPercentage)
                 },
                 [`annualActivitiesProgress.${index}.totalScore`]: {
-                    $lt: Number.parseFloat(score),
-                },
+                    $lt: Number.parseFloat(score)
+                }
             };
 
             const invalidUserList = await User.find({
+                ...studentInfo,
                 [`annualActivitiesProgress.${index}.progressPercentage`]: {
-                    $exists: false,
-                },
-                group: groupData.groupId,
+                    $exists: false
+                }
             });
 
             if (invalidUserList.length > 0) {
@@ -202,38 +205,57 @@ class UserService {
                     invalidUserList.map((invalidUser) =>
                         this.createNewAnnualActivitiesProgress({
                             pageInfo: {
+                                pageTalentEngineerType: groupCode,
+                                pageFaculty: invalidUser.faculty,
                                 pageStudentCohort: invalidUser.cohort,
-                                pageStudentMajor: invalidUser.major,
+                                pageStudentMajor: invalidUser.major
                             },
                             currentLevelYear: invalidUser.levelYear,
-                            userId: invalidUser._id,
+                            userId: invalidUser._id
                         })
                     )
                 );
             }
 
-            await Promise.all([
-                User.updateMany(
-                    {
-                        ...filterUser,
-                        group: groupData.groupId,
-                    },
-                    {
-                        $set: {
-                            isActive: false,
-                        },
+            if (isTalentEngineer) {
+                await User.updateMany(filterUser, {
+                    $set: {
+                        isActive: false
                     }
-                ),
-                User.updateMany(
-                    {
-                        major: major.toLowerCase(),
-                        cohort: parseInt(cohort),
-                    },
-                    {
+                });
+
+                await Promise.all([
+                    User.updateMany(
+                        {
+                            ...studentInfo,
+                            isActive: true
+                        },
+                        {
+                            $set: {
+                                levelYear: nextYearValue,
+                                [`annualActivitiesProgress.${index + 1}`]: {
+                                    levelYear: nextYearValue,
+                                    totalScore: 0,
+                                    numberOfRequiredActivity: 0,
+                                    numberOfPendingActivity: 0,
+                                    numberOfAcceptedActivity: 0,
+                                    numberOfRejectedActivity: 0,
+                                    numberOfResubmitedActivity: 0,
+                                    progressPercentage: 0,
+                                    isActive: true
+                                }
+                            }
+                        }
+                    ),
+                    FacultyService.updateCohortById(updatedCohortData)
+                ]);
+            } else {
+                const [_, talentEngineerGroup] = await Promise.all([
+                    User.updateMany(filterUser, {
                         $set: {
-                            levelYear: isTalentEngineer ? nextYearValue : levelYear,
-                            [`annualActivitiesProgress.${isTalentEngineer ? index + 1 : index}`]: {
-                                levelYear: isTalentEngineer ? nextYearValue : levelYear,
+                            levelYear: nextYearValue,
+                            [`annualTemporaryActivitiesProgress.${index + 1}`]: {
+                                levelYear: nextYearValue,
                                 totalScore: 0,
                                 numberOfRequiredActivity: 0,
                                 numberOfPendingActivity: 0,
@@ -241,47 +263,33 @@ class UserService {
                                 numberOfRejectedActivity: 0,
                                 numberOfResubmitedActivity: 0,
                                 progressPercentage: 0,
-                            },
-                        },
-                        // $push: {
-                        //     annualActivitiesProgress: {
-                        //         $each: [
-                        //             {
-                        //                 levelYear: isTalentEngineer ? nextYearValue : levelYear,
-                        //                 totalScore: 0,
-                        //                 numberOfRequiredActivity: 0,
-                        //                 numberOfPendingActivity: 0,
-                        //                 numberOfAcceptedActivity: 0,
-                        //                 numberOfRejectedActivity: 0,
-                        //                 numberOfResubmitedActivity: 0,
-                        //                 progressPercentage: 0,
-                        //             },
-                        //         ],
-                        //         // If user is the temporary talent engineer, replace the temporary activity progress with the official activy progress
-                        //         $position: isTalentEngineer ? index + 1 : index,
-                        //     },
-                        // },
-                    }
-                ),
-                isTalentEngineer ? FacultyService.updateCohortById(updatedCohortData) : null,
-            ]);
+                                isActive: false
+                            }
+                        }
+                    }),
+                    PermissionService.getGroupByGroupCode(TALENT_ENGINEER_CODE)
+                ]);
 
-            if (!isTalentEngineer) {
-                const group = await PermissionService.getGroupByGroupCode(TALENT_ENGINEER_CODE);
-
-                await User.updateMany(
-                    {
-                        major: major.toLowerCase(),
-                        cohort: parseInt(cohort),
-                        group: groupData.groupId,
-                        isActive: true,
-                    },
-                    {
-                        $set: {
-                            group: group._id,
+                await Promise.all([
+                    User.updateMany(
+                        {
+                            ...studentInfo,
+                            [`annualTemporaryActivitiesProgress.${index + 1}`]: { $exists: false }
                         },
-                    }
-                );
+                        {
+                            $set: {
+                                group: talentEngineerGroup._id
+                            }
+                        }
+                    ),
+                    FacultyService.updateAdditionalApplyCohort({
+                        facultyName: faculty.toLowerCase(),
+                        majorName: major.toLowerCase(),
+                        cohortName: +cohort,
+                        levelYear: +levelYear,
+                        isActive: false
+                    })
+                ]);
             }
         } catch (error) {
             throw error;
@@ -293,29 +301,34 @@ class UserService {
         levelYear,
         groupCode,
         sortProgressPercentage,
-        queryString,
+        queryString
     }) => {
         try {
+            const index = levelYear - 1;
+            const annualActivitiesField =
+                groupCode === TALENT_ENGINEER_CODE ? "annualActivitiesProgress" : "annualTemporaryActivitiesProgress";
+
             const studentList = new Pagination(
                 User.aggregate([
                     {
-                        $match: filterData,
+                        $match: filterData
                     },
                     {
                         $lookup: {
                             from: "groups",
                             localField: "group",
                             foreignField: "_id",
-                            as: "group",
-                        },
+                            as: "group"
+                        }
                     },
                     {
-                        $unwind: "$group",
+                        $unwind: "$group"
                     },
                     {
                         $match: {
                             "group.groupCode": groupCode,
-                        },
+                            [`${annualActivitiesField}.${index}.isActive`]: true
+                        }
                     },
                     {
                         $project: {
@@ -329,16 +342,21 @@ class UserService {
                             isActive: 1,
                             group: 1,
                             progressData: {
-                                $arrayElemAt: ["$annualActivitiesProgress", levelYear - 1],
-                            },
-                        },
+                                $arrayElemAt: [`$${annualActivitiesField}`, index]
+                            }
+                        }
+                    },
+                    {
+                        $match: {
+                            "progressData.isActive": true
+                        }
                     },
                     {
                         $sort: {
                             "progressData.progressPercentage": sortProgressPercentage,
-                            "progressData.totalScore": sortProgressPercentage,
-                        },
-                    },
+                            "progressData.totalScore": sortProgressPercentage
+                        }
+                    }
                 ]),
                 queryString
             ).paginating();
@@ -351,57 +369,64 @@ class UserService {
 
     static updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
         try {
+            const user = await this.getUserAndPopulateGroupById({ id: userId });
+
+            if (!user) throw createError.NotFound("Người dùng không tồn tại");
+
+            const annualActivitiesField =
+                user.group.groupCode === TALENT_ENGINEER_CODE
+                    ? "annualActivitiesProgress"
+                    : "annualTemporaryActivitiesProgress";
+
             const ACCEPTED_STATUS = "đã duyệt";
             const fieldOfStatus = {
                 "chờ duyệt": "numberOfPendingActivity",
                 "đã duyệt": "numberOfAcceptedActivity",
                 "từ chối": "numberOfRejectedActivity",
-                "phải nộp lại": "numberOfResubmitedActivity",
+                "phải nộp lại": "numberOfResubmitedActivity"
             };
 
             const index = levelYear - 1;
 
             const updatedInfo = {
-                [`annualActivitiesProgress.${index}.${fieldOfStatus[status]}`]: 1,
-                [`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`]: -1,
+                [`${annualActivitiesField}.${index}.${fieldOfStatus[status]}`]: 1,
+                [`${annualActivitiesField}.${index}.${fieldOfStatus[prevStatus]}`]: -1
             };
 
             if (prevStatus === status) return;
 
-            if (!prevStatus) delete updatedInfo[`annualActivitiesProgress.${index}.${fieldOfStatus[prevStatus]}`];
+            if (!prevStatus) delete updatedInfo[`${annualActivitiesField}.${index}.${fieldOfStatus[prevStatus]}`];
 
             if (prevStatus === ACCEPTED_STATUS) {
-                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = -totalScore;
+                updatedInfo[`${annualActivitiesField}.${index}.totalScore`] = -totalScore;
             } else if (status === ACCEPTED_STATUS) {
-                updatedInfo[`annualActivitiesProgress.${index}.totalScore`] = totalScore;
+                updatedInfo[`${annualActivitiesField}.${index}.totalScore`] = totalScore;
             }
 
-            const user = await User.findById(userId);
-
-            if (!user) throw createError.NotFound("Người dùng không tồn tại");
-
-            if (!user.annualActivitiesProgress[index]) {
+            if (!user[annualActivitiesField] || !user[annualActivitiesField][index]) {
                 await this.createNewAnnualActivitiesProgress({
                     pageInfo: {
+                        pageTalentEngineerType: user.group.groupCode,
+                        pageFaculty: user.faculty,
                         pageStudentCohort: user.cohort,
-                        pageStudentMajor: user.major,
+                        pageStudentMajor: user.major
                     },
                     currentLevelYear: user.levelYear,
-                    userId,
+                    userId
                 });
             } else {
                 const updatedUser = await User.findByIdAndUpdate(
                     userId,
                     {
-                        $inc: updatedInfo,
+                        $inc: updatedInfo
                     },
                     {
-                        new: true,
+                        new: true
                     }
                 );
 
                 const keys = Object.keys(fieldOfStatus);
-                const annualActivityProgress = updatedUser.annualActivitiesProgress[index];
+                const annualActivityProgress = updatedUser[annualActivitiesField][index];
                 let isExistsNetigaveValue = false;
 
                 // In the worst case, the negative value exists so we must reset and calculate all field
@@ -410,11 +435,13 @@ class UserService {
                     if (annualActivityProgress[field] < 0) {
                         await this.createNewAnnualActivitiesProgress({
                             pageInfo: {
+                                pageTalentEngineerType: user.group.groupCode,
+                                pageFaculty: user.faculty,
                                 pageStudentCohort: user.cohort,
-                                pageStudentMajor: user.major,
+                                pageStudentMajor: user.major
                             },
                             currentLevelYear: user.levelYear,
-                            userId,
+                            userId
                         });
                         isExistsNetigaveValue = true;
                         break;
@@ -423,9 +450,9 @@ class UserService {
 
                 if (!isExistsNetigaveValue && [prevStatus, status].includes(ACCEPTED_STATUS)) {
                     const { numberOfRequiredActivity, numberOfAcceptedActivity } =
-                        updatedUser.annualActivitiesProgress[index];
+                        updatedUser[annualActivitiesField][index];
 
-                    updatedUser.annualActivitiesProgress[index].progressPercentage =
+                    updatedUser[annualActivitiesField][index].progressPercentage =
                         (numberOfAcceptedActivity / numberOfRequiredActivity) * 100;
                     await updatedUser.save();
                 }
@@ -435,31 +462,31 @@ class UserService {
         }
     };
 
-    static calculateCurrentActivitiesProgress = async ({ userId, pageInfo }) => {
+    static calculateCurrentActivitiesProgress = async ({
+        user,
+        pages,
+        levelYearLastest,
+        pageStudentLevelYear,
+        annualActivitiesField
+    }) => {
         try {
             let pageIdList = [];
             let progressData = {};
-            const { pageStudentCohort, pageStudentMajor, pageStudentLevelYear } = pageInfo;
-            const annualActivitiyProgress = {
+
+            const index = pageStudentLevelYear - 1;
+            const annualActivityProgress = {
                 numberOfRequiredActivity: 0,
                 numberOfPendingActivity: 0,
                 numberOfAcceptedActivity: 0,
                 numberOfRejectedActivity: 0,
                 numberOfResubmitedActivity: 0,
                 progressPercentage: 0,
-                totalScore: 0,
+                totalScore: 0
             };
 
-            const [pages, user] = await Promise.all([
-                Page.find({
-                    pageStudentCohort,
-                    pageStudentMajor,
-                    pageStudentLevelYear,
-                }),
-                User.findById(userId),
-            ]);
-
-            if (!user) throw createError.NotFound("Người dùng không tồn tại");
+            if (!user[annualActivitiesField] || user[annualActivitiesField].length < levelYearLastest) {
+                user[annualActivitiesField] = Array(levelYearLastest).fill(null);
+            }
 
             const tableList = pages.reduce((tableList, page) => {
                 pageIdList.push(page._id);
@@ -472,8 +499,8 @@ class UserService {
             }, 0);
 
             const rows = await Row.find({
-                user: userId,
-                page: { $in: pageIdList },
+                user: user._id,
+                page: { $in: pageIdList }
             });
 
             if (rows.length > 0) {
@@ -489,25 +516,32 @@ class UserService {
                     return {
                         ...annualActivityProgress,
                         [key]: annualActivityProgress[key] + 1,
-                        totalScore: status === ACCEPTED_STATUS ? totalScore + contentItem.totalScore : totalScore,
+                        totalScore: status === ACCEPTED_STATUS ? totalScore + contentItem.totalScore : totalScore
                     };
-                }, annualActivitiyProgress);
+                }, annualActivityProgress);
             }
 
             const numberOfAcceptedActivity = progressData?.numberOfAcceptedActivity || 0;
-
             const progressPercentage = numberOfRequiredActivity
                 ? (numberOfAcceptedActivity / numberOfRequiredActivity) * 100
                 : 0;
 
-            user.annualActivitiesProgress[pageStudentLevelYear - 1] = {
+            user[annualActivitiesField][index] = {
                 levelYear: pageStudentLevelYear,
-                ...annualActivitiyProgress,
+                ...annualActivityProgress,
                 ...progressData,
                 numberOfRequiredActivity,
-                progressPercentage,
+                progressPercentage
             };
-            await user.save();
+
+            if (
+                Object.values(annualActivityProgress).every((value) => value === 0) &&
+                pageStudentLevelYear < levelYearLastest
+            )
+                user[annualActivitiesField][index].isActive = false;
+            else user[annualActivitiesField][index].isActive = true;
+
+            if (!levelYearLastest || pageStudentLevelYear === levelYearLastest) await user.save();
         } catch (error) {
             throw error;
         }
@@ -515,17 +549,36 @@ class UserService {
 
     static createNewAnnualActivitiesProgress = async ({ pageInfo, currentLevelYear, userId }) => {
         try {
+            const user = await this.getUserAndPopulateGroupById({ id: userId });
+
+            if (!user) throw createError.NotFound("Người dùng không tồn tại");
+
+            const annualActivitiesField =
+                user.group.groupCode === TALENT_ENGINEER_CODE
+                    ? `annualActivitiesProgress`
+                    : `annualTemporaryActivitiesProgress`;
+
+            const pagesList = await Promise.all(
+                Array(currentLevelYear)
+                    .fill(null)
+                    .map((_, index) =>
+                        Page.find({
+                            ...pageInfo,
+                            pageStudentLevelYear: index + 1
+                        })
+                    )
+            );
+
             await Promise.all(
                 Array(currentLevelYear)
                     .fill(null)
                     .map((_, index) =>
                         this.calculateCurrentActivitiesProgress({
-                            userId,
-                            pageInfo: {
-                                pageStudentCohort: pageInfo.pageStudentCohort,
-                                pageStudentMajor: pageInfo.pageStudentMajor,
-                                pageStudentLevelYear: index + 1,
-                            },
+                            user,
+                            levelYearLastest: currentLevelYear,
+                            annualActivitiesField,
+                            pages: pagesList[index],
+                            pageStudentLevelYear: index + 1
                         })
                     )
             );
@@ -536,55 +589,62 @@ class UserService {
 
     static updateNumOfRequiredActivity = async ({ page, tables, isDesc }) => {
         try {
-            const index = page.pageStudentLevelYear - 1;
+            const { pageStudentLevelYear, pageTalentEngineerType, pageStudentCohort, pageStudentMajor } = page;
+            const index = pageStudentLevelYear - 1;
+            const group = await PermissionService.getGroupByGroupCode(pageTalentEngineerType);
+            const annualActivitiesField =
+                group.groupCode === TALENT_ENGINEER_CODE
+                    ? "annualActivitiesProgress"
+                    : "annualTemporaryActivitiesProgress";
 
             const quantityDemanded = tables.reduce((quantityDemanded, table) => {
                 if (!table?.quantityDemanded) return quantityDemanded;
                 return quantityDemanded + table.quantityDemanded;
             }, 0);
 
-            const group = await PermissionService.getGroupByGroupCode(page.pageTalentEngineerType);
-            const groupId = group._id;
-
             const filterData = {
-                cohort: parseInt(page.pageStudentCohort),
-                major: page.pageStudentMajor,
-                group: groupId,
+                cohort: +pageStudentCohort,
+                major: pageStudentMajor,
+                group: group._id
             };
 
             const invalidUserList = await User.find({
                 ...filterData,
-                [`annualActivitiesProgress.${index}.numberOfRequiredActivity`]: {
-                    $exists: false,
-                },
+                [`${annualActivitiesField}.${index}.numberOfRequiredActivity`]: {
+                    $exists: false
+                }
             }).lean();
 
-            await Promise.all(
-                invalidUserList.map((invalidUser) =>
-                    this.createNewAnnualActivitiesProgress({
-                        pageInfo: {
-                            pageStudentMajor: invalidUser.major,
-                            pageStudentCohort: invalidUser.cohort,
-                        },
-                        currentLevelYear: invalidUser.levelYear,
-                        userId: invalidUser._id,
-                    })
-                )
-            );
-
             const invalidUserIdList = invalidUserList.map((invalidUser) => invalidUser._id);
+
+            if (invalidUserIdList.length > 0) {
+                await Promise.all(
+                    invalidUserList.map((invalidUser) =>
+                        this.createNewAnnualActivitiesProgress({
+                            pageInfo: {
+                                pageTalentEngineerType: pageTalentEngineerType,
+                                pageFaculty: invalidUser.faculty,
+                                pageStudentMajor: invalidUser.major,
+                                pageStudentCohort: invalidUser.cohort
+                            },
+                            currentLevelYear: invalidUser.levelYear,
+                            userId: invalidUser._id
+                        })
+                    )
+                );
+            }
 
             const userList = await User.find({
                 ...filterData,
                 _id: {
-                    $nin: invalidUserIdList,
-                },
+                    $nin: invalidUserIdList
+                }
             });
 
-            if (userList.length > 0)
+            if (userList.length > 0) {
                 await Promise.all(
                     userList.map((user) => {
-                        const annualActivityProgress = user.annualActivitiesProgress[index];
+                        const annualActivityProgress = user[annualActivitiesField][index];
                         const quantity = isDesc ? -quantityDemanded : quantityDemanded;
 
                         annualActivityProgress.numberOfRequiredActivity += quantity;
@@ -597,7 +657,9 @@ class UserService {
                         user.save();
                     })
                 );
+            }
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };
@@ -606,7 +668,7 @@ class UserService {
         try {
             const result = await Promise.all([
                 PermissionService.getGroupById({ groupId }),
-                this.getUserAndPopulateGroupById({ id: userId }),
+                this.getUserAndPopulateGroupById({ id: userId })
             ]);
 
             if (!result[0]) throw createError.NotFound("Chức vụ không tồn tại");
@@ -615,10 +677,10 @@ class UserService {
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
                 {
-                    group: groupId,
+                    group: groupId
                 },
                 {
-                    new: true,
+                    new: true
                 }
             );
 

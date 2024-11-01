@@ -20,13 +20,14 @@ function SearchFilterComponent({
     talentEngineerType,
     currentLevelYearValue,
     activityValue,
-    statusValue
+    statusValue,
+    isLevelYearInput
 }) {
     const dispatch = useDispatch();
-    const auth = useSelector(authSelector);
     const facultyState = useSelector(facultySelector);
     const activities = useSelector(activitiesSelector);
     const [majorValueList, setMajorValueList] = useState([]);
+    const isTemporaryEngineer = talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
 
     const handleMajorValue = (e) => {
         const value = e.target.value;
@@ -164,18 +165,36 @@ function SearchFilterComponent({
                 )}
 
                 {setCurrentLevelYearValue &&
-                    (talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE ? (
-                        <input
-                            type="number"
-                            min={1}
-                            max={15}
-                            placeholder="Nhập Năm học"
-                            onChange={handleCurrentLevelYear}
-                            value={currentLevelYearValue}
-                        />
+                    (talentEngineerType && isTemporaryEngineer ? (
+                        isLevelYearInput ? (
+                            <input
+                                type="number"
+                                min={1}
+                                max={15}
+                                placeholder="Nhập Năm học"
+                                onChange={handleCurrentLevelYear}
+                                value={currentLevelYearValue}
+                            />
+                        ) : (
+                            <select onInput={handleCurrentLevelYear} value={currentLevelYearValue}>
+                                <option value={''}>{`Chọn Năm`}</option>
+                                {cohortValue?.additionalRegisterInfo?.levelYear &&
+                                    new Array(cohortValue.additionalRegisterInfo.levelYear).fill(0).map((_, index) => {
+                                        const currentAdditionalLevelYear = cohortValue.additionalRegisterInfo.levelYear;
+                                        const isActive = cohortValue.additionalRegisterInfo.isActive;
+                                        const levelYear = currentAdditionalLevelYear - index;
+
+                                        return (
+                                            <option key={index} value={levelYear}>
+                                                {`Năm ${levelYear} ${levelYear === currentAdditionalLevelYear && isActive ? '(Đang hoạt động)' : '(Đã kết thúc)'}`}
+                                            </option>
+                                        );
+                                    })}
+                            </select>
+                        )
                     ) : (
                         <select onInput={handleCurrentLevelYear} value={currentLevelYearValue}>
-                            <option value={''}>Chọn Năm</option>
+                            <option value={''}>{`Chọn Năm`}</option>
                             {cohortValue?.currentLevelYear &&
                                 new Array(cohortValue.currentLevelYear).fill(0).map((_, index) => {
                                     const levelYear = cohortValue.currentLevelYear - index;

@@ -111,6 +111,7 @@ export const getFacultyByName =
     async (dispatch) => {
         try {
             const res = await getDataApi(`/faculty/${facultyName}`);
+
             dispatch({
                 type: GLOBALTYPES.FACULTY.GET_FACULTY,
                 payload: {

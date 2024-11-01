@@ -7,7 +7,9 @@ class AccessControllers {
     getInfoUser = async (req, res, next) => {
         try {
             const accessToken = req?.headers["x-token"] || req.cookies?.accessToken;
-            const user = await accessService.getUserInfo(res.locals.userData._id);
+            const userId = res.locals.userData._id;
+
+            const user = await accessService.getUserInfo(userId);
 
             if (!user.isActive) throw createError.BadRequest("Tài khoản đã bị khóa");
 
@@ -49,7 +51,7 @@ class AccessControllers {
             res.status(200)
                 .cookie("accessToken", accessToken, {
                     // httpOnly: true,
-                    // secure: true
+                    // secure: true,
                 })
                 .send({
                     status: "Đăng nhập thành công",

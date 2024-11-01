@@ -18,43 +18,61 @@ class PageService {
                 pageStudentCohort,
                 pageStudentMajor,
                 pageTalentEngineerType,
-                pageStudentLevelYear,
+                pageStudentLevelYear
             } = data;
+            const isTemporaryEngineer = pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_TYPE;
 
             const page = await Page.findOne({
                 pageName,
                 pageStudentCohort,
                 pageStudentMajor,
                 pageTalentEngineerType,
-                pageStudentLevelYear,
+                pageStudentLevelYear
             }).lean();
-
-            if (pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_TYPE) {
-                await FacultyService.updateAdditionalApplyCohort({
-                    facultyName: pageFaculty,
-                    majorName: pageStudentMajor,
-                    cohortName: +pageStudentCohort,
-                    levelYear: pageStudentLevelYear,
-                    isActive: true,
-                });
-            }
 
             if (page) throw createError(409, "Tên Trang Đã Tồn Tại");
 
-            if (pageType === NEWS_PAGE) {
-                createdPage = await Page.create({
-                    pageName,
-                    pageType,
-                });
-            } else if (pageType === GOAL_PAGE) {
-                const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                    facultyName: pageFaculty,
-                    majorName: pageStudentMajor,
-                    cohortName: pageStudentCohort,
-                });
+            if (pageType === GOAL_PAGE) {
+                if (isTemporaryEngineer) {
+                    const additionalRegisterInfo = await FacultyService.getAdditionalRegisterInfo({
+                        facultyName: pageFaculty,
+                        majorName: pageStudentMajor,
+                        cohortName: pageStudentCohort
+                    });
 
-                if (currentLevelYear > pageStudentLevelYear)
-                    throw createError.BadRequest("Không thể tạo nhóm chỉ tiêu cho năm học đã kết thúc");
+                    const levelYear = additionalRegisterInfo?.levelYear;
+                    const isActive = additionalRegisterInfo?.isActive;
+
+                    const levelYearConditions =
+                        levelYear > pageStudentLevelYear || (!isActive && levelYear === pageStudentLevelYear);
+                    const validConditions = levelYear !== undefined && isActive !== undefined;
+
+                    if (validConditions && levelYearConditions) {
+                        throw createError.BadRequest("Năm đăng ký bổ sung đã kết thúc");
+                    } else if (validConditions && pageStudentLevelYear > levelYear && isActive) {
+                        throw createError.BadRequest(`Năm đăng ký bổ sung hiện tại chưa kết thúc (Năm ${levelYear})`);
+                    }
+
+                    await FacultyService.updateAdditionalApplyCohort({
+                        facultyName: pageFaculty,
+                        majorName: pageStudentMajor,
+                        cohortName: +pageStudentCohort,
+                        levelYear: pageStudentLevelYear,
+                        isActive: true
+                    });
+                } else {
+                    const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
+                        facultyName: pageFaculty,
+                        majorName: pageStudentMajor,
+                        cohortName: pageStudentCohort
+                    });
+
+                    if (currentLevelYear > pageStudentLevelYear) {
+                        throw createError.BadRequest("Không thể tạo nhóm chỉ tiêu cho năm học đã kết thúc");
+                    } else if (currentLevelYear < pageStudentLevelYear) {
+                        throw createError.BadRequest(`Năm học chưa kết thúc (Năm ${levelYear})`);
+                    }
+                }
 
                 createdPage = await Page.create({
                     pageName,
@@ -64,20 +82,25 @@ class PageService {
                     pageTalentEngineerType,
                     pageStudentLevelYear,
                     tables,
-                    pageType,
+                    pageType
                 });
 
                 await UserService.updateNumOfRequiredActivity({
                     page: createdPage,
                     tables,
-                    isDesc: false,
+                    isDesc: false
+                });
+            } else {
+                createdPage = await Page.create({
+                    pageName,
+                    pageType
                 });
             }
 
             return {
                 status: 201,
                 msg: `Tạo ${pageType === GOAL_PAGE ? "Trang" : "Loại Tin Tức"} Thành Công`,
-                data: createdPage,
+                data: createdPage
             };
         } catch (error) {
             throw error;
@@ -90,16 +113,16 @@ class PageService {
                 {
                     $match: {
                         ...fields,
-                        isActive: true,
-                    },
+                        isActive: true
+                    }
                 },
                 {
-                    $unwind: "$tables",
+                    $unwind: "$tables"
                 },
                 {
                     $match: {
-                        "tables.isActive": true,
-                    },
+                        "tables.isActive": true
+                    }
                 },
                 {
                     $lookup: {
@@ -107,14 +130,14 @@ class PageService {
                         pipeline: [
                             {
                                 $match: {
-                                    $expr: { $eq: ["$user", convertToObjectId(userId)] },
-                                },
-                            },
+                                    $expr: { $eq: ["$user", convertToObjectId(userId)] }
+                                }
+                            }
                         ],
                         localField: "tables.rowValueList",
                         foreignField: "_id",
-                        as: "tables.rowValueList",
-                    },
+                        as: "tables.rowValueList"
+                    }
                 },
                 {
                     $group: {
@@ -128,10 +151,10 @@ class PageService {
                         pageTalentEngineerType: { $first: "$pageTalentEngineerType" },
                         isActive: { $first: "$isActive" },
                         tables: {
-                            $push: "$tables",
-                        },
-                    },
-                },
+                            $push: "$tables"
+                        }
+                    }
+                }
             ]);
 
             return pages;
@@ -153,7 +176,7 @@ class PageService {
         pageStudentMajor,
         pageStudentCohort,
         pageStudentLevelYear,
-        pageTalentEngineerType,
+        pageTalentEngineerType
     }) => {
         try {
             const pages = await Page.aggregate([
@@ -163,36 +186,36 @@ class PageService {
                         pageStudentCohort: Number.parseInt(pageStudentCohort),
                         pageStudentLevelYear: Number.parseInt(pageStudentLevelYear),
                         pageTalentEngineerType: pageTalentEngineerType,
-                        isActive: true,
-                    },
+                        isActive: true
+                    }
                 },
                 {
-                    $unwind: "$tables",
+                    $unwind: "$tables"
                 },
                 {
                     $match: {
-                        "tables.isActive": true,
-                    },
+                        "tables.isActive": true
+                    }
                 },
                 {
                     $project: {
-                        "tables.tableName": 1,
-                    },
+                        "tables.tableName": 1
+                    }
                 },
                 {
                     $group: {
                         _id: null,
                         tables: {
-                            $push: "$tables",
-                        },
-                    },
+                            $push: "$tables"
+                        }
+                    }
                 },
                 {
                     $project: {
                         _id: 0,
-                        tables: 1,
-                    },
-                },
+                        tables: 1
+                    }
+                }
             ]);
             return pages;
         } catch (error) {
@@ -203,7 +226,7 @@ class PageService {
     static getPageById = async ({ page }) => {
         try {
             const pageInfo = await Page.findOne({
-                _id: page,
+                _id: page
             });
             return pageInfo;
         } catch (error) {
@@ -214,8 +237,7 @@ class PageService {
     static getPageByFields = async (fields) => {
         try {
             const pageInfo = await Page.findOne({
-                ...fields,
-                isActive: true,
+                ...fields
             });
             return pageInfo;
         } catch (error) {
@@ -244,7 +266,7 @@ class PageService {
                             ).score;
                             content[rowTitleItem._id] = {
                                 value: fixedValueOfContent,
-                                score,
+                                score
                             };
                             totalScore += score;
                         }
@@ -254,7 +276,7 @@ class PageService {
 
             return {
                 pageData,
-                totalScore,
+                totalScore
             };
         } catch (error) {
             throw error;
@@ -267,8 +289,8 @@ class PageService {
                 { _id: page, "tables._id": table },
                 {
                     $push: {
-                        "tables.$.rowValueList": rowList._id,
-                    },
+                        "tables.$.rowValueList": rowList._id
+                    }
                 }
             );
         } catch (error) {
@@ -282,16 +304,16 @@ class PageService {
                 {
                     $match: {
                         ...fields,
-                        isActive: true,
-                    },
+                        isActive: true
+                    }
                 },
                 {
-                    $unwind: "$tables",
+                    $unwind: "$tables"
                 },
                 {
                     $match: {
-                        "tables.isActive": true,
-                    },
+                        "tables.isActive": true
+                    }
                 },
                 {
                     $lookup: {
@@ -299,14 +321,14 @@ class PageService {
                         pipeline: [
                             {
                                 $match: {
-                                    $expr: { $eq: ["$user", convertToObjectId(userId)] },
-                                },
-                            },
+                                    $expr: { $eq: ["$user", convertToObjectId(userId)] }
+                                }
+                            }
                         ],
                         localField: "tables.rowValueList",
                         foreignField: "_id",
-                        as: "tables.rowValueList",
-                    },
+                        as: "tables.rowValueList"
+                    }
                 },
                 {
                     $group: {
@@ -319,16 +341,16 @@ class PageService {
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
                         isActive: { $first: "$isActive" },
                         tables: {
-                            $push: "$tables",
-                        },
-                    },
-                },
+                            $push: "$tables"
+                        }
+                    }
+                }
             ]);
 
             return {
                 status: 200,
                 msg: "Lấy Dữ Liệu Trang Thành Công",
-                data: page[0],
+                data: page[0]
             };
         } catch (error) {
             throw error;
@@ -343,14 +365,14 @@ class PageService {
             await UserService.updateNumOfRequiredActivity({
                 page: page,
                 tables: page.tables,
-                isDesc: true,
+                isDesc: true
             });
 
             await Page.findOneAndDelete({ _id: pageId });
 
             return {
                 status: 200,
-                msg: "Xóa Trang Thành Công",
+                msg: "Xóa Trang Thành Công"
             };
         } catch (error) {
             throw error;
@@ -362,14 +384,14 @@ class PageService {
             await Page.findByIdAndUpdate(
                 pageId,
                 {
-                    isActive: !currentStatus,
+                    isActive: !currentStatus
                 },
                 { new: true }
             );
 
             return {
                 status: 200,
-                msg: "Cập nhật trạng thái trang thành công",
+                msg: "Cập nhật trạng thái trang thành công"
             };
         } catch (error) {
             throw error;
@@ -381,13 +403,13 @@ class PageService {
         pageStudentLevelYear,
         pageStudentCohort,
         groupCode,
-        filterArr,
+        filterArr
     }) => {
         try {
             const fields = {
                 pageStudentMajor,
                 pageStudentLevelYear: +pageStudentLevelYear,
-                pageStudentCohort: +pageStudentCohort,
+                pageStudentCohort: +pageStudentCohort
             };
 
             if ([TALENT_ENGINEER_TYPE, TEMPORARY_TALENT_ENGINEER_TYPE].includes(groupCode))
@@ -395,10 +417,10 @@ class PageService {
 
             const pageDetailsList = await Page.aggregate([
                 {
-                    $match: fields,
+                    $match: fields
                 },
                 {
-                    $unwind: "$tables",
+                    $unwind: "$tables"
                 },
                 {
                     $lookup: {
@@ -408,13 +430,13 @@ class PageService {
                             {
                                 $match: {
                                     $expr: {
-                                        $and: filterArr,
-                                    },
-                                },
-                            },
+                                        $and: filterArr
+                                    }
+                                }
+                            }
                         ],
-                        as: "tables.rowValueList",
-                    },
+                        as: "tables.rowValueList"
+                    }
                 },
                 {
                     $group: {
@@ -426,15 +448,15 @@ class PageService {
                         pageStudentCohort: { $first: "$pageStudentCohort" },
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
                         tables: {
-                            $push: "$tables",
-                        },
-                    },
+                            $push: "$tables"
+                        }
+                    }
                 },
                 {
                     $sort: {
-                        pageName: 1,
-                    },
-                },
+                        pageName: 1
+                    }
+                }
             ]);
 
             return pageDetailsList;

@@ -52,6 +52,11 @@
                             justify-content: center;
                             max-height: 40px;
                             min-width: 140px;
+                            transition: 0.1s linear;
+
+                            &:active {
+                                transform: scale(0.9);
+                            }
 
                             svg {
                                 font-size: 17px !important;

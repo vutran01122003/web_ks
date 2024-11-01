@@ -1,10 +1,10 @@
-const client = require('../dbs/init.redis');
+const client = require("../dbs/init.redis");
 
 class SocketService {
     connect = (socket) => {
-        socket.on('handshake', ({ userId }) => {
+        socket.on("handshake", ({ userId }) => {
             client.set(`socketId:${userId}`, socket.id);
-            socket.on('disconnect', () => {
+            socket.on("disconnect", () => {
                 client.del(`socketId:${userId}`);
             });
         });

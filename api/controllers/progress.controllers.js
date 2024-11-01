@@ -8,7 +8,7 @@ const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
     "đã duyệt",
     "chờ duyệt",
     "từ chối",
-    "phải nộp lại",
+    "phải nộp lại"
 ];
 
 const { TALENT_ENGINEER_CODE, TEMPORARY_TALENT_ENGINEER_CODE } = process.env;
@@ -18,14 +18,11 @@ class ProgressControllers {
         try {
             const { userId, pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
 
-            const { groupCode } = res.locals.userData.group;
-
             const pageDetailsList = await ProgressService.getProgressByYear({
                 pageStudentMajor,
                 pageStudentLevelYear,
                 pageStudentCohort,
-                userId: userId,
-                groupCode,
+                userId: userId
             });
 
             const completedTasks = pageDetailsList.reduce((arr, page) => {
@@ -44,7 +41,7 @@ class ProgressControllers {
                         acceptedTasksNum: 0,
                         rejectedTasksNum: 0,
                         resubmitedTasksNum: 0,
-                        pendingTasksNum: 0,
+                        pendingTasksNum: 0
                     };
 
                     table.rowValueList[0]?.content.forEach((content) => {
@@ -76,15 +73,15 @@ class ProgressControllers {
                         quantityDemanded,
                         completedTasksNum,
                         percent: Number.parseFloat((completedTasksNum / quantityDemanded) * 100),
-                        tables,
-                    },
+                        tables
+                    }
                 ];
             }, []);
 
             res.status(200).json({
                 status: 200,
                 msg: "Lấy Quá Trình Hoàn Thành Chỉ Tiêu Theo Năm Thành Công",
-                data: completedTasks,
+                data: completedTasks
             });
         } catch (error) {
             next(error);
@@ -106,13 +103,13 @@ class ProgressControllers {
                 sortProgressPercentage: parseInt(sortProgressPercentage),
                 queryString: {
                     page,
-                    limit,
-                },
+                    limit
+                }
             });
 
             res.status(200).json({
                 msg: "Lấy danh sách tiến độ hoàn thành hoạt động thành công",
-                data: studentList,
+                data: studentList
             });
         } catch (error) {
             next(error);
@@ -125,11 +122,11 @@ class ProgressControllers {
 
             const [currentLevelYear, group] = await Promise.all([
                 FacultyService.getCurrentLevelYearOfCohort({
-                    facultyName: faculty,
-                    majorName: major,
-                    cohortName: cohort,
+                    facultyName: faculty.toLowerCase(),
+                    majorName: major.toLowerCase(),
+                    cohortName: +cohort
                 }),
-                PermissionService.getGroupByGroupCode(groupCode),
+                PermissionService.getGroupByGroupCode(groupCode)
             ]);
 
             if (levelYear < currentLevelYear)
@@ -137,31 +134,23 @@ class ProgressControllers {
 
             await UserService.updateUserActivityStatusByMajor({
                 conditions,
-                major,
+                faculty: faculty.toLowerCase(),
+                major: major.toLowerCase(),
                 cohort: +cohort,
                 levelYear: +levelYear,
                 updatedCohortData,
                 groupData: {
                     groupCode: groupCode,
-                    groupId: group._id,
-                },
+                    groupId: group._id
+                }
             });
 
-            if (groupCode === TEMPORARY_TALENT_ENGINEER_CODE) {
-                await FacultyService.updateAdditionalApplyCohort({
-                    facultyName: faculty,
-                    majorName: major,
-                    cohortName: cohort,
-                    levelYear,
-                    isActive: false,
-                });
-            }
             res.status(200).json({
                 status: 200,
                 msg:
                     group.groupCode === TALENT_ENGINEER_CODE
                         ? `Kết thúc hoạt động nộp minh chứng`
-                        : "Kết thúc hoạt động xét tuyển bổ sung",
+                        : "Kết thúc hoạt động xét tuyển bổ sung"
             });
         } catch (error) {
             next(error);

@@ -12,8 +12,8 @@ const upload = multer({
         }
     },
     limits: {
-        files: 1,
-    },
+        files: 1
+    }
 });
 
 router.route("/excel").get(excelController.exportUserQualified).post(upload.single("file"), excelController.importUser);

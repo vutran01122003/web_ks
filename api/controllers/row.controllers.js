@@ -18,12 +18,12 @@ class RowControllers {
                 throw createError.BadRequest(`Đã kết thúc hoạt động nộp minh chứng năm ${pageStudentLevelYear}`);
 
             const { rowList, rowItemId } = await RowService.addRow({
-                data: rowData,
+                data: rowData
             });
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`,
+                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
             });
 
             await Promise.all([
@@ -31,19 +31,19 @@ class RowControllers {
                     data: req.body,
                     uploadedFiles,
                     rowListId: rowList._id,
-                    rowItemId,
+                    rowItemId
                 }),
                 UserService.updateAnnualActivityProgress({
                     userId: user,
                     levelYear: levelYear,
                     prevStatus: null,
-                    status: PENDING_STATUS,
-                }),
+                    status: PENDING_STATUS
+                })
             ]);
 
             res.status(200).json({
                 msg: "Thêm Thông Tin Thành Công",
-                data: rowList,
+                data: rowList
             });
         } catch (error) {
             next(error);
@@ -64,7 +64,7 @@ class RowControllers {
                 contentId,
                 levelYear,
                 pageStudentLevelYear,
-                user,
+                user
             } = rowData;
 
             if (pageStudentLevelYear < levelYear)
@@ -74,7 +74,7 @@ class RowControllers {
 
             const uploadedFiles = await UploadService.uploadFilesToS3({
                 files: req.files,
-                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`,
+                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
             });
 
             await Promise.all([
@@ -82,19 +82,19 @@ class RowControllers {
                     data: req.body,
                     uploadedFiles,
                     rowListId: rowListId,
-                    rowItemId: contentId,
+                    rowItemId: contentId
                 }),
                 UserService.updateAnnualActivityProgress({
                     userId: user,
                     levelYear: levelYear,
                     prevStatus: RESUBMITED_STATUS,
-                    status: PENDING_STATUS,
-                }),
+                    status: PENDING_STATUS
+                })
             ]);
 
             res.status(200).json({
                 status: 200,
-                msg: updatedRow?.msg,
+                msg: updatedRow?.msg
             });
         } catch (error) {
             next(error);
@@ -109,18 +109,19 @@ class RowControllers {
                 current_rows,
                 rows_type,
                 activity,
+                userId,
                 pageStudentMajor,
                 pageStudentCohort,
                 pageStudentLevelYear,
+                pageTalentEngineerType
             } = req.query;
 
             const userFilterConditions = {
-                ["user.major"]: req.query?.major ? req.query?.major.toLowerCase() : null,
-                ["user.userId"]: req.query?.student_id
+                ["user.userId"]: userId
                     ? {
-                          ["$regex"]: new RegExp(`^${req.query?.student_id}`),
+                          ["$regex"]: new RegExp(`^${userId}`)
                       }
-                    : null,
+                    : null
             };
 
             Object.keys(userFilterConditions).forEach((key) => {
@@ -137,12 +138,13 @@ class RowControllers {
                 pageStudentMajor,
                 pageStudentCohort,
                 pageStudentLevelYear,
+                pageTalentEngineerType
             });
 
             res.status(200).json({
                 status: dynamicRows.status,
                 msg: dynamicRows.msg,
-                data: dynamicRows.data,
+                data: dynamicRows.data
             });
         } catch (error) {
             next(error);
@@ -161,7 +163,7 @@ class RowControllers {
                 deadline,
                 isTimedExtension,
                 userId: _id,
-                groupCode,
+                groupCode
             } = req.body;
 
             const levelYear = pageInfo.pageStudentLevelYear;
@@ -180,7 +182,7 @@ class RowControllers {
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 facultyName: user.faculty,
                 majorName: user.major,
-                cohortName: user.cohort,
+                cohortName: user.cohort
             });
 
             if (levelYear < currentLevelYear)
@@ -200,7 +202,7 @@ class RowControllers {
                 status,
                 noteValue,
                 deadline: deadlineDatetime,
-                isTimedExtension,
+                isTimedExtension
             });
 
             const row = await Row.findById(rowListId);
@@ -210,14 +212,15 @@ class RowControllers {
                 levelYear,
                 prevStatus,
                 status,
-                totalScore: row.content.id(contentIdList).totalScore,
+                totalScore: row.content.id(contentIdList).totalScore
             });
 
             res.status(200).json({
                 status: code,
-                msg,
+                msg
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

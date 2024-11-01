@@ -13,7 +13,7 @@ module.exports = {
                 isVaild = await UserService.checkRole({
                     userId,
                     path: req.route.path,
-                    method: req.method.toLowerCase(),
+                    method: req.method.toLowerCase()
                 });
             }
 
@@ -23,5 +23,5 @@ module.exports = {
         } catch (error) {
             next(error);
         }
-    },
+    }
 };

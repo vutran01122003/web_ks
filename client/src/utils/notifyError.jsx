@@ -11,4 +11,6 @@ export default function notifyError({ dispatch, error, defaultMessage }) {
             error: status === 401 ? 'Hết phiên đăng nhập' : msg ?? defaultMessage
         }
     });
+
+    // if (status === 401) window.location.reload();
 }

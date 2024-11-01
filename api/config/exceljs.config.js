@@ -1,14 +1,14 @@
 const userColumn = [
-    { header: 'STT', key: 's_no', width: 5 },
-    { header: 'MSSV', key: 'userId', width: 10 },
-    { header: 'Họ đệm', key: 'lastName', width: 25 },
-    { header: 'Tên', key: 'firstName', width: 25 },
-    { header: 'Ngày sinh', key: 'birthday', width: 12 },
-    { header: 'Khoa', key: 'faculty', width: 30 },
-    { header: 'Chuyên ngành', key: 'major', width: 30 },
-    { header: 'Khoá', key: 'cohort', width: 5 },
-    { header: 'Email', key: 'email', width: 35 },
-    { header: 'Điện thoại', key: 'phone', width: 15 }
+    { header: "STT", key: "s_no", width: 5 },
+    { header: "MSSV", key: "userId", width: 10 },
+    { header: "Họ đệm", key: "lastName", width: 25 },
+    { header: "Tên", key: "firstName", width: 25 },
+    { header: "Ngày sinh", key: "birthday", width: 12 },
+    { header: "Khoa", key: "faculty", width: 30 },
+    { header: "Chuyên ngành", key: "major", width: 30 },
+    { header: "Khoá", key: "cohort", width: 5 },
+    { header: "Email", key: "email", width: 35 },
+    { header: "Điện thoại", key: "phone", width: 15 }
 ];
 
 const addDataOfRow = (cell, colNumber, data) => {

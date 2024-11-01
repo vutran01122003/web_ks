@@ -1,4 +1,4 @@
-const NotificationService = require('../services/notification.service');
+const NotificationService = require("../services/notification.service");
 
 class NotificationControllers {
     async createNotification(req, res, next) {
@@ -14,7 +14,7 @@ class NotificationControllers {
 
             res.status(201).json({
                 status: 201,
-                msg: 'Tạo thông báo thành công',
+                msg: "Tạo thông báo thành công",
                 data: createdNotification
             });
         } catch (error) {
@@ -38,7 +38,7 @@ class NotificationControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Lấy dữ liệu thông báo thành công',
+                msg: "Lấy dữ liệu thông báo thành công",
                 data: notifications
             });
         } catch (error) {
@@ -59,7 +59,7 @@ class NotificationControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Cập nhật trạng thái đọc của thông báo thành công',
+                msg: "Cập nhật trạng thái đọc của thông báo thành công",
                 data: updatedNotification
             });
         } catch (error) {
@@ -77,7 +77,7 @@ class NotificationControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Đánh dấu đã đọc tất cả thông báo thành công'
+                msg: "Đánh dấu đã đọc tất cả thông báo thành công"
             });
         } catch (error) {
             next(error);
@@ -96,7 +96,7 @@ class NotificationControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Xóa thông báo thành công',
+                msg: "Xóa thông báo thành công",
                 data: deletedNotifications
             });
         } catch (error) {
@@ -114,7 +114,7 @@ class NotificationControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Xóa tất cả thông báo thành công'
+                msg: "Xóa tất cả thông báo thành công"
             });
         } catch (error) {
             next(error);
@@ -131,7 +131,7 @@ class NotificationControllers {
 
             res.status(200).json({
                 status: 200,
-                msg: 'Lấy số lượng bài viết chưa đọc thành công',
+                msg: "Lấy số lượng bài viết chưa đọc thành công",
                 data: {
                     numUnreadNotifications
                 }

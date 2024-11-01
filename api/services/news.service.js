@@ -18,7 +18,7 @@ class NewsService {
                 .populate({
                     path: "author",
                     model: "user",
-                    select: "lastName firstName avatar",
+                    select: "lastName firstName avatar"
                 })
                 .lean()
                 .exec();
@@ -28,7 +28,7 @@ class NewsService {
             return {
                 status: 200,
                 msg: "Lấy toàn bộ tin tức thành công",
-                data: news,
+                data: news
             };
         } catch (error) {
             throw error;
@@ -40,7 +40,7 @@ class NewsService {
                 .populate({
                     path: "author",
                     model: "user",
-                    select: "lastName firstName avatar",
+                    select: "lastName firstName avatar"
                 })
                 .lean()
                 .exec();
@@ -50,7 +50,7 @@ class NewsService {
             return {
                 status: 200,
                 msg: "Lấy tin tức thành công",
-                data: newsDetails,
+                data: newsDetails
             };
         } catch (error) {
             throw error;
@@ -59,7 +59,7 @@ class NewsService {
     static updateNews = async ({ newsId, newsData }) => {
         try {
             const updatedNews = await News.findByIdAndUpdate({ _id: newsId }, newsData, {
-                new: true,
+                new: true
             })
                 .lean()
                 .exec();
@@ -69,7 +69,7 @@ class NewsService {
             return {
                 status: 200,
                 msg: `Cập nhật bài viết thành công`,
-                data: updatedNews,
+                data: updatedNews
             };
         } catch (error) {
             throw error;
@@ -82,7 +82,7 @@ class NewsService {
             if (!deletedNews) throw createError.NotFound("Bài viết không tồn tại");
             return {
                 status: 200,
-                msg: "Xóa bài viết thành công",
+                msg: "Xóa bài viết thành công"
             };
         } catch (error) {
             throw error;

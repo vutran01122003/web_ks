@@ -1,7 +1,7 @@
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
+const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
 function modelGemini() {
-    const MODEL_NAME = 'gemini-pro';
+    const MODEL_NAME = "gemini-pro";
     const API_KEY = process.env.GEMINI_API_KEY;
 
     const genAI = new GoogleGenerativeAI(API_KEY);

@@ -24,10 +24,7 @@ const ActivityUi = () => {
     const [talentEngineerType, setTalentEngineerType] = useState('');
     const [currentLevelYearValue, setCurrentLevelYearValue] = useState('');
     const [activityValue, setActivityValue] = useState('');
-    const [userData, setUserData] = useState({
-        userId: '',
-        major: ''
-    });
+    const [userId, setUserId] = useState('');
     const [nextPage, setNextPage] = useState({
         pendingRows: 1,
         acceptedRows: 1,
@@ -50,16 +47,12 @@ const ActivityUi = () => {
     };
 
     const handleChangeTabValue = (tabValue) => {
-        setUserData({
-            userId: '',
-            major: ''
-        });
-
+        setUserId('');
         setTab(tabValue);
     };
 
     const handleRelativeSearchByStudentId = (e) => {
-        setUserData((prev) => ({ ...prev, userId: e.target.value }));
+        setUserId(e.target.value);
     };
 
     const handleRelativeSearch = () => {
@@ -117,9 +110,10 @@ const ActivityUi = () => {
                 getDynamicRows({
                     tab,
                     limit,
-                    userData,
+                    userId,
                     page: nextPage[tab],
                     currentRows: row[tab]?.currentRows,
+                    pageTalentEngineerType: talentEngineerType,
                     pageStudentCohort: cohortValue.cohortName,
                     pageStudentLevelYear: currentLevelYearValue,
                     pageStudentMajor: majorValue.majorName,
@@ -173,7 +167,7 @@ const ActivityUi = () => {
                                 <Input
                                     placeholder="Mã sinh viên"
                                     onChange={handleRelativeSearchByStudentId}
-                                    value={userData.userId}
+                                    value={userId}
                                     style={{
                                         width: 220
                                     }}
@@ -197,10 +191,7 @@ const ActivityUi = () => {
                                     className="btn__refresh"
                                     onClick={() => {
                                         handleRefreshTab();
-                                        setUserData({
-                                            userId: '',
-                                            major: ''
-                                        });
+                                        setUserId('');
                                     }}
                                 >
                                     Làm Mới

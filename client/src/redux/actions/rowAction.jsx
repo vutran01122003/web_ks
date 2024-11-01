@@ -51,14 +51,15 @@ export const addRow =
 export const getDynamicRows =
     ({
         tab,
-        userData,
+        userId,
         page,
         limit,
         currentRows,
         activity,
         pageStudentMajor,
         pageStudentCohort,
-        pageStudentLevelYear
+        pageStudentLevelYear,
+        pageTalentEngineerType
     }) =>
     async (dispatch) => {
         try {
@@ -74,12 +75,12 @@ export const getDynamicRows =
                 limit: limit || 10,
                 current_rows: currentRows,
                 rows_type: tab,
-                student_id: userData?.userId || null,
-                major: userData?.major || null,
                 activity,
+                userId,
                 pageStudentMajor,
                 pageStudentCohort,
-                pageStudentLevelYear
+                pageStudentLevelYear,
+                pageTalentEngineerType
             });
 
             dispatch({

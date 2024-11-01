@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const conn = require('../dbs/init.mongodb');
+const conn = require("../dbs/init.mongodb");
 
-const [DOC, COL] = ['news', 'news'];
+const [DOC, COL] = ["news", "news"];
 
 const NewsSchema = new Schema(
     {
@@ -28,7 +28,7 @@ const NewsSchema = new Schema(
         },
         author: {
             type: mongoose.Types.ObjectId,
-            ref: 'user',
+            ref: "user",
             required: true
         }
     },

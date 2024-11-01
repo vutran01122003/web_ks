@@ -11,7 +11,7 @@ class PermissionService {
             const createdGroup = await Group.create({
                 name,
                 description,
-                groupCode,
+                groupCode
             });
             return createdGroup;
         } catch (error) {
@@ -86,7 +86,7 @@ class PermissionService {
                 name,
                 method,
                 url,
-                description,
+                description
             });
 
             return createdRole;
@@ -115,8 +115,8 @@ class PermissionService {
 
             const role = Role.find({
                 _id: {
-                    $in: roleIdList,
-                },
+                    $in: roleIdList
+                }
             });
 
             if (!role) throw createError.NotFound("Quyền không tồn tại");

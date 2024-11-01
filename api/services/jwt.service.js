@@ -22,8 +22,22 @@ class JwtService {
 
     static verifyAccessToken = async (accessToken) => {
         try {
-            const data = await jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-            return data;
+            return new Promise((resolve, reject) => {
+                jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (error, data) => {
+                    if (error) {
+                        resolve({
+                            isExpired: error instanceof jwt.TokenExpiredError,
+                            data: null,
+                            error,
+                        });
+                    }
+                    resolve({
+                        isExpired: false,
+                        error: null,
+                        data,
+                    });
+                });
+            });
         } catch (error) {
             throw error;
         }

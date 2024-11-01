@@ -1,6 +1,7 @@
 import GLOBALTYPES from './globalTypes';
 import { getDataApi, postDataApi } from '../../utils/fetchData';
 import notifyError from '../../utils/notifyError';
+import { getFacultyByName } from './facultyAction';
 
 export const getProgressByYear =
     ({ userId, studentMajor, studentCohort, studentLevelYear }) =>
@@ -110,6 +111,8 @@ export const stopSubmittingProof =
                     success: res.data.msg
                 }
             });
+
+            if (faculty) dispatch(getFacultyByName({ facultyName: faculty }));
         } catch (error) {
             notifyError({
                 dispatch,

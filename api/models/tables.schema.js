@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const TableSchema = new Schema({
@@ -36,7 +36,7 @@ const TableSchema = new Schema({
         required: true
     },
     rowValueList: {
-        type: [{ type: Schema.Types.ObjectId, ref: 'row' }],
+        type: [{ type: Schema.Types.ObjectId, ref: "row" }],
         default: []
     },
 
