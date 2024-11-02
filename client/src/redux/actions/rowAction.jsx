@@ -14,16 +14,19 @@ export const addRow =
                 }
             });
 
-            const { major, cohort, faculty, contentId, rowListId, path } = JSON.parse(formData.get('rowData'));
+            const { major, cohort, faculty, contentId, rowListId, pageStudentLevelYear, path } = JSON.parse(
+                formData.get('rowData')
+            );
 
             const res = contentId
                 ? await patchDataApi(`/rows/${rowListId}`, formData)
                 : await postDataApi('/rows', formData);
 
             const page = await getDataApi(path, {
-                major,
-                cohort,
-                faculty
+                pageStudentMajor: major,
+                pageStudentCohort: cohort,
+                pageFaculty: faculty,
+                pageStudentLevelYear
             });
 
             dispatch({

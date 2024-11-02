@@ -202,6 +202,10 @@
                     }
                 }
                 .table__col--target {
+                    &.mt_40 {
+                        margin-top: 40px;
+                    }
+
                     .flex__line {
                         display: flex;
                         justify-content: right;
@@ -243,7 +247,7 @@
 
                                 .add_fixed_heading {
                                     color: #222222;
-                                    margin-bottom: 15px;
+                                    margin-bottom: 10px;
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
@@ -381,7 +385,8 @@
                                 }
                             }
 
-                            .add__col {
+                            .add__col,
+                            .more_value_btn {
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
@@ -389,9 +394,12 @@
                                 position: absolute;
                                 right: 5px;
                                 top: 0px;
-                                color: rgba(0, 128, 0, 0.525);
                                 cursor: pointer;
                                 transition: 0.1s linear;
+                            }
+
+                            .add__col {
+                                color: rgba(0, 128, 0, 0.525);
 
                                 &:hover {
                                     color: green;

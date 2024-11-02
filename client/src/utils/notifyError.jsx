@@ -1,7 +1,10 @@
 import GLOBALTYPES from '../redux/actions/globalTypes';
+import { getAccessToken } from './getCookie';
 
 export default function notifyError({ dispatch, error, defaultMessage }) {
-    const { status, msg } = error.response?.data;
+    const errorData = error?.response.data;
+    const status = errorData?.status;
+    const msg = errorData?.msg;
 
     if (!defaultMessage) defaultMessage = 'Có lỗi xảy ra';
 
@@ -12,5 +15,5 @@ export default function notifyError({ dispatch, error, defaultMessage }) {
         }
     });
 
-    // if (status === 401) window.location.reload();
+    if (status && status === 401) window.location.reload();
 }

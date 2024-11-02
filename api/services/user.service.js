@@ -27,7 +27,7 @@ class UserService {
 
             if (id) {
                 result = await User.findById(id).populate("group").select(selectedFieldArr);
-            } else if (idList.length > 0) {
+            } else if (idList && idList.length > 0) {
                 result = await User.find({ _id: { $in: [...idList] } })
                     .populate("group")
                     .select(selectedFieldArr);
@@ -62,31 +62,34 @@ class UserService {
     static getUsersByFields = async ({ fields, groupCode, queryString, sort }) => {
         Object.keys(fields).forEach((key) => fields[key] === undefined && delete fields[key]);
 
-        const pagination = new Pagination(
-            User.aggregate([
-                { $match: fields },
-                {
-                    $lookup: {
-                        from: "groups",
-                        localField: "group",
-                        foreignField: "_id",
-                        as: "group"
-                    }
-                },
-                {
-                    $unwind: "$group"
-                },
-                {
-                    $match: {
-                        "group.groupCode": groupCode
-                    }
-                },
-                {
-                    $sort: sort
+        const aggregatePipe = [
+            { $match: fields },
+            {
+                $lookup: {
+                    from: "groups",
+                    localField: "group",
+                    foreignField: "_id",
+                    as: "group"
                 }
-            ]),
-            queryString
-        );
+            },
+            {
+                $unwind: "$group"
+            },
+            {
+                $match: {
+                    "group.groupCode": groupCode
+                }
+            },
+            {
+                $sort: sort
+            }
+        ];
+
+        if (!fields) aggregatePipe.splice(0, 1);
+        if (!groupCode) aggregatePipe.splice(1, 3);
+        if (!sort) aggregatePipe.splice(-1, 1);
+
+        const pagination = new Pagination(User.aggregate(aggregatePipe), queryString);
 
         return await pagination.paginating();
     };
@@ -558,7 +561,7 @@ class UserService {
                     ? `annualActivitiesProgress`
                     : `annualTemporaryActivitiesProgress`;
 
-            const pagesList = await Promise.all(
+            const annualPagesList = await Promise.all(
                 Array(currentLevelYear)
                     .fill(null)
                     .map((_, index) =>
@@ -577,7 +580,7 @@ class UserService {
                             user,
                             levelYearLastest: currentLevelYear,
                             annualActivitiesField,
-                            pages: pagesList[index],
+                            pages: annualPagesList[index],
                             pageStudentLevelYear: index + 1
                         })
                     )
@@ -659,7 +662,6 @@ class UserService {
                 );
             }
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

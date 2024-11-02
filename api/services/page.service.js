@@ -339,6 +339,7 @@ class PageService {
                         pageStudentMajor: { $first: "$pageStudentMajor" },
                         pageStudentCohort: { $first: "$pageStudentCohort" },
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
+                        pageTalentEngineerType: { $first: "$pageTalentEngineerType" },
                         isActive: { $first: "$isActive" },
                         tables: {
                             $push: "$tables"

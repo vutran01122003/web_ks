@@ -1,6 +1,10 @@
 const Page = require("../models/page.model");
 const createError = require("http-errors");
 const UserService = require("./user.service");
+const Row = require("../models/row.model");
+const User = require("../models/user.model");
+const PermissionService = require("./permission.service");
+const { TALENT_ENGINEER_CODE } = process.env;
 
 class TableService {
     static addTable = async ({ pageId, tables }) => {
@@ -84,9 +88,30 @@ class TableService {
 
     static updateTable = async ({ pageId, table }) => {
         try {
-            const page = await Page.findById(pageId).lean();
+            const page = await Page.findById(pageId);
 
             if (!page) throw createError.NotFound("Page không tồn tại");
+
+            const { pageFaculty, pageStudentMajor, pageStudentCohort, pageTalentEngineerType, pageStudentLevelYear } =
+                page;
+            const newQuantityDemanded = table.quantityDemanded;
+            const originalTable = await page.tables.id(table._id);
+            const isDiffQuantity = originalTable.quantityDemanded !== newQuantityDemanded;
+
+            if (isDiffQuantity) {
+                const newLargestIndex = newQuantityDemanded - 1;
+
+                const row = await Row.findOne({
+                    table: table._id,
+                    [`content.${newLargestIndex + 1}`]: { $exists: true }
+                });
+
+                if (row) {
+                    throw createError.BadRequest(
+                        `Đã có kỹ sư hoàn thành hơn ${newQuantityDemanded} hoạt động trong chỉ tiêu ${table.tableName}`
+                    );
+                }
+            }
 
             const updatedData = Object.keys(table).reduce((obj, key) => {
                 return {
@@ -103,6 +128,43 @@ class TableService {
             );
 
             if (!updatedPage) throw createError.NotFound("Page không tồn tại");
+
+            if (isDiffQuantity) {
+                const group = await PermissionService.getGroupByGroupCode(pageTalentEngineerType);
+                const [userList, pageList] = await Promise.all([
+                    User.find({
+                        faculty: pageFaculty,
+                        major: pageStudentMajor,
+                        cohort: pageStudentCohort,
+                        group: group._id
+                    }),
+                    Page.find({
+                        pageFaculty,
+                        pageStudentMajor,
+                        pageStudentCohort,
+                        pageTalentEngineerType,
+                        pageStudentLevelYear
+                    })
+                ]);
+
+                if (userList.length > 0) {
+                    const annualActivitiesField =
+                        pageTalentEngineerType === TALENT_ENGINEER_CODE
+                            ? "annualActivitiesProgress"
+                            : "annualTemporaryActivitiesProgress";
+
+                    await Promise.all(
+                        userList.map((user) =>
+                            UserService.calculateCurrentActivitiesProgress({
+                                user,
+                                pages: pageList,
+                                pageStudentLevelYear,
+                                annualActivitiesField
+                            })
+                        )
+                    );
+                }
+            }
 
             return {
                 status: 200,

@@ -109,7 +109,7 @@ export const removeTable =
     };
 
 export const updateTable =
-    ({ pageId, table, tableIndex }) =>
+    ({ pageId, table, tableIndex, onGetPages }) =>
     async (dispatch) => {
         try {
             const res = await patchDataApi('/table', {
@@ -127,6 +127,8 @@ export const updateTable =
                     }
                 });
             }
+
+            if (onGetPages) onGetPages();
 
             dispatch({
                 type: GLOBALTYPES.ALERT,

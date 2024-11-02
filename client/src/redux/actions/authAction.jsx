@@ -1,4 +1,5 @@
 import { getDataApi, postDataApi } from '../../utils/fetchData';
+import { getAccessToken } from '../../utils/getCookie';
 import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
@@ -97,13 +98,9 @@ export const logout = () => async (dispatch) => {
     }
 };
 
-const hasAccessToken = () => {
-    return document.cookie.split(';').some((cookie) => cookie.trim().startsWith('accessToken='));
-};
-
 export const verifyAccessToken = () => async (dispatch) => {
     try {
-        if (hasAccessToken()) {
+        if (getAccessToken()) {
             const res = await getDataApi('/access-token');
             dispatch({
                 type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,

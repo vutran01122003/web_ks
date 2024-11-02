@@ -66,13 +66,16 @@ class PageControllers {
     };
 
     getPage = async (req, res, next) => {
-        const { major, cohort, faculty } = req.query;
+        const { pageName } = req.params;
+        const { pageStudentMajor, pageStudentCohort, pageFaculty, pageStudentLevelYear } = req.query;
         const { groupCode } = res.locals.userData.group;
+
         const fields = {
-            pageName: req.params?.name,
-            pageStudentMajor: major,
-            pageStudentCohort: parseInt(cohort),
-            pageFaculty: faculty
+            pageName,
+            pageFaculty,
+            pageStudentMajor,
+            pageStudentCohort: +pageStudentCohort,
+            pageStudentLevelYear: +pageStudentLevelYear
         };
 
         if ([TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE].includes(groupCode))

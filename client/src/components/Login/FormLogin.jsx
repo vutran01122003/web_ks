@@ -90,7 +90,7 @@ const FormLogin = () => {
                     <div className="heading_text--login">ĐĂNG NHẬP HỆ THỐNG</div>
                     <form onSubmit={handleSumbitFormLogin}>
                         <FormControl
-                            label="Mã sinh viên"
+                            label="Mã tài khoản"
                             type="text"
                             id="user"
                             iconBefore={<RiAccountCircleFill />}

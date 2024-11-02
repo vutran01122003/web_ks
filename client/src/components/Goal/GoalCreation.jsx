@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
-import { BiSolidAddToQueue } from 'react-icons/bi';
 import Tippy from '@tippyjs/react/headless';
-import { AiFillCloseCircle, AiFillSave, AiOutlineClose } from 'react-icons/ai';
 import { FaCaretRight } from 'react-icons/fa';
-import { IoIosAddCircle } from 'react-icons/io';
+import { BiSolidAddToQueue } from 'react-icons/bi';
 import { MdOutlineAddCircle } from 'react-icons/md';
+import { IoIosAddCircle, IoMdMore } from 'react-icons/io';
+import { AiFillCloseCircle, AiFillSave, AiOutlineClose, AiFillEdit } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllFaculties } from '../../redux/actions/facultyAction';
 import { facultySelector } from '../../redux/selector';
 import { createPage } from '../../redux/actions/pageAction';
+import { getAllFaculties } from '../../redux/actions/facultyAction';
 import ComponentButton from '../Button/ComponentButton';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import SearchFilterComponent from '../Filter/SearchFilter';
 
 const { VITE_APP_GOAL_PAGE } = import.meta.env;
 
-const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData }) => {
+const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData, tableDetailsData }) => {
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
     const pageFaculty = facultyState.faculty;
@@ -273,20 +273,23 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     }, []);
 
     useEffect(() => {
-        if (prevUpdatedTableData) {
+        const initialTables = (tableData) => {
             setTables([
                 {
-                    ...prevUpdatedTableData,
-                    scoreType: prevUpdatedTableData.fixedScore ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
+                    ...tableData,
+                    scoreType: tableData.fixedScore ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
                 }
             ]);
-        }
-    }, [prevUpdatedTableData]);
+        };
+
+        if (prevUpdatedTableData) initialTables(prevUpdatedTableData);
+        if (tableDetailsData) initialTables(tableDetailsData);
+    }, [prevUpdatedTableData, tableDetailsData]);
 
     return (
         <div className="wrap__goals">
             <div className="body__goals">
-                {!handleAddTable && !handleUpdateTable && (
+                {!handleAddTable && !handleUpdateTable && !tableDetailsData && (
                     <div className="goals_info_wrapper">
                         <div className="faculty_info">
                             <SearchFilterComponent
@@ -304,7 +307,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                     </div>
                 )}
 
-                {!handleAddTable && !handleUpdateTable && (
+                {!handleAddTable && !handleUpdateTable && !tableDetailsData && (
                     <div className="filed__line">
                         <label>Tên Nhóm Chỉ Tiêu</label>
                         <input
@@ -326,6 +329,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                         <input
                                             type="text"
                                             value={table.tableName}
+                                            readOnly={tableDetailsData ? true : false}
                                             placeholder="Nhập tiêu đề chỉ tiêu"
                                             onChange={(e) => updateTable(tableIndex, 'tableName', e.target.value)}
                                             className="input_title--chi_tieu"
@@ -345,6 +349,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                     <input
                                         type="text"
                                         value={table.description}
+                                        readOnly={tableDetailsData ? true : false}
                                         placeholder="Nhập mô tả chỉ tiêu"
                                         onChange={(e) => updateTable(tableIndex, 'description', e.target.value)}
                                         id="mo_ta_chi_tieu"
@@ -355,6 +360,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                     <input
                                         type="text"
                                         value={table.quantityDemanded}
+                                        readOnly={tableDetailsData ? true : false}
                                         placeholder="Nhập số lượng cần hoàn thành"
                                         onChange={(e) => {
                                             updateTable(
@@ -369,25 +375,40 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
 
                                 <div className="flex__line_lable">
                                     <label>Loại Điểm Số:</label>
-                                    <select
-                                        value={tables[tableIndex].scoreType}
-                                        onChange={(e) => {
-                                            updateTable(tableIndex, 'scoreType', e.target.value);
-                                        }}
-                                    >
-                                        <option value={FIXED_SCORE_TYPE}>Điểm số cố định</option>
-                                        <option value={DYNAMIC_SCORE_TYPE}>Điểm số không cố định</option>
-                                    </select>
+                                    {!tableDetailsData ? (
+                                        <select
+                                            value={tables[tableIndex].scoreType}
+                                            onChange={(e) => {
+                                                updateTable(tableIndex, 'scoreType', e.target.value);
+                                            }}
+                                        >
+                                            <option value={FIXED_SCORE_TYPE}>Điểm số cố định</option>
+                                            <option value={DYNAMIC_SCORE_TYPE}>Điểm số không cố định</option>
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            value={
+                                                tables[tableIndex].scoreType === FIXED_SCORE_TYPE
+                                                    ? 'Điểm số cố định'
+                                                    : 'Điểm số không cố định'
+                                            }
+                                            readOnly={true}
+                                        />
+                                    )}
                                 </div>
 
                                 {table.scoreType === FIXED_SCORE_TYPE && (
                                     <div className="flex__line_lable">
-                                        <label htmlFor="score_input">Nhập Điểm:</label>
+                                        <label htmlFor="score_input">
+                                            {!tableDetailsData ? 'Nhập Điểm:' : 'Điểm Số:'}
+                                        </label>
                                         <input
                                             className={`score_input`}
                                             type="text"
-                                            placeholder="Nhập điểm số chỉ tiêu"
                                             value={table.fixedScore}
+                                            readOnly={tableDetailsData ? true : false}
+                                            placeholder="Nhập điểm số chỉ tiêu"
                                             id="score_input"
                                             onChange={(e) =>
                                                 updateTable(
@@ -400,15 +421,17 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                     </div>
                                 )}
 
-                                <div className="table__col--target">
-                                    <div className="flex__line">
-                                        <ComponentButton
-                                            onClick={() => addRowValue(tableIndex)}
-                                            textButton="Thêm Cột"
-                                            className="btn__add-col"
-                                            icon_before={<MdOutlineAddCircle />}
-                                        />
-                                    </div>
+                                <div className={`table__col--target ${tableDetailsData ? 'mt_40' : ''}`}>
+                                    {!tableDetailsData && (
+                                        <div className="flex__line">
+                                            <ComponentButton
+                                                onClick={() => addRowValue(tableIndex)}
+                                                textButton="Thêm Cột"
+                                                className="btn__add-col"
+                                                icon_before={<MdOutlineAddCircle />}
+                                            />
+                                        </div>
+                                    )}
 
                                     <div className="tr__line--cols">
                                         <div className="box__cols">
@@ -418,13 +441,14 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                                         <input
                                                             type="text"
                                                             value={rowTitle?.titleValue || ''}
+                                                            readOnly={tableDetailsData ? true : false}
                                                             placeholder={`Cột ${rowIndex + 1}`}
                                                             onChange={(e) =>
                                                                 updateRowTitle(tableIndex, rowIndex, e.target.value)
                                                             }
                                                         />
 
-                                                        {table.rowTitleList.length > 1 && (
+                                                        {table.rowTitleList.length > 1 && !tableDetailsData && (
                                                             <div
                                                                 onClick={() => deleteRowValue(tableIndex, rowIndex)}
                                                                 className={`del__col`}
@@ -447,54 +471,64 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                                             render={(attrs) => (
                                                                 <div className="add_value_col" tabIndex="-1" {...attrs}>
                                                                     <h3 className="add_fixed_heading">
-                                                                        Thêm Giá Trị Định Sẵn
+                                                                        {!tableDetailsData
+                                                                            ? 'THÊM GIÁ TRỊ ĐỊNH SẴN'
+                                                                            : 'GIÁ TRỊ ĐỊNH SẴN'}
+
                                                                         <span>
                                                                             {rowTitle?.titleValue
                                                                                 ? '(' + rowTitle?.titleValue + ')'
                                                                                 : rowTitle?.titleValue}
                                                                         </span>
                                                                     </h3>
-                                                                    <div className="add_fixed_value_wrapper">
-                                                                        <input
-                                                                            type="text"
-                                                                            placeholder="Nhập giá trị"
-                                                                            className="fixed_value_input"
-                                                                            onChange={(e) => {
-                                                                                setFixedValue(e.target.value);
-                                                                            }}
-                                                                            value={fixedValue}
-                                                                        />
-                                                                        {table.scoreType === DYNAMIC_SCORE_TYPE && (
+                                                                    {!tableDetailsData && (
+                                                                        <div className="add_fixed_value_wrapper">
                                                                             <input
                                                                                 type="text"
-                                                                                placeholder="Điểm"
-                                                                                className="score_value_input"
+                                                                                placeholder="Nhập giá trị"
+                                                                                className="fixed_value_input"
                                                                                 onChange={(e) => {
-                                                                                    setScoreValue(
-                                                                                        Number.parseInt(e.target.value)
+                                                                                    setFixedValue(e.target.value);
+                                                                                }}
+                                                                                value={fixedValue}
+                                                                            />
+                                                                            {table.scoreType === DYNAMIC_SCORE_TYPE && (
+                                                                                <input
+                                                                                    type="text"
+                                                                                    placeholder="Điểm"
+                                                                                    className="score_value_input"
+                                                                                    onChange={(e) => {
+                                                                                        setScoreValue(
+                                                                                            Number.parseInt(
+                                                                                                e.target.value
+                                                                                            )
+                                                                                        );
+                                                                                    }}
+                                                                                    value={
+                                                                                        isNaN(scoreValue)
+                                                                                            ? ''
+                                                                                            : scoreValue
+                                                                                    }
+                                                                                />
+                                                                            )}
+                                                                            <button
+                                                                                className="add_fixed_value_btn"
+                                                                                onClick={() => {
+                                                                                    addFixedValue(
+                                                                                        tableIndex,
+                                                                                        rowIndex,
+                                                                                        fixedValue,
+                                                                                        table.scoreType ===
+                                                                                            FIXED_SCORE_TYPE
+                                                                                            ? 0
+                                                                                            : scoreValue
                                                                                     );
                                                                                 }}
-                                                                                value={
-                                                                                    isNaN(scoreValue) ? '' : scoreValue
-                                                                                }
-                                                                            />
-                                                                        )}
-                                                                        <button
-                                                                            className="add_fixed_value_btn"
-                                                                            onClick={() => {
-                                                                                addFixedValue(
-                                                                                    tableIndex,
-                                                                                    rowIndex,
-                                                                                    fixedValue,
-                                                                                    table.scoreType === FIXED_SCORE_TYPE
-                                                                                        ? 0
-                                                                                        : scoreValue
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            Thêm
-                                                                        </button>
-                                                                    </div>
+                                                                            >
+                                                                                Thêm
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
                                                                     <ul>
                                                                         {table.rowTitleList[rowIndex].fixedValue.map(
                                                                             (fixedValueObj, index) => (
@@ -518,18 +552,20 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                                                                         )}
                                                                                     </span>
 
-                                                                                    <div
-                                                                                        className="btn_del_fixed_value"
-                                                                                        onClick={() =>
-                                                                                            removeFixedValue(
-                                                                                                tableIndex,
-                                                                                                rowIndex,
-                                                                                                index
-                                                                                            )
-                                                                                        }
-                                                                                    >
-                                                                                        <AiFillCloseCircle />
-                                                                                    </div>
+                                                                                    {!tableDetailsData && (
+                                                                                        <div
+                                                                                            className="btn_del_fixed_value"
+                                                                                            onClick={() =>
+                                                                                                removeFixedValue(
+                                                                                                    tableIndex,
+                                                                                                    rowIndex,
+                                                                                                    index
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            <AiFillCloseCircle />
+                                                                                        </div>
+                                                                                    )}
                                                                                 </li>
                                                                             )
                                                                         )}
@@ -538,14 +574,25 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                                             )}
                                                         >
                                                             <div
-                                                                className="add__col"
+                                                                className={
+                                                                    tableDetailsData ? 'more_value_btn' : 'add__col'
+                                                                }
                                                                 onClick={() => {
                                                                     handleOpenModalAddFixedValue(tableIndex, rowIndex);
                                                                 }}
                                                             >
-                                                                <abbr title="Tạo danh sách giá trị được định sẵn">
-                                                                    <IoIosAddCircle />
-                                                                </abbr>
+                                                                {table.rowTitleList[rowIndex].fixedValue.length > 0 &&
+                                                                    tableDetailsData && (
+                                                                        <abbr title="Xem danh sách giá trị được định sẵn">
+                                                                            <IoMdMore />
+                                                                        </abbr>
+                                                                    )}
+
+                                                                {!tableDetailsData && (
+                                                                    <abbr title="Tạo danh sách giá trị được định sẵn">
+                                                                        <IoIosAddCircle />
+                                                                    </abbr>
+                                                                )}
                                                             </div>
                                                         </Tippy>
                                                     </div>
@@ -559,24 +606,27 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                     })}
                 </div>
 
-                <div className="line__flex">
-                    <ComponentButton
-                        onClick={handleAddTable ? handleAddGoal : handleUpdateTable ? handleUpdateGoal : addTable}
-                        type="button"
-                        textButton={handleUpdateTable ? 'Cập Nhật Chỉ Tiêu' : 'Thêm Chỉ Tiêu'}
-                        className={`btn__add_table ${handleAddTable || handleUpdateTable ? 'active' : ''}`}
-                        icon_before={<BiSolidAddToQueue />}
-                    />
-                    {!handleAddTable && !handleUpdateTable && (
+                {!tableDetailsData && (
+                    <div className="line__flex">
                         <ComponentButton
-                            textButton="Tạo Nhóm Chỉ Tiêu"
-                            onClick={handleCreatePage}
+                            onClick={handleAddTable ? handleAddGoal : handleUpdateTable ? handleUpdateGoal : addTable}
                             type="button"
-                            className="btn__create--page"
-                            icon_before={<AiFillSave />}
+                            textButton={handleUpdateTable ? 'Cập Nhật Chỉ Tiêu' : 'Thêm Chỉ Tiêu'}
+                            className={`btn__add_table ${handleAddTable || handleUpdateTable ? 'active' : ''}`}
+                            icon_before={handleUpdateTable ? <AiFillEdit /> : <BiSolidAddToQueue />}
                         />
-                    )}
-                </div>
+
+                        {!handleAddTable && !handleUpdateTable && (
+                            <ComponentButton
+                                textButton="Tạo Nhóm Chỉ Tiêu"
+                                onClick={handleCreatePage}
+                                type="button"
+                                className="btn__create--page"
+                                icon_before={<AiFillSave />}
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -16,7 +16,7 @@ class Pagination {
 
         const skip = Math.abs((page - 1) * limit + (numOfDocs ? (page - 1) * limit - numOfDocs : 0));
 
-        return await this.query.skip(skip).limit(limit);
+        return this.query.skip(skip).limit(limit);
     };
 }
 

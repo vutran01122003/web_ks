@@ -1,3 +1,4 @@
+const createHttpError = require("http-errors");
 const jwtService = require("../services/jwt.service");
 const UserService = require("../services/user.service");
 
@@ -9,18 +10,17 @@ module.exports = {
             const { data, isExpired, error } = await jwtService.verifyAccessToken(accessToken);
 
             if (isExpired) {
-                res.status(401).clearCookie("accessToken").json({
+                return res.status(401).clearCookie("accessToken").json({
                     status: 401,
-                    msg: "Hết phiên đăng nhập",
+                    msg: "Hết phiên đăng nhập"
                 });
-                res.end();
             }
 
-            if (error) throw error;
+            if (error) throw createHttpError.Unauthorized("Xảy ra lỗi xác thực người dùng");
 
             const user = await UserService.getUserAndPopulateGroupById({
                 id: data.userId,
-                selectedFieldArr: ["_id", "userId", "firstName", "lastName", "group"],
+                selectedFieldArr: ["_id", "userId", "firstName", "lastName", "group"]
             });
 
             res.locals.userData = user;
@@ -28,5 +28,5 @@ module.exports = {
         } catch (error) {
             next(error);
         }
-    },
+    }
 };

@@ -4,7 +4,7 @@ import { updateTable } from '../../redux/actions/tableAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import GoalsCreation from '../Goal/GoalCreation';
 
-function UpdateTableModal({ tableInfo, toggleUpdateTableModalDisplay }) {
+function UpdateTableModal({ tableInfo, toggleUpdateTableModalDisplay, onGetPages }) {
     const dispatch = useDispatch();
     const { pageId, table } = tableInfo;
 
@@ -27,9 +27,11 @@ function UpdateTableModal({ tableInfo, toggleUpdateTableModalDisplay }) {
             dispatch(
                 updateTable({
                     pageId,
-                    table
+                    table,
+                    onGetPages
                 })
             );
+
             toggleUpdateTableModalDisplay();
         }
     };

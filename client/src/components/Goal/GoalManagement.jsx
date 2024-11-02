@@ -13,6 +13,7 @@ import AddTableModal from '../Modal/AddTableModal';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import EmptyDataNotification from '../Notification/EmptyDataNotification';
 import SearchFilterComponent from '../Filter/SearchFilter';
+import TableDetailsModel from '../Modal/TableDetailsModal';
 
 function GoalsManagement() {
     const dispatch = useDispatch();
@@ -32,7 +33,12 @@ function GoalsManagement() {
     const [isVisibleUpdateStatusPageModal, setIsVisibleUpdateStatusPageModal] = useState(false);
     const [isVisibleRemoveTableModal, setIsVisibleRemoveTableModal] = useState(false);
     const [isVisibleUpdateTableModal, setIsVisibleUpdateTableModal] = useState(false);
+    const [isVisibleTableDetailsModal, setIsVisibleTableDetailsModal] = useState(false);
     const [isVisibleUpdateStatusTableModal, setIsVisibleUpdateStatusTableModal] = useState(false);
+
+    const handleToggleTableDetailsModal = () => {
+        setIsVisibleTableDetailsModal((prev) => !prev);
+    };
 
     const handleOpenAddTableModal = ({ pageId, pageName }) => {
         setOpenAddTableModal(true);
@@ -202,6 +208,14 @@ function GoalsManagement() {
                     <UpdateTableModal
                         tableInfo={tableInfo}
                         toggleUpdateTableModalDisplay={handleToggleVisibleUpdateTableModal}
+                        onGetPages={onGetPages}
+                    />
+                )}
+
+                {isVisibleTableDetailsModal && goals.table && (
+                    <TableDetailsModel
+                        table={goals.table}
+                        toggleTableDetailsModalDisplay={handleToggleTableDetailsModal}
                     />
                 )}
 
@@ -252,6 +266,19 @@ function GoalsManagement() {
                                                         <div key={table._id} className="activity_name">
                                                             <span>{capitalizeFirstLetter(table.tableName)}</span>
                                                             <div className="activity_btn_group">
+                                                                <span
+                                                                    className="activity_edit_btn"
+                                                                    onClick={() => {
+                                                                        handleGetTable({
+                                                                            pageId: filteredPageItem._id,
+                                                                            tableId: table._id
+                                                                        });
+                                                                        handleToggleTableDetailsModal();
+                                                                    }}
+                                                                >
+                                                                    Xem
+                                                                </span>
+
                                                                 <span
                                                                     className="activity_edit_btn"
                                                                     onClick={() => {

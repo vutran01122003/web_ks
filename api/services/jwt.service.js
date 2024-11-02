@@ -8,7 +8,7 @@ class JwtService {
                 { userId: userData._id, roles: userData.roles },
                 ACCESS_TOKEN_SECRET,
                 {
-                    expiresIn: "5h",
+                    expiresIn: "5h"
                 },
                 (err, data) => {
                     if (err) {
@@ -28,13 +28,13 @@ class JwtService {
                         resolve({
                             isExpired: error instanceof jwt.TokenExpiredError,
                             data: null,
-                            error,
+                            error
                         });
                     }
                     resolve({
                         isExpired: false,
                         error: null,
-                        data,
+                        data
                     });
                 });
             });

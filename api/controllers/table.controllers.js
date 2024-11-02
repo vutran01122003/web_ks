@@ -47,7 +47,6 @@ class TableControllers {
                 status: removedTable.status
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

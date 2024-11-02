@@ -14,7 +14,7 @@ require("./dbs/init.mongodb");
 
 const {
     morganType,
-    app: { clientDomain_v1, clientDomain_v2 },
+    app: { clientDomain_v1, clientDomain_v2 }
 } = require("./config/config");
 
 // CORS config
@@ -27,7 +27,7 @@ const corsOptions = {
             callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true,
+    credentials: true
 };
 
 // MiddleWare
@@ -66,25 +66,25 @@ app.use((err, req, res, next) => {
             case "LIMIT_FILE_SIZE":
                 errInfo = {
                     status: 413,
-                    msg: "Kích thước file tối đa là 10MB",
+                    msg: "Kích thước file tối đa là 10MB"
                 };
                 break;
             case "LIMIT_FILE_COUNT":
                 errInfo = {
                     status: 413,
-                    msg: "Giới hạn tải lên là 10 files",
+                    msg: "Giới hạn tải lên là 10 files"
                 };
                 break;
             case "LIMIT_UNEXPECTED_FILE":
                 errInfo = {
                     status: 422,
-                    msg: "Định dạng file không đúng",
+                    msg: "Định dạng file không đúng"
                 };
                 break;
             default:
                 errInfo = {
                     status: 400,
-                    msg: "Tải lên các files gặp sự cố",
+                    msg: "Tải lên các files gặp sự cố"
                 };
                 break;
         }
@@ -95,7 +95,7 @@ app.use((err, req, res, next) => {
         return res.status(400).json({
             status: 400,
             msg: err.details[0].message,
-            path: err.details[0].path,
+            path: err.details[0].path
         });
     }
 
@@ -104,7 +104,7 @@ app.use((err, req, res, next) => {
 
     return res.status(statusCode).json({
         status: statusCode,
-        msg: statusCode !== 500 ? message : "Có lỗi hệ thống xảy ra",
+        msg: statusCode !== 500 ? message : "Có lỗi hệ thống xảy ra"
     });
 });
 

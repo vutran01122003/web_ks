@@ -53,17 +53,17 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
         const formData = new FormData();
 
         let rowData = {
-            user: _id,
             userId,
+            user: _id,
+            levelYear,
+            path: pathName,
             faculty,
             major,
             cohort,
-            levelYear,
-            tableName: title,
             page: pageId,
             pageStudentLevelYear,
             table: tableId,
-            path: pathName,
+            tableName: title,
             content: JSON.stringify(row)
         };
 
