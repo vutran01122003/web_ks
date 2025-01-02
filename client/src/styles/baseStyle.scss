@@ -23,7 +23,7 @@ a {
 }
 
 select {
-    min-width: 180px;
+    min-width: 160px;
     padding: 10px;
     border: 1px solid #ccc;
     color: #333;
@@ -74,6 +74,59 @@ select {
 .toast {
     top: 70px !important;
     right: 15px !important;
+}
+
+// Search
+.search_input {
+    outline: none;
+    width: 160px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    color: #333;
+    font-weight: 600;
+}
+
+.search_btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #1677ff;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    cursor: pointer;
+    max-height: 40px;
+    width: 120px;
+    transition: 0.1s linear;
+
+    &:active {
+        transform: scale(0.9);
+    }
+}
+
+// Excel
+.export_btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #1d6f42;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    cursor: pointer;
+    max-height: 40px;
+    width: 125px;
+    transition: 0.1s linear;
+
+    &:active {
+        transform: scale(0.9);
+    }
 }
 
 // Loading

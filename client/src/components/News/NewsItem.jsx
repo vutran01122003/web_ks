@@ -1,4 +1,4 @@
-import no_image from '../../assets/images/no_image.jpg';
+import no_image from '../../assets/images/result/no_image.jpg';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { toFullName } from '../../utils/handleString';

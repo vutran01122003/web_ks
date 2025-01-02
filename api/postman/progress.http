@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21013481",
+    "userId": "21078101",
     "password": "1111"
 }
 
@@ -13,7 +13,7 @@ Content-Type: application/json
 GET {{url}}/api/progress?pageStudentMajor=Kỹ thuật phần mềm&pageStudentLevelYear=1&pageStudentCohort=17
 
 ### Get all student's progress
-GET {{url}}/api/progress/all?major=kỹ thuật phần mềm&cohort=17&levelYear=1&isCompleted=false
+GET {{url}}/api/progress/all?groupCode=001&faculty=công nghệ thông tin&major=kỹ thuật phần mềm&cohort=20&levelYear=2&sortProgressPercentage=-1
 
 ### remove students if they don't pass 
 POST {{url}}/api/progress/updated-users

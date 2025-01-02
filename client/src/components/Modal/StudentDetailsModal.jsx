@@ -71,7 +71,7 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
     };
 
     return (
-        <div className="modal_overlap" onMouseUp={onCloseModal}>
+        <div className="modal_overlap" onDoubleClick={onCloseModal}>
             <div className="box_wrapper student_details_modal">
                 <div className="modal_header student_details_header">
                     <h3>Thông tin kỹ sư</h3>

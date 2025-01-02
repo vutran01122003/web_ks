@@ -4,6 +4,9 @@ import { RiUpload2Fill } from 'react-icons/ri';
 import { IoMdClose } from 'react-icons/io';
 import { checkFilesUpload, encodeFileName } from '../../utils/uploadFiles';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import docIcon from '../../assets/images/icon/doc.png';
+import pdfIcon from '../../assets/images/icon/pdf.png';
+import errorFileIcon from '../../assets/images/icon/error.png';
 
 function ComponentProofFile({ files, setFiles }) {
     const inputRef = useRef();
@@ -69,15 +72,9 @@ function ComponentProofFile({ files, setFiles }) {
                             {files.map((file, index) => {
                                 let src = null;
                                 if (file.type.split('/').includes('image')) src = URL.createObjectURL(file);
-                                else if (file.type === 'application/pdf')
-                                    src = import.meta.env.VITE_APP_PDF_FILE_ICON_URL;
-                                else if (
-                                    file.type ===
-                                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-                                    file.type === 'application/msword'
-                                )
-                                    src = import.meta.env.VITE_APP_DOC_FILE_ICON_URL;
-                                else src = import.meta.env.VITE_APP_INVAILD_FILE_ICON_URL;
+                                else if (file.type === 'application/pdf') src = pdfIcon;
+                                else if (file.type === 'application/msword') src = docIcon;
+                                else src = errorFileIcon;
 
                                 return (
                                     <div className="previewed_file_wrapper" key={index}>

@@ -232,7 +232,7 @@ function TableContent({
                     );
                 } else if (item?.editLabel) {
                     return !isDetailedRow ? (
-                        <td className="line__item " key={index}>
+                        <td className="line__item" key={index}>
                             {
                                 <abbr
                                     title={`${
@@ -258,6 +258,12 @@ function TableContent({
                             }
                         </td>
                     ) : null;
+                } else if (item?.scoreLabel) {
+                    return (
+                        <td className="line__item" key={index}>
+                            {item?.scoreValue || 0}
+                        </td>
+                    );
                 }
 
                 return (

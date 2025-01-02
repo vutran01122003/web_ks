@@ -8,6 +8,7 @@ import FormControl from '../Form/FormControl';
 
 const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead, page }) => {
     const dispatch = useDispatch();
+
     const [row, setRow] = useState(rowInfo?.rowValue ?? {});
     const [files, setFiles] = useState([]);
     const handleChangeRow = (e) => {
@@ -96,7 +97,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
     };
 
     return (
-        <div className={`wrap__modal`} onMouseUp={handleCloseModal}>
+        <div className={`wrap__modal`} onDoubleClick={handleCloseModal}>
             <form className={`modal`}>
                 <div className="head__modal">
                     <div className="head__modal__title ">
@@ -145,9 +146,10 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
                                             <option key={item.textHeading} value="">
                                                 {item.textHeading}
                                             </option>
+
                                             {item.fixedValueList.map((fixedValue, index) => (
                                                 <option key={fixedValue.value + index} value={fixedValue.value}>
-                                                    {fixedValue.value}
+                                                    {`${fixedValue.value} | ${item.fixedScore || fixedValue.score} Điểm`}
                                                 </option>
                                             ))}
                                         </select>

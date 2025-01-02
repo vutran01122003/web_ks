@@ -1,4 +1,4 @@
-import avatar from '../../assets/images/avatar_default.jpg';
+import avatar from '../../assets/images/other/avatar_default.jpg';
 function Avatar({ url, size, className }) {
     return (
         <div className={`info__avatar ${className || ''}`}>

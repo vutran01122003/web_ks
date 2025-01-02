@@ -5,12 +5,13 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21013481",
+    "userId": "21078101",
     "password": "1111"
 }
 
 ### Add group to user
 POST {{url}}/api/users/65e06f20580884a201b801d7/groups/65e07596147fc5e332b88986
 
-### Get user
-GET {{url}}/api/users?major=kỹ thuật phần mềm&cohort=17&limit=5&page=1
+### Get users
+GET {{url}}/api/users?major=kỹ thuật phần mềm&cohort=20&limit=5&page=1&groupCode=002&sortByName=-1
+

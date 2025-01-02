@@ -4,7 +4,7 @@ function ConfirmModal({ headerContent, bodyContent, noteContent, onAccept, toggl
     return (
         <div
             className="modal_overlap"
-            onMouseUp={(e) => {
+            onDoubleClick={(e) => {
                 if (e.target === e.currentTarget) toggleConfirmModalDisplay();
             }}
         >

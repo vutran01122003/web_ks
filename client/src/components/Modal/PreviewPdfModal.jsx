@@ -70,7 +70,7 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
     }, []);
 
     return (
-        <div className="modal_overlap" onMouseUp={handleMouseUpDetailedRowModal}>
+        <div className="modal_overlap" onDoubleClick={handleMouseUpDetailedRowModal}>
             <div className={`preview_PDF_wrapper ${pdfList.length > 1 ? 'multi_page' : 'single_page'}`}>
                 <div className="preview_PDF_wrapper_header">
                     <h3>Minh Chứng</h3>

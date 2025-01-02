@@ -106,7 +106,7 @@ function ApproveActivityModal({
     };
 
     return (
-        <div className="modal_overlap" onMouseUp={handleHiddenPopup}>
+        <div className="modal_overlap" onDoubleClick={handleHiddenPopup}>
             <div className="approve_modal">
                 <div className="approve_modal_header">
                     <h2>{title}</h2>

@@ -14,6 +14,8 @@ function StopSubmittingProofModal({
     handleHiddenStopSubmittingProofModal,
     updatedCohortData
 }) {
+    const confirm = 'Tôi đồng ý';
+
     const dispatch = useDispatch();
     const progressPercentageInputRef = useRef();
     const scoreInputRef = useRef();
@@ -67,6 +69,8 @@ function StopSubmittingProofModal({
     };
 
     const handleStopSubmittingProof = () => {
+        if (confirmValue.trim() !== confirm) return;
+
         if (
             (progressPercentage || progressPercentageInputRef.current.readOnly) &&
             (score || scoreInputRef.current.readOnly)
@@ -97,7 +101,7 @@ function StopSubmittingProofModal({
     };
 
     return (
-        <div className="modal_overlap" onMouseUp={handleHideModal}>
+        <div className="modal_overlap" onDoubleClick={handleHideModal}>
             <div className="stop_submitting_proof_modal">
                 <div className="stop_submitting_proof_header">
                     <h2>Kết Thúc Hoạt Động Nộp Minh Chứng</h2>
@@ -165,9 +169,7 @@ function StopSubmittingProofModal({
                     </button>
 
                     <button
-                        className={`btn_accept ${
-                            confirmValue.trim().toLowerCase() === 'tôi đồng ý' ? 'active' : 'inactive'
-                        }`}
+                        className={`btn_accept ${confirmValue.trim() === confirm ? 'active' : 'inactive'}`}
                         onClick={handleStopSubmittingProof}
                     >
                         Đồng ý

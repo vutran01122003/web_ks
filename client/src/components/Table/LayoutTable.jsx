@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Fragment, useState } from 'react';
+import { useSelector } from 'react-redux';
 import TableModal from '../Modal/TableModal';
 import PreviewFilesModal from '../Modal/PreviewFilesModal';
 import { authSelector } from '../../redux/selector';
@@ -25,7 +25,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
         setUseStateModal(false);
         setRowInfo(null);
     };
-
+    console.log(table);
     return (
         <div className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}>
             {!isDynamicRows && (
@@ -61,11 +61,13 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                 </header>
             )}
 
-            {!isDynamicRows && !isDetailedRow && (
-                <h5 className="table_description">
-                    <span>Mô tả chỉ tiêu: </span>
-                    {`${table.description ? table.description : 'không có mô tả cụ thể cho chỉ tiêu này'}`}
-                </h5>
+            {!isDetailedRow && (
+                <Fragment>
+                    <h5 className="table_description">
+                        {`Mô Tả Chỉ Tiêu: ${table.description ? table.description : 'Không có mô tả cụ thể cho chỉ tiêu này'}`}
+                    </h5>
+                    <h5 className="table_description">{`Số Lượng Hoạt Động Tối Đa: ${table.quantityDemanded}`}</h5>
+                </Fragment>
             )}
 
             <table className={`table ${isDynamicRows ? 'margin-0' : ''}`}>

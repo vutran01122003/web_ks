@@ -4,6 +4,46 @@ const PageService = require("./page.service");
 const convertToObjectId = require("../utils/convertToObjectId");
 
 class RowService {
+    static calculateTotalScoreOfRow = async ({ pageId, content, tableId }) => {
+        try {
+            let totalScore = 0;
+            const pageData = await PageService.getPageById({ page: pageId });
+            if (!pageData) throw createError.NotFound("Trang Không Tồn Tại");
+
+            const table = pageData.tables.id(tableId);
+
+            if (table) {
+                if (table.fixedScore) {
+                    totalScore = table.fixedScore;
+                } else {
+                    table.rowTitleList.forEach((rowTitleItem) => {
+                        const fixedValueList = rowTitleItem.fixedValue;
+
+                        if (fixedValueList.length > 0) {
+                            const fixedValueOfContent = content[rowTitleItem._id];
+                            const score = fixedValueList.find(
+                                (fixedValueItem) => fixedValueItem.value === fixedValueOfContent
+                            ).score;
+
+                            content[rowTitleItem._id] = {
+                                value: fixedValueOfContent,
+                                score
+                            };
+                            totalScore += score;
+                        }
+                    });
+                }
+            } else throw createError.NotFound("Chỉ tiêu không tồn tại");
+
+            return {
+                pageData,
+                totalScore
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static addRow = async ({ data }) => {
         try {
             const { user, table, page, content } = data;
@@ -12,7 +52,7 @@ class RowService {
             let rowItemId = null;
             let [rowList, { pageData, totalScore }] = await Promise.all([
                 Row.findOne({ user, table }),
-                PageService.calculateTotalScoreOfRow({
+                this.calculateTotalScoreOfRow({
                     pageId: page,
                     tableId: table,
                     content: contentObj
@@ -97,7 +137,7 @@ class RowService {
     static resubmitRow = async ({ rowData }) => {
         try {
             const { table, page, content, contentId, rowListId } = rowData;
-            const { totalScore } = await PageService.calculateTotalScoreOfRow({
+            const { totalScore } = await this.calculateTotalScoreOfRow({
                 pageId: page,
                 tableId: table,
                 content

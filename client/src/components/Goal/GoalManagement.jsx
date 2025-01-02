@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoSearch } from 'react-icons/io5';
-
 import { goalsSelector } from '../../redux/selector';
 import { capitalizeFirstLetter } from '../../utils/handleString';
-import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
-import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import UpdateTableModal from '../Modal/UpdateTableModal';
 import RemovePageModal from '../Modal/RemovePageModal';
 import ConfirmModal from '../Modal/ConfirmModal';
 import AddTableModal from '../Modal/AddTableModal';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
-import EmptyDataNotification from '../Notification/EmptyDataNotification';
 import SearchFilterComponent from '../Filter/SearchFilter';
 import TableDetailsModel from '../Modal/TableDetailsModal';
+import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
+import EmptyDataNotification from '../Notification/EmptyDataNotification';
+import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
 
 function GoalsManagement() {
     const dispatch = useDispatch();

@@ -13,13 +13,13 @@ function SearchFilterComponent({
     setCohortValue,
     setTalentEngineerType,
     setCurrentLevelYearValue,
-    setActivityValue,
+    setActivityName,
     setStatus,
     majorValue,
     cohortValue,
     talentEngineerType,
     currentLevelYearValue,
-    activityValue,
+    activityName,
     statusValue,
     isLevelYearInput
 }) {
@@ -36,7 +36,7 @@ function SearchFilterComponent({
         setTalentEngineerType('');
 
         if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
-        if (setActivityValue) setActivityValue('');
+        if (setActivityName) setActivityName('');
         if (!value) {
             setMajorValue('');
             return;
@@ -51,7 +51,7 @@ function SearchFilterComponent({
         setTalentEngineerType('');
 
         if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
-        if (setActivityValue) setActivityValue('');
+        if (setActivityName) setActivityName('');
         if (!value) {
             setCohortValue('');
             return;
@@ -64,7 +64,7 @@ function SearchFilterComponent({
         const value = e.target.value;
 
         if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
-        if (setActivityValue) setActivityValue('');
+        if (setActivityName) setActivityName('');
         if (!value) {
             setTalentEngineerType('');
             return;
@@ -76,7 +76,7 @@ function SearchFilterComponent({
     const handleCurrentLevelYear = (e) => {
         const value = e.target.value;
 
-        if (setActivityValue) setActivityValue('');
+        if (setActivityName) setActivityName('');
         if (!value) {
             setCurrentLevelYearValue('');
             return;
@@ -85,8 +85,8 @@ function SearchFilterComponent({
         setCurrentLevelYearValue(+value);
     };
 
-    const handleActivityValue = (e) => {
-        setActivityValue(e.target.value);
+    const onChangeActivityName = (e) => {
+        setActivityName(e.target.value);
     };
 
     const handleStatusValue = (e) => {
@@ -105,7 +105,7 @@ function SearchFilterComponent({
     }, [facultyState?.faculty]);
 
     useEffect(() => {
-        if (setActivityValue) {
+        if (setActivityName) {
             if (majorValue?.majorName && cohortValue?.cohortName && currentLevelYearValue > 0 && talentEngineerType) {
                 dispatch(
                     getActivities({
@@ -207,8 +207,8 @@ function SearchFilterComponent({
                         </select>
                     ))}
 
-                {setActivityValue && (
-                    <select value={activityValue} onInput={handleActivityValue}>
+                {setActivityName && (
+                    <select value={activityName} onInput={onChangeActivityName}>
                         <option value="">Chọn Hoạt Động</option>
                         {currentLevelYearValue &&
                             activities.length > 0 &&

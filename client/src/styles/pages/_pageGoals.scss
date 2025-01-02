@@ -459,27 +459,6 @@
                 display: flex;
                 gap: 10px;
                 margin-bottom: 10px;
-
-                .search_btn {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    background-color: #1677ff;
-                    border: none;
-                    color: #fff;
-                    font-size: 15px;
-                    padding: 8px 12px;
-                    border-radius: 3px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    max-height: 40px;
-                    min-width: 120px;
-                    transition: 0.1s linear;
-
-                    &:active {
-                        transform: scale(0.9);
-                    }
-                }
             }
 
             .goal_management_body {

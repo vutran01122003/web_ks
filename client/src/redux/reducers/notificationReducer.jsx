@@ -6,7 +6,7 @@ const initialState = {
     maxPage: false,
     unreadNotificationNum: 0,
     isLoading: false,
-    currentNumNotifications: 0,
+    currentNumNotifications: 0
 };
 
 function notificationReducer(state = initialState, action) {
@@ -14,14 +14,14 @@ function notificationReducer(state = initialState, action) {
         case GLOBALTYPES.NOTIFICATION.LOADING_NOTIFICATIONS: {
             return {
                 ...state,
-                isLoading: action.payload.isLoading,
+                isLoading: action.payload.isLoading
             };
         }
 
         case GLOBALTYPES.NOTIFICATION.GET_NUM_UNREAD_NOTIFICATION: {
             return {
                 ...state,
-                unreadNotificationNum: action.payload.numUnreadNotifications,
+                unreadNotificationNum: action.payload.numUnreadNotifications
             };
         }
 
@@ -30,7 +30,7 @@ function notificationReducer(state = initialState, action) {
                 ...state,
                 data: [action.payload.notification, ...state.data],
                 unreadNotificationNum: state.unreadNotificationNum + 1,
-                currentNumNotifications: state.currentNumNotifications + 1,
+                currentNumNotifications: state.currentNumNotifications + 1
             };
         }
 
@@ -43,8 +43,7 @@ function notificationReducer(state = initialState, action) {
                 currentNumNotifications:
                     action.payload.page === 1
                         ? action.payload.data.length
-                        : state.currentNumNotifications +
-                          action.payload.data.length,
+                        : state.currentNumNotifications + action.payload.data.length
             };
         }
 
@@ -55,19 +54,12 @@ function notificationReducer(state = initialState, action) {
 
             for (let i = 0; i < notificationList.length; i++) {
                 if (action.payload.notificationId === notificationList[i]._id) {
-                    if (notificationList[i].recipient)
-                        notificationList[i].isRead = status;
+                    if (notificationList[i].recipient) notificationList[i].isRead = status;
                     else {
-                        const readedUserList =
-                            notificationList[i].readedUserList;
+                        const readedUserList = notificationList[i].readedUserList;
                         status
                             ? readedUserList.push(action.payload.recipientId)
-                            : readedUserList.splice(
-                                  readedUserList.indexOf(
-                                      action.payload.recipientId,
-                                  ),
-                                  1,
-                              );
+                            : readedUserList.splice(readedUserList.indexOf(action.payload.recipientId), 1);
                     }
                     break;
                 }
@@ -76,9 +68,7 @@ function notificationReducer(state = initialState, action) {
             return {
                 ...state,
                 data: notificationList,
-                unreadNotificationNum: status
-                    ? unreadNotificationNum - 1
-                    : unreadNotificationNum + 1,
+                unreadNotificationNum: status ? unreadNotificationNum - 1 : unreadNotificationNum + 1
             };
         }
 
@@ -100,7 +90,7 @@ function notificationReducer(state = initialState, action) {
                 unreadNotificationNum: notification.isRead
                     ? state.unreadNotificationNum
                     : state.unreadNotificationNum - 1,
-                currentNumNotifications: state.currentNumNotifications - 1,
+                currentNumNotifications: state.currentNumNotifications - 1
             };
         }
 
@@ -110,28 +100,25 @@ function notificationReducer(state = initialState, action) {
                 page: 0,
                 maxPage: false,
                 unreadNotificationNum: 0,
-                currentNumNotifications: 0,
+                currentNumNotifications: 0
             };
         }
 
         case GLOBALTYPES.NOTIFICATION.MARK_ALL_AS_READ: {
-            let _ntfList = [...state.data];
+            let ntfList = [...state.data];
             const _recipientId = action.payload.recipientId;
 
-            for (let i = 0; i < _ntfList.length; i++) {
-                if (_ntfList[i].recipient && !_ntfList[i].isRead)
-                    _ntfList[i].isRead = true;
-                else if (
-                    !_ntfList[i].recipient &&
-                    !_ntfList[i].readedUserList.includes(_recipientId)
-                ) {
-                    _ntfList[i].readedUserList.push(_recipientId);
+            for (let i = 0; i < ntfList.length; i++) {
+                if (ntfList[i].recipient && !ntfList[i].isRead) ntfList[i].isRead = true;
+                else if (!ntfList[i].recipient && !ntfList[i].readedUserList.includes(_recipientId)) {
+                    ntfList[i].readedUserList.push(_recipientId);
                 }
             }
 
             return {
                 ...state,
-                data: _ntfList,
+                unreadNotificationNum: 0,
+                data: ntfList
             };
         }
 

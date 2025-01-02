@@ -1,15 +1,17 @@
+import moment from 'moment';
 import { Fragment, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { IoSearch } from 'react-icons/io5';
 import { LuTimerReset } from 'react-icons/lu';
-import { useDispatch, useSelector } from 'react-redux';
-import GLOBALTYPES from '../redux/actions/globalTypes';
-import { FaSortNumericDown, FaSortNumericDownAlt } from 'react-icons/fa';
-import { getAnnualTaskProgress } from '../redux/actions/progressAction';
-import { authSelector, facultySelector, progressSelector } from '../redux/selector';
+import { FaSortNumericDown, FaSortNumericDownAlt, FaFileExport } from 'react-icons/fa';
 import { toFullName } from '../utils/handleString';
+import GLOBALTYPES from '../redux/actions/globalTypes';
+import { getAnnualTaskProgress } from '../redux/actions/progressAction';
+import SearchFilterComponent from '../components/Filter/SearchFilter';
 import StopSubmittingProofModal from '../components/Modal/StopSubmittingProofModal';
 import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
-import SearchFilterComponent from '../components/Filter/SearchFilter';
+import { authSelector, facultySelector, progressSelector } from '../redux/selector';
+import { exportProgressStatisticsExcel } from '../redux/actions/excelAction';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
@@ -39,6 +41,12 @@ function ProgressUI() {
                   .find((_major) => _major.majorName === major.majorName)
                   .cohortList.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalRegisterInfo
             : null;
+
+    const stopButtonDisplayConditions =
+        (talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE &&
+            additionalRegisterInfo?.levelYear === levelYear &&
+            additionalRegisterInfo?.isActive) ||
+        talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
 
     const lastStudentElementRef = (node) => {
         if (progress.annualTaskProgress.isLoading) return;
@@ -70,6 +78,19 @@ function ProgressUI() {
         setUserId(e.target.value);
     };
 
+    const exportExcelFile = () => {
+        dispatch(
+            exportProgressStatisticsExcel({
+                cohort: cohort.cohortName,
+                major: major.majorName,
+                levelYear: +levelYear,
+                faculty: faculty.facultyName,
+                groupCode: talentEngineerType,
+                sortProgressPercentage: sortProgressPercentage * 1
+            })
+        );
+    };
+
     const onSearchAnnualTaskProgress = ({ page, sortProgressPercentage }) => {
         if (cohort && major && levelYear) {
             dispatch(
@@ -85,6 +106,13 @@ function ProgressUI() {
                     limit: LIMIT
                 })
             );
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: 'Tìm kiếm thành công'
+                }
+            });
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -189,33 +217,42 @@ function ProgressUI() {
                                 talentEngineerType={talentEngineerType}
                                 currentLevelYearValue={levelYear}
                             />
-                            <input type="text" placeholder="Nhập Mã Sinh Viên" onChange={handleChangeUserIdValue} />
-                            <div className="btn_group">
-                                <button className="search_btn" onClick={searchData}>
-                                    <IoSearch />
-                                    Tìm Kiếm
+                            <input
+                                type="text"
+                                className="search_input"
+                                placeholder="Nhập Mã Sinh Viên"
+                                onChange={handleChangeUserIdValue}
+                            />
+
+                            <button className="search_btn" onClick={searchData}>
+                                <IoSearch size={20} />
+                                Tìm Kiếm
+                            </button>
+
+                            {progress.annualTaskProgress.data.length > 0 && (
+                                <button className="export_btn" onClick={exportExcelFile}>
+                                    <FaFileExport size={20} />
+                                    Xuất Excel
                                 </button>
-                                <div className="line__flex">
-                                    {((talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE &&
-                                        additionalRegisterInfo.levelYear === levelYear &&
-                                        additionalRegisterInfo.isActive) ||
-                                        talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) && (
-                                        <Fragment>
-                                            {isVisibleStopSubmitingProofBtn &&
-                                                progress.annualTaskProgress.data.length > 0 && (
-                                                    <button
-                                                        className="btn__end_progress"
-                                                        onClick={handleVissbleStopSubmittingProofModal}
-                                                    >
-                                                        <LuTimerReset />
-                                                        {talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-                                                            ? 'Dừng Xét Tuyển Bổ Sung'
-                                                            : 'Dừng Nộp Minh Chứng'}
-                                                    </button>
-                                                )}
-                                        </Fragment>
-                                    )}
-                                </div>
+                            )}
+
+                            <div className="line__flex">
+                                {stopButtonDisplayConditions && (
+                                    <Fragment>
+                                        {isVisibleStopSubmitingProofBtn &&
+                                            progress.annualTaskProgress.data.length > 0 && (
+                                                <button
+                                                    className="btn__end_progress"
+                                                    onClick={handleVissbleStopSubmittingProofModal}
+                                                >
+                                                    <LuTimerReset />
+                                                    {talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
+                                                        ? 'Dừng Xét Tuyển Bổ Sung'
+                                                        : 'Dừng Nộp Minh Chứng'}
+                                                </button>
+                                            )}
+                                    </Fragment>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -227,6 +264,7 @@ function ProgressUI() {
                                     <th>STT</th>
                                     <th>Mã Sinh Viên</th>
                                     <th>Tên Sinh Viên</th>
+                                    <th>Ngày Sinh</th>
                                     <th className="progress_header">
                                         <span>Tổng Tiến Độ</span>
                                         <span className="progress_header_filter" onClick={handleToggleSortProgress}>
@@ -244,7 +282,8 @@ function ProgressUI() {
 
                             <tbody>
                                 {progress.annualTaskProgress.data.map((progressItem, index) => {
-                                    const { progressData, lastName, firstName, userId, isActive } = progressItem;
+                                    const { progressData, lastName, firstName, userId, isActive, birthday } =
+                                        progressItem;
                                     const progressPercentage = progressData?.progressPercentage ?? 0;
                                     const totalScore = progressData?.totalScore ?? 0;
 
@@ -254,6 +293,7 @@ function ProgressUI() {
                                                 <td>{index + 1}</td>
                                                 <td>{userId}</td>
                                                 <td>{toFullName({ firstName, lastName })}</td>
+                                                <td>{moment(birthday).format('DD/MM/yyyy')}</td>
                                                 <td>{`${progressPercentage.toFixed(2)}%`}</td>
                                                 <td>{totalScore}</td>
                                                 <td className={isActive ? 'active' : 'inactive'}>

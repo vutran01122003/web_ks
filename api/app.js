@@ -31,12 +31,12 @@ const corsOptions = {
 };
 
 // MiddleWare
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan(morganType));
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
-app.use(morgan(morganType));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Router

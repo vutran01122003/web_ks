@@ -1,0 +1,15 @@
+@url=http://localhost:4000
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "userId": "21078101",
+    "password": "1111"
+}
+
+### Export progress statistics excel
+GET {{url}}/api/progress-statistics/export?groupCode=001&faculty=công nghệ thông tin&major=kỹ thuật phần mềm&cohort=20&levelYear=2&sortProgressPercentage=-1
+
+### Export qualified users excel
+GET {{url}}/api/qualified-users/export?major=kỹ thuật phần mềm&cohort=20&groupCode=002&sortByName=-1

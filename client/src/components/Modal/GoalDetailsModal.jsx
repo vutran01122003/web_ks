@@ -39,7 +39,7 @@ function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
     }, [levelYear]);
 
     return (
-        <div className="modal_overlap" onMouseUp={onHiddenModal}>
+        <div className="modal_overlap" onDoubleClick={onHiddenModal}>
             <div className="box_wrapper goal_details_modal">
                 <div className="goal_details_modal_header">
                     <span>Thống Kê Chi Tiết Hoạt Động</span>

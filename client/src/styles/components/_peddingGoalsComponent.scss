@@ -33,6 +33,14 @@
 
         .filter_group {
             padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .search_wrapper {
+            display: flex;
+            gap: 5px;
         }
 
         .tab__tables--goal {
@@ -90,47 +98,13 @@
                 }
             }
         }
-
-        .line__sort {
-            width: 100%;
-            background: #fff;
-            margin-top: -15px;
-            display: flex;
-            border-bottom: 1px solid #eceaea;
-            padding: 15px;
-
-            .box__left {
-                display: flex;
-                width: 100%;
-                gap: 10px;
-                > div {
-                    margin-right: 15px;
-                }
-            }
-
-            .box__right {
-                flex: 1;
-
-                .btn__refresh {
-                    background-color: #2387f9;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 16px;
-                    font-weight: 500;
-
-                    svg {
-                        font-size: 18px;
-                    }
-                }
-            }
-        }
     }
 }
 
 .container__center {
     background-color: $color_white;
     border-radius: 3px;
+    overflow: auto;
 
     .notify_nothing {
         display: flex;

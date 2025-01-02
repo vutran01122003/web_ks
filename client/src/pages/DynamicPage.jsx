@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { pageSelector } from '../redux/selector';
@@ -36,11 +36,7 @@ const DynamicPage = () => {
 
             const tableList = pageData?.tables || [];
 
-            setTables(
-                tableList.map((table) => {
-                    return renderTable({ table });
-                })
-            );
+            setTables(tableList.map((table) => renderTable({ table })));
         }
     }, [page.pages, dynamicPage]);
 
@@ -53,10 +49,11 @@ const DynamicPage = () => {
             );
         }
     }, [pathname]);
+
     return (
         <div className="dynamic_page_container">
             {page?.pageType && page.pageType === VITE_APP_GOAL_PAGE && (
-                <>
+                <Fragment>
                     {tables.length > 0 ? (
                         tables.map((table) => {
                             return <LayoutTable key={table.tableId} table={table} page={page}></LayoutTable>;
@@ -64,7 +61,7 @@ const DynamicPage = () => {
                     ) : (
                         <EmptyDataNotification />
                     )}
-                </>
+                </Fragment>
             )}
 
             {page?.pageType && page.pageType === VITE_APP_NEWS_PAGE && <News />}

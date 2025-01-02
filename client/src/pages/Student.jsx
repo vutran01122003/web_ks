@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
+import { FiEdit } from 'react-icons/fi';
+import { IoSearch } from 'react-icons/io5';
+import { AiOutlineUserAdd } from 'react-icons/ai';
+import { FaSortAlphaDown, FaSortAlphaDownAlt, FaFileExport } from 'react-icons/fa';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 import ConfirmModal from '../components/Modal/ConfirmModal';
-import { importUser } from '../redux/actions/excelAction';
+import { exportQualifiedUsersExcel, importUser } from '../redux/actions/excelAction';
 import { facultySelector, studentSelector } from '../redux/selector';
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import SearchFilterComponent from '../components/Filter/SearchFilter';
@@ -90,6 +92,18 @@ const Student = () => {
         return stringValue;
     };
 
+    const exportExcelFile = () => {
+        dispatch(
+            exportQualifiedUsersExcel({
+                major: major.majorName,
+                cohort: cohort.cohortName,
+                groupCode: talentEngineerType,
+                status: status,
+                sortByName
+            })
+        );
+    };
+
     const onGetStudents = ({ page, sortByName }) => {
         if (!major || !cohort || !status) {
             dispatch({
@@ -166,28 +180,31 @@ const Student = () => {
                 <div className="body__data--st">
                     <div className="line__sort">
                         <div className="filter_group">
-                            <SearchFilterComponent
-                                setMajorValue={setMajor}
-                                setCohortValue={Setcohort}
-                                setTalentEngineerType={setTalentEngineerType}
-                                setStatus={setStatus}
-                                majorValue={major}
-                                cohortValue={cohort}
-                                talentEngineerType={talentEngineerType}
-                                statusValue={status}
-                            />
+                            <div className="left-section">
+                                <SearchFilterComponent
+                                    setMajorValue={setMajor}
+                                    setCohortValue={Setcohort}
+                                    setTalentEngineerType={setTalentEngineerType}
+                                    setStatus={setStatus}
+                                    majorValue={major}
+                                    cohortValue={cohort}
+                                    talentEngineerType={talentEngineerType}
+                                    statusValue={status}
+                                />
+                            </div>
 
-                            <input
-                                type="text"
-                                name="userId"
-                                placeholder="Nhập Mã Sinh Viên"
-                                onChange={handleChangeUserId}
-                            />
+                            <div className="right_section">
+                                <input
+                                    className="search_input"
+                                    type="text"
+                                    name="userId"
+                                    placeholder="Nhập Mã Sinh Viên"
+                                    onChange={handleChangeUserId}
+                                />
 
-                            <div className="search_wrapper">
                                 <div className="btn_group">
                                     <button
-                                        className="student_search_btn"
+                                        className="search_btn"
                                         onClick={() => {
                                             onClickGetStudentListBtn({
                                                 page: 1,
@@ -195,11 +212,15 @@ const Student = () => {
                                             });
                                         }}
                                     >
-                                        Tìm Kiếm
+                                        <IoSearch size={20} />
+                                        <span>Tìm Kiếm</span>
                                     </button>
 
-                                    <div className="add_student_btn_wrapper">
-                                        <label htmlFor="excelfile">Thêm Kỹ Sư</label>
+                                    <div className="add_student_wrapper">
+                                        <label htmlFor="excelfile">
+                                            <AiOutlineUserAdd size={20} />
+                                            <span> Thêm Kỹ Sư</span>
+                                        </label>
                                         <input
                                             type="file"
                                             id="excelfile"
@@ -210,6 +231,13 @@ const Student = () => {
                                             ref={fileRef}
                                         />
                                     </div>
+
+                                    {studentState.studentList.length > 0 && (
+                                        <button className="export_btn" onClick={exportExcelFile}>
+                                            <FaFileExport size={20} />
+                                            <span>Xuất Excel</span>
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

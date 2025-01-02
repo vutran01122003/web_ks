@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 const conn = require("../dbs/init.mongodb");
 const User = require("./user.model");
 
-const { TALENT_ENGINEER_TYPE } = process.env;
+const { TALENT_ENGINEER_PAGE_TYPE } = process.env;
 const [DOC, COL] = ["row", "rows"];
 
 const RowSchema = new Schema(
@@ -87,7 +87,7 @@ RowSchema.pre("deleteMany", async function (next) {
             const { pageStudentLevelYear, pageTalentEngineerType } = deletedDocs[0].page;
             const index = pageStudentLevelYear - 1;
             const annualActivitiesField =
-                TALENT_ENGINEER_TYPE === pageTalentEngineerType
+                TALENT_ENGINEER_PAGE_TYPE === pageTalentEngineerType
                     ? "annualActivitiesProgress"
                     : "annualTemporaryActivitiesProgress";
 

@@ -28,8 +28,10 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
     TABLE.tableId = table ? table._id : dynamicTable._id;
     TABLE.title = table ? table.tableName : dynamicTable.tableName;
     const rowTitleList = table ? table.rowTitleList : dynamicTable.rowTitleList;
+    const fixedScore = table ? table.fixedScore : null;
 
     TABLE.thead = [];
+
     if (!table) {
         TABLE.thead = [
             {
@@ -59,13 +61,22 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
     if (rowTitleList) {
         TABLE.thead.push(
             ...rowTitleList.map((rowTitle) => {
-                return {
+                const typeInput = rowTitle.fixedValue.length > 0 ? 'select' : 'text';
+                const headerData = {
                     _id: rowTitle._id,
                     textHeading: rowTitle.titleValue,
                     fixedValueList: rowTitle.fixedValue,
-                    typeInput: rowTitle.fixedValue.length > 0 ? 'select' : 'text',
+                    typeInput,
                     isShow: true
                 };
+
+                if (typeInput === 'select')
+                    return {
+                        ...headerData,
+                        fixedScore
+                    };
+
+                return headerData;
             })
         );
     }
@@ -80,6 +91,12 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
 
     TABLE.thead = [
         ...TABLE.thead,
+        {
+            textHeading: 'Điểm',
+            typeInput: 'text',
+            requiredHeading: true,
+            isShow: false
+        },
         {
             textHeading: 'Minh Chứng',
             typeInput: 'file',
@@ -96,6 +113,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
             isShow: false
         });
     } else {
+        TABLE.quantityDemanded = table.quantityDemanded;
         TABLE.thead.push(
             {
                 textHeading: 'Trạng Thái',
@@ -158,6 +176,10 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
 
             const tbody = [
                 ...rowValueItemArr,
+                {
+                    scoreLabel: true,
+                    scoreValue: rowValueItem.totalScore
+                },
                 {
                     proofNameLabel: 'Tải về',
                     proofPreviewLabel: 'Xem',

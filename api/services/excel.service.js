@@ -1,29 +1,25 @@
 const ExcelJS = require("exceljs/dist/es5");
-const { userColumn, addDataOfRow } = require("../config/exceljs.config");
+const { userColumn, addUserData, progressStatisticsColumn } = require("../config/exceljs.config");
 const AccessService = require("../services/access.service");
-const User = require("../models/user.model");
 const createHttpError = require("http-errors");
 
 const { TALENT_ENGINEER_CODE } = process.env;
 
 class ExcelService {
-    static exportUserQualified = async () => {
+    static exportQualifiedUsersExcel = async (qualifiedUsersData) => {
         try {
             const workbook = new ExcelJS.Workbook();
-
             const sheet = workbook.addWorksheet("My Sheet");
 
             sheet.columns = userColumn;
 
-            let counter = 1;
+            qualifiedUsersData.forEach((user, index) => {
+                const data = {
+                    s_no: index + 1,
+                    ...user
+                };
 
-            const userData = await User.find();
-
-            userData.forEach((user) => {
-                user.s_no = counter;
-
-                sheet.addRow(user);
-                counter++;
+                sheet.addRow(data);
             });
 
             sheet.getRow(1).eachCell((cell) => {
@@ -32,7 +28,35 @@ class ExcelService {
 
             return workbook;
         } catch (error) {
-            throw createHttpError.BadRequest("Lỗi xuất dữ liệu exel");
+            throw createHttpError.BadRequest("Lỗi xuất dữ liệu excel");
+        }
+    };
+
+    static exportProgressStatisticsExcel = async (progressStatisticsData) => {
+        try {
+            const workbook = new ExcelJS.Workbook();
+            const sheet = workbook.addWorksheet("My Sheet");
+
+            sheet.columns = progressStatisticsColumn;
+
+            progressStatisticsData.forEach((progressItem, index) => {
+                const data = {
+                    s_no: index + 1,
+                    ...progressItem,
+                    progressPercentage: progressItem.progressData?.progressPercentage || 0,
+                    totalScore: progressItem.progressData?.totalScore || 0
+                };
+
+                sheet.addRow(data);
+            });
+
+            sheet.getRow(1).eachCell((cell) => {
+                cell.font = { bold: true };
+            });
+
+            return workbook;
+        } catch (error) {
+            throw createHttpError.BadRequest("Lỗi xuất dữ liệu excel");
         }
     };
 
@@ -52,7 +76,7 @@ class ExcelService {
                     data.password = "1111";
                     row.eachCell((cell, colNumber) => {
                         if (colNumber > 1) {
-                            addDataOfRow(cell, colNumber, data);
+                            addUserData(cell, colNumber, data);
                         }
                     });
                     prevRegisterUserList.push(data);
@@ -68,7 +92,7 @@ class ExcelService {
                 )
             );
         } catch (error) {
-            throw createHttpError.BadRequest("Lỗi nhập dữ liệu exel");
+            throw createHttpError.BadRequest("Lỗi nhập dữ liệu excel");
         }
     };
 }

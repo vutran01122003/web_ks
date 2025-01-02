@@ -1,13 +1,10 @@
 import { Modal } from 'antd';
+import docIcon from '../../assets/images/icon/doc.png';
+import imgIcon from '../../assets/images/icon/img.png';
+import pdfIcon from '../../assets/images/icon/pdf.png';
+import errorFileIcon from '../../assets/images/icon/error.png';
 
 function PreviewFilesModal({ proofFilesData, openPreviewModal, setOpenPreviewModal }) {
-    const {
-        VITE_APP_IMG_FILE_ICON_URL,
-        VITE_APP_DOC_FILE_ICON_URL,
-        VITE_APP_PDF_FILE_ICON_URL,
-        VITE_APP_INVAILD_FILE_ICON_URL
-    } = import.meta.env;
-
     return (
         <Modal
             title={'Danh Sách Minh Chứng'}
@@ -20,28 +17,28 @@ function PreviewFilesModal({ proofFilesData, openPreviewModal, setOpenPreviewMod
         >
             <div className="files_preview_wrapper">
                 {proofFilesData.map((proofFiles) => {
-                    let src = '';
-                    let alt = '';
+                    let src = null;
+                    let alt = null;
 
                     switch (proofFiles?.fileType.toLowerCase()) {
                         case 'jpg':
                         case 'jpeg':
                         case 'png':
-                            src = VITE_APP_IMG_FILE_ICON_URL;
-                            alt = 'image file';
+                            src = imgIcon;
+                            alt = 'Image file';
                             break;
                         case 'doc':
                         case 'docx':
-                            src = VITE_APP_DOC_FILE_ICON_URL;
-                            alt = 'document file';
+                            src = docIcon;
+                            alt = 'Document file';
                             break;
                         case 'pdf':
-                            src = VITE_APP_PDF_FILE_ICON_URL;
-                            alt = 'document file';
+                            src = pdfIcon;
+                            alt = 'PDF file';
                             break;
                         default:
-                            src = VITE_APP_INVAILD_FILE_ICON_URL;
-                            alt = 'invaild file';
+                            src = errorFileIcon;
+                            alt = 'Invaild file';
                             break;
                     }
 

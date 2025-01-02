@@ -9,7 +9,7 @@ function NoteModal({ handleHiddenNoteModal, noteList }) {
     };
 
     return (
-        <div className="modal_overlap" onMouseUp={handleHiddenPopup}>
+        <div className="modal_overlap" onDoubleClick={handleHiddenPopup}>
             <div className="note_modal">
                 <div className="note_modal_header">
                     <h3>{'Lịch sử ghi chú của hoạt động'}</h3>

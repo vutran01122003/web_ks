@@ -1,11 +1,11 @@
-import LogoIUH from '../assets/images/logo_iuh_full.png';
-import ImageIntro2 from '../assets/images/image_intro.png';
+import LogoIUH from '../assets/images/logo/logo_iuh_full.png';
+import ImageIntro2 from '../assets/images/other/image_intro.png';
 import FormLogin from '../components/Login/FormLogin';
 
 import { useSelector } from 'react-redux';
 import { authSelector } from '../redux/selector';
 import { Navigate } from 'react-router-dom';
-import imgBackGround from '../assets/images/background_form_login.jpg';
+import imgBackGround from '../assets/images/background/background_form_login.jpg';
 
 const Login = () => {
     const auth = useSelector(authSelector);

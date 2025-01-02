@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaAnglesLeft, FaAnglesRight } from 'react-icons/fa6';
 import { IoMdArrowDropright } from 'react-icons/io';
-import Logo_IUH from '../../assets/images/logo_iuh.png';
-import Logo_IUH_color_w from '../../assets/images/logo_iuh.png';
+import Logo_IUH from '../../assets/images/logo/logo_iuh.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { pageSelector } from '../../redux/selector';
 import { getPages } from '../../redux/actions/pageAction';
@@ -194,7 +193,7 @@ const LayoutSideBar = ({ auth }) => {
                 <div className="img__logo">
                     {toggleMenu ? null : (
                         <a href="/">
-                            <img src={determineAuth ? Logo_IUH_color_w : Logo_IUH} alt="logo_iuh" />
+                            <img src={Logo_IUH} alt="logo_iuh" />
                         </a>
                     )}
 

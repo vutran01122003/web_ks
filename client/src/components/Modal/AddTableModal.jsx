@@ -31,7 +31,7 @@ function AddTableModal({ pageId, handleHideAddTableModal }) {
     };
 
     return (
-        <div className="modal_overlap" onMouseUp={handleClosePopup}>
+        <div className="modal_overlap" onDoubleClick={handleClosePopup}>
             <div className="box_wrapper">
                 <h2 className="modal_header">Thêm Chỉ Tiêu Mới</h2>
                 <div className="modal_close_icon_wrapper" onClick={handleHideAddTableModal}>

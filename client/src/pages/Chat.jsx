@@ -1,13 +1,15 @@
+import { Button } from 'antd';
+import Markdown from 'react-markdown';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoSend } from 'react-icons/io5';
-import { RiBubbleChartFill } from 'react-icons/ri';
-import { sendChat, getTypeChat } from '../redux/actions/chatbotAction';
-import { Button } from 'antd';
 import { FaArrowDown } from 'react-icons/fa6';
+import { RiBubbleChartFill } from 'react-icons/ri';
 import { chatbotSelector } from '../redux/selector';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import Markdown from 'react-markdown';
+import { sendChat, getTypeChat } from '../redux/actions/chatbotAction';
+import chatbotLoading from '../assets/images/icon/chatbot_loading.png';
+
 const Chat = () => {
     const dispatch = useDispatch();
     const chatbot = useSelector(chatbotSelector);
@@ -119,11 +121,7 @@ const Chat = () => {
                                     <TextLink text={item?.answer} />
                                 </div>
                             ) : (
-                                <img
-                                    src={import.meta.env.VITE_APP_CHATBOT_LOADING}
-                                    className="chatbot-loading"
-                                    alt="loading"
-                                />
+                                <img src={chatbotLoading} className="chatbot-loading" alt="loading" />
                             )}
                         </div>
                     ))

@@ -1,5 +1,7 @@
 import GLOBALTYPES from '../actions/globalTypes';
 
+const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
+
 const initialState = {
     loading: false,
     pendingRows: {
@@ -47,7 +49,7 @@ function rowReducer(state = initialState, action) {
                     ...state[rowsType],
                     data: action.payload.page === 1 ? dynamicRows : [...rowData, ...dynamicRows],
                     page: page || 1,
-                    maxPage: dynamicRows.length === 0 ? true : false,
+                    maxPage: dynamicRows.length < LIMIT ? true : false,
                     currentRows: page === 1 ? dynamicRows.length : rowData.length + dynamicRows.length
                 }
             };
@@ -115,7 +117,7 @@ function rowReducer(state = initialState, action) {
         }
 
         case GLOBALTYPES.ROW.RESET_ALL_TAB: {
-            return initialState;
+            return { ...initialState };
         }
 
         default:

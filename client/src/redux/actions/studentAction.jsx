@@ -31,6 +31,13 @@ export const getStudents =
                     page: page
                 }
             });
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: 'Tìm kiếm thành công'
+                }
+            });
         } catch (error) {
             notifyError({
                 error,

@@ -4,7 +4,7 @@ const UserService = require("./user.service");
 const convertToObjectId = require("../utils/convertToObjectId");
 const FacultyService = require("./faculty.service");
 
-const { TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE, GOAL_PAGE, NEWS_PAGE } = process.env;
+const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE, GOAL_PAGE, NEWS_PAGE } = process.env;
 
 class PageService {
     static createPage = async (data) => {
@@ -20,7 +20,7 @@ class PageService {
                 pageTalentEngineerType,
                 pageStudentLevelYear
             } = data;
-            const isTemporaryEngineer = pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_TYPE;
+            const isTemporaryEngineer = pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_PAGE_TYPE;
 
             const page = await Page.findOne({
                 pageName,
@@ -245,44 +245,6 @@ class PageService {
         }
     };
 
-    static calculateTotalScoreOfRow = async ({ pageId, content, tableId }) => {
-        try {
-            let totalScore = 0;
-            const pageData = await this.getPageById({ page: pageId });
-            if (!pageData) throw createError.NotFound("Trang Không Tồn Tại");
-
-            const table = pageData.tables.id(tableId);
-
-            if (table) {
-                if (table.fixedScore) {
-                    totalScore = table.fixedScore;
-                } else {
-                    table.rowTitleList.forEach((rowTitleItem) => {
-                        const fixedValueList = rowTitleItem.fixedValue;
-                        if (fixedValueList.length > 0) {
-                            const fixedValueOfContent = content[rowTitleItem._id];
-                            const score = fixedValueList.find(
-                                (fixedValueItem) => fixedValueItem.value === fixedValueOfContent
-                            ).score;
-                            content[rowTitleItem._id] = {
-                                value: fixedValueOfContent,
-                                score
-                            };
-                            totalScore += score;
-                        }
-                    });
-                }
-            } else throw createError.NotFound("Chỉ tiêu không tồn tại");
-
-            return {
-                pageData,
-                totalScore
-            };
-        } catch (error) {
-            throw error;
-        }
-    };
-
     static addRowIntoTableOfPage = async ({ page, table, rowList }) => {
         try {
             await Page.findOneAndUpdate(
@@ -413,7 +375,7 @@ class PageService {
                 pageStudentCohort: +pageStudentCohort
             };
 
-            if ([TALENT_ENGINEER_TYPE, TEMPORARY_TALENT_ENGINEER_TYPE].includes(groupCode))
+            if ([TALENT_ENGINEER_PAGE_TYPE, TEMPORARY_TALENT_ENGINEER_PAGE_TYPE].includes(groupCode))
                 fields.pageTalentEngineerType = groupCode;
 
             const pageDetailsList = await Page.aggregate([

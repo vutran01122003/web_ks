@@ -1,17 +1,30 @@
 const userColumn = [
-    { header: "STT", key: "s_no", width: 5 },
+    { header: "STT", key: "s_no", width: 10 },
     { header: "MSSV", key: "userId", width: 10 },
-    { header: "Họ đệm", key: "lastName", width: 25 },
-    { header: "Tên", key: "firstName", width: 25 },
-    { header: "Ngày sinh", key: "birthday", width: 12 },
-    { header: "Khoa", key: "faculty", width: 30 },
-    { header: "Chuyên ngành", key: "major", width: 30 },
-    { header: "Khoá", key: "cohort", width: 5 },
-    { header: "Email", key: "email", width: 35 },
+    { header: "Họ đệm", key: "lastName", width: 20 },
+    { header: "Tên", key: "firstName", width: 10 },
+    { header: "Ngày sinh", key: "birthday", width: 15 },
+    { header: "Khoa", key: "faculty", width: 25 },
+    { header: "Chuyên ngành", key: "major", width: 25 },
+    { header: "Khoá", key: "cohort", width: 10 },
+    { header: "Email", key: "email", width: 30 },
     { header: "Điện thoại", key: "phone", width: 15 }
 ];
 
-const addDataOfRow = (cell, colNumber, data) => {
+const progressStatisticsColumn = [
+    { header: "STT", key: "s_no", width: 10 },
+    { header: "MSSV", key: "userId", width: 10 },
+    { header: "Họ đệm", key: "lastName", width: 20 },
+    { header: "Tên", key: "firstName", width: 10 },
+    { header: "Ngày sinh", key: "birthday", width: 15 },
+    { header: "Khoa", key: "faculty", width: 25 },
+    { header: "Chuyên ngành", key: "major", width: 25 },
+    { header: "Khoá", key: "cohort", width: 10 },
+    { header: "Tổng tiến độ (%)", key: "progressPercentage", width: 20 },
+    { header: "Tổng điểm", key: "totalScore", width: 15 }
+];
+
+const addUserData = (cell, colNumber, data) => {
     switch (colNumber) {
         case 2:
             data.userId = cell.value;
@@ -47,5 +60,6 @@ const addDataOfRow = (cell, colNumber, data) => {
 
 module.exports = {
     userColumn,
-    addDataOfRow
+    progressStatisticsColumn,
+    addUserData
 };

@@ -5,7 +5,7 @@ const Row = require("../models/row.model");
 const conn = require("../dbs/init.mongodb");
 const TableSchema = require("./tables.schema");
 
-const { GOAL_PAGE, NEWS_PAGE, TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE } = process.env;
+const { GOAL_PAGE, NEWS_PAGE, TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE } = process.env;
 const [DOC, COL] = ["page", "pages"];
 
 const PageSchema = new Schema(
@@ -26,7 +26,7 @@ const PageSchema = new Schema(
         },
         pageTalentEngineerType: {
             type: String,
-            enum: [TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE],
+            enum: [TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE],
             validate: {
                 validator: function () {
                     return this.pageType === "chỉ tiêu";

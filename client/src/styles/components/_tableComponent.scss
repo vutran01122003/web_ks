@@ -18,7 +18,7 @@
     }
 
     header {
-        padding: 10px;
+        padding: 5px 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -61,6 +61,7 @@
         font-weight: 400;
         padding-left: 10px;
     }
+
     .table {
         border: 1px solid $line_color;
         margin: 10px 0px;
@@ -181,7 +182,7 @@
                 &:hover {
                     background-color: #f3f3f3d7;
                 }
-                
+
                 .line__item {
                     font-size: 14px;
                     font-weight: 500;
@@ -195,13 +196,13 @@
                     flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
-                    
+
                     .proof_files_download {
                         border-right: 1px solid #333;
                     }
-    
-                    .preview_proof_files,   
-                    .proof_files_download {  
+
+                    .preview_proof_files,
+                    .proof_files_download {
                         display: inline-block;
                         padding: 0 8px;
                         color: currentColor;
@@ -211,11 +212,11 @@
                             color: #0266f2;
                             text-decoration: underline;
                         }
-    
+
                         &:active {
                             color: #0055cc;
                         }
-    
+
                         user-select: none;
                     }
                 }

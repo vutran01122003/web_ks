@@ -23,66 +23,26 @@
                     display: flex;
                     flex-wrap: wrap;
                     padding: 10px;
-                    gap: 10px;
+                    gap: 5px;
 
-                    input {
-                        min-width: 180px;
-                        padding: 10px;
-                        border: 1px solid #ccc;
-                        color: #333;
+                    .btn__end_progress {
+                        height: 40px;
+                        background-color: #f0635c;
+                        font-size: 15px;
+                        padding: 8px;
+                        border: none;
+                        border-radius: 3px;
+                        color: #fff;
                         font-weight: 600;
-                        outline: none;
-                    }
-
-                    .btn_group {
+                        cursor: pointer;
                         display: flex;
-                        gap: 8px;
+                        align-items: center;
+                        justify-content: center;
+                        min-width: 200px;
 
-                        .search_btn {
-                            background-color: #1677ff;
-                            font-size: 15px;
-                            padding: 8px 12px;
-                            border: none;
-                            border-radius: 3px;
-                            color: #fff;
-                            font-weight: 600;
-                            cursor: pointer;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            max-height: 40px;
-                            min-width: 140px;
-                            transition: 0.1s linear;
-
-                            &:active {
-                                transform: scale(0.9);
-                            }
-
-                            svg {
-                                font-size: 17px !important;
-                                margin-right: 5px;
-                            }
-                        }
-
-                        .btn__end_progress {
-                            height: 40px;
-                            background-color: #f0635c;
-                            font-size: 15px;
-                            padding: 8px;
-                            border: none;
-                            border-radius: 3px;
-                            color: #fff;
-                            font-weight: 600;
-                            cursor: pointer;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            min-width: 200px;
-
-                            svg {
-                                font-size: 17px !important;
-                                margin-right: 5px;
-                            }
+                        svg {
+                            font-size: 17px !important;
+                            margin-right: 5px;
                         }
                     }
                 }
@@ -150,9 +110,10 @@
                     th {
                         padding: 10px;
                         text-align: left;
-                        font-size: 15px;
-                        color: #000;
+                        font-size: 13.5px;
+                        color: #333;
                         text-align: center;
+                        text-transform: uppercase;
                     }
 
                     td {
@@ -160,6 +121,7 @@
                         padding: 12px 10px;
                         font-size: 14px;
                         font-weight: 600;
+                        color: #4e545b;
 
                         &.active {
                             color: #1677ff;

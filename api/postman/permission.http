@@ -14,9 +14,9 @@ POST {{url}}/api/groups
 Content-Type: application/json
 
 {
-    "name": "Kỹ sư tài năng tạm thời",
-    "description": "nhóm người kstn tạm thời là những người chờ xét duyệt lên kstn chính thức bằng cách hoàn thành các chỉ tiêu hoặc nộp các tài liệu chứng minh bản thân có thể trở thành kstn",
-    "groupCode": "001"
+    "name": "Kỹ sư tài năng bị loại",
+    "description": "nhóm người kstn bị loại là những người không đạt yêu cầu của hệ thống, các quyền cơ bản của kstn đã bị thu hồi trừ quyền xem các thông tin của bản thân",
+    "groupCode": "005"
 }
 
 ### Get all group
@@ -45,6 +45,23 @@ Content-Type: application/json
 ### Delete role
 DELETE {{url}}/api/roles/65d869e64f4c55561ee57878
 
+### Add roles to the non-talent engineer's group
+POST {{url}}/api/groups/6774eae20d98178e703c80ec/roles
+Content-Type: application/json
+
+{
+    "roleIdList": [
+      "670cc56458c8cef6bf3f0d77",
+      "670cc56458c8cef6bf3f0d79",
+      "670cc56458c8cef6bf3f0d7d",
+      "670cc56458c8cef6bf3f0d8d",
+      "670cc56458c8cef6bf3f0d91",
+      "670cc56458c8cef6bf3f0d7f",
+      "670cc56458c8cef6bf3f0dbf",
+      "670cc56458c8cef6bf3f0de7",
+      "670cc56458c8cef6bf3f0dc1"
+    ]
+}
 
 ### Add roles to the talent engineer's group
 POST {{url}}/api/groups/670cc61358c8cef6bf3f0dec/roles

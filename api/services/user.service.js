@@ -18,7 +18,7 @@ const STATUS = {
     [REJECTED_STATUS]: "numberOfRejectedActivity",
     [RESUBMITED_STATUS]: "numberOfResubmitedActivity"
 };
-const { TALENT_ENGINEER_TYPE, TALENT_ENGINEER_CODE } = process.env;
+const { TALENT_ENGINEER_CODE } = process.env;
 
 class UserService {
     static getUserAndPopulateGroupById = async ({ id, idList, selectedFieldArr }) => {
@@ -78,6 +78,12 @@ class UserService {
             {
                 $match: {
                     "group.groupCode": groupCode
+                }
+            },
+            {
+                $project: {
+                    "group.method": 0,
+                    "group.description": 0
                 }
             },
             {
@@ -170,35 +176,35 @@ class UserService {
     };
 
     static updateUserActivityStatusByMajor = async ({
-        conditions,
         faculty,
         major,
         cohort,
         levelYear,
-        updatedCohortData,
-        groupData
+        groupData,
+        conditions,
+        updatedCohortData
     }) => {
         try {
             const index = levelYear - 1;
             const { groupId, groupCode } = groupData;
-            const studentInfo = { faculty, major, cohort, group: groupId };
             const { progressPercentage, score } = conditions;
             const { nextYearValue } = updatedCohortData;
-            const isTalentEngineer = groupCode === TALENT_ENGINEER_TYPE;
+            const studentInfo = { faculty, major, cohort, group: groupId };
+            const isTalentEngineer = groupCode === TALENT_ENGINEER_CODE;
+            const annualActivitiesField = isTalentEngineer
+                ? "annualActivitiesProgress"
+                : "annualTemporaryActivitiesProgress";
 
             const filterUser = {
                 ...studentInfo,
-                [`annualActivitiesProgress.${index}.progressPercentage`]: {
+                [`${annualActivitiesField}.${index}.progressPercentage`]: {
                     $lt: Number.parseFloat(progressPercentage)
-                },
-                [`annualActivitiesProgress.${index}.totalScore`]: {
-                    $lt: Number.parseFloat(score)
                 }
             };
 
             const invalidUserList = await User.find({
                 ...studentInfo,
-                [`annualActivitiesProgress.${index}.progressPercentage`]: {
+                [`${annualActivitiesField}.${index}.progressPercentage`]: {
                     $exists: false
                 }
             });
@@ -236,7 +242,7 @@ class UserService {
                         {
                             $set: {
                                 levelYear: nextYearValue,
-                                [`annualActivitiesProgress.${index + 1}`]: {
+                                [`${annualActivitiesField}.${index + 1}`]: {
                                     levelYear: nextYearValue,
                                     totalScore: 0,
                                     numberOfRequiredActivity: 0,
@@ -257,7 +263,7 @@ class UserService {
                     User.updateMany(filterUser, {
                         $set: {
                             levelYear: nextYearValue,
-                            [`annualTemporaryActivitiesProgress.${index + 1}`]: {
+                            [`${annualActivitiesField}.${index + 1}`]: {
                                 levelYear: nextYearValue,
                                 totalScore: 0,
                                 numberOfRequiredActivity: 0,
@@ -277,7 +283,7 @@ class UserService {
                     User.updateMany(
                         {
                             ...studentInfo,
-                            [`annualTemporaryActivitiesProgress.${index + 1}`]: { $exists: false }
+                            [`${annualActivitiesField}.${index + 1}`]: { $exists: false }
                         },
                         {
                             $set: {
@@ -342,8 +348,11 @@ class UserService {
                             major: 1,
                             levelYear: 1,
                             cohort: 1,
+                            birthday: 1,
                             isActive: 1,
-                            group: 1,
+                            "group.name": 1,
+                            "group.groupCode": 1,
+                            "group._id": 1,
                             progressData: {
                                 $arrayElemAt: [`$${annualActivitiesField}`, index]
                             }
@@ -356,8 +365,8 @@ class UserService {
                     },
                     {
                         $sort: {
-                            "progressData.progressPercentage": sortProgressPercentage,
-                            "progressData.totalScore": sortProgressPercentage
+                            "progressData.totalScore": sortProgressPercentage,
+                            "progressData.progressPercentage": sortProgressPercentage
                         }
                     }
                 ]),

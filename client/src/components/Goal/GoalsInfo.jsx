@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import search from '../../assets/images/search.png';
+import search from '../../assets/images/other/search.png';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 
 function GoalsInfo({ levelYear, goalsInfo }) {

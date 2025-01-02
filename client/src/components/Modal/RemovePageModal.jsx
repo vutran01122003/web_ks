@@ -21,7 +21,7 @@ function RemovePageModal({ pageId, subPageName, handleHideRemovePageModal }) {
     };
 
     return (
-        <div className="modal_overlap" onMouseUp={handleClickOuterClosePopup}>
+        <div className="modal_overlap" onDoubleClick={handleClickOuterClosePopup}>
             <div className="box_wrapper">
                 <h2 className="modal_header">Xóa Nhóm Chỉ Tiêu</h2>
                 <div className="modal_close_icon_wrapper" onClick={handleClosePopup}>

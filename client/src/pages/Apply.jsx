@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import LogoIUH from '../assets/images/logo_iuh.png';
+import LogoIUH from '../assets/images/logo/logo_iuh.png';
 import ComponentProofFile from '../components/ProofFile/ComponentProofFile';
 import ComponentButton from '../components/Button/ComponentButton';
 import { GrClose } from 'react-icons/gr';

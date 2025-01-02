@@ -1,29 +1,53 @@
+import { Tabs } from 'antd';
+import { IoSearch } from 'react-icons/io5';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Tabs, Input } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, rowSelector } from '../redux/selector';
 import { getDynamicRows } from '../redux/actions/rowAction';
-import ComponentDynamicRow from '../components/DynamicRow/ComponentDynamicRow';
 import CircularProgress from '@mui/material/CircularProgress';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-
-import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+import ComponentDynamicRow from '../components/DynamicRow/ComponentDynamicRow';
 import SearchFilterComponent from '../components/Filter/SearchFilter';
+import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+
+const items = [
+    {
+        key: 'pendingRows',
+        label: 'Hoạt Động Chưa Duyệt',
+        children: null
+    },
+    {
+        key: 'acceptedRows',
+        label: 'Hoạt Động Đã Duyệt',
+        children: null
+    },
+    {
+        key: 'rejectedRows',
+        label: 'Hoạt Động Đã Từ Chối',
+        children: null
+    },
+    {
+        key: 'resubmitedRows',
+        label: 'Hoạt Động Phải Nộp Lại',
+        children: null
+    }
+];
 
 const ActivityUi = () => {
+    const limit = import.meta.env.VITE_APP_API_LIMIT;
+
     const observer = useRef();
     const dispatch = useDispatch();
 
     const auth = useSelector(authSelector);
     const row = useSelector(rowSelector);
 
-    const [refreshTabTrigger, setRefreshTabTrigger] = useState(false);
+    const [tab, setTab] = useState('pendingRows');
     const [majorValue, setMajorValue] = useState({});
     const [cohortValue, setCohortValue] = useState({});
     const [talentEngineerType, setTalentEngineerType] = useState('');
     const [currentLevelYearValue, setCurrentLevelYearValue] = useState('');
-    const [activityValue, setActivityValue] = useState('');
+    const [activityName, setActivityName] = useState('');
     const [userId, setUserId] = useState('');
     const [nextPage, setNextPage] = useState({
         pendingRows: 1,
@@ -32,31 +56,73 @@ const ActivityUi = () => {
         resubmitedRows: 1
     });
 
-    const [tab, setTab] = useState('pendingRows');
-    const limit = import.meta.env.VITE_APP_API_LIMIT;
+    const majorName = majorValue.majorName;
+    const cohortName = cohortValue.cohortName;
 
-    const handleRefreshTab = () => {
-        dispatch({
-            type: GLOBALTYPES.ROW.REFRESH_TAB,
-            payload: {
-                rowsType: tab
-            }
-        });
-        setRefreshTabTrigger((prev) => !prev);
-        setNextPage((prev) => ({ ...prev, [tab]: 1 }));
-    };
-
-    const handleChangeTabValue = (tabValue) => {
-        setUserId('');
-        setTab(tabValue);
-    };
-
-    const handleRelativeSearchByStudentId = (e) => {
+    const onChangeUserId = (e) => {
         setUserId(e.target.value);
     };
 
-    const handleRelativeSearch = () => {
-        handleRefreshTab();
+    const handleChangeTabValue = (tabValue) => {
+        setTab(tabValue);
+    };
+
+    const validateFilterData = () => {
+        if (majorName && cohortName && currentLevelYearValue > 0 && talentEngineerType && activityName) return true;
+        return false;
+    };
+
+    const getTheFirstActivityList = ({ tab, userId }) => {
+        dispatch({
+            type: GLOBALTYPES.ROW.RESET_ALL_TAB
+        });
+
+        setNextPage({
+            pendingRows: 1,
+            acceptedRows: 1,
+            rejectedRows: 1,
+            resubmitedRows: 1
+        });
+
+        getActivities({ tab, page: 1, userId });
+    };
+
+    const getActivities = ({ tab, page, userId }) => {
+        dispatch(
+            getDynamicRows({
+                tab,
+                page,
+                limit,
+                userId,
+                currentRows: row[tab]?.currentRows,
+                pageStudentMajor: majorName,
+                pageStudentCohort: cohortName,
+                pageTalentEngineerType: talentEngineerType,
+                pageStudentLevelYear: currentLevelYearValue,
+                activity: activityName
+            })
+        );
+    };
+
+    const onSearch = async () => {
+        if (!validateFilterData()) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
+            });
+            return;
+        }
+
+        getTheFirstActivityList({ tab, userId });
+
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                success: 'Tìm kiếm thành công'
+            }
+        });
     };
 
     const lastPostElementRef = useCallback(
@@ -64,9 +130,7 @@ const ActivityUi = () => {
             if (row.loading) return;
             if (observer.current) observer.current.disconnect();
             observer.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && nextPage[tab] === 1 && row[tab]?.data.length === limit) {
-                    setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
-                } else if (entries[0].isIntersecting && nextPage[tab] > 1 && !row[tab]?.maxPage) {
+                if (entries[0].isIntersecting && !row[tab]?.maxPage) {
                     setNextPage((prev) => ({ ...prev, [tab]: prev[tab] + 1 }));
                 }
             });
@@ -75,67 +139,16 @@ const ActivityUi = () => {
         [row.loading]
     );
 
-    const items = [
-        {
-            key: 'pendingRows',
-            label: 'Hoạt Động Chưa Duyệt',
-            children: null
-        },
-        {
-            key: 'acceptedRows',
-            label: 'Hoạt Động Đã Duyệt',
-            children: null
-        },
-        {
-            key: 'rejectedRows',
-            label: 'Hoạt Động Đã Từ Chối',
-            children: null
-        },
-        {
-            key: 'resubmitedRows',
-            label: 'Hoạt Động Phải Nộp Lại',
-            children: null
-        }
-    ];
+    useEffect(() => {
+        if (nextPage[tab] > 1) getActivities({ tab, page: nextPage[tab] });
+    }, [tab, nextPage[tab]]);
 
     useEffect(() => {
-        if (
-            majorValue?.majorName &&
-            cohortValue?.cohortName &&
-            currentLevelYearValue > 0 &&
-            talentEngineerType &&
-            activityValue
-        ) {
-            dispatch(
-                getDynamicRows({
-                    tab,
-                    limit,
-                    userId,
-                    page: nextPage[tab],
-                    currentRows: row[tab]?.currentRows,
-                    pageTalentEngineerType: talentEngineerType,
-                    pageStudentCohort: cohortValue.cohortName,
-                    pageStudentLevelYear: currentLevelYearValue,
-                    pageStudentMajor: majorValue.majorName,
-                    activity: activityValue
-                })
-            );
-        } else {
-            dispatch({
-                type: GLOBALTYPES.ROW.RESET_ALL_TAB
-            });
+        setUserId('');
+        if (validateFilterData()) {
+            getTheFirstActivityList({ tab });
         }
-    }, [
-        tab,
-        dispatch,
-        nextPage[tab],
-        refreshTabTrigger,
-        majorValue?.majorName,
-        cohortValue?.cohortName,
-        currentLevelYearValue,
-        activityValue,
-        talentEngineerType
-    ]);
+    }, [tab, majorName, cohortName, talentEngineerType, currentLevelYearValue, activityName]);
 
     return (
         <>
@@ -148,78 +161,44 @@ const ActivityUi = () => {
                                 setCohortValue={setCohortValue}
                                 setTalentEngineerType={setTalentEngineerType}
                                 setCurrentLevelYearValue={setCurrentLevelYearValue}
-                                setActivityValue={setActivityValue}
+                                setActivityName={setActivityName}
                                 majorValue={majorValue}
                                 cohortValue={cohortValue}
                                 talentEngineerType={talentEngineerType}
                                 currentLevelYearValue={currentLevelYearValue}
-                                activityValue={activityValue}
+                                activityName={activityName}
                             />
+
+                            <div className="search_wrapper">
+                                <input
+                                    className="search_input"
+                                    placeholder="Mã sinh viên"
+                                    value={userId}
+                                    onChange={onChangeUserId}
+                                />
+
+                                <button className="search_btn" onClick={() => onSearch(tab)} type="primary">
+                                    <IoSearch size={20} />
+                                    <span>Tìm Kiếm</span>
+                                </button>
+                            </div>
                         </div>
+
                         <Tabs
                             onChange={handleChangeTabValue}
                             defaultActiveKey="1"
                             items={items}
                             className="tab__tables--goal"
                         />
-                        <div className="line__sort">
-                            <div className="box__left">
-                                <Input
-                                    placeholder="Mã sinh viên"
-                                    onChange={handleRelativeSearchByStudentId}
-                                    value={userId}
-                                    style={{
-                                        width: 220
-                                    }}
-                                />
 
-                                <Button
-                                    onClick={handleRelativeSearch}
-                                    type="primary"
-                                    style={{
-                                        fontWeight: 600
-                                    }}
-                                >
-                                    Tìm Kiếm
-                                </Button>
-                            </div>
-
-                            <div className="box__right">
-                                <Button
-                                    type="primary"
-                                    icon={<ReloadOutlined />}
-                                    className="btn__refresh"
-                                    onClick={() => {
-                                        handleRefreshTab();
-                                        setUserId('');
-                                    }}
-                                >
-                                    Làm Mới
-                                </Button>
-                            </div>
-                        </div>
                         <div className="container__center">
-                            <>
-                                {row[tab].data.map((dynamicRows, index) => {
-                                    if (index === row[tab].data.length - 1 && row[tab].data.length != 0) {
-                                        return (
-                                            <div
-                                                ref={lastPostElementRef}
-                                                className="last"
-                                                key={dynamicRows?._id + index}
-                                            >
-                                                <ComponentDynamicRow
-                                                    index={index}
-                                                    rowsType={tab}
-                                                    talentEngineerType={talentEngineerType}
-                                                    dynamicRows={dynamicRows}
-                                                />
-                                            </div>
-                                        );
-                                    }
-
+                            {row[tab].data.length > 0 &&
+                                row[tab].data.map((dynamicRows, index) => {
                                     return (
-                                        <div key={dynamicRows?._id + index}>
+                                        <div
+                                            ref={index === row[tab].data.length - 1 ? lastPostElementRef : null}
+                                            key={dynamicRows?._id + index}
+                                        >
                                             <ComponentDynamicRow
                                                 index={index}
                                                 rowsType={tab}
@@ -230,12 +209,11 @@ const ActivityUi = () => {
                                     );
                                 })}
 
-                                {row?.loading && (
-                                    <div className="loading_rows_pendding">
-                                        <CircularProgress />
-                                    </div>
-                                )}
-                            </>
+                            {row?.loading && (
+                                <div className="loading_rows_pendding">
+                                    <CircularProgress />
+                                </div>
+                            )}
 
                             {!row.loading && row[tab].data.length == 0 && <EmptyDataNotification />}
                         </div>
