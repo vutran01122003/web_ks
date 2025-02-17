@@ -112,7 +112,6 @@ class ProgressControllers {
                 data: studentList
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -125,7 +124,7 @@ class ProgressControllers {
                 FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty.toLowerCase(),
                     majorName: major.toLowerCase(),
-                    cohortName: +cohort
+                    cohortName: cohort.toLowerCase()
                 }),
                 PermissionService.getGroupByGroupCode(groupCode)
             ]);
@@ -149,7 +148,7 @@ class ProgressControllers {
             res.status(200).json({
                 status: 200,
                 msg:
-                    group.groupCode === TALENT_ENGINEER_CODE
+                    groupCode === TALENT_ENGINEER_CODE
                         ? `Kết thúc hoạt động nộp minh chứng`
                         : "Kết thúc hoạt động xét tuyển bổ sung"
             });

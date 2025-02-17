@@ -1,94 +1,39 @@
 import { Tabs } from 'antd';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoMdArrowDropright, IoMdAddCircle } from 'react-icons/io';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import { IoMdAddCircle } from 'react-icons/io';
 import { MdRemoveCircle } from 'react-icons/md';
-import { TiDeleteOutline } from 'react-icons/ti';
 import { FaPen } from 'react-icons/fa';
-import { getDataApi } from '../utils/fetchData';
-import GLOBALTYPES from '../redux/actions/globalTypes';
+
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
-import Avatar from '../components/Account/ComponentAvatar';
-import { createCohort, createFaculty, getAllFaculties } from '../redux/actions/facultyAction';
+import { createCohort, deleteMajor, getAllFaculties } from '../redux/actions/facultyAction';
 import { facultySelector } from '../redux/selector';
+import CreateFacultyModal from '../components/Modal/CreateFacultyModal';
+import CreateMajorModal from '../components/Modal/CreateMajorModal';
 
 function Faculty() {
     const dispatch = useDispatch();
-    const [userId, setUserId] = useState('');
-    const [majorList, setMajorList] = useState([]);
-    const [majorName, setMajorName] = useState('');
-    const [facultyName, setFacultyName] = useState('');
-    const [cohortName, setCohortName] = useState('');
-    const [currentFaculty, setCurrentFaculty] = useState({});
-    const [currentMajor, setCurrentMajor] = useState({});
-    const [facultyManagerList, setFacultyManagerList] = useState([]);
     const faculty = useSelector(facultySelector);
 
-    const handleChangeFacultyName = (e) => {
-        setFacultyName(e.target.value);
+    const [cohortName, setCohortName] = useState('');
+    const [facultyId, setFacultyId] = useState(null);
+    const [currentFaculty, setCurrentFaculty] = useState({});
+    const [currentMajor, setCurrentMajor] = useState({});
+    const [isDisplayCreateFacultyModel, setIsDisplayCreateFacultyModel] = useState(false);
+    const [isDisplayAddMajorsModel, setIsDisplayAddMajorsModel] = useState(false);
+
+    const handleToggleDisplayCreateFacultyModal = () => {
+        setIsDisplayCreateFacultyModel((prev) => !prev);
     };
 
-    const handleChangeUserId = (e) => {
-        setUserId(e.target.value);
-    };
-
-    const handleChangeMajorName = (e) => {
-        setMajorName(e.target.value);
+    const handleToggleDisplayAddMajorsModal = (facultyId) => {
+        setFacultyId(facultyId);
+        setIsDisplayAddMajorsModel((prev) => !prev);
     };
 
     const handleChangeCohortName = (e) => {
         setCohortName(e.target.value);
-    };
-
-    const addFacultyManager = async () => {
-        try {
-            const res = await getDataApi(`/users/${userId}`);
-            const userData = res.data.data;
-
-            if (facultyManagerList.some((facultyManager) => facultyManager._id === userData._id)) {
-                setUserId('');
-                return;
-            }
-
-            if (userData) {
-                setFacultyManagerList((prev) => [...prev, userData]);
-            }
-        } catch (error) {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    error: error.response.data.msg
-                }
-            });
-        }
-    };
-
-    const createNewFaculty = () => {
-        dispatch(
-            createFaculty({
-                facultyName,
-                managerIdList: facultyManagerList.map((facultyManager) => facultyManager._id),
-                majorList
-            })
-        );
-
-        setFacultyName('');
-        setUserId('');
-        setMajorList([]);
-        setFacultyManagerList([]);
-    };
-
-    const deleteFacultyManager = async (managerId) => {
-        setFacultyManagerList((prev) => prev.filter((manager) => manager._id != managerId));
-    };
-
-    const addMajor = () => {
-        if (majorName.trim()) setMajorList((prev) => Array.from(new Set([...prev, majorName])));
-        setMajorName('');
-    };
-
-    const deleteMajor = (majorData) => {
-        setMajorList((prev) => prev.filter((majorItem) => majorItem !== majorData));
     };
 
     const handleChangeFacultySelect = (e) => {
@@ -112,163 +57,91 @@ function Faculty() {
         );
     };
 
+    const deleteMajorById = ({ facultyId, majorId }) => {
+        dispatch(deleteMajor({ facultyId, majorId }));
+    };
+
     useEffect(() => {
         if (faculty.facultyData.length === 0) dispatch(getAllFaculties());
     }, []);
 
-    const FacultyUi = (
-        <>
-            <form className="faculty_form">
-                <fieldset>
-                    <legend>Tạo Mới Khoa</legend>
-                    <div className="input_item_wrapper">
-                        <label htmlFor="faculty_name_input">Tên Khoa Mới:</label>
-                        <input
-                            id="faculty_name_input"
-                            type="text"
-                            onChange={handleChangeFacultyName}
-                            value={facultyName}
-                            placeholder="Nhập tên khoa mới"
-                        />
-                    </div>
+    const FacultyUI = (
+        <Fragment>
+            {isDisplayCreateFacultyModel && (
+                <CreateFacultyModal onHiddenModal={handleToggleDisplayCreateFacultyModal} />
+            )}
 
-                    <div className="input_item_wrapper">
-                        <label htmlFor="faculty_manager_input">Quản Lý Khoa:</label>
-                        <input
-                            id="faculty_manager_input"
-                            type="text"
-                            onChange={handleChangeUserId}
-                            value={userId}
-                            placeholder="Nhập mã quản lý khoa"
-                        />
-                        <button type="button" onClick={addFacultyManager} className="add_faculty_manager_btn">
-                            Thêm
-                        </button>
-                    </div>
+            {isDisplayAddMajorsModel && (
+                <CreateMajorModal onHiddenModal={handleToggleDisplayAddMajorsModal} facultyId={facultyId} />
+            )}
 
-                    <div className="input_item_wrapper">
-                        <label htmlFor="faculty_major_input">Tên Chuyên Ngành:</label>
-                        <input
-                            id="faculty_major_input"
-                            type="text"
-                            onChange={handleChangeMajorName}
-                            value={majorName}
-                            placeholder="Nhập tên chuyên ngành"
-                        />
-                        <button type="button" onClick={addMajor} className="add_aculty_major_btn">
-                            Thêm
-                        </button>
-                    </div>
-                    {facultyManagerList.length > 0 && (
-                        <div className="faculy_manager_list">
-                            <h5 className="faculy_manager_list title">Danh sách quản lý khoa: </h5>
-                            {facultyManagerList.map((facultyManager, index) => (
-                                <div key={index} className="manager_info">
-                                    <div className="manager_info_wrapper">
-                                        <IoMdArrowDropright />
-                                        <Avatar url={facultyManager.avatar} size="small" />
-                                        <div className="manager_info_content">
-                                            <span> {capitalizeFirstLetter(facultyManager.userId)} </span>
-                                            <span>
-                                                {toFullName({
-                                                    lastName: facultyManager.lastName,
-                                                    firstName: facultyManager.firstName
-                                                })}
-                                            </span>
-                                        </div>
-                                    </div>
+            <div className="table_heading">
+                <h3 className="heading">Danh Sách Khoa Và Chuyên Ngành</h3>
+                <button className="create_faculty_btn" onClick={handleToggleDisplayCreateFacultyModal}>
+                    <IoIosAddCircleOutline size={20} />
+                    <span>Tạo Khoa Mới</span>
+                </button>
+            </div>
 
-                                    <div
-                                        className="manager_info_delete_btn"
-                                        onClick={() => {
-                                            deleteFacultyManager(facultyManager._id);
-                                        }}
-                                    >
-                                        <TiDeleteOutline />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {majorList.length > 0 && (
-                        <div className="faculy_major_list">
-                            <h5 className="faculy_major_list_title title">Danh sách chuyên ngành: </h5>
-                            {majorList.map((major, index) => (
-                                <div key={index} className="major_item">
-                                    <div className="major_item_content">
-                                        <IoMdArrowDropright />
-                                        <span> {major} </span>
-                                    </div>
-
-                                    <div
-                                        className="major_item_delete_btn"
-                                        onClick={() => {
-                                            deleteMajor(major);
-                                        }}
-                                    >
-                                        <TiDeleteOutline />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    <button type="button" className="create_new_faculty_btn" onClick={createNewFaculty}>
-                        Tạo Khoa Mới
-                    </button>
-                </fieldset>
-            </form>
             <table>
                 <thead>
                     <tr>
                         <th>Tên Khoa</th>
-                        <th>Quản Lý Khoa</th>
                         <th>Chuyên Ngành</th>
                         <th>Tình Trạng</th>
                         <th>Thao Tác</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {faculty.facultyData.map((facultyItem) => (
                         <tr key={facultyItem._id}>
                             <td>{capitalizeFirstLetter(facultyItem.facultyName)}</td>
                             <td>
-                                {facultyItem.managerList.map((manager, index) => (
-                                    <div key={index} className="manager_item">{`${manager.userId}-${toFullName({
-                                        lastName: manager.lastName,
-                                        firstName: manager.firstName
-                                    })}`}</div>
-                                ))}
-                            </td>
-                            <td>
                                 {facultyItem.majors.map((major, index) => (
                                     <div className="major_item" key={index}>
                                         <span>{capitalizeFirstLetter(major.majorName)}</span>
                                         <button className="updated_btn">Sửa</button>
-                                        <button className="delete_btn">Xóa</button>
+                                        <button
+                                            className="delete_btn"
+                                            onClick={() => {
+                                                deleteMajorById({
+                                                    facultyId: facultyItem._id,
+                                                    majorId: major._id
+                                                });
+                                            }}
+                                        >
+                                            Xóa
+                                        </button>
                                     </div>
                                 ))}
                             </td>
                             <td>{facultyItem.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}</td>
                             <td className="interactive_btn_wrapper">
                                 <div className="updated_btn">
-                                    <FaPen /> <span>Chỉnh Sửa</span>
+                                    <FaPen /> <span>Chỉnh Sửa Khoa</span>
                                 </div>
-                                <div className="add_btn">
+                                <div
+                                    className="add_btn"
+                                    onClick={() => {
+                                        handleToggleDisplayAddMajorsModal(facultyItem._id);
+                                    }}
+                                >
                                     <IoMdAddCircle /> <span>Thêm Chuyên Ngành</span>
                                 </div>
+
                                 <div className="delete_btn">
-                                    <MdRemoveCircle /> <span>Xóa Khoa</span>
+                                    <MdRemoveCircle /> <span>Ẩn Khoa</span>
                                 </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </>
+        </Fragment>
     );
 
-    const CohortUi = (
+    const CohortUI = (
         <form className="cohort_form">
             <fieldset>
                 <legend>Thêm khóa sinh viên mới</legend>
@@ -325,12 +198,12 @@ function Faculty() {
         {
             key: 'faculty',
             label: 'Khoa & Chuyên Ngành',
-            children: FacultyUi
+            children: FacultyUI
         },
         {
             key: 'cohort',
             label: 'Khóa Sinh Viên',
-            children: CohortUi
+            children: CohortUI
         }
     ];
 

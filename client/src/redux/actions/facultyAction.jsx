@@ -1,4 +1,4 @@
-import { getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
+import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 
@@ -123,6 +123,50 @@ export const getFacultyByName =
                 error,
                 dispatch,
                 defaultMessage: 'Lấy dữ liệu khoa thất bại'
+            });
+        }
+    };
+
+export const createMajors =
+    ({ facultyId, majorNameList }) =>
+    async (dispatch) => {
+        try {
+            const res = await postDataApi(`/faculties/${facultyId}/majors`, {
+                majorNameList
+            });
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res?.data.msg || 'Thêm chuyên ngành thành công'
+                }
+            });
+        } catch (error) {
+            notifyError({
+                error,
+                dispatch,
+                defaultMessage: 'Thêm chuyên ngành thất bại'
+            });
+        }
+    };
+
+export const deleteMajor =
+    ({ facultyId, majorId }) =>
+    async (dispatch) => {
+        try {
+            const res = await deleteDataApi(`/faculties/${facultyId}/majors/${majorId}`);
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res?.data.msg || 'Xóa chuyên ngành thành công'
+                }
+            });
+        } catch (error) {
+            notifyError({
+                error,
+                dispatch,
+                defaultMessage: 'Xóa chuyên ngành thất bại'
             });
         }
     };

@@ -15,7 +15,7 @@ const pageSchema = Joi.object({
         pageStudentMajor: Joi.string().required().messages({
             "any.required": "Vui lòng chọn chuyên ngành"
         }),
-        pageStudentCohort: Joi.number().required().messages({
+        pageStudentCohort: Joi.string().required().messages({
             "any.required": "Vui lòng chọn khóa sinh viên"
         }),
         pageTalentEngineerType: Joi.string().required().messages({

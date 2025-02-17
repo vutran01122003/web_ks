@@ -2,21 +2,21 @@ const createHttpError = require("http-errors");
 const Faculty = require("../models/faculty.model");
 
 class FacultyService {
-    static createFaculty = async ({ facultyName, userDataList, managerIdList, majorList }) => {
+    static createFaculty = async ({ facultyName, managerIdList, majorList }) => {
         try {
             const isExists = await Faculty.findOne({ facultyName }).lean();
 
             if (isExists) throw createHttpError.Conflict("Tên khoa đã tồn tại");
-            if (userDataList.length !== managerIdList.length)
-                throw createHttpError.NotFound(`Có người dùng trong danh sách đã bị xóa hoặc không tồn tại`);
 
             const createdFaculty = await Faculty.create({
                 facultyName,
-                managerList: managerIdList,
-                majors: majorList.map((major) => ({
-                    majorName: major,
-                    cohortList: []
-                }))
+                managerList: managerIdList || [],
+                majors: majorList
+                    ? majorList.map((major) => ({
+                          majorName: major.toLowerCase().trim(),
+                          cohortList: []
+                      }))
+                    : []
             });
 
             const populatedFaculty = createdFaculty.populate({
@@ -31,23 +31,26 @@ class FacultyService {
         }
     };
 
-    static createMajor = async ({ majorName, facultyId }) => {
+    static createMajors = async ({ majorNameList, facultyId }) => {
         try {
             const faculty = await Faculty.findById(facultyId);
 
             if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
 
-            if (!majorName.trim()) throw createHttpError.BadRequest("Chuyên ngành không để trống");
+            const standardMajorNameList = Array.from(
+                new Set(majorNameList.map((majorName) => majorName.toLowerCase().trim()))
+            );
+            const majors = standardMajorNameList.map((standardMajorName) => ({ majorName: standardMajorName }));
 
-            if (!faculty.majors.some((major) => major.majorName === majorName.trim().toLowerCase())) {
-                faculty.majors.push({
-                    majorName
-                });
-                await faculty.save();
-            } else throw createHttpError.Conflict("Chuyên ngành đã tồn tại");
+            if (faculty.majors.some((major) => standardMajorNameList.includes(major.majorName)))
+                throw createHttpError.Conflict("Chuyên Ngành đã tồn tại");
+
+            faculty.majors.push(...majors);
+
+            await faculty.save();
 
             return {
-                msg: `Chuyên ngành ${majorName} đã được tạo thành công`,
+                msg: `Chuyên ngành ${standardMajorNameList.join(" - ")} đã được tạo thành công`,
                 status: 201,
                 data: faculty.majors[faculty.majors.length - 1]
             };
@@ -156,7 +159,7 @@ class FacultyService {
 
             if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
 
-            const cohort = major.cohortList.find((cohort) => cohort.cohortName === parseInt(cohortName));
+            const cohort = major.cohortList.find((cohort) => cohort.cohortName === cohortName);
 
             return cohort;
         } catch (error) {
@@ -174,7 +177,7 @@ class FacultyService {
 
             if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
 
-            const cohort = major.cohortList.find((cohort) => cohort.cohortName === parseInt(cohortName));
+            const cohort = major.cohortList.find((cohort) => cohort.cohortName === cohortName);
 
             cohort.additionalRegisterInfo = {
                 levelYear,
@@ -304,7 +307,7 @@ class FacultyService {
             if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
 
             const currentLevelYear = major.cohortList.find(
-                (cohort) => cohort.cohortName === parseInt(cohortName)
+                (cohort) => cohort.cohortName === cohortName
             ).currentLevelYear;
 
             return currentLevelYear;

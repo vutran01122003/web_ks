@@ -78,7 +78,7 @@ function FirstLogin() {
     useEffect(() => {
         if (data.cohort) {
             const additionalRegisterInfo = cohortList.find(
-                (cohort) => cohort.cohortName === +data.cohort
+                (cohort) => cohort.cohortName === data.cohort
             )?.additionalRegisterInfo;
 
             if (additionalRegisterInfo?.isActive) {
@@ -142,7 +142,7 @@ function FirstLogin() {
                                     cohortList
                                         ? cohortList.map((cohort) => ({
                                               labelOption: cohort.cohortName,
-                                              value: +cohort.cohortName
+                                              value: cohort.cohortName
                                           }))
                                         : []
                                 }

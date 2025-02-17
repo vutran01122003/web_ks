@@ -171,13 +171,12 @@ class RowControllers {
             const user = await UserService.getUserAndPopulateGroupById({ id: _id });
 
             if (!user.isActive) throw createError.BadRequest("Người dùng đã bị khóa tài khoản");
-            if (user.group.groupCode !== groupCode) {
+            if (user.groups[0].groupCode !== groupCode)
                 throw createError.BadRequest(
                     `Sinh viên này không còn là ${
                         groupCode === TALENT_ENGINEER_CODE ? "kỹ sư tài năng" : "kỹ sư tài năng bổ sung"
                     }`
                 );
-            }
 
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 facultyName: user.faculty,

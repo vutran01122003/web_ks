@@ -19,6 +19,6 @@ const upload = multer({
 router.get("/qualified-users/export", excelController.exportQualifiedUsersExcel);
 router.get("/progress-statistics/export", excelController.exportProgressStatisticsExcel);
 
-router.post("/execel/", upload.single("file"), excelController.importUser);
+router.post("/users-excel/import", upload.single("file"), excelController.importUsers);
 
 module.exports = router;

@@ -14,9 +14,9 @@ POST {{url}}/api/faculties
 Content-Type: application/json
 
 {
-    "facultyName": "công nghệ thông tin",
+    "facultyName": "Điện ảnh",
     "managerIdList": [],
-    "majorList": ["công nghệ thông tin", "kỹ thuật phần mềm", "khoa học máy tinh"]
+    "majorList": []
 }
 
 ### Get faculties
@@ -42,12 +42,12 @@ Content-Type: application/json
 ### Delete faculty by id
 DELETE {{url}}/api/faculties/65d6e123530e21efa2dafe6c
 
-### Create major
-POST {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors
+### Create majors
+POST {{url}}/api/faculties/670ce2e79cfcef01f024c052/majors
 Content-Type: application/json
 
 {
-    "majorName": "Quản lý khách sạn 3"
+    "majorNameList": []
 }
 
 ### Get major by id
@@ -65,7 +65,7 @@ Content-Type: application/json
 DELETE {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
 
 ### Create cohort
-POST {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts
+POST {{url}}/api/faculties/670ce2e79cfcef01f024c052/majors/678364e76edcad8e9c020bda/cohorts
 Content-Type: application/json
 
 {

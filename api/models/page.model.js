@@ -55,7 +55,7 @@ const PageSchema = new Schema(
             }
         },
         pageStudentCohort: {
-            type: Number,
+            type: String,
             validate: {
                 validator: function () {
                     return this.pageType === "chỉ tiêu";

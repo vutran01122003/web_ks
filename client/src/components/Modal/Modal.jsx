@@ -1,8 +1,16 @@
-const Modal = ({ children }) => {
+import { AiOutlineClose } from 'react-icons/ai';
+
+const Modal = ({ children, onHiddenModal, headerTitle }) => {
     return (
-        <div className="modal__container">
-            Modal
-            {children}
+        <div className="modal_overlap" onDoubleClick={onHiddenModal}>
+            <div className="box_wrapper">
+                {headerTitle && <h2 className="modal_header">{headerTitle}</h2>}
+                <div className="modal_close_icon_wrapper" onClick={onHiddenModal}>
+                    <AiOutlineClose />
+                </div>
+
+                <div className="modal_body">{children}</div>
+            </div>
         </div>
     );
 };

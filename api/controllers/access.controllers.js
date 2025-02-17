@@ -16,8 +16,8 @@ class AccessControllers {
             res.status(200).json({
                 user,
                 token: {
-                    accessToken,
-                },
+                    accessToken
+                }
             });
         } catch (error) {
             next(error);
@@ -36,16 +36,16 @@ class AccessControllers {
                     data: {
                         firstLogin: {
                             userId: req.body.userId,
-                            birthday: req.body.password,
-                        },
-                    },
+                            birthday: req.body.password
+                        }
+                    }
                 });
             }
 
             if (loggedUser?.data && !loggedUser?.data.isActive) throw createError.BadRequest("Tài khoản đã bị khóa");
 
             const accessToken = await jwtService.signAccessToken({
-                userData: loggedUser?.data,
+                userData: loggedUser?.data
             });
 
             res.status(200)
@@ -58,9 +58,9 @@ class AccessControllers {
                     data: {
                         user: loggedUser?.data,
                         token: {
-                            accessToken,
-                        },
-                    },
+                            accessToken
+                        }
+                    }
                 });
         } catch (error) {
             next(error);
@@ -74,28 +74,28 @@ class AccessControllers {
 
             const createdUser = await accessService.register({
                 data,
-                groupCode,
+                groupCode
             });
 
             if (!createdUser) throw createError.BadRequest("Tạo tài khoản người dùng thất bại");
 
             const accessToken = await jwtService.signAccessToken({
-                userData: createdUser,
+                userData: createdUser
             });
 
             res.status(201)
                 .cookie("accessToken", accessToken, {
                     sameSite: "none",
-                    secure: true,
+                    secure: true
                 })
                 .send({
                     status: "Cập nhật thông tin thành công",
                     data: {
                         user: createdUser,
                         token: {
-                            accessToken,
-                        },
-                    },
+                            accessToken
+                        }
+                    }
                 });
         } catch (error) {
             next(error);
@@ -108,10 +108,10 @@ class AccessControllers {
                 .cookie("accessToken", "", {
                     httpOnly: true,
                     sameSite: "none",
-                    secure: true,
+                    secure: true
                 })
                 .send({
-                    status: "Đăng xuất thành công",
+                    status: "Đăng xuất thành công"
                 });
         } catch (error) {
             next(error);

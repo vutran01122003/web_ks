@@ -92,7 +92,7 @@ class ExcelService {
                 )
             );
         } catch (error) {
-            throw createHttpError.BadRequest("Lỗi nhập dữ liệu excel");
+            throw error;
         }
     };
 }

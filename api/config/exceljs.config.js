@@ -48,7 +48,7 @@ const addUserData = (cell, colNumber, data) => {
             data.cohort = cell.value;
             break;
         case 9:
-            data.email = cell.value.text;
+            data.email = cell.value.text || cell.value;
             break;
         case 10:
             data.phone = cell.value;

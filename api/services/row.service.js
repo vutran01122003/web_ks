@@ -266,8 +266,8 @@ class RowService {
                 {
                     $match: {
                         "page.pageStudentMajor": pageStudentMajor,
-                        "page.pageStudentCohort": Number.parseInt(pageStudentCohort),
-                        "page.pageStudentLevelYear": Number.parseInt(pageStudentLevelYear),
+                        "page.pageStudentCohort": pageStudentCohort,
+                        "page.pageStudentLevelYear": parseInt(pageStudentLevelYear),
                         "page.pageTalentEngineerType": pageTalentEngineerType
                     }
                 },

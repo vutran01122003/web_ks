@@ -11,12 +11,15 @@ const FacultySchema = new Schema(
             lowercase: true,
             unique: true
         },
-        managerList: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "user"
-            }
-        ],
+        managerList: {
+            type: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: "user"
+                }
+            ],
+            default: []
+        },
         isActive: {
             type: Boolean,
             default: true
@@ -27,6 +30,15 @@ const FacultySchema = new Schema(
                     type: String,
                     lowercase: true
                 },
+                managerList: {
+                    type: [
+                        {
+                            type: Schema.Types.ObjectId,
+                            ref: "user"
+                        }
+                    ],
+                    default: []
+                },
                 isActive: {
                     type: Boolean,
                     default: true
@@ -35,7 +47,7 @@ const FacultySchema = new Schema(
                     new mongoose.Schema(
                         {
                             cohortName: {
-                                type: Number
+                                type: String
                             },
                             currentLevelYear: {
                                 type: Number,

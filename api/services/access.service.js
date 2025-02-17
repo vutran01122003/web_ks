@@ -12,9 +12,9 @@ class AccessService {
             const { userId, password } = data;
             const user = await User.findOne({ userId }).populate([
                 {
-                    path: "group",
-                    model: "group",
-                },
+                    path: "groups",
+                    model: "group"
+                }
             ]);
 
             if (user) {
@@ -24,7 +24,7 @@ class AccessService {
                 return {
                     isSuccessLogin: isValidPassword,
                     typePassword: "password",
-                    data: user,
+                    data: user
                 };
             } else throw createHttpError.Unauthorized("Mã sinh viên hoặc mật khẩu không đúng");
         } catch (error) {
@@ -40,7 +40,7 @@ class AccessService {
             const result = await Promise.all([
                 User.findOne({ userId }),
                 User.findOne({ email }),
-                User.findOne({ phone }),
+                User.findOne({ phone })
             ]);
 
             if (result[0]) throw createHttpError.Conflict("Mã sinh viên đã tồn tại");
@@ -59,21 +59,21 @@ class AccessService {
                 faculty,
                 email,
                 phone,
-                group: group._id,
+                groups: [group._id]
             });
 
             if (TALENT_ENGINEER_CODE === groupCode) {
                 levelYear = await FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty.toLowerCase(),
                     majorName: major.toLowerCase(),
-                    cohortName: +cohort,
+                    cohortName: cohort.toString()
                 });
                 createdUser.levelYear = levelYear;
             } else if (TEMPORARY_TALENT_ENGINEER_CODE === groupCode) {
                 const additionalRegisterInfo = await FacultyService.getAdditionalRegisterInfo({
                     facultyName: faculty.toLowerCase(),
                     majorName: major.toLowerCase(),
-                    cohortName: +cohort,
+                    cohortName: cohort
                 });
 
                 levelYear = additionalRegisterInfo.levelYear;
@@ -88,18 +88,18 @@ class AccessService {
 
             await createdUser.save();
 
-            const populatedUser = await User.populate(createdUser, { path: "group" });
+            const populatedUser = await User.populate(createdUser, { path: "groups" });
 
             if ([TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE].includes(groupCode)) {
                 await createNewAnnualActivitiesProgress({
                     pageInfo: {
                         pageFaculty: faculty.toLowerCase(),
                         pageStudentMajor: major.toLowerCase(),
-                        pageStudentCohort: +cohort,
-                        pageTalentEngineerType: groupCode,
+                        pageStudentCohort: cohort,
+                        pageTalentEngineerType: groupCode
                     },
                     currentLevelYear: levelYear,
-                    userId: populatedUser._id,
+                    userId: populatedUser._id
                 });
             }
 
@@ -115,9 +115,9 @@ class AccessService {
                 .select("-password")
                 .populate([
                     {
-                        path: "group",
-                        model: "group",
-                    },
+                        path: "groups",
+                        model: "group"
+                    }
                 ])
                 .lean();
             if (!user) throw createHttpError.NotFound("Tài khoản người dùng không tồn tại");

@@ -238,7 +238,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 pageName,
                 pageType: VITE_APP_GOAL_PAGE,
                 pageFaculty: pageFaculty.facultyName,
-                pageStudentCohort: +pageStudentCohort.cohortName,
+                pageStudentCohort: pageStudentCohort.cohortName,
                 pageStudentMajor: pageStudentMajor.majorName,
                 pageTalentEngineerType: talentEngineerType,
                 pageStudentLevelYear: +pageStudentLevelYear,

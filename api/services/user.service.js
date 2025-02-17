@@ -26,10 +26,10 @@ class UserService {
             let result = null;
 
             if (id) {
-                result = await User.findById(id).populate("group").select(selectedFieldArr);
+                result = await User.findById(id).populate("groups").select(selectedFieldArr);
             } else if (idList && idList.length > 0) {
                 result = await User.find({ _id: { $in: [...idList] } })
-                    .populate("group")
+                    .populate("groups")
                     .select(selectedFieldArr);
             }
 
@@ -67,23 +67,46 @@ class UserService {
             {
                 $lookup: {
                     from: "groups",
-                    localField: "group",
+                    localField: "groups",
                     foreignField: "_id",
-                    as: "group"
+                    as: "groups"
                 }
             },
             {
-                $unwind: "$group"
+                $unwind: "$groups"
             },
             {
                 $match: {
-                    "group.groupCode": groupCode
+                    "groups.groupCode": groupCode
                 }
             },
             {
                 $project: {
-                    "group.method": 0,
-                    "group.description": 0
+                    "groups.method": 0,
+                    "groups.description": 0
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    avatar: { $first: "$avatar" },
+                    userId: { $first: "$userId" },
+                    firstName: { $first: "$firstName" },
+                    lastName: { $first: "$lastName" },
+                    gender: { $first: "$gender" },
+                    birthday: { $first: "$birthday" },
+                    faculty: { $first: "$faculty" },
+                    major: { $first: "$major" },
+                    cohort: { $first: "$cohort" },
+                    isActive: { $first: "$isActive" },
+                    email: { $first: "$email" },
+                    phone: { $first: "$phone" },
+                    annualTemporaryActivitiesProgress: { $first: "$annualTemporaryActivitiesProgress" },
+                    annualActivitiesProgress: { $first: "$annualActivitiesProgress" },
+                    levelYear: { $first: "$levelYear" },
+                    groups: {
+                        $push: "$groups"
+                    }
                 }
             },
             {
@@ -126,9 +149,9 @@ class UserService {
                 await Promise.all([
                     this.createNewAnnualActivitiesProgress({
                         pageInfo: {
-                            pageTalentEngineerType: updatedUser.group.groupCode,
+                            pageTalentEngineerType: updatedUser.groups[0].groupCode,
                             pageFaculty: faculty.toLowerCase(),
-                            pageStudentCohort: +cohort,
+                            pageStudentCohort: cohort,
                             pageStudentMajor: major.toLowerCase()
                         },
                         currentLevelYear,
@@ -151,7 +174,7 @@ class UserService {
         try {
             const user = await User.findById(userId)
                 .populate({
-                    path: "group",
+                    path: "groups",
                     model: "group",
                     populate: {
                         path: `method.${method}`,
@@ -162,10 +185,13 @@ class UserService {
 
             if (!user) throw createError.NotFound("Người dùng không tồn tại");
 
-            for (let i = 0; i < user.group.method[method].length; i++) {
-                const roleInfo = user.group.method[method][i];
-                if (roleInfo.url === path && roleInfo.method === method) {
-                    return true;
+            const groups = user.groups;
+
+            for (let i = 0; i < groups.length; i++) {
+                const roles = groups[i].method[method];
+
+                for (let j = 0; j < roles.length; j++) {
+                    if (roles[j].url === path) return true;
                 }
             }
 
@@ -189,7 +215,7 @@ class UserService {
             const { groupId, groupCode } = groupData;
             const { progressPercentage, score } = conditions;
             const { nextYearValue } = updatedCohortData;
-            const studentInfo = { faculty, major, cohort, group: groupId };
+            const studentInfo = { faculty, major, cohort, groups: { $in: groupId } };
             const isTalentEngineer = groupCode === TALENT_ENGINEER_CODE;
             const annualActivitiesField = isTalentEngineer
                 ? "annualActivitiesProgress"
@@ -283,18 +309,18 @@ class UserService {
                     User.updateMany(
                         {
                             ...studentInfo,
-                            [`${annualActivitiesField}.${index + 1}`]: { $exists: false }
+                            levelYear
                         },
                         {
                             $set: {
-                                group: talentEngineerGroup._id
+                                groups: [talentEngineerGroup._id]
                             }
                         }
                     ),
                     FacultyService.updateAdditionalApplyCohort({
                         facultyName: faculty.toLowerCase(),
                         majorName: major.toLowerCase(),
-                        cohortName: +cohort,
+                        cohortName: cohort,
                         levelYear: +levelYear,
                         isActive: false
                     })
@@ -325,17 +351,17 @@ class UserService {
                     {
                         $lookup: {
                             from: "groups",
-                            localField: "group",
+                            localField: "groups",
                             foreignField: "_id",
-                            as: "group"
+                            as: "groups"
                         }
                     },
                     {
-                        $unwind: "$group"
+                        $unwind: "$groups"
                     },
                     {
                         $match: {
-                            "group.groupCode": groupCode,
+                            "groups.groupCode": groupCode,
                             [`${annualActivitiesField}.${index}.isActive`]: true
                         }
                     },
@@ -350,11 +376,34 @@ class UserService {
                             cohort: 1,
                             birthday: 1,
                             isActive: 1,
-                            "group.name": 1,
-                            "group.groupCode": 1,
-                            "group._id": 1,
+                            "groups.name": 1,
+                            "groups.groupCode": 1,
+                            "groups._id": 1,
                             progressData: {
                                 $arrayElemAt: [`$${annualActivitiesField}`, index]
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: "$_id",
+                            avatar: { $first: "$avatar" },
+                            userId: { $first: "$userId" },
+                            firstName: { $first: "$firstName" },
+                            lastName: { $first: "$lastName" },
+                            gender: { $first: "$gender" },
+                            birthday: { $first: "$birthday" },
+                            faculty: { $first: "$faculty" },
+                            major: { $first: "$major" },
+                            cohort: { $first: "$cohort" },
+                            isActive: { $first: "$isActive" },
+                            email: { $first: "$email" },
+                            phone: { $first: "$phone" },
+                            annualTemporaryActivitiesProgress: { $first: "$annualTemporaryActivitiesProgress" },
+                            annualActivitiesProgress: { $first: "$annualActivitiesProgress" },
+                            levelYear: { $first: "$levelYear" },
+                            groups: {
+                                $push: "$groups"
                             }
                         }
                     },
@@ -386,7 +435,7 @@ class UserService {
             if (!user) throw createError.NotFound("Người dùng không tồn tại");
 
             const annualActivitiesField =
-                user.group.groupCode === TALENT_ENGINEER_CODE
+                user.groups[0].groupCode === TALENT_ENGINEER_CODE
                     ? "annualActivitiesProgress"
                     : "annualTemporaryActivitiesProgress";
 
@@ -418,7 +467,7 @@ class UserService {
             if (!user[annualActivitiesField] || !user[annualActivitiesField][index]) {
                 await this.createNewAnnualActivitiesProgress({
                     pageInfo: {
-                        pageTalentEngineerType: user.group.groupCode,
+                        pageTalentEngineerType: user.groups[0].groupCode,
                         pageFaculty: user.faculty,
                         pageStudentCohort: user.cohort,
                         pageStudentMajor: user.major
@@ -447,7 +496,7 @@ class UserService {
                     if (annualActivityProgress[field] < 0) {
                         await this.createNewAnnualActivitiesProgress({
                             pageInfo: {
-                                pageTalentEngineerType: user.group.groupCode,
+                                pageTalentEngineerType: user.groups[0].groupCode,
                                 pageFaculty: user.faculty,
                                 pageStudentCohort: user.cohort,
                                 pageStudentMajor: user.major
@@ -566,7 +615,7 @@ class UserService {
             if (!user) throw createError.NotFound("Người dùng không tồn tại");
 
             const annualActivitiesField =
-                user.group.groupCode === TALENT_ENGINEER_CODE
+                user.groups[0].groupCode === TALENT_ENGINEER_CODE
                     ? `annualActivitiesProgress`
                     : `annualTemporaryActivitiesProgress`;
 
@@ -615,9 +664,11 @@ class UserService {
             }, 0);
 
             const filterData = {
-                cohort: +pageStudentCohort,
+                cohort: pageStudentCohort,
                 major: pageStudentMajor,
-                group: group._id
+                groups: {
+                    $in: group._id
+                }
             };
 
             const invalidUserList = await User.find({
@@ -688,7 +739,9 @@ class UserService {
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
                 {
-                    group: groupId
+                    $push: {
+                        groups: groupId
+                    }
                 },
                 {
                     new: true

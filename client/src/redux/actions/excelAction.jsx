@@ -7,7 +7,7 @@ const { VITE_APP_TALENT_ENGINEER_CODE } = import.meta.env;
 
 export const importUser = (formData) => async (dispatch) => {
     try {
-        const res = await postDataApi('/excel', formData);
+        const res = await postDataApi('/users-excel/import', formData);
 
         dispatch({
             type: GLOBALTYPES.ALERT,

@@ -56,7 +56,7 @@ class PageService {
                     await FacultyService.updateAdditionalApplyCohort({
                         facultyName: pageFaculty,
                         majorName: pageStudentMajor,
-                        cohortName: +pageStudentCohort,
+                        cohortName: pageStudentCohort,
                         levelYear: pageStudentLevelYear,
                         isActive: true
                     });
@@ -183,7 +183,7 @@ class PageService {
                 {
                     $match: {
                         pageStudentMajor,
-                        pageStudentCohort: Number.parseInt(pageStudentCohort),
+                        pageStudentCohort: pageStudentCohort,
                         pageStudentLevelYear: Number.parseInt(pageStudentLevelYear),
                         pageTalentEngineerType: pageTalentEngineerType,
                         isActive: true
@@ -371,8 +371,8 @@ class PageService {
         try {
             const fields = {
                 pageStudentMajor,
-                pageStudentLevelYear: +pageStudentLevelYear,
-                pageStudentCohort: +pageStudentCohort
+                pageStudentLevelYear: parseInt(pageStudentLevelYear),
+                pageStudentCohort: pageStudentCohort
             };
 
             if ([TALENT_ENGINEER_PAGE_TYPE, TEMPORARY_TALENT_ENGINEER_PAGE_TYPE].includes(groupCode))

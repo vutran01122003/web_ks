@@ -11,7 +11,7 @@
 
         th {
             border: 1px solid #dddddd;
-            background: #006fee;
+            background: #1677ff;
             color: #fff;
             padding: 8px;
         }
@@ -32,9 +32,15 @@
 
         .major_item {
             display: flex;
-            justify-content: center;
             align-items: center;
+            text-align: left;
             transition: 0.1s linear;
+
+            .major_item_content {
+                display: flex;
+                align-items: center;
+            }
+
             > span {
                 min-width: 140px;
             }
@@ -90,8 +96,47 @@
         }
     }
 
-    .faculty_form {
+    .table_heading {
         display: flex;
+        padding: 10px 5px;
+        justify-content: space-between;
+        align-items: center;
+
+        .heading {
+            color: #0153b1;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    }
+
+    .create_faculty_btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: #1677ff;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        padding: 8px;
+        border-radius: 3px;
+        font-weight: 600;
+        cursor: pointer;
+        max-height: 40px;
+        width: 140px;
+        transition: 0.1s linear;
+
+        &:active {
+            transform: scale(0.9);
+        }
+    }
+
+    .major_form,
+    .faculty_form {
+        width: 600px;
+        padding: 25px;
+        min-width: 100%;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
 
         fieldset {
@@ -102,18 +147,6 @@
             padding: 20px;
         }
 
-        legend {
-            background-color: #006fee;
-            color: white;
-            font-weight: 600;
-            padding: 5px 10px;
-            font-size: 600;
-            width: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .input_item_wrapper {
             display: flex;
             width: 100%;
@@ -121,7 +154,7 @@
 
             label {
                 display: inline-block;
-                min-width: 150px;
+                min-width: 160px;
                 font-weight: 600;
             }
 
@@ -136,7 +169,9 @@
                 font-size: 14px;
             }
 
-            .add_aculty_major_btn,
+            .add_major_btn,
+            .add_major_manager_btn,
+            .add_faculty_major_btn,
             .add_faculty_manager_btn {
                 margin-left: 5px;
                 height: 35px;
@@ -196,6 +231,7 @@
             }
         }
 
+        .major_list,
         .faculy_major_list {
             .major_item {
                 padding: 8px 12px;
@@ -217,8 +253,9 @@
             }
         }
 
+        .create_new_major_btn,
         .create_new_faculty_btn {
-            margin-left: 5px;
+            margin-top: 15px;
             height: 35px;
             outline: none;
             border-radius: 3px;

@@ -113,6 +113,8 @@ export const stopSubmittingProof =
             });
 
             if (faculty) dispatch(getFacultyByName({ facultyName: faculty }));
+
+            window.location.reload();
         } catch (error) {
             notifyError({
                 dispatch,

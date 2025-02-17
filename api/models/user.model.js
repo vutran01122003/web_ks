@@ -9,81 +9,81 @@ const UserSchema = new Schema(
     {
         avatar: {
             type: String,
-            default: process.env.S3_DEFAULT_AVATAR,
+            default: process.env.S3_DEFAULT_AVATAR
         },
         userId: {
             type: String,
             required: true,
             unique: true,
-            trim: true,
+            trim: true
         },
         firstName: {
             type: String,
             lowercase: true,
             required: true,
-            trim: true,
+            trim: true
         },
         lastName: {
             type: String,
             lowercase: true,
             required: true,
-            trim: true,
+            trim: true
         },
         password: {
             type: String,
-            trim: true,
+            trim: true
         },
-        group: {
-            type: Schema.Types.ObjectId,
-            ref: "group",
+        groups: {
+            type: [Schema.Types.ObjectId],
+            ref: "group"
         },
         gender: {
             type: String,
             enum: ["nam", "nữ"],
             default: "nam",
-            lowercase: true,
+            lowercase: true
         },
         birthday: {
-            type: Schema.Types.Date,
+            type: Schema.Types.Date
         },
         faculty: {
             type: String,
-            lowercase: true,
+            lowercase: true
         },
         major: {
             type: String,
-            lowercase: true,
+            lowercase: true
         },
-        // Thuộc tính cohort cho biết Khóa sinh viên nhập học (Ví Dụ: 17, 18, 19, 20,...)
+        // Thuộc tính cohort cho biết Khóa sinh viên nhập học (Ví Dụ: K17, K18,...)
         cohort: {
-            type: Number,
+            type: String
         },
         // Cấp bậc năm học của sinh viên (1, 2, 3, 4, 5, ...)
         levelYear: {
-            type: Number,
+            type: Number
         },
         // Cấp bậc năm học đăng ký bổ sung của sinh viên (1, 2, 3, 4, 5, ...)
         isActive: {
             type: Boolean,
-            default: true,
+            default: true
         },
         email: {
             type: String,
             lowercase: true,
-            unique: true,
+            unique: true
         },
         phone: {
             type: String,
             lowercase: true,
-            unique: true,
+            unique: true
         },
         // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
         annualTemporaryActivitiesProgress: [ProgressSchema],
-        annualActivitiesProgress: [ProgressSchema],
+        annualActivitiesProgress: [ProgressSchema]
     },
     {
         collection: COL,
-        timestamps: true,
+        timestamps: true
     }
 );
 

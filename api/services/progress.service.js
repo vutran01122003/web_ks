@@ -18,7 +18,7 @@ class ProgressService {
                 pageStudentLevelYear,
                 pageStudentCohort,
                 filterArr,
-                groupCode: user.group.groupCode
+                groupCode: user.groups[0].groupCode
             });
 
             return pageDetailsList;
@@ -41,12 +41,12 @@ class ProgressService {
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 facultyName: faculty.toLowerCase(),
                 majorName: major.toLowerCase(),
-                cohortName: +cohort
+                cohortName: cohort.toLowerCase()
             });
 
             const filterData = {
                 major: major.toLowerCase(),
-                cohort: +cohort,
+                cohort: cohort,
                 userId: userId
                     ? {
                           $regex: userId

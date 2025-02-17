@@ -9,25 +9,8 @@ const {
 } = import.meta.env;
 
 const LayoutInfo = ({ user, isDetailedRow }) => {
-    const groupCode = user?.group.groupCode;
-    let heading = 'Thông Tin Cá Nhân';
-
-    switch (groupCode) {
-        case VITE_APP_ADMIN_CODE:
-            heading = 'Thông Tin Quản Trị Hệ Thống';
-            break;
-        case VITE_APP_FACULTY_MANAGER_CODE:
-            heading = 'Thông Tin Giảng Viên';
-            break;
-        case VITE_APP_TALENT_ENGINEER_CODE:
-            heading = 'Thông Tin Sinh Viên';
-            break;
-        case VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE:
-            heading = 'Thông Tin Sinh Viên Đăng Ký Bổ Sung';
-            break;
-        default:
-            break;
-    }
+    const groupCodeList = user?.groups.map((group) => group.groupCode);
+    const heading = 'Thông Tin Cá Nhân';
 
     const userDataList = [
         {
@@ -78,7 +61,10 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
                 </div>
                 <div className="info__text">
                     {userDataList.map((userData, index) => {
-                        if (userData.roles.includes(groupCode) || userData.roles.length === 0) {
+                        const roles = userData.roles;
+                        const mergedRoles = Array.from(new Set([...roles, ...groupCodeList]));
+
+                        if (mergedRoles.length < groupCodeList.length + roles.length || roles.length === 0) {
                             return userData.isShow ? (
                                 <div className="info_line" key={index}>
                                     <span className="info_line_label">{`${userData.label}: `}</span>

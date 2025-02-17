@@ -15,26 +15,31 @@ import { authSelector, facultySelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
 import { getFacultyByName } from './redux/actions/facultyAction';
+const { VITE_APP_ADMIN_CODE } = import.meta.env;
 
 const App = () => {
+    const location = useLocation();
     const dispatch = useDispatch();
+
     const auth = useSelector(authSelector);
     const facultyState = useSelector(facultySelector);
-    const location = useLocation();
-    const pathName = location.pathname;
-    const groupCode = auth?.user?.group.groupCode;
+
     const [isLoading, setIsLoading] = useState(true);
+
+    const user = auth?.user;
+    const pathName = location.pathname;
+    const groupCodeList = user?.groups.map((group) => group.groupCode);
 
     useEffect(() => {
         dispatch(verifyAccessToken()).finally(() => setIsLoading(false));
     }, [dispatch]);
 
     useEffect(() => {
-        if (auth?.user) {
-            dispatch(getNumUnreadNotification({ userId: auth?.user._id }));
-            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: auth?.user?.faculty }));
+        if (user) {
+            dispatch(getNumUnreadNotification({ userId: user._id }));
+            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: user?.faculty }));
         }
-    }, [auth, dispatch]);
+    }, [user, dispatch]);
 
     if (isLoading) return null;
 
@@ -47,9 +52,9 @@ const App = () => {
                 <Route
                     path="/"
                     element={
-                        auth?.user ? (
+                        user ? (
                             <Fragment>
-                                <Layout auth={auth} pathName={pathName} groupCode={groupCode} />
+                                <Layout auth={auth} pathName={pathName} groupCodeList={groupCodeList} />
                                 <SocketIO auth={auth} />
                             </Fragment>
                         ) : auth?.firstLogin ? (

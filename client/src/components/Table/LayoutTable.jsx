@@ -25,7 +25,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
         setUseStateModal(false);
         setRowInfo(null);
     };
-    console.log(table);
+
     return (
         <div className={`container__table ${isDynamicRows ? 'margin-0' : ''} ${isDetailedRow ? 'detailed_table' : ''}`}>
             {!isDynamicRows && (
@@ -61,7 +61,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                 </header>
             )}
 
-            {!isDetailedRow && (
+            {!isDynamicRows && !isDetailedRow && (
                 <Fragment>
                     <h5 className="table_description">
                         {`Mô Tả Chỉ Tiêu: ${table.description ? table.description : 'Không có mô tả cụ thể cho chỉ tiêu này'}`}

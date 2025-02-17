@@ -136,7 +136,9 @@ class TableService {
                         faculty: pageFaculty,
                         major: pageStudentMajor,
                         cohort: pageStudentCohort,
-                        group: group._id
+                        groups: {
+                            $in: group._id
+                        }
                     }),
                     Page.find({
                         pageFaculty,

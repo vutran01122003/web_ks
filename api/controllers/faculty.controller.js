@@ -5,17 +5,19 @@ const createError = require("http-errors");
 class FacultyController {
     createFaculty = async (req, res, next) => {
         try {
+            let userDataList = [];
             const { facultyName, managerIdList, majorList } = req.body;
+            const numIdList = managerIdList.length;
 
             if (!facultyName.trim()) throw createError.BadRequest("Tên khoa không được để trống");
-            if (managerIdList.length === 0) throw createError.BadRequest("Danh sách quản lý khoa không được để trống");
-            if (majorList.length === 0) throw createError.BadRequest("Danh sách chuyên ngành không được để trống");
 
-            const userDataList = await UserService.getUserAndPopulateGroupById({ idList: managerIdList });
+            if (managerIdList && numIdList > 0) {
+                userDataList = await UserService.getUserAndPopulateGroupById({ idList: managerIdList });
+                if (userDataList.length !== numIdList) throw createError.NotFound(`Quản lý khoa không tồn tại`);
+            }
 
             const createdFaculty = await FacultyService.createFaculty({
                 facultyName,
-                userDataList,
                 managerIdList,
                 majorList
             });
@@ -102,11 +104,14 @@ class FacultyController {
         }
     };
 
-    createMajor = async (req, res, next) => {
+    createMajors = async (req, res, next) => {
         try {
             const facultyId = req.params.facultyId;
-            const { majorName } = req.body;
-            const createdMajor = await FacultyService.createMajor({ majorName, facultyId });
+            const { majorNameList } = req.body;
+
+            if (majorNameList.length === 0) throw createError.BadRequest("Tên chuyên ngành không được rỗng");
+
+            const createdMajor = await FacultyService.createMajors({ majorNameList, facultyId });
 
             return res.status(201).json({
                 msg: createdMajor.msg,
@@ -170,6 +175,15 @@ class FacultyController {
         try {
             const { facultyId, majorId } = req.params;
             const { cohortName } = req.body;
+
+            const major = await FacultyService.getMajorById({
+                facultyId,
+                majorId
+            });
+
+            const isExists = major.cohortList.find((cohort) => cohort.cohortName === cohortName);
+
+            if (isExists) throw createError.Conflict(`Khóa ${cohortName} đã tồn tại`);
 
             const createdCohort = await FacultyService.createCohort({
                 facultyId,

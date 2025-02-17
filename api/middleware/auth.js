@@ -6,7 +6,6 @@ module.exports = {
     auth: async (req, res, next) => {
         try {
             const accessToken = req?.headers["x-token"] || req.cookies?.accessToken;
-
             const { data, isExpired, error } = await jwtService.verifyAccessToken(accessToken);
 
             if (isExpired) {
@@ -20,7 +19,7 @@ module.exports = {
 
             const user = await UserService.getUserAndPopulateGroupById({
                 id: data.userId,
-                selectedFieldArr: ["_id", "userId", "firstName", "lastName", "group"]
+                selectedFieldArr: ["_id", "userId", "firstName", "lastName", "groups"]
             });
 
             res.locals.userData = user;

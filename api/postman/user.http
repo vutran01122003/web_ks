@@ -10,8 +10,9 @@ Content-Type: application/json
 }
 
 ### Add group to user
-POST {{url}}/api/users/65e06f20580884a201b801d7/groups/65e07596147fc5e332b88986
+POST {{url}}/api/users/670ce73281e90dfee50aa1cc/groups/670cdd2e58c8cef6bf3f0df8
 
 ### Get users
 GET {{url}}/api/users?major=kỹ thuật phần mềm&cohort=20&limit=5&page=1&groupCode=002&sortByName=-1
+
 

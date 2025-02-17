@@ -307,6 +307,7 @@ function ProgressUI() {
                                             <td>{index + 1}</td>
                                             <td>{userId}</td>
                                             <td>{toFullName({ firstName, lastName })}</td>
+                                            <td>{moment(birthday).format('DD/MM/yyyy')}</td>
                                             <td>{`${progressPercentage.toFixed(2)}%`}</td>
                                             <td>{totalScore}</td>
                                             <td className={isActive ? 'active' : 'inactive'}>

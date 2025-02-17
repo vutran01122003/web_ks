@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaAnglesLeft, FaAnglesRight } from 'react-icons/fa6';
 import { IoMdArrowDropright } from 'react-icons/io';
@@ -9,22 +9,16 @@ import { getPages } from '../../redux/actions/pageAction';
 import { ARRAY_LIST_MENU } from '../../shared/menu';
 import { renderSideBar } from '../../helpers/renderSideBar';
 
-const {
-    VITE_APP_ADMIN_CODE,
-    VITE_APP_FACULTY_MANAGER_CODE,
-    VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE,
-    VITE_APP_TALENT_ENGINEER_CODE,
-    VITE_APP_GOAL_PAGE
-} = import.meta.env;
+const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_GOAL_PAGE } = import.meta.env;
 
 const LayoutSideBar = ({ auth }) => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
     const [toggleMenu, setToggleMenu] = useState(false);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
-    const groupCode = auth?.user?.group.groupCode;
-    const determineAuth = [VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE].includes(groupCode);
-    const levelYearList = Array.from(Array(auth?.user?.levelYear || 1).keys()).map((x) => x + 1);
+    const user = auth?.user;
+    const groupCodeList = user?.groups.map((group) => group.groupCode);
+    const levelYearList = Array.from(Array(user?.levelYear || 1).keys()).map((x) => x + 1);
 
     const menuRef = useRef([
         ...ARRAY_LIST_MENU.map(() => ({
@@ -79,15 +73,20 @@ const LayoutSideBar = ({ auth }) => {
     }, [menuRef, subMenu]);
 
     useEffect(() => {
-        if (auth?.user && [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(groupCode))
+        const conditions =
+            groupCodeList.includes(VITE_APP_TALENT_ENGINEER_CODE) ||
+            groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE);
+
+        if (user && conditions) {
             dispatch(
                 getPages({
-                    userId: auth.user._id,
-                    pageStudentMajor: auth.user.major,
-                    pageStudentCohort: auth.user.cohort,
+                    userId: user._id,
+                    pageStudentMajor: user.major,
+                    pageStudentCohort: user.cohort,
                     pageStudentLevelYear: levelYear
                 })
             );
+        }
     }, [dispatch, levelYear]);
 
     useEffect(() => {
@@ -97,10 +96,18 @@ const LayoutSideBar = ({ auth }) => {
     }, [JSON.stringify(page.pages), levelYear]);
 
     const renderArrMenu = ARRAY_LIST_MENU.map((item, index) => {
+        let condition = false;
+
+        if (item?.roles) {
+            const roles = item.roles;
+            const mergedRoles = Array.from(new Set([...roles, ...groupCodeList]));
+            condition = mergedRoles.length < roles.length + groupCodeList.length;
+        }
+
         return (
             <React.Fragment key={index}>
-                {item.allow || item.roles.includes(auth?.user.group.groupCode) ? (
-                    <>
+                {item.allow || condition ? (
+                    <Fragment>
                         {item.submenu ? (
                             <div
                                 key={index}
@@ -181,7 +188,7 @@ const LayoutSideBar = ({ auth }) => {
                                 })}
                             </div>
                         ) : undefined}
-                    </>
+                    </Fragment>
                 ) : null}
             </React.Fragment>
         );

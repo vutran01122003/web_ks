@@ -47,7 +47,7 @@ class ExcelController {
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 facultyName: faculty.toLowerCase(),
                 majorName: major.toLowerCase(),
-                cohortName: +cohort
+                cohortName: cohort
             });
 
             const filterData = {
@@ -88,12 +88,11 @@ class ExcelController {
                     throw error;
                 });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
 
-    importUser = async (req, res, next) => {
+    importUsers = async (req, res, next) => {
         try {
             await excelService.importUser(req);
 

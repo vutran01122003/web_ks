@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import LayoutInfo from '../components/Home/LayoutInfo';
 import LayoutChart from '../components/Home/LayoutChart';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,14 +18,13 @@ const Home = ({ auth }) => {
     const [chartData, setChartData] = useState([]);
     const [goalsInfo, setGoalInfo] = useState([]);
     const [levelYear, setLevelYear] = useState(auth?.user?.levelYear || 1);
-    const groupCode = auth?.user.group.groupCode;
+    const groupCodeList = auth?.user.groups.map((group) => group.groupCode);
+    const condition =
+        groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) ||
+        groupCodeList.includes(VITE_APP_TALENT_ENGINEER_CODE);
 
     const handleGetProgressByYear = () => {
-        if (
-            auth?.user &&
-            [VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) &&
-            !progress.goalsInfoData[levelYear]
-        ) {
+        if (auth?.user && condition && !progress.goalsInfoData[levelYear]) {
             dispatch(
                 getProgressByYear({
                     userId: auth?.user._id,
@@ -56,7 +55,7 @@ const Home = ({ auth }) => {
         }
     }, [progress.goalsInfoData, levelYear]);
 
-    return [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(groupCode) ? (
+    return condition ? (
         <div className="pageHome ">
             <div className="information__welcome">
                 <div className="wecome__name">
@@ -78,28 +77,23 @@ const Home = ({ auth }) => {
                 </div>
             </div>
 
-            {VITE_APP_TALENT_ENGINEER_CODE === groupCode && auth.user?.annualActivitiesProgress && (
+            {groupCodeList.includes(VITE_APP_TALENT_ENGINEER_CODE) && auth.user?.annualActivitiesProgress && (
                 <Quantity annualActivitiesProgress={auth.user.annualActivitiesProgress[levelYear - 1]} />
             )}
 
-            {VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE === groupCode && auth.user?.annualTemporaryActivitiesProgress && (
-                <Quantity annualActivitiesProgress={auth.user.annualTemporaryActivitiesProgress[levelYear - 1]} />
-            )}
+            {groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) &&
+                auth.user?.annualTemporaryActivitiesProgress && (
+                    <Quantity annualActivitiesProgress={auth.user.annualTemporaryActivitiesProgress[levelYear - 1]} />
+                )}
 
             <div className="container__top transform__animation--top">
                 <LayoutInfo user={auth?.user} />
-                <>
-                    {[VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) && (
-                        <LayoutChart chartData={chartData} auth={auth} setLevelYear={setLevelYear} />
-                    )}
-                </>
+                <Fragment>
+                    {condition && <LayoutChart chartData={chartData} auth={auth} setLevelYear={setLevelYear} />}
+                </Fragment>
             </div>
 
-            <div>
-                {[VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCode) && (
-                    <GoalsInfo levelYear={levelYear} goalsInfo={goalsInfo} />
-                )}
-            </div>
+            <div>{condition && <GoalsInfo levelYear={levelYear} goalsInfo={goalsInfo} />}</div>
         </div>
     ) : null;
 };

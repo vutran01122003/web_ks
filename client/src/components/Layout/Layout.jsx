@@ -14,7 +14,13 @@ const defaultPathMapping = {
     [VITE_APP_ADMIN_CODE]: '/faculty'
 };
 
-function Layout({ auth, pathName, groupCode }) {
+function Layout({ auth, pathName, groupCodeList }) {
+    const paths = ['/', '/home'];
+    const cond1 = groupCodeList.includes(VITE_APP_FACULTY_MANAGER_CODE) || groupCodeList.includes(VITE_APP_ADMIN_CODE);
+    const cond2 =
+        groupCodeList.includes(VITE_APP_TALENT_ENGINEER_CODE) ||
+        groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE);
+
     return (
         <div className="wrap__layout">
             <LayoutSideBar auth={auth} />
@@ -22,15 +28,11 @@ function Layout({ auth, pathName, groupCode }) {
                 <main>
                     <TopHeader auth={auth} />
                     <div className="main">
-                        {['/', '/home'].includes(pathName) &&
-                            [VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE].includes(groupCode) && (
-                                <Navigate to={defaultPathMapping[groupCode]} replace />
-                            )}
+                        {paths.includes(pathName) && cond1 && (
+                            <Navigate to={defaultPathMapping[groupCodeList[0]]} replace />
+                        )}
 
-                        {(!['/', '/home'].includes(pathName) ||
-                            [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(
-                                groupCode
-                            )) && <Outlet />}
+                        {(!paths.includes(pathName) || cond2) && <Outlet />}
                     </div>
                 </main>
             </div>

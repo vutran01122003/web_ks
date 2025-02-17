@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const getPageByNameSchema = Joi.object({
+const QueryPageSchema = Joi.object({
     params: Joi.object({
         pageName: Joi.string().required().messages({
             "any.required": "Tên page là bắt buộc"
@@ -13,7 +13,7 @@ const getPageByNameSchema = Joi.object({
         pageFaculty: Joi.string().required().messages({
             "any.required": "Tên Khoa là bắt buộc"
         }),
-        pageStudentCohort: Joi.number().required().messages({
+        pageStudentCohort: Joi.string().required().messages({
             "any.required": "Khóa sinh viên là bắt buộc"
         }),
         pageStudentLevelYear: Joi.number().required().messages({
@@ -22,12 +22,12 @@ const getPageByNameSchema = Joi.object({
     })
 });
 
-const getActivitiesSchema = Joi.object({
+const QueryActivityListSchema = Joi.object({
     query: Joi.object({
         pageStudentMajor: Joi.string().required().messages({
             "any.required": "Chuyên ngành là bắt buộc"
         }),
-        pageStudentCohort: Joi.number().required().messages({
+        pageStudentCohort: Joi.string().required().messages({
             "any.required": "Khóa sinh viên là bắt buộc"
         }),
         pageStudentLevelYear: Joi.number().required().messages({
@@ -40,6 +40,6 @@ const getActivitiesSchema = Joi.object({
 });
 
 module.exports = {
-    getPageByNameSchema,
-    getActivitiesSchema
+    QueryPageSchema,
+    QueryActivityListSchema
 };

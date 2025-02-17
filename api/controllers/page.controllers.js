@@ -1,7 +1,7 @@
 const PageService = require("../services/page.service");
 const pageService = require("../services/page.service");
 
-const { TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE } = process.env;
+const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE } = process.env;
 
 class PageControllers {
     createPage = async (req, res, next) => {
@@ -21,21 +21,19 @@ class PageControllers {
     getPages = async (req, res, next) => {
         try {
             const { userId, ...fields } = req.query;
-            const { groupCode } = res.locals.userData.group;
+            const groupCode = res.locals.userData.groups[0].groupCode;
+            const condition = [TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE].includes(groupCode);
 
             let pages = [];
+
             if (userId) {
                 const { pageStudentCohort, pageStudentLevelYear } = fields;
 
-                if ([TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE].includes(groupCode))
-                    fields.pageTalentEngineerType = groupCode;
-                if (pageStudentCohort) fields.pageStudentCohort = parseInt(pageStudentCohort);
+                if (condition) fields.pageTalentEngineerType = groupCode;
                 if (pageStudentLevelYear) fields.pageStudentLevelYear = parseInt(pageStudentLevelYear);
 
                 pages = await pageService.getPages(fields, userId);
-            } else {
-                pages = await pageService.getGoals(fields);
-            }
+            } else pages = await pageService.getGoals(fields);
 
             res.status(200).json({
                 status: "Lấy dữ liệu trang thành công",
@@ -68,18 +66,18 @@ class PageControllers {
     getPage = async (req, res, next) => {
         const { pageName } = req.params;
         const { pageStudentMajor, pageStudentCohort, pageFaculty, pageStudentLevelYear } = req.query;
-        const { groupCode } = res.locals.userData.group;
+        const groupCode = res.locals.userData.groups[0].groupCode;
+        const condition = [TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE].includes(groupCode);
 
         const fields = {
             pageName,
             pageFaculty,
             pageStudentMajor,
-            pageStudentCohort: +pageStudentCohort,
-            pageStudentLevelYear: +pageStudentLevelYear
+            pageStudentCohort: pageStudentCohort,
+            pageStudentLevelYear: parseInt(pageStudentLevelYear)
         };
 
-        if ([TEMPORARY_TALENT_ENGINEER_TYPE, TALENT_ENGINEER_TYPE].includes(groupCode))
-            fields.pageTalentEngineerType = groupCode;
+        if (condition) fields.pageTalentEngineerType = groupCode;
 
         const page = await pageService.getPage({
             fields,
