@@ -28,8 +28,8 @@
             text-transform: uppercase;
             color: #222222;
             text-align: center;
-            padding: 12px;
-            font-size: 18px;
+            padding: 10px;
+            font-size: 16px;
             border-bottom: 1px solid rgb(217, 216, 216);
         }
 
@@ -38,8 +38,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 25px;
-            width: 25px;
+            height: 30px;
+            width: 30px;
             border-radius: 50%;
             right: 9px;
             top: 9px;
@@ -208,7 +208,7 @@
         margin-bottom: 10px;
     }
 
-    .file_item_link_wrapper {
+    .file_item_wrapper {
         display: flex;
         align-items: center;
         padding: 10px;
@@ -936,6 +936,7 @@
     max-height: 100%;
     padding-bottom: 10px;
     min-width: 617px;
+    user-select: none;
 
     .preview_PDF_wrapper_header {
         display: flex;
@@ -955,8 +956,8 @@
     }
 
     .preview_PDF {
-        height: 550px;
-        overflow: auto;
+        height: 620px;
+
         .react-pdf__Page__canvas {
             margin: 0 auto;
             width: 100% !important;
@@ -969,7 +970,7 @@
         gap: 10px;
         justify-content: center;
         align-items: center;
-        background: #000;
+        background: rgb(33, 35, 38);
 
         .pagination_pdf {
             &.active {
@@ -1171,6 +1172,151 @@
                 height: 100%;
                 box-shadow: unset;
             }
+        }
+    }
+}
+
+// Import excel modal
+.modal-excel-body {
+    padding: 15px;
+
+    .columns-preview-title {
+        margin-bottom: 15px;
+    }
+
+    .columns-preview-tab {
+        display: flex;
+        max-width: 100%;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+
+        .columns-preview-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid gray;
+            min-width: 100px;
+            color: #333;
+            font-weight: 600;
+        }
+    }
+
+    .note-content {
+        font-weight: 400;
+        color: gray;
+        font-size: 14px;
+        padding-bottom: 20px;
+    }
+
+    .upload-excel-btn {
+        display: flex;
+        align-items: center;
+        min-height: 45px;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 3px;
+        width: 100%;
+        border: 1px solid gray;
+        margin-bottom: 15px;
+
+        label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #333;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+        }
+    }
+
+    .excel-file-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        .excel-file-info-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            .reject-file-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 30px;
+                width: 30px;
+                border-radius: 50%;
+                transition: 0.1s linear;
+
+                &:hover {
+                    color: red;
+                    background: #d3d2d25e;
+                }
+            }
+        }
+
+        .excel-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            .excel-icon {
+                width: 120px;
+                height: auto;
+                object-fit: contain;
+            }
+
+            span {
+                color: #333;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+
+        button {
+            width: 180px;
+            padding: 10px;
+            border-radius: 3px;
+            outline: none;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s linear;
+
+            &:active {
+                transform: scale(0.9);
+            }
+        }
+
+        .agree-btn {
+            background: #1677ff;
+
+            &.not-allowed {
+                cursor: not-allowed;
+                opacity: 0.7;
+
+                &:active {
+                    transform: none;
+                }
+            }
+        }
+
+        .cancel-btn {
+            background: #f0635c;
         }
     }
 }

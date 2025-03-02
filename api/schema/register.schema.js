@@ -33,7 +33,7 @@ const registerSchema = Joi.object({
         major: Joi.string().required().messages({
             "any.required": "Chưa chọn chuyên ngành"
         }),
-        cohort: Joi.number().required().messages({
+        cohort: Joi.string().required().messages({
             "any.required": "Chưa chọn khóa sinh viên"
         }),
         levelYear: Joi.number().required().messages({

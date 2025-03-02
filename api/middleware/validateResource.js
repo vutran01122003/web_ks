@@ -1,4 +1,4 @@
-function validateResource(schema) {
+function validateResource({ schema }) {
     return function (req, res, next) {
         try {
             const payload = {

@@ -183,7 +183,7 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                 {
                     proofNameLabel: 'Tải về',
                     proofPreviewLabel: 'Xem',
-                    proofFiles: rowValueItem.proofFilesList,
+                    proofFiles: rowValueItem.proofFileList,
                     tableValue: {
                         ...dynamicTable,
                         rowValueList: [

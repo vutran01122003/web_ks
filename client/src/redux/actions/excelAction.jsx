@@ -1,5 +1,5 @@
-import { downloadExcel } from '../../utils/downloadExcel';
 import { postDataApi } from '../../utils/fetchData';
+import { downloadExcel } from '../../utils/handleFile';
 import notifyError from '../../utils/notifyError';
 import GLOBALTYPES from './globalTypes';
 

@@ -4,13 +4,16 @@ const UploadService = require("../services/upload.service");
 const UserService = require("../services/user.service");
 const Row = require("../models/row.model");
 const FacultyService = require("../services/faculty.service");
+const { storeFiles } = require("../utils/storeFile");
+const { slugifyWithSlashes } = require("../utils");
 
 const [PENDING_STATUS, RESUBMITED_STATUS] = ["chờ duyệt", "phải nộp lại"];
-const { TALENT_ENGINEER_CODE } = process.env;
+const { TALENT_ENGINEER_CODE, S3_IS_ENABLE } = process.env;
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
+            const s3IsEnable = S3_IS_ENABLE === "true";
             const rowData = JSON.parse(req.body.rowData);
             const { faculty, major, cohort, userId, tableName, user, levelYear, pageStudentLevelYear } = rowData;
 
@@ -21,15 +24,31 @@ class RowControllers {
                 data: rowData
             });
 
-            const uploadedFiles = await UploadService.uploadFilesToS3({
-                files: req.files,
-                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
-            });
+            let uploadedFiles = null;
+            const mineTypeList = req.files.map((file) => file.mimetype);
+
+            if (s3IsEnable) {
+                uploadedFiles = await UploadService.uploadFilesToS3({
+                    files: req.files,
+                    folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
+                });
+            } else {
+                const destination = slugifyWithSlashes(
+                    `${faculty}/${major}/khoá ${cohort}/năm ${levelYear}/${tableName}`
+                );
+
+                uploadedFiles = await storeFiles({
+                    destination,
+                    files: req.files
+                });
+            }
 
             await Promise.all([
                 RowService.addProofFiles({
+                    s3IsEnable,
                     data: req.body,
                     uploadedFiles,
+                    mineTypeList,
                     rowListId: rowList._id,
                     rowItemId
                 }),

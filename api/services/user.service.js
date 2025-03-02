@@ -321,7 +321,7 @@ class UserService {
                         facultyName: faculty.toLowerCase(),
                         majorName: major.toLowerCase(),
                         cohortName: cohort,
-                        levelYear: +levelYear,
+                        levelYear: parseInt(levelYear),
                         isActive: false
                     })
                 ]);

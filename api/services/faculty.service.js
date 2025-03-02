@@ -1,5 +1,6 @@
 const createHttpError = require("http-errors");
 const Faculty = require("../models/faculty.model");
+const { capitalizeFirstLetter } = require("../utils/handleString");
 
 class FacultyService {
     static createFaculty = async ({ facultyName, managerIdList, majorList }) => {
@@ -276,11 +277,11 @@ class FacultyService {
         try {
             const faculty = await Faculty.findById(facultyId).lean();
 
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
+            if (!faculty) throw createHttpError.NotFound(`Khoa không tồn tại`);
 
             return faculty;
         } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu khoa");
+            throw error;
         }
     };
 
@@ -288,11 +289,25 @@ class FacultyService {
         try {
             const faculty = await Faculty.findOne({ facultyName });
 
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
+            if (!faculty) throw createHttpError.NotFound(`Khoa ${capitalizeFirstLetter(facultyName)} không tồn tại`);
 
             return faculty;
         } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu khoa");
+            throw error;
+        }
+    };
+
+    static getMajorByName = async ({ facultyName, majorName }) => {
+        try {
+            const faculty = await this.getFacultyByName({ facultyName });
+            const major = faculty.majors.find((major) => major.majorName === majorName.toLowerCase());
+
+            if (!major)
+                throw createHttpError.NotFound(`Chuyên ngành ${capitalizeFirstLetter(majorName)} không tồn tại`);
+
+            return major;
+        } catch (error) {
+            throw error;
         }
     };
 
@@ -300,11 +315,12 @@ class FacultyService {
         try {
             const faculty = await Faculty.findOne({ facultyName });
 
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
+            if (!faculty) throw createHttpError.NotFound(`Khoa ${capitalizeFirstLetter(facultyName)} không tồn tại`);
 
             const major = faculty.majors.find((major) => major.majorName === majorName);
 
-            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+            if (!major)
+                throw createHttpError.NotFound(`Chuyên ngành ${capitalizeFirstLetter(majorName)} không tồn tại`);
 
             const currentLevelYear = major.cohortList.find(
                 (cohort) => cohort.cohortName === cohortName
@@ -312,7 +328,7 @@ class FacultyService {
 
             return currentLevelYear;
         } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+            throw error;
         }
     };
 
@@ -322,7 +338,7 @@ class FacultyService {
 
             return cohort.additionalRegisterInfo;
         } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu đăng ký bổ sung");
+            throw error;
         }
     };
 }

@@ -7,6 +7,6 @@ const registerSchema = require("../../schema/register.schema");
 router.get("/access-token", auth, accessControllers.getInfoUser);
 router.post("/login", accessControllers.login);
 router.get("/logout", accessControllers.logout);
-router.post("/register", validateResource(registerSchema), accessControllers.register);
+router.post("/register", validateResource({ schema: registerSchema }), accessControllers.register);
 
 module.exports = router;

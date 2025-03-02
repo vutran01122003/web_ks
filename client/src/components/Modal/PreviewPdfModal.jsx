@@ -1,108 +1,61 @@
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AiOutlineClose } from 'react-icons/ai';
 import { TiMediaRecord } from 'react-icons/ti';
-import GLOBALTYPES from '../../redux/actions/globalTypes';
-import { renderTable } from '../../helpers/renderTable';
-import client from '../../config/aws.config';
+import Modal from './Modal';
+import { s3Client } from '../../config/aws.config';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { getFileFromS3, getFileFromServer } from '../../utils/handleFile';
 
-function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
-    pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
+function DetailedRowModal({ handleHiddenFileContentModal, tableData }) {
+    const proofFileList = tableData.rowValueList[0].content[0].proofFileList || [];
+    const [proofFileIndex, setProofFileIndex] = useState(0);
+    const [url, setUrl] = useState(null);
 
-    const dispatch = useDispatch();
-    const table = renderTable({ table: tableData });
-    const linkPDFList = tableData.rowValueList[0].content[0].proofFilesList || [];
-    const [pdfList, setPdfList] = useState([]);
-    const [numPages, setNumPages] = useState(1);
-    const [pdfIndex, setPdfIndex] = useState(0);
+    const convertToObjectURL = () => {
+        try {
+            const proofFile = proofFileList[proofFileIndex];
+            const fileUrl = proofFile?.fileUrl;
+            const awsKey = proofFile?.Key;
+            const bucket = proofFile?.Bucket;
 
-    const onDocumentLoadSuccess = ({ numPages }) => {
-        setNumPages(numPages);
-    };
-
-    const handleChangePdfIndex = (index) => {
-        setPdfIndex(index);
-    };
-
-    const handleMouseUpDetailedRowModal = (e) => {
-        if (e.target === e.currentTarget) {
-            handleHiddenDetailedRowModal(e);
+            if (bucket && awsKey)
+                getFileFromS3({ Key: awsKey, Bucket: bucket, type: proofFile.fileType })
+                    .then((blob) => setUrl(URL.createObjectURL(blob)))
+                    .catch((err) => {
+                        throw err;
+                    });
+            else if (!bucket && fileUrl)
+                getFileFromServer(fileUrl)
+                    .then((blob) => setUrl(URL.createObjectURL(blob)))
+                    .catch((err) => {
+                        throw err;
+                    });
+            else setUrl(null);
+        } catch (error) {
+            setUrl(null);
+            throw error;
         }
     };
 
-    const handleGetPDF = async () => {
-        Promise.all(
-            linkPDFList.map((linkPDFItem) => {
-                return client.send(
-                    new GetObjectCommand({
-                        Bucket: linkPDFItem.Bucket,
-                        Key: linkPDFItem.Key
-                    })
-                );
-            })
-        )
-            .then((resList) => {
-                return Promise.all(
-                    resList.map((res) => {
-                        return res.Body.transformToByteArray();
-                    })
-                );
-            })
-            .then((data) => {
-                setPdfList(data.map((item) => new Blob([item], { type: 'application/pdf' })));
-            })
-            .catch((error) => {
-                dispatch({
-                    type: GLOBALTYPES.ALERT,
-                    payload: {
-                        error: 'Xem File PDF Không Thành Công'
-                    }
-                });
-            });
-    };
-
     useEffect(() => {
-        handleGetPDF();
-    }, []);
+        convertToObjectURL();
+    }, [proofFileIndex]);
 
     return (
-        <div className="modal_overlap" onDoubleClick={handleMouseUpDetailedRowModal}>
-            <div className={`preview_PDF_wrapper ${pdfList.length > 1 ? 'multi_page' : 'single_page'}`}>
-                <div className="preview_PDF_wrapper_header">
-                    <h3>Minh Chứng</h3>
-                    <div className="modal_close_btn" onClick={handleHiddenDetailedRowModal}>
-                        <AiOutlineClose />
-                    </div>
-                </div>
+        <Modal onHiddenModal={handleHiddenFileContentModal} headerTitle="Thông Tin Minh Chứng">
+            <div className={`preview_PDF_wrapper ${proofFileList.length > 1 ? 'multi_page' : 'single_page'}`}>
                 <div className="preview_PDF">
-                    <Document file={pdfList[pdfIndex]} onLoadSuccess={onDocumentLoadSuccess}>
-                        {Array.apply(null, Array(numPages))
-                            .map((_, i) => i + 1)
-                            .map((page) => {
-                                return (
-                                    <Page
-                                        key={page}
-                                        pageNumber={page}
-                                        renderTextLayer={false}
-                                        renderAnnotationLayer={false}
-                                    />
-                                );
-                            })}
-                    </Document>
+                    <object data={url} type="application/pdf" width="100%" height="100%">
+                        <p>Không thể hiển thị dữ liệu</p>
+                    </object>
                 </div>
-                {pdfList.length > 1 && (
+
+                {proofFileList.length > 1 && (
                     <div className="preview_PDF_pagination">
-                        {pdfList.map((_, index) => (
+                        {proofFileList.map((_, index) => (
                             <div
                                 key={index}
-                                className={`pagination_pdf ${pdfIndex === index ? 'active' : ''}`}
-                                onClick={() => {
-                                    handleChangePdfIndex(index);
-                                }}
+                                className={`pagination_pdf ${proofFileIndex === index ? 'active' : ''}`}
+                                onClick={() => setProofFileIndex(index)}
                             >
                                 <TiMediaRecord />
                             </div>
@@ -110,7 +63,7 @@ function DetailedRowModal({ handleHiddenDetailedRowModal, tableData }) {
                     </div>
                 )}
             </div>
-        </div>
+        </Modal>
     );
 }
 

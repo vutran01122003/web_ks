@@ -31,3 +31,9 @@
 .container__menu .wrap__menu::-webkit-scrollbar-track {
     background: transparent;
 }
+
+// preview_PDF_wrapper
+
+.preview_PDF_wrapper::-webkit-scrollbar {
+    width: 0px;
+}

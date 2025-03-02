@@ -7,14 +7,14 @@ import TableContent from './TableContent';
 
 const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentEngineerType }) => {
     const [useStateModal, setUseStateModal] = useState(false);
-    const [openPreviewModal, setOpenPreviewModal] = useState(false);
-    const [proofFilesData, setProofFilesData] = useState(null);
+    const [visiblePreviewFileModal, setVisiblePreviewFileModal] = useState(false);
+    const [proofFileDataList, setProofFileDataList] = useState(null);
     const [rowInfo, setRowInfo] = useState(null);
 
     const auth = useSelector(authSelector);
     const handleOpenPreviewFilesModal = ({ proofData }) => {
-        setProofFilesData(proofData);
-        setOpenPreviewModal(true);
+        setProofFileDataList(proofData);
+        setVisiblePreviewFileModal(true);
     };
 
     const handleOpenModal = () => {
@@ -107,11 +107,11 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                     </tbody>
                 )}
             </table>
-            {openPreviewModal && (
+            {visiblePreviewFileModal && (
                 <PreviewFilesModal
-                    proofFilesData={proofFilesData}
-                    openPreviewModal={openPreviewModal}
-                    setOpenPreviewModal={setOpenPreviewModal}
+                    proofFileDataList={proofFileDataList}
+                    visiblePreviewFileModal={visiblePreviewFileModal}
+                    setVisiblePreviewFileModal={setVisiblePreviewFileModal}
                 />
             )}
         </div>

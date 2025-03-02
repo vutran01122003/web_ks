@@ -32,7 +32,7 @@ function TableContent({
 }) {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
-    const [visibleDetailedRowModal, setVisibleDetailedRowModal] = useState(false);
+    const [visibleFileContentModal, setVisibleFileContentModal] = useState(false);
     const [modalData, setModalData] = useState({});
 
     const handleVisibleConfirmModal = () => {
@@ -52,13 +52,13 @@ function TableContent({
         setVisibleNoteModal(false);
     };
 
-    const handleVisibleDetailedRowModal = () => {
-        setVisibleDetailedRowModal(true);
+    const handleVisibleFileContentModal = () => {
+        setVisibleFileContentModal(true);
     };
 
-    const handleHiddenDetailedRowModal = (e) => {
+    const handleHiddenFileContentModal = (e) => {
         e.preventDefault();
-        setVisibleDetailedRowModal(false);
+        setVisibleFileContentModal(false);
     };
 
     return (
@@ -68,9 +68,9 @@ function TableContent({
                     return (
                         !isDetailedRow && (
                             <td className="proof_files_wrapper line__item" key={index}>
-                                {visibleDetailedRowModal && (
+                                {visibleFileContentModal && (
                                     <PreviewPdfModal
-                                        handleHiddenDetailedRowModal={handleHiddenDetailedRowModal}
+                                        handleHiddenFileContentModal={handleHiddenFileContentModal}
                                         tableData={item?.tableValue}
                                     />
                                 )}
@@ -92,7 +92,7 @@ function TableContent({
                                     </a>
                                 )}
 
-                                <span onClick={handleVisibleDetailedRowModal} className="preview_proof_files">
+                                <span onClick={handleVisibleFileContentModal} className="preview_proof_files">
                                     {item?.proofPreviewLabel}
                                 </span>
                             </td>

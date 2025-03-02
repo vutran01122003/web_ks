@@ -12,6 +12,7 @@ const app = express();
 require("./dbs/init.redis");
 require("./dbs/init.mongodb");
 
+const { auth } = require("./middleware/auth");
 const {
     morganType,
     app: { clientDomain_v1, clientDomain_v2 }
@@ -19,6 +20,7 @@ const {
 
 // CORS config
 const whitelist = [clientDomain_v1, clientDomain_v2];
+
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
@@ -38,6 +40,9 @@ app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
 app.use(cookieParser());
+
+// Static
+app.use("/files", [auth, express.static("data")]);
 
 // Router
 app.use("/api", require("./router/page"));

@@ -29,7 +29,7 @@ const RowSchema = new Schema(
                             lowercase: true,
                             default: "chờ duyệt"
                         },
-                        proofFilesList: {
+                        proofFileList: {
                             type: [
                                 {
                                     originalName: String,

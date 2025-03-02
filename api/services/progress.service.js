@@ -46,7 +46,7 @@ class ProgressService {
 
             const filterData = {
                 major: major.toLowerCase(),
-                cohort: cohort,
+                cohort,
                 userId: userId
                     ? {
                           $regex: userId

@@ -15,7 +15,6 @@ import { authSelector, facultySelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
 import { getFacultyByName } from './redux/actions/facultyAction';
-const { VITE_APP_ADMIN_CODE } = import.meta.env;
 
 const App = () => {
     const location = useLocation();

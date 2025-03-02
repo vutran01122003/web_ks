@@ -29,8 +29,6 @@ export const addRow =
                 pageStudentLevelYear
             });
 
-            console.log(page);
-
             dispatch({
                 type: GLOBALTYPES.PAGE.UPDATE_DYNAMIC_PAGE,
                 payload: {

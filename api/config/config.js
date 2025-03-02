@@ -2,7 +2,8 @@ const dev = {
     app: {
         port: process.env.DEV_APP_PORT || 4000,
         clientDomain_v1: process.env.DEV_CLIENT_DOMAIN_V1 || "http://localhost:3000",
-        clientDomain_v2: process.env.DEV_CLIENT_DOMAIN_V2 || "http://localhost:3000"
+        clientDomain_v2: process.env.DEV_CLIENT_DOMAIN_V2 || "http://localhost:3000",
+        uri_base: process.env.DEV_APP_URI_BASE || "http://localhost:4000"
     },
     morganType: "dev",
     mongodb: {
@@ -19,7 +20,8 @@ const dev = {
 const pro = {
     app: {
         port: process.env.PRO_APP_PORT,
-        clientDomain: process.env.PRO_CLIENT_DOMAIN
+        clientDomain: process.env.PRO_CLIENT_DOMAIN,
+        uri_base: process.env.PRO_APP_URI_BASE || "http://localhost:4000"
     },
     morganType: "tiny",
     mongodb: {

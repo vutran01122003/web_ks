@@ -8,18 +8,22 @@ const { CreateFacultySchema, CreateMajorListSchema, CreateCohortSchema } = requi
 router.get("/faculties", facultyController.getAllFaculty);
 router.get("/faculties/:facultyId", facultyController.getFacultyById);
 router.get("/faculty/:facultyName", facultyController.getFacultyByName);
-router.post("/faculties", validateResource(CreateFacultySchema), facultyController.createFaculty);
+router.post("/faculties", validateResource({ schema: CreateFacultySchema }), facultyController.createFaculty);
 router.patch("/faculties/:facultyId", facultyController.updateFaculty);
 router.delete("/faculties/:facultyId", facultyController.deleteFaculty);
 
-router.post("/faculties/:facultyId/majors", validateResource(CreateMajorListSchema), facultyController.createMajors);
+router.post(
+    "/faculties/:facultyId/majors",
+    validateResource({ schema: CreateMajorListSchema }),
+    facultyController.createMajors
+);
 router.get("/faculties/:facultyId/majors/:majorId", facultyController.getMajorById);
 router.patch("/faculties/:facultyId/majors/:majorId", facultyController.updateMajor);
 router.delete("/faculties/:facultyId/majors/:majorId", facultyController.deleteMajor);
 
 router.post(
     "/faculties/:facultyId/majors/:majorId/cohorts",
-    validateResource(CreateCohortSchema),
+    validateResource({ schema: CreateCohortSchema }),
     facultyController.createCohort
 );
 router.get("/faculties/:facultyId/majors/:majorId/cohorts/:cohortId", facultyController.getCohortById);

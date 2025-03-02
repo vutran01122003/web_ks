@@ -89,7 +89,8 @@ select {
 .search_btn {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 4px;
     background-color: #1677ff;
     border: none;
     color: #fff;

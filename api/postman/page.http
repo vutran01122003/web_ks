@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21013481",
+    "userId": "21013666",
     "password": "1111"
 }
 
@@ -127,14 +127,32 @@ Content-Type: application/pdf
 
 < ./data/dummy.pdf
 --MyBoundary
+Content-Disposition: form-data; name="files"; filename="dummy.pdf"
+Content-Type: application/pdf
+
+< ./data/dummy.pdf
+--MyBoundary
+Content-Disposition: form-data; name="files"; filename="dummy.pdf"
+Content-Type: application/pdf
+
+< ./data/dummy.pdf
+--MyBoundary
 Content-Disposition: form-data; name="rowData"
 Content-Type: application/json
 
 {
-    "user": "65d98ca4fe939cfae60740f8",
-    "table": "65d98f5024ee301790cca8a7", 
-    "page": "65d98f5024ee301790cca8a6",
-    "content": "{\"row 1\":\"1\",\"row 2\":\"2\",\"row 3\":\"3\",\"row 4\":\"4\",\"row 5\":\"5\"}"
+    "userId": "21013666",
+    "user": "67335d250b2a1b45a93fe0b2",
+    "levelYear": 2,
+    "path": "/page/test",
+    "faculty": "công nghệ thông tin",
+    "major": "kỹ thuật phần mềm",
+    "cohort": "20",
+    "page": "67b3433f203e264c9de00f8a",
+    "pageStudentLevelYear": 2,
+    "table": "67b3433f203e264c9de00f8b",
+    "tableName": "demo01",
+    "content": "{\"67b3433f203e264c9de00f8c\":\"1\",\"67b3433f203e264c9de00f8c\":{\"value\":\"online\",\"score\": 10}}"
 }
 
 --MyBoundary--

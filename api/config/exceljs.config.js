@@ -3,6 +3,7 @@ const userColumn = [
     { header: "MSSV", key: "userId", width: 10 },
     { header: "Họ đệm", key: "lastName", width: 20 },
     { header: "Tên", key: "firstName", width: 10 },
+    { header: "Giới tính", key: "gender", width: 15 },
     { header: "Ngày sinh", key: "birthday", width: 15 },
     { header: "Khoa", key: "faculty", width: 25 },
     { header: "Chuyên ngành", key: "major", width: 25 },
@@ -16,6 +17,7 @@ const progressStatisticsColumn = [
     { header: "MSSV", key: "userId", width: 10 },
     { header: "Họ đệm", key: "lastName", width: 20 },
     { header: "Tên", key: "firstName", width: 10 },
+    { header: "Giới tính", key: "gender", width: 15 },
     { header: "Ngày sinh", key: "birthday", width: 15 },
     { header: "Khoa", key: "faculty", width: 25 },
     { header: "Chuyên ngành", key: "major", width: 25 },
@@ -24,33 +26,36 @@ const progressStatisticsColumn = [
     { header: "Tổng điểm", key: "totalScore", width: 15 }
 ];
 
-const addUserData = (cell, colNumber, data) => {
-    switch (colNumber) {
-        case 2:
+const addUserData = (cell, colName, data) => {
+    switch (colName) {
+        case "mssv":
             data.userId = cell.value;
             break;
-        case 3:
+        case "họ đệm":
             data.lastName = cell.value;
             break;
-        case 4:
+        case "tên":
             data.firstName = cell.value;
             break;
-        case 5:
+        case "giới tính":
+            data.gender = cell.value;
+            break;
+        case "ngày sinh":
             data.birthday = cell.value;
             break;
-        case 6:
+        case "khoa":
             data.faculty = cell.value;
             break;
-        case 7:
+        case "chuyên ngành":
             data.major = cell.value;
             break;
-        case 8:
+        case "khoá":
             data.cohort = cell.value;
             break;
-        case 9:
+        case "email":
             data.email = cell.value.text || cell.value;
             break;
-        case 10:
+        case "điện thoại":
             data.phone = cell.value;
             break;
         default:

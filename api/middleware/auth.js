@@ -5,7 +5,8 @@ const UserService = require("../services/user.service");
 module.exports = {
     auth: async (req, res, next) => {
         try {
-            const accessToken = req?.headers["x-token"] || req.cookies?.accessToken;
+            const accessToken =
+                req?.headers["x-token"] || req.cookies?.accessToken || req?.headers["cookie"].split("=")[1];
             const { data, isExpired, error } = await jwtService.verifyAccessToken(accessToken);
 
             if (isExpired) {

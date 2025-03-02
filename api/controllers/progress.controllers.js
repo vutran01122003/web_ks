@@ -136,8 +136,8 @@ class ProgressControllers {
                 conditions,
                 faculty: faculty.toLowerCase(),
                 major: major.toLowerCase(),
-                cohort: +cohort,
-                levelYear: +levelYear,
+                cohort,
+                levelYear: parseInt(levelYear),
                 updatedCohortData,
                 groupData: {
                     groupCode: groupCode,

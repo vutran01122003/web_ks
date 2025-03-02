@@ -21,9 +21,14 @@ class RowService {
 
                         if (fixedValueList.length > 0) {
                             const fixedValueOfContent = content[rowTitleItem._id];
-                            const score = fixedValueList.find(
+                            const fixedValue = fixedValueList.find(
                                 (fixedValueItem) => fixedValueItem.value === fixedValueOfContent
-                            ).score;
+                            );
+
+                            if (!fixedValue)
+                                throw createError.BadRequest("Thông tin không đầy đủ hoặc không chính xác");
+
+                            const score = fixedValue.score;
 
                             content[rowTitleItem._id] = {
                                 value: fixedValueOfContent,
@@ -47,6 +52,7 @@ class RowService {
     static addRow = async ({ data }) => {
         try {
             const { user, table, page, content } = data;
+
             const contentObj = JSON.parse(content);
 
             let rowItemId = null;
@@ -179,19 +185,28 @@ class RowService {
         }
     };
 
-    static addProofFiles = async ({ uploadedFiles, rowListId, rowItemId }) => {
+    static addProofFiles = async ({ s3IsEnable, uploadedFiles, mineTypeList, rowListId, rowItemId }) => {
         try {
             const updatedRow = await Row.findOneAndUpdate(
                 { _id: rowListId, "content._id": rowItemId },
                 {
                     $set: {
-                        "content.$.proofFilesList": uploadedFiles.map((uploadedFile) => ({
-                            fileUrl: uploadedFile.Location,
-                            fileType: uploadedFile.Key.split(".").slice(-1)[0],
-                            originalName: uploadedFile.Key.split("/").slice(-1)[0],
-                            Key: uploadedFile.key,
-                            Bucket: uploadedFile.Bucket
-                        }))
+                        "content.$.proofFileList": uploadedFiles.map((uploadedFile, index) => {
+                            const proofFileItem = {
+                                fileUrl: s3IsEnable ? uploadedFile.Location : uploadedFile.fileUrl,
+                                fileType: mineTypeList[index],
+                                originalName: s3IsEnable
+                                    ? uploadedFile.Key.split("/").slice(-1)[0]
+                                    : uploadedFile.originalName
+                            };
+
+                            if (s3IsEnable) {
+                                proofFileItem.Key = uploadedFile.key;
+                                proofFileItem.Bucket = uploadedFile.Bucket;
+                            }
+
+                            return proofFileItem;
+                        })
                     }
                 }
             );

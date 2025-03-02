@@ -2,11 +2,11 @@ import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { RiUpload2Fill } from 'react-icons/ri';
 import { IoMdClose } from 'react-icons/io';
-import { checkFilesUpload, encodeFileName } from '../../utils/uploadFiles';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import docIcon from '../../assets/images/icon/doc.png';
 import pdfIcon from '../../assets/images/icon/pdf.png';
 import errorFileIcon from '../../assets/images/icon/error.png';
+import { checkFilesUpload, encodeFileName } from '../../utils/handleFile';
 
 function ComponentProofFile({ files, setFiles }) {
     const inputRef = useRef();

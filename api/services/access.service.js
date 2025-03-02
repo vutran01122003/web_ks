@@ -32,7 +32,7 @@ class AccessService {
         }
     };
 
-    static register = async ({ data, groupCode }) => {
+    static register = async ({ data, groupCode, transaction }) => {
         try {
             const { userId, lastName, firstName, password, birthday, major, cohort, faculty, email, phone } = data;
             let levelYear = 0;
@@ -40,12 +40,13 @@ class AccessService {
             const result = await Promise.all([
                 User.findOne({ userId }),
                 User.findOne({ email }),
-                User.findOne({ phone })
+                User.findOne({ phone }),
+                FacultyService.getMajorByName({ facultyName: faculty, majorName: major })
             ]);
 
-            if (result[0]) throw createHttpError.Conflict("Mã sinh viên đã tồn tại");
-            if (result[1]) throw createHttpError.Conflict("Email đã tồn tại");
-            if (result[2]) throw createHttpError.Conflict("Số điện thoại đã tồn tại");
+            if (result[0]) throw createHttpError.Conflict(`Mã sinh viên ${userId} đã tồn tại`);
+            if (result[1]) throw createHttpError.Conflict(`Email ${email} đã tồn tại`);
+            if (result[2]) throw createHttpError.Conflict(`Số điện thoại ${phone} đã tồn tại`);
 
             const group = await PermissionService.getGroupByGroupCode(groupCode);
 
@@ -66,7 +67,7 @@ class AccessService {
                 levelYear = await FacultyService.getCurrentLevelYearOfCohort({
                     facultyName: faculty.toLowerCase(),
                     majorName: major.toLowerCase(),
-                    cohortName: cohort.toString()
+                    cohortName: String(cohort)
                 });
                 createdUser.levelYear = levelYear;
             } else if (TEMPORARY_TALENT_ENGINEER_CODE === groupCode) {
@@ -86,6 +87,7 @@ class AccessService {
 
             createdUser.encodePassword(password);
 
+            if (transaction) await createdUser.save(transaction);
             await createdUser.save();
 
             const populatedUser = await User.populate(createdUser, { path: "groups" });

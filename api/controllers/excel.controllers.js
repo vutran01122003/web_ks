@@ -9,7 +9,7 @@ class ExcelController {
 
             const qualifiedUsersData = await UserService.getUsersByFields({
                 fields: {
-                    cohort: parseInt(cohort),
+                    cohort,
                     major,
                     isActive: status ? status === "true" : undefined
                 },
@@ -52,7 +52,7 @@ class ExcelController {
 
             const filterData = {
                 major: major.toLowerCase(),
-                cohort: +cohort,
+                cohort,
                 userId: userId
                     ? {
                           $regex: userId

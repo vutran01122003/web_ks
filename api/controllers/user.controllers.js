@@ -40,7 +40,7 @@ class UserControllers {
 
             const users = await UserService.getUsersByFields({
                 fields: {
-                    cohort: parseInt(cohort),
+                    cohort,
                     major,
                     isActive: status ? status === "true" : undefined,
                     userId: userId ? { $regex: userId } : undefined

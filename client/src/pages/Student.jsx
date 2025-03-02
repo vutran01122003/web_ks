@@ -6,7 +6,6 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import { FaSortAlphaDown, FaSortAlphaDownAlt, FaFileExport } from 'react-icons/fa';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import ConfirmModal from '../components/Modal/ConfirmModal';
 import { exportQualifiedUsersExcel, importUser } from '../redux/actions/excelAction';
 import { facultySelector, studentSelector } from '../redux/selector';
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
@@ -14,12 +13,12 @@ import SearchFilterComponent from '../components/Filter/SearchFilter';
 import StudentDetailsModal from '../components/Modal/StudentDetailsModal';
 import GoalDetailsModal from '../components/Modal/GoalDetailsModal';
 import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+import ImportExcelModal from '../components/Modal/ImportExcelModal';
 
 const Student = () => {
-    const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
+    const { VITE_APP_API_LIMIT, VITE_APP_TALENT_ENGINEER_CODE } = import.meta.env;
     const dispatch = useDispatch();
     const observe = useRef();
-    const fileRef = useRef();
 
     const facultyState = useSelector(facultySelector);
     const studentState = useSelector(studentSelector);
@@ -32,31 +31,13 @@ const Student = () => {
 
     const [pageNumber, setPageNumber] = useState(1);
     const [sortByName, setSortByName] = useState(1);
-    const [file, setFile] = useState('');
     const [currentUserData, setCurrentUserData] = useState(null);
     const [isVisibleGoalDetailsModal, setIsVisibleGoalDetailsModal] = useState(false);
     const [isVisibleStudentDetailsModal, setIsVisibleStudentDetailsModal] = useState(false);
+    const [isVisibleExcelModal, setIsVisibleExcelModal] = useState(false);
 
     const handleChangeUserId = (e) => {
         setUserId(e.target.value);
-    };
-
-    const handleFileSelected = (e) => {
-        const file = Array.from(e.target.files)[0];
-        setFile(file);
-    };
-
-    const onHiddenExcelModalDisplay = () => {
-        setFile('');
-        fileRef.current.value = '';
-    };
-
-    const onImportUser = () => {
-        const formData = new FormData();
-        formData.set('file', file);
-
-        dispatch(importUser(formData));
-        onHiddenExcelModalDisplay();
     };
 
     const onToggleVisibleStudentDetailsModal = (index) => {
@@ -69,6 +50,10 @@ const Student = () => {
         setIsVisibleGoalDetailsModal((prev) => !prev);
         if (index === undefined) setCurrentUserData(null);
         else setCurrentUserData(studentState.studentList[index]);
+    };
+
+    const onToggleExcelModal = () => {
+        setIsVisibleExcelModal((prev) => !prev);
     };
 
     const lastStudentElement = useCallback(
@@ -122,7 +107,7 @@ const Student = () => {
                 groupCode: talentEngineerType,
                 status: status,
                 userId: userId,
-                limit: LIMIT,
+                limit: VITE_APP_API_LIMIT,
                 page: page,
                 sortByName
             })
@@ -164,15 +149,23 @@ const Student = () => {
                 <GoalDetailsModal currentUserData={currentUserData} onToggleModalDisplay={onToggleGoalDetailsModal} />
             )}
 
-            {file && (
-                <ConfirmModal
-                    headerContent={'Thêm Sinh Viên Mới'}
-                    bodyContent={'Bạn chắc chắn muốn thêm những sinh viên có trong file này không ?'}
-                    noteContent={
-                        'Yêu cầu định dạng excel và đặt đúng tên và vị trí các cột như sau: STT | MSSV | Họ đệm | Tên | Ngày sinh | Khoa | Chuyên ngành | Khóa | Email | Điện thoại'
-                    }
-                    toggleConfirmModalDisplay={onHiddenExcelModalDisplay}
-                    onAccept={onImportUser}
+            {isVisibleExcelModal && (
+                <ImportExcelModal
+                    headerTitle="Thêm Danh Sách Kỹ Sư Tài Năng"
+                    columns={[
+                        'STT',
+                        'MSSV',
+                        'Họ đệm',
+                        'Tên',
+                        'Giới tính',
+                        'Ngày sinh',
+                        'Khoa',
+                        'Chuyên ngành',
+                        'Khóa',
+                        'Email',
+                        'Điện thoại'
+                    ]}
+                    onCloseModal={onToggleExcelModal}
                 />
             )}
 
@@ -216,21 +209,12 @@ const Student = () => {
                                         <span>Tìm Kiếm</span>
                                     </button>
 
-                                    <div className="add_student_wrapper">
-                                        <label htmlFor="excelfile">
+                                    {talentEngineerType === VITE_APP_TALENT_ENGINEER_CODE && (
+                                        <div className="add_student_wrapper" onClick={onToggleExcelModal}>
                                             <AiOutlineUserAdd size={20} />
-                                            <span> Thêm Kỹ Sư</span>
-                                        </label>
-                                        <input
-                                            type="file"
-                                            id="excelfile"
-                                            name="excelfile"
-                                            hidden
-                                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                            onChange={handleFileSelected}
-                                            ref={fileRef}
-                                        />
-                                    </div>
+                                            <span>Thêm Kỹ Sư</span>
+                                        </div>
+                                    )}
 
                                     {studentState.studentList.length > 0 && (
                                         <button className="export_btn" onClick={exportExcelFile}>
