@@ -4,6 +4,7 @@ const AccessService = require("../services/access.service");
 const createHttpError = require("http-errors");
 const { capitalizeFirstLetter } = require("../utils/handleString");
 const mongoose = require("mongoose");
+const conn = require("../dbs/init.mongodb");
 
 const { TALENT_ENGINEER_CODE } = process.env;
 
@@ -68,11 +69,13 @@ class ExcelService {
     };
 
     static importUser = async (req) => {
-        const session = await mongoose.startSession();
-        await session.startTransaction();
+        const session = await conn.startSession();
+        const transaction = { session };
+        let prevRegisterUserList = [];
 
         try {
-            let prevRegisterUserList = [];
+            session.startTransaction();
+
             const workbook = new ExcelJS.Workbook();
             const buffer = req.file.buffer;
 
@@ -104,17 +107,19 @@ class ExcelService {
                 }
             });
 
-            const currentTransaction = { session };
-
-            await Promise.all(
+            const results = await Promise.allSettled(
                 prevRegisterUserList.map((prevRegisterUser) =>
                     AccessService.register({
                         data: prevRegisterUser,
                         groupCode: TALENT_ENGINEER_CODE,
-                        transaction: currentTransaction
+                        transaction: transaction
                     })
                 )
             );
+
+            for (let i = 0; i < results.length; i++) {
+                if (results[i].status === "rejected") throw createHttpError.BadRequest(results[i].reason.message);
+            }
 
             await session.commitTransaction();
         } catch (error) {

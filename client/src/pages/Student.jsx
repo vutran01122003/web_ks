@@ -22,6 +22,7 @@ const Student = () => {
 
     const facultyState = useSelector(facultySelector);
     const studentState = useSelector(studentSelector);
+    const studentList = studentState.studentList;
 
     const [userId, setUserId] = useState('');
     const [major, setMajor] = useState('');
@@ -43,13 +44,13 @@ const Student = () => {
     const onToggleVisibleStudentDetailsModal = (index) => {
         setIsVisibleStudentDetailsModal((prev) => !prev);
         if (index === undefined) setCurrentUserData(null);
-        else setCurrentUserData(studentState.studentList[index]);
+        else setCurrentUserData(studentList[index]);
     };
 
     const onToggleGoalDetailsModal = (index) => {
         setIsVisibleGoalDetailsModal((prev) => !prev);
         if (index === undefined) setCurrentUserData(null);
-        else setCurrentUserData(studentState.studentList[index]);
+        else setCurrentUserData(studentList[index]);
     };
 
     const onToggleExcelModal = () => {
@@ -216,7 +217,7 @@ const Student = () => {
                                         </div>
                                     )}
 
-                                    {studentState.studentList.length > 0 && (
+                                    {studentList.length > 0 && (
                                         <button className="export_btn" onClick={exportExcelFile}>
                                             <FaFileExport size={20} />
                                             <span>Xuất Excel</span>
@@ -247,15 +248,11 @@ const Student = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {studentState.studentList.length > 0 &&
-                                    studentState.studentList.map((student, index) => (
+                                {studentList.length > 0 &&
+                                    studentList.map((student, index) => (
                                         <tr
                                             key={student._id + index}
-                                            ref={
-                                                index + 1 === studentState.studentList.length
-                                                    ? lastStudentElement
-                                                    : null
-                                            }
+                                            ref={index + 1 === studentList.length ? lastStudentElement : null}
                                         >
                                             <td>{index + 1}</td>
                                             <td className="msv_st">{handleStringValue(student.userId)}</td>
@@ -306,7 +303,7 @@ const Student = () => {
                             </tbody>
                         </table>
 
-                        {studentState.studentList.length === 0 && <EmptyDataNotification />}
+                        {studentList.length === 0 && <EmptyDataNotification />}
                     </div>
                 </div>
             </div>

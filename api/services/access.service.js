@@ -88,7 +88,7 @@ class AccessService {
             createdUser.encodePassword(password);
 
             if (transaction) await createdUser.save(transaction);
-            await createdUser.save();
+            else await createdUser.save();
 
             const populatedUser = await User.populate(createdUser, { path: "groups" });
 
@@ -101,12 +101,13 @@ class AccessService {
                         pageTalentEngineerType: groupCode
                     },
                     currentLevelYear: levelYear,
-                    userId: populatedUser._id
+                    user: populatedUser
                 });
             }
 
             return populatedUser;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

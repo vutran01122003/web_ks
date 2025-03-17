@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const {
-    mongodb: { port, host, database }
+    mongodb: { uri }
 } = require("../config/config");
 
-const uri = `mongodb://${host}:${port}/${database}`;
 const conn = mongoose.createConnection(uri);
 
 // conn.set("debug", true);

@@ -64,9 +64,13 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
             {!isDynamicRows && !isDetailedRow && (
                 <Fragment>
                     <h5 className="table_description">
-                        {`Mô Tả Chỉ Tiêu: ${table.description ? table.description : 'Không có mô tả cụ thể cho chỉ tiêu này'}`}
+                        <span>Mô Tả Chỉ Tiêu: </span>
+                        <span>{table.description ? table.description : 'Không có mô tả cụ thể cho chỉ tiêu này'}</span>
                     </h5>
-                    <h5 className="table_description">{`Số Lượng Hoạt Động Tối Đa: ${table.quantityDemanded}`}</h5>
+                    <h5 className="table_description">
+                        <span>Số Lượng Tối Đa: </span>
+                        <span>{table.quantityDemanded}</span>
+                    </h5>
                 </Fragment>
             )}
 

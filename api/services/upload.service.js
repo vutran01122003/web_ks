@@ -6,6 +6,7 @@ class UploadService {
     static uploadFilesToS3 = async ({ files, folderName }) => {
         const uploadedFiles = await Promise.all(
             files.map((file) => {
+                console.log(file);
                 return S3UploadV2.upload({
                     Bucket: process.env.S3_BUCKET_NAME,
                     Key: `${folderName}/${decodeURI(file.originalname)}`,

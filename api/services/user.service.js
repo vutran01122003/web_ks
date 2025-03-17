@@ -608,14 +608,18 @@ class UserService {
         }
     };
 
-    static createNewAnnualActivitiesProgress = async ({ pageInfo, currentLevelYear, userId }) => {
+    static createNewAnnualActivitiesProgress = async ({ pageInfo, currentLevelYear, userId, user }) => {
         try {
-            const user = await this.getUserAndPopulateGroupById({ id: userId });
+            let userData = null;
 
-            if (!user) throw createError.NotFound("Người dùng không tồn tại");
+            if (user) userData = user;
+            else userData = await this.getUserAndPopulateGroupById({ id: userId });
 
+            if (!userData) throw createError.NotFound("Người dùng không tồn tại");
+
+            console.log(userData);
             const annualActivitiesField =
-                user.groups[0].groupCode === TALENT_ENGINEER_CODE
+                userData.groups[0].groupCode === TALENT_ENGINEER_CODE
                     ? `annualActivitiesProgress`
                     : `annualTemporaryActivitiesProgress`;
 
@@ -635,7 +639,7 @@ class UserService {
                     .fill(null)
                     .map((_, index) =>
                         this.calculateCurrentActivitiesProgress({
-                            user,
+                            user: userData,
                             levelYearLastest: currentLevelYear,
                             annualActivitiesField,
                             pages: annualPagesList[index],
