@@ -36,7 +36,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
         },
         {
             label: 'Khoa',
-            value: user?.faculty ? capitalizeFirstLetter(user?.faculty) : 'Chưa Cập Nhật',
+            value: user?.faculty.facultyName ? capitalizeFirstLetter(user?.faculty.facultyName) : 'Chưa Cập Nhật',
             roles: [
                 VITE_APP_FACULTY_MANAGER_CODE,
                 VITE_APP_TALENT_ENGINEER_CODE,
@@ -46,7 +46,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
         },
         {
             label: 'Ngành',
-            value: user?.major ? capitalizeFirstLetter(user?.major) : 'Chưa Cập Nhật',
+            value: user?.major.majorName ? capitalizeFirstLetter(user?.major.majorName) : 'Chưa Cập Nhật',
             roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
             isShow: isDetailedRow ? false : true
         }

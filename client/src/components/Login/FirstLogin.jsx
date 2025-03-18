@@ -11,15 +11,6 @@ import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
-export const createNumberOption = (startNumber, endNumber) => {
-    const options = [];
-    for (let number = startNumber; number <= endNumber; number++) {
-        const fomattedNumber = number.toString().padStart(2, '0');
-        options.push({ labelOption: fomattedNumber, value: fomattedNumber });
-    }
-    return options;
-};
-
 function FirstLogin() {
     const dispatch = useDispatch();
     const { facultyData } = useSelector(facultySelector);
@@ -50,7 +41,7 @@ function FirstLogin() {
         dispatch(
             register({
                 ...data,
-                levelYear: +data.levelYear,
+                levelYear: parseInt(data.levelYear),
                 groupCode: VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
             })
         );
@@ -71,7 +62,7 @@ function FirstLogin() {
         setData((prev) => ({ ...prev, cohort: '', levelYear: '' }));
         if (data.major) {
             const specificMajor = majorList.find((major) => major.majorName === data.major);
-            setCohortList(specificMajor ? specificMajor.cohortList : []);
+            setCohortList(specificMajor ? specificMajor.cohorts : []);
         }
     }, [data?.major]);
 

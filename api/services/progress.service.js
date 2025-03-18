@@ -29,7 +29,6 @@ class ProgressService {
 
     static getAllProgress = async ({
         userId,
-        faculty,
         major,
         cohort,
         levelYear,
@@ -38,15 +37,14 @@ class ProgressService {
         sortProgressPercentage
     }) => {
         try {
-            const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                facultyName: faculty.toLowerCase(),
-                majorName: major.toLowerCase(),
-                cohortName: cohort.toLowerCase()
-            });
+            const [majorData, cohortData] = await Promise.all([
+                FacultyService.getMajorByName({ majorName: major.toLowerCase() }),
+                FacultyService.getCohortByName({ majorName: major.toLowerCase(), cohortName: cohort.toLowerCase() })
+            ]);
 
             const filterData = {
-                major: major.toLowerCase(),
-                cohort,
+                major: majorData._id,
+                cohort: cohortData._id,
                 userId: userId
                     ? {
                           $regex: userId
@@ -55,7 +53,7 @@ class ProgressService {
                 isActive: true
             };
 
-            if (levelYear < currentLevelYear) delete filterData.isActive;
+            if (levelYear < cohortData.currentLevelYear) delete filterData.isActive;
             if (!userId) delete filterData.userId;
 
             const studentList = await UserService.getAnnualTaskProgress({

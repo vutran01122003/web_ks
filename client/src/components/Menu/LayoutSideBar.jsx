@@ -12,11 +12,11 @@ import { renderSideBar } from '../../helpers/renderSideBar';
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_GOAL_PAGE } = import.meta.env;
 
 const LayoutSideBar = ({ auth }) => {
+    const user = auth?.user;
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
     const [toggleMenu, setToggleMenu] = useState(false);
     const [levelYear, setLevelYear] = useState(auth.user.levelYear);
-    const user = auth?.user;
     const groupCodeList = user?.groups.map((group) => group.groupCode);
     const levelYearList = Array.from(Array(user?.levelYear || 1).keys()).map((x) => x + 1);
 
@@ -81,8 +81,8 @@ const LayoutSideBar = ({ auth }) => {
             dispatch(
                 getPages({
                     userId: user._id,
-                    pageStudentMajor: user.major,
-                    pageStudentCohort: user.cohort,
+                    pageStudentMajor: user?.major.majorName,
+                    pageStudentCohort: user?.cohort.cohortName,
                     pageStudentLevelYear: levelYear
                 })
             );

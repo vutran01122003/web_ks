@@ -15,7 +15,7 @@ router.delete("/faculties/:facultyId", facultyController.deleteFaculty);
 router.post(
     "/faculties/:facultyId/majors",
     validateResource({ schema: CreateMajorListSchema }),
-    facultyController.createMajors
+    facultyController.createMajor
 );
 router.get("/faculties/:facultyId/majors/:majorId", facultyController.getMajorById);
 router.patch("/faculties/:facultyId/majors/:majorId", facultyController.updateMajor);

@@ -7,10 +7,15 @@ class ExcelController {
         try {
             const { cohort, groupCode, major, status, sortByName } = req.query;
 
+            const [majorData, cohortData] = await Promise.all([
+                FacultyService.getMajorByName({ majorName: major }),
+                FacultyService.getCohortByName({ majorName: major, cohortName: cohort })
+            ]);
+
             const qualifiedUsersData = await UserService.getUsersByFields({
                 fields: {
-                    cohort,
-                    major,
+                    cohort: cohortData._id,
+                    major: majorData._id,
                     isActive: status ? status === "true" : undefined
                 },
                 groupCode,
@@ -36,23 +41,23 @@ class ExcelController {
                     throw error;
                 });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
 
     exportProgressStatisticsExcel = async (req, res, next) => {
         try {
-            const { major, cohort, groupCode, faculty, levelYear, userId, sortProgressPercentage } = req.query;
+            const { major, cohort, groupCode, levelYear, userId, sortProgressPercentage } = req.query;
 
-            const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                facultyName: faculty.toLowerCase(),
-                majorName: major.toLowerCase(),
-                cohortName: cohort
-            });
+            const [majorData, cohortData] = await Promise.all([
+                FacultyService.getMajorByName({ majorName: major }),
+                FacultyService.getCohortByName({ majorName: major, cohortName: cohort })
+            ]);
 
             const filterData = {
-                major: major.toLowerCase(),
-                cohort,
+                major: majorData._id,
+                cohort: cohortData._id,
                 userId: userId
                     ? {
                           $regex: userId
@@ -61,7 +66,7 @@ class ExcelController {
                 isActive: true
             };
 
-            if (levelYear < currentLevelYear) delete filterData.isActive;
+            if (levelYear < cohortData.currentLevelYear) delete filterData.isActive;
             if (!userId) delete filterData.userId;
 
             const progressStatisticsData = await UserService.getAnnualTaskProgress({

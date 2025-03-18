@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21013481",
+    "userId": "21078101",
     "password": "1111"
 }
 
@@ -14,47 +14,46 @@ POST {{url}}/api/faculties
 Content-Type: application/json
 
 {
-    "facultyName": "Điện ảnh",
-    "managerIdList": [],
-    "majorList": []
+    "facultyName": "Dien tu",
+    "managerIdList": ["670ce73281e90dfee50aa1cc"]
 }
 
-### Get faculties
-GET {{url}}/api/faculties
-
-### Get faculty by id
-GET {{url}}/api/faculties/65e143d8d5592282126467d8
-
-### Get faculty by name
-GET {{url}}/api/faculty/công nghệ thông tin
-
-### Update faculty by id
-PATCH {{url}}/api/faculties
+### Update faculty
+PATCH {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf
 Content-Type: application/json
 
 {
-   "facultyId": "65d4b6c7145a0ed78a37d7d7",
    "data": {
         "facultyName": "2222a"
    }
 }
 
-### Delete faculty by id
-DELETE {{url}}/api/faculties/65d6e123530e21efa2dafe6c
+### Delete faculty
+DELETE {{url}}/api/faculties/67d9787d6f196d9d54ae3c86
+
+### Get faculty by id
+GET {{url}}/api/faculties/67d8e18aee1f89c1d1661efc
+
+### Get faculty by name
+GET {{url}}/api/faculty/điện ảnh
+
+### Get faculties
+GET {{url}}/api/faculties
 
 ### Create majors
-POST {{url}}/api/faculties/670ce2e79cfcef01f024c052/majors
+POST {{url}}/api/faculties/67d9ac48409de33ad406b76f/majors
 Content-Type: application/json
 
 {
-    "majorNameList": []
+    "majorName": "Dien tu vip pro 2",
+    "managerIdList": ["670ce73281e90dfee50aa1cc"]
 }
 
 ### Get major by id
-GET {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
+GET {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors/67d92d6e7f6b4a73d814fc4f
 
 ### Update major
-PATCH {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803
+PATCH {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors/67d92d6e7f6b4a73d814fc4f
 Content-Type: application/json
 
 {
@@ -62,24 +61,24 @@ Content-Type: application/json
 }
 
 ### Delete major
-DELETE {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d6e7a87e72e4352c820b55
+DELETE {{url}}/api/faculties/67d9ac48409de33ad406b76f/majors/67d9ac5e409de33ad406b77a
 
 ### Create cohort
-POST {{url}}/api/faculties/670ce2e79cfcef01f024c052/majors/678364e76edcad8e9c020bda/cohorts
+POST {{url}}/api/faculties/67d96b01e4ca5f9f70f20580/majors/67d96b2ae4ca5f9f70f20587/cohorts
 Content-Type: application/json
 
 {
-    "cohortName": 18
+    "cohortName": "20"
 }
 
-### Get all cohort by id
-GET {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts/65d6f1ea525026bb0202a421
+### Get cohort
+GET {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors/67d9226c65f93c2caa907327/cohorts/67d928f979161679648256d4
 
 ### Delete cohort
-DELETE {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts/65d6f1ea525026bb0202a421
+DELETE {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors/67d9226c65f93c2caa907327/cohorts/67d928f979161679648256d4
 
 ### Update cohort
-PATCH {{url}}/api/faculties/65d4b757145a0ed78a37d800/majors/65d4b760145a0ed78a37d803/cohorts/65d6f1d5525026bb0202a417
+PATCH {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors/67d9226c65f93c2caa907327/cohorts/67d928f979161679648256d4
 Content-Type: application/json
 
 {

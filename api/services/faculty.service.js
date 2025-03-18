@@ -1,224 +1,37 @@
 const createHttpError = require("http-errors");
 const Faculty = require("../models/faculty.model");
+const Major = require("../models/major.model");
+const Cohort = require("../models/cohort.model");
 const { capitalizeFirstLetter } = require("../utils/handleString");
 
+const populatedOptions = [
+    { path: "managers", model: "user", select: "lastName firstName userId" },
+    {
+        path: "majors",
+        model: "major",
+        populate: {
+            path: "cohorts",
+            model: "cohort"
+        }
+    }
+];
+
 class FacultyService {
-    static createFaculty = async ({ facultyName, managerIdList, majorList }) => {
+    static createFaculty = async ({ facultyName, managers }) => {
         try {
+            console.log(managers);
             const isExists = await Faculty.findOne({ facultyName }).lean();
 
             if (isExists) throw createHttpError.Conflict("Tên khoa đã tồn tại");
 
             const createdFaculty = await Faculty.create({
                 facultyName,
-                managerList: managerIdList || [],
-                majors: majorList
-                    ? majorList.map((major) => ({
-                          majorName: major.toLowerCase().trim(),
-                          cohortList: []
-                      }))
-                    : []
+                managers
             });
 
-            const populatedFaculty = createdFaculty.populate({
-                path: "managerList",
-                model: "user",
-                select: "lastName firstName userId"
-            });
+            const populatedFaculty = createdFaculty.populate(populatedOptions);
 
             return populatedFaculty;
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static createMajors = async ({ majorNameList, facultyId }) => {
-        try {
-            const faculty = await Faculty.findById(facultyId);
-
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            const standardMajorNameList = Array.from(
-                new Set(majorNameList.map((majorName) => majorName.toLowerCase().trim()))
-            );
-            const majors = standardMajorNameList.map((standardMajorName) => ({ majorName: standardMajorName }));
-
-            if (faculty.majors.some((major) => standardMajorNameList.includes(major.majorName)))
-                throw createHttpError.Conflict("Chuyên Ngành đã tồn tại");
-
-            faculty.majors.push(...majors);
-
-            await faculty.save();
-
-            return {
-                msg: `Chuyên ngành ${standardMajorNameList.join(" - ")} đã được tạo thành công`,
-                status: 201,
-                data: faculty.majors[faculty.majors.length - 1]
-            };
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static getMajorById = async ({ facultyId, majorId }) => {
-        try {
-            const faculty = await Faculty.findById(facultyId);
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            return faculty.majors.id(majorId);
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static updateMajor = async ({ facultyId, majorId, data }) => {
-        try {
-            const faculty = await Faculty.findById(facultyId);
-
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-            if (
-                data.majorName &&
-                faculty.majors.some((major) => major.majorName === data.majorName.trim().toLowerCase())
-            )
-                throw createHttpError.Conflict("Chuyên ngành đã tồn tại");
-
-            Object.keys(data).forEach((key) => {
-                faculty.majors.id(majorId)[key] = data[key];
-            });
-            await faculty.save();
-
-            return faculty.majors.id(majorId);
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static deleteMajor = async ({ facultyId, majorId }) => {
-        try {
-            let deletedMajor = null;
-            const faculty = await Faculty.findById(facultyId);
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            faculty.majors = faculty.majors.filter((major) => {
-                if (major._id == majorId) deletedMajor = major;
-                return major._id != majorId;
-            });
-
-            await faculty.save();
-
-            return deletedMajor;
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static createCohort = async ({ facultyId, majorId, cohortName }) => {
-        try {
-            const faculty = await Faculty.findById(facultyId);
-
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-            if (!cohortName) throw createHttpError.BadRequest("Khóa sinh viên không được để trống");
-
-            const cohortList = faculty.majors.id(majorId).cohortList;
-            if (cohortList.some((cohort) => cohort.cohortName === cohortName))
-                throw createHttpError.Conflict(`Khóa ${cohortName} đã tồn tại`);
-
-            cohortList.push({
-                cohortName
-            });
-
-            await faculty.save();
-
-            return {
-                status: 201,
-                msg: `Khóa ${cohortName} được tạo thành công`,
-                data: cohortList[cohortList.length - 1]
-            };
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static getCohortById = async ({ facultyId, majorId, cohortId }) => {
-        try {
-            const faculty = await Faculty.findById(facultyId);
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            return faculty.majors.id(majorId).cohortList.id(cohortId);
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static getCohortByName = async ({ facultyName, majorName, cohortName }) => {
-        try {
-            const faculty = await Faculty.findOne({ facultyName });
-
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            const major = faculty.majors.find((major) => major.majorName === majorName);
-
-            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
-
-            const cohort = major.cohortList.find((cohort) => cohort.cohortName === cohortName);
-
-            return cohort;
-        } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
-        }
-    };
-
-    static updateAdditionalApplyCohort = async ({ facultyName, majorName, cohortName, levelYear, isActive }) => {
-        try {
-            const faculty = await Faculty.findOne({ facultyName });
-
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            const major = faculty.majors.find((major) => major.majorName === majorName);
-
-            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
-
-            const cohort = major.cohortList.find((cohort) => cohort.cohortName === cohortName);
-
-            cohort.additionalRegisterInfo = {
-                levelYear,
-                isActive
-            };
-
-            await faculty.save();
-        } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
-        }
-    };
-
-    static deleteCohortById = async ({ facultyId, majorId, cohortId }) => {
-        try {
-            let deletedCohort = null;
-            const faculty = await Faculty.findById(facultyId);
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            const cohortList = faculty.majors.id(majorId).cohortList;
-            faculty.majors.id(majorId).cohortList = cohortList.filter((cohort) => {
-                if (cohort._id == cohortId) deletedCohort = cohort;
-                return cohort._id != cohortId;
-            });
-
-            await faculty.save();
-            return deletedCohort;
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    static updateCohortById = async ({ cohortId, majorId, facultyId, nextYearValue }) => {
-        try {
-            const faculty = await Faculty.findById(facultyId);
-            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
-
-            const cohort = await faculty.majors.id(majorId).cohortList.id(cohortId);
-            cohort.currentLevelYear = nextYearValue;
-
-            await faculty.save();
         } catch (error) {
             throw error;
         }
@@ -233,7 +46,7 @@ class FacultyService {
 
             const updatedFaculty = await Faculty.findByIdAndUpdate(facultyId, data, {
                 new: true
-            }).lean();
+            }).populate(populatedOptions);
 
             if (!updatedFaculty) throw createHttpError.NotFound("Khoa không tồn tại");
 
@@ -245,7 +58,7 @@ class FacultyService {
 
     static deleteFaculty = async ({ facultyId }) => {
         try {
-            const deletedFaculty = await Faculty.findByIdAndDelete(facultyId);
+            const deletedFaculty = await Faculty.findOneAndDelete({ _id: facultyId });
 
             if (!deletedFaculty) throw createHttpError.NotFound("Khoa không tồn tại");
 
@@ -261,21 +74,18 @@ class FacultyService {
 
     static getAllFaculties = async () => {
         try {
-            const faculties = await Faculty.find({ isActive: true })
-                .populate({ path: "managerList", model: "user", select: "lastName firstName userId" })
-                .lean();
-
+            const faculties = await Faculty.find({ isActive: true }).populate(populatedOptions).lean();
             const availableFaculties = faculties.filter((faculty) => faculty.isActive === true);
 
             return availableFaculties;
         } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu các khoa");
+            throw error;
         }
     };
 
     static getFacultyById = async ({ facultyId }) => {
         try {
-            const faculty = await Faculty.findById(facultyId).lean();
+            const faculty = await Faculty.findById(facultyId).populate(populatedOptions);
 
             if (!faculty) throw createHttpError.NotFound(`Khoa không tồn tại`);
 
@@ -287,7 +97,7 @@ class FacultyService {
 
     static getFacultyByName = async ({ facultyName }) => {
         try {
-            const faculty = await Faculty.findOne({ facultyName });
+            const faculty = await Faculty.findOne({ facultyName }).populate(populatedOptions);
 
             if (!faculty) throw createHttpError.NotFound(`Khoa ${capitalizeFirstLetter(facultyName)} không tồn tại`);
 
@@ -297,10 +107,47 @@ class FacultyService {
         }
     };
 
-    static getMajorByName = async ({ facultyName, majorName }) => {
+    static createMajor = async ({ majorName, facultyId, managers }) => {
         try {
-            const faculty = await this.getFacultyByName({ facultyName });
-            const major = faculty.majors.find((major) => major.majorName === majorName.toLowerCase());
+            const isExists = await Major.findOne({ majorName });
+
+            if (isExists) throw createHttpError.Conflict("Chuyên ngành đã tồn tại");
+
+            const faculty = await Faculty.findById(facultyId);
+
+            if (!faculty) throw createHttpError.NotFound("Khoa không tồn tại");
+
+            const createdMajor = await Major.create({ majorName, managers });
+
+            const populatedMajor = await Major.populate(createdMajor, {
+                path: "managers",
+                select: "userId lastName firstName"
+            });
+
+            faculty.majors.push(createdMajor._id);
+            await faculty.save();
+
+            return {
+                msg: `Chuyên ngành ${majorName} đã được tạo thành công`,
+                status: 201,
+                data: populatedMajor
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getMajorById = async ({ majorId }) => {
+        try {
+            return await Major.findById(majorId);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getMajorByName = async ({ majorName }) => {
+        try {
+            const major = await Major.findOne({ majorName });
 
             if (!major)
                 throw createHttpError.NotFound(`Chuyên ngành ${capitalizeFirstLetter(majorName)} không tồn tại`);
@@ -311,30 +158,131 @@ class FacultyService {
         }
     };
 
-    static getCurrentLevelYearOfCohort = async ({ facultyName, majorName, cohortName }) => {
+    static updateMajor = async ({ majorId, data }) => {
         try {
-            const faculty = await Faculty.findOne({ facultyName });
+            if (data.majorName) {
+                const isExists = await Major.findOne({ majorName: data.majorName });
+                if (isExists) throw createHttpError.Conflict("Chuyên ngành đã tồn tại");
+            }
 
-            if (!faculty) throw createHttpError.NotFound(`Khoa ${capitalizeFirstLetter(facultyName)} không tồn tại`);
-
-            const major = faculty.majors.find((major) => major.majorName === majorName);
-
-            if (!major)
-                throw createHttpError.NotFound(`Chuyên ngành ${capitalizeFirstLetter(majorName)} không tồn tại`);
-
-            const currentLevelYear = major.cohortList.find(
-                (cohort) => cohort.cohortName === cohortName
-            ).currentLevelYear;
-
-            return currentLevelYear;
+            return await Major.findByIdAndUpdate(majorId, data, {
+                new: true
+            });
         } catch (error) {
             throw error;
         }
     };
 
-    static getAdditionalRegisterInfo = async ({ facultyName, majorName, cohortName }) => {
+    static deleteMajor = async ({ facultyId, majorId }) => {
         try {
-            const cohort = await this.getCohortByName({ facultyName, majorName, cohortName });
+            await Major.findOneAndDelete({ _id: majorId });
+            await Faculty.findByIdAndUpdate(facultyId, {
+                $pull: {
+                    majors: majorId
+                }
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static createCohort = async ({ majorId, cohortName }) => {
+        try {
+            const major = await Major.findById(majorId).populate("cohorts", "cohortName");
+
+            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+
+            if (major.cohorts.some((cohort) => cohort.cohortName === cohortName))
+                throw createHttpError.Conflict(`Khoá ${cohortName} đã tồn tại`);
+
+            const createdCohort = await Cohort.create({ cohortName });
+
+            major.cohorts.push(createdCohort._id);
+            await major.save();
+
+            return {
+                status: 201,
+                msg: `Khóa ${cohortName} được tạo thành công`,
+                data: createdCohort
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getCohortById = async ({ cohortId }) => {
+        try {
+            return await Cohort.findById(cohortId);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getCohortByName = async ({ majorName, cohortName }) => {
+        try {
+            const major = await this.getMajorByName({ majorName });
+            const populatedMajor = await major.populate("cohorts", "cohortName");
+            const cohort = populatedMajor.cohorts.find((cohort) => cohort.cohortName === cohortName);
+
+            if (!cohort) throw createHttpError.NotFound("Khóa sinh viên không tồn tại");
+
+            return cohort;
+        } catch (error) {
+            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+        }
+    };
+
+    static updateAdditionalApplyCohort = async ({ majorName, cohortName, levelYear, isActive }) => {
+        try {
+            const cohort = await this.getCohortByName({ cohortName, majorName });
+
+            cohort.additionalRegisterInfo = {
+                levelYear,
+                isActive
+            };
+
+            await cohort.save();
+        } catch (error) {
+            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+        }
+    };
+
+    static deleteCohortById = async ({ majorId, cohortId }) => {
+        try {
+            await Cohort.findByIdAndDelete(cohortId);
+
+            await Major.findByIdAndUpdate(majorId, {
+                $pull: {
+                    cohorts: cohortId
+                }
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static updateCohortById = async ({ cohortId, data }) => {
+        try {
+            return await Cohort.findByIdAndUpdate(cohortId, data, {
+                new: true
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getCurrentLevelYearOfCohort = async ({ majorName, cohortName }) => {
+        try {
+            const cohort = await this.getCohortByName({ majorName, cohortName });
+            return cohort.currentLevelYear;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    static getAdditionalRegisterInfo = async ({ majorName, cohortName }) => {
+        try {
+            const cohort = await this.getCohortByName({ majorName, cohortName });
 
             return cohort.additionalRegisterInfo;
         } catch (error) {

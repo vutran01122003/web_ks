@@ -11,7 +11,7 @@ const [ACCEPTED_STATUS, PENDING_STATUS, REJECTED_STATUS, RESUMBITED_STATUS] = [
     "phải nộp lại"
 ];
 
-const { TALENT_ENGINEER_CODE, TEMPORARY_TALENT_ENGINEER_CODE } = process.env;
+const { TALENT_ENGINEER_CODE } = process.env;
 
 class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
@@ -90,13 +90,11 @@ class ProgressControllers {
 
     getAllProgress = async (req, res, next) => {
         try {
-            const { major, cohort, groupCode, faculty, levelYear, userId, sortProgressPercentage, page, limit } =
-                req.query;
+            const { major, cohort, groupCode, levelYear, userId, sortProgressPercentage, page, limit } = req.query;
 
             const studentList = await ProgressService.getAllProgress({
                 major,
                 cohort,
-                faculty,
                 userId,
                 levelYear,
                 groupCode,
@@ -122,7 +120,6 @@ class ProgressControllers {
 
             const [currentLevelYear, group] = await Promise.all([
                 FacultyService.getCurrentLevelYearOfCohort({
-                    facultyName: faculty.toLowerCase(),
                     majorName: major.toLowerCase(),
                     cohortName: cohort.toLowerCase()
                 }),

@@ -50,7 +50,7 @@ const addUserData = (cell, colName, data) => {
             data.major = cell.value;
             break;
         case "khoá":
-            data.cohort = cell.value;
+            data.cohort = String(cell.value);
             break;
         case "email":
             data.email = cell.value.text || cell.value;

@@ -35,7 +35,6 @@ class PageService {
             if (pageType === GOAL_PAGE) {
                 if (isTemporaryEngineer) {
                     const additionalRegisterInfo = await FacultyService.getAdditionalRegisterInfo({
-                        facultyName: pageFaculty,
                         majorName: pageStudentMajor,
                         cohortName: pageStudentCohort
                     });
@@ -54,7 +53,6 @@ class PageService {
                     }
 
                     await FacultyService.updateAdditionalApplyCohort({
-                        facultyName: pageFaculty,
                         majorName: pageStudentMajor,
                         cohortName: pageStudentCohort,
                         levelYear: pageStudentLevelYear,
@@ -62,7 +60,6 @@ class PageService {
                     });
                 } else {
                     const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                        facultyName: pageFaculty,
                         majorName: pageStudentMajor,
                         cohortName: pageStudentCohort
                     });

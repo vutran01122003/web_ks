@@ -1,6 +1,6 @@
 const conn = require("../dbs/init.mongodb");
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const { Schema } = require("mongoose");
+const Major = require("./major.model");
 
 const [DOC, COL] = ["faculty", "faculties"];
 
@@ -11,7 +11,7 @@ const FacultySchema = new Schema(
             lowercase: true,
             unique: true
         },
-        managerList: {
+        managers: {
             type: [
                 {
                     type: Schema.Types.ObjectId,
@@ -20,58 +20,35 @@ const FacultySchema = new Schema(
             ],
             default: []
         },
+        majors: {
+            type: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: "major"
+                }
+            ],
+            default: []
+        },
         isActive: {
             type: Boolean,
             default: true
-        },
-        majors: [
-            {
-                majorName: {
-                    type: String,
-                    lowercase: true
-                },
-                managerList: {
-                    type: [
-                        {
-                            type: Schema.Types.ObjectId,
-                            ref: "user"
-                        }
-                    ],
-                    default: []
-                },
-                isActive: {
-                    type: Boolean,
-                    default: true
-                },
-                cohortList: [
-                    new mongoose.Schema(
-                        {
-                            cohortName: {
-                                type: String
-                            },
-                            currentLevelYear: {
-                                type: Number,
-                                default: 1
-                            },
-                            additionalRegisterInfo: {
-                                levelYear: Number,
-                                isActive: Boolean
-                            },
-                            isActive: {
-                                type: Boolean,
-                                default: true
-                            }
-                        },
-                        {
-                            timestamps: true
-                        }
-                    )
-                ]
-            }
-        ]
+        }
     },
     { timestamps: true, collection: COL }
 );
+
+FacultySchema.pre("findOneAndDelete", async function (next) {
+    try {
+        const { _id } = this.getQuery();
+        const faculty = await this.model.findById(_id);
+        const majorIds = faculty.majors;
+
+        await Major.deleteMany({ _id: { $in: majorIds } });
+        next();
+    } catch (error) {
+        throw error;
+    }
+});
 
 const Faculty = conn.model(DOC, FacultySchema);
 

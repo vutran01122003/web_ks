@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const UserService = require("../services/user.service");
+const FacultyService = require("../services/faculty.service");
 
 class UserControllers {
     addGroupForUser = async (req, res, next) => {
@@ -38,10 +39,18 @@ class UserControllers {
         try {
             const { limit, page, cohort, groupCode, major, userId, status, sortByName } = req.query;
 
+            const [majorData, cohortData] = await Promise.all([
+                FacultyService.getMajorByName({ majorName: major }),
+                FacultyService.getCohortByName({
+                    majorName: major,
+                    cohortName: cohort
+                })
+            ]);
+
             const users = await UserService.getUsersByFields({
                 fields: {
-                    cohort,
-                    major,
+                    cohort: cohortData._id,
+                    major: majorData._id,
                     isActive: status ? status === "true" : undefined,
                     userId: userId ? { $regex: userId } : undefined
                 },

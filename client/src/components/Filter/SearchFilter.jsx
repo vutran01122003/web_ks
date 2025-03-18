@@ -137,9 +137,9 @@ function SearchFilterComponent({
 
                 <select onInput={handleCohortValue} value={JSON.stringify(cohortValue)}>
                     <option value="">Chọn khóa</option>
-                    {majorValue?.cohortList &&
-                        majorValue?.cohortList.length > 0 &&
-                        majorValue?.cohortList.map((cohort, index) => (
+                    {majorValue?.cohorts &&
+                        majorValue?.cohorts.length > 0 &&
+                        majorValue?.cohorts.map((cohort, index) => (
                             <option key={index} value={JSON.stringify(cohort)}>
                                 {`Khóa ${cohort.cohortName}`}
                             </option>

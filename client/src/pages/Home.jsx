@@ -10,26 +10,27 @@ import { GoArrowRight } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 import { toFullName } from '../utils/handleString';
 
-const Home = ({ auth }) => {
-    const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
+const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
+const Home = ({ auth }) => {
+    const user = auth?.user;
     const dispatch = useDispatch();
     const progress = useSelector(progressSelector);
     const [chartData, setChartData] = useState([]);
     const [goalsInfo, setGoalInfo] = useState([]);
-    const [levelYear, setLevelYear] = useState(auth?.user?.levelYear || 1);
-    const groupCodeList = auth?.user.groups.map((group) => group.groupCode);
+    const [levelYear, setLevelYear] = useState(user?.levelYear || 1);
+    const groupCodeList = user.groups.map((group) => group.groupCode);
     const condition =
         groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) ||
         groupCodeList.includes(VITE_APP_TALENT_ENGINEER_CODE);
 
     const handleGetProgressByYear = () => {
-        if (auth?.user && condition && !progress.goalsInfoData[levelYear]) {
+        if (user && condition && !progress.goalsInfoData[levelYear]) {
             dispatch(
                 getProgressByYear({
-                    userId: auth?.user._id,
-                    studentMajor: auth.user?.major,
-                    studentCohort: auth.user?.cohort,
+                    userId: user._id,
+                    studentMajor: auth.user?.major.majorName,
+                    studentCohort: auth.user?.cohort.cohortName,
                     studentLevelYear: levelYear
                 })
             );
@@ -38,7 +39,7 @@ const Home = ({ auth }) => {
 
     useEffect(() => {
         handleGetProgressByYear();
-    }, [auth?.user, levelYear]);
+    }, [user, levelYear]);
 
     useEffect(() => {
         if (progress.goalsInfoData[levelYear]) {
@@ -62,8 +63,8 @@ const Home = ({ auth }) => {
                     <span>
                         {`Xin chào,
                     ${toFullName({
-                        lastName: auth?.user?.lastName,
-                        firstName: auth?.user?.firstName
+                        lastName: user?.lastName,
+                        firstName: user?.firstName
                     })}!`}
                     </span>
                     <div className="to__profile">
@@ -87,7 +88,7 @@ const Home = ({ auth }) => {
                 )}
 
             <div className="container__top transform__animation--top">
-                <LayoutInfo user={auth?.user} />
+                <LayoutInfo user={user} />
                 <Fragment>
                     {condition && <LayoutChart chartData={chartData} auth={auth} setLevelYear={setLevelYear} />}
                 </Fragment>

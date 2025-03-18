@@ -87,7 +87,7 @@ const PageSchema = new Schema(
 PageSchema.pre("findOneAndDelete", async function (next) {
     try {
         const { _id } = this.getQuery();
-        const page = await Page.findById(_id);
+        const page = await this.model.findById(_id);
 
         await Row.deleteMany({ table: { $in: page.tables.map((table) => table._id) } });
         next();

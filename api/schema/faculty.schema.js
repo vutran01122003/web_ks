@@ -7,12 +7,13 @@ const CreateFacultySchema = joi.object({
             "string.max": "Tên khoa có tối đa là 200 ký tự",
             "string.min": "Tên khoa có tối thiểu là 2 ký tự"
         }),
-        managerIdList: joi.array().messages({
-            "array.base": "Dữ liệu danh sách quản lý không đúng định dạng"
-        }),
-        majorList: joi.array().messages({
-            "array.base": "Dữ liệu danh sách chuyên ngành không đúng định dạng"
-        })
+        managerIdList: joi
+            .array()
+            .items(joi.string().regex(/^[0-9a-fA-F]{24}$/))
+            .messages({
+                "array.base": "Dữ liệu danh sách quản lý khoa không đúng định dạng",
+                "string.pattern.base": "Mã quản lý khoa không đúng định dạng"
+            })
     })
 });
 
@@ -28,9 +29,16 @@ const CreateMajorListSchema = joi.object({
             })
     }),
     body: joi.object({
-        majorNameList: joi.array().messages({
-            "array.base": "Dữ liệu danh sách quản lý không đúng định dạng"
-        })
+        majorName: joi.string().min(2).messages({
+            "string.min": `Tên chuyên ngành phải lớn hơn 2 ký tự`
+        }),
+        managerIdList: joi
+            .array()
+            .items(joi.string().regex(/^[0-9a-fA-F]{24}$/))
+            .messages({
+                "array.base": "Dữ liệu danh sách quản lý chuyên ngành không đúng định dạng",
+                "string.pattern.base": "Mã quản lý chuyên ngành không đúng định dạng"
+            })
     })
 });
 
@@ -50,7 +58,7 @@ const CreateCohortSchema = joi.object({
             .required()
             .messages({
                 "any.required": "Mã chuyên ngành rỗng",
-                "string.pattern.base": "Mã người chuyên ngành không đúng định dạng"
+                "string.pattern.base": "Mã chuyên ngành không đúng định dạng"
             })
     }),
     body: joi.object({

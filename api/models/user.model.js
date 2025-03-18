@@ -47,16 +47,17 @@ const UserSchema = new Schema(
             type: Schema.Types.Date
         },
         faculty: {
-            type: String,
-            lowercase: true
+            type: Schema.Types.ObjectId,
+            ref: "faculty"
         },
         major: {
-            type: String,
-            lowercase: true
+            type: Schema.Types.ObjectId,
+            ref: "major"
         },
         // Thuộc tính cohort cho biết Khóa sinh viên nhập học (Ví Dụ: K17, K18,...)
         cohort: {
-            type: String
+            type: Schema.Types.ObjectId,
+            ref: "cohort"
         },
         // Cấp bậc năm học của sinh viên (1, 2, 3, 4, 5, ...)
         levelYear: {

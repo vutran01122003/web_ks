@@ -3,7 +3,6 @@ const { userColumn, addUserData, progressStatisticsColumn } = require("../config
 const AccessService = require("../services/access.service");
 const createHttpError = require("http-errors");
 const { capitalizeFirstLetter } = require("../utils/handleString");
-const mongoose = require("mongoose");
 const conn = require("../dbs/init.mongodb");
 
 const { TALENT_ENGINEER_CODE } = process.env;
@@ -17,14 +16,15 @@ class ExcelService {
             sheet.columns = userColumn;
 
             qualifiedUsersData.forEach((user, index) => {
-                const { firstName, lastName, faculty, major } = user;
+                const { firstName, lastName, faculty, major, cohort } = user;
                 const data = {
                     s_no: index + 1,
                     ...user,
                     firstName: capitalizeFirstLetter(firstName),
                     lastName: capitalizeFirstLetter(lastName),
-                    faculty: capitalizeFirstLetter(faculty),
-                    major: capitalizeFirstLetter(major)
+                    faculty: capitalizeFirstLetter(faculty.facultyName),
+                    major: capitalizeFirstLetter(major.majorName),
+                    cohort: cohort.cohortName
                 };
 
                 sheet.addRow(data);
@@ -36,6 +36,7 @@ class ExcelService {
 
             return workbook;
         } catch (error) {
+            console.log(error);
             throw createHttpError.BadRequest("Lỗi xuất dữ liệu excel");
         }
     };
@@ -48,11 +49,18 @@ class ExcelService {
             sheet.columns = progressStatisticsColumn;
 
             progressStatisticsData.forEach((progressItem, index) => {
+                const { progressData, firstName, lastName, faculty, major, cohort } = progressItem;
+
                 const data = {
                     s_no: index + 1,
                     ...progressItem,
-                    progressPercentage: progressItem.progressData?.progressPercentage || 0,
-                    totalScore: progressItem.progressData?.totalScore || 0
+                    firstName: capitalizeFirstLetter(firstName),
+                    lastName: capitalizeFirstLetter(lastName),
+                    faculty: capitalizeFirstLetter(faculty.facultyName),
+                    major: capitalizeFirstLetter(major.majorName),
+                    cohort: cohort.cohortName,
+                    progressPercentage: progressData?.progressPercentage || 0,
+                    totalScore: progressData?.totalScore || 0
                 };
 
                 sheet.addRow(data);

@@ -78,9 +78,6 @@ const Apply = () => {
                     <ComponentButton className="btn__submit" textButton="Đăng ký" />
                 </div>
             </div>
-            {/* <div className="image">
-				<img src={apply} />
-			</div> */}
         </div>
     );
 };

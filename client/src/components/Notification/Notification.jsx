@@ -17,6 +17,7 @@ import {
 } from '../../redux/actions/notifyAction';
 
 function Notification({ notification, auth, handleToggleVisibleNotificationModal }) {
+    const user = auth?.user;
     const dispatch = useDispatch();
     const notificationRef = useRef();
     const observer = useRef();
@@ -32,7 +33,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
                 if (entries[0].isIntersecting && !notification.maxPage) {
                     dispatch(
                         getNotifications({
-                            recipientId: auth?.user._id,
+                            recipientId: user._id,
                             page: notification.page + 1,
                             limit: 5,
                             currentNumNotifications: notification.currentNumNotifications
@@ -43,7 +44,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
             if (elem) observer.current.observe(elem);
         },
         [
-            auth?.user._id,
+            user._id,
             notification.isLoading,
             notification.page,
             notification.maxPage,
@@ -76,12 +77,12 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
     };
 
     const handleMarkAllAsRead = () => {
-        if (notification.unreadNotificationNum !== 0) dispatch(markAllAsRead({ recipientId: auth?.user._id }));
+        if (notification.unreadNotificationNum !== 0) dispatch(markAllAsRead({ recipientId: user._id }));
         handleToggleVisibleMoreModal();
     };
 
     const handleDeleteAllNotification = () => {
-        if (notification.data.length !== 0) dispatch(deleteAllNotification({ recipientId: auth?.user._id }));
+        if (notification.data.length !== 0) dispatch(deleteAllNotification({ recipientId: user._id }));
         handleToggleVisibleMoreModal();
     };
 
@@ -90,7 +91,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
             updateReadStatus({
                 notificationId,
                 status: status,
-                recipientId: auth?.user._id
+                recipientId: user._id
             })
         );
 
@@ -102,7 +103,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
         dispatch(
             deleteNotification({
                 notificationId,
-                recipientId: auth?.user._id
+                recipientId: user._id
             })
         );
         handleToggleVisibleNtfItemMoreModal();
@@ -120,7 +121,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
         if (notification.data.length === 0 && !notification.maxPage)
             dispatch(
                 getNotifications({
-                    recipientId: auth?.user._id,
+                    recipientId: user._id,
                     limit: 5,
                     page: 1,
                     currentNumNotifications: 0
@@ -162,7 +163,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
                             if (notificationItem.recipient) {
                                 isRead = notificationItem.isRead ? true : false;
                             } else {
-                                isRead = notificationItem.readedUserList.includes(auth?.user._id) ? true : false;
+                                isRead = notificationItem.readedUserList.includes(user._id) ? true : false;
                             }
 
                             return (
@@ -236,7 +237,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
                                                                         status: notificationItem.recipient
                                                                             ? !notificationItem.isRead
                                                                             : !notificationItem.readedUserList.includes(
-                                                                                  auth?.user?._id
+                                                                                  user?._id
                                                                               )
                                                                     });
                                                                 }}

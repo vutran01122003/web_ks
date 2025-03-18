@@ -20,6 +20,53 @@ const STATUS = {
 };
 const { TALENT_ENGINEER_CODE } = process.env;
 
+const lookupData = [
+    {
+        $lookup: {
+            from: "groups",
+            localField: "groups",
+            foreignField: "_id",
+            as: "groups"
+        }
+    },
+    {
+        $lookup: {
+            from: "faculties",
+            localField: "faculty",
+            foreignField: "_id",
+            as: "faculty"
+        }
+    },
+    {
+        $lookup: {
+            from: "majors",
+            localField: "major",
+            foreignField: "_id",
+            as: "major"
+        }
+    },
+    {
+        $lookup: {
+            from: "cohorts",
+            localField: "cohort",
+            foreignField: "_id",
+            as: "cohort"
+        }
+    },
+    {
+        $unwind: "$groups"
+    },
+    {
+        $unwind: "$faculty"
+    },
+    {
+        $unwind: "$major"
+    },
+    {
+        $unwind: "$cohort"
+    }
+];
+
 class UserService {
     static getUserAndPopulateGroupById = async ({ id, idList, selectedFieldArr }) => {
         try {
@@ -60,67 +107,61 @@ class UserService {
     };
 
     static getUsersByFields = async ({ fields, groupCode, queryString, sort }) => {
-        Object.keys(fields).forEach((key) => fields[key] === undefined && delete fields[key]);
+        try {
+            Object.keys(fields).forEach((key) => fields[key] === undefined && delete fields[key]);
 
-        const aggregatePipe = [
-            { $match: fields },
-            {
-                $lookup: {
-                    from: "groups",
-                    localField: "groups",
-                    foreignField: "_id",
-                    as: "groups"
-                }
-            },
-            {
-                $unwind: "$groups"
-            },
-            {
-                $match: {
-                    "groups.groupCode": groupCode
-                }
-            },
-            {
-                $project: {
-                    "groups.method": 0,
-                    "groups.description": 0
-                }
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    avatar: { $first: "$avatar" },
-                    userId: { $first: "$userId" },
-                    firstName: { $first: "$firstName" },
-                    lastName: { $first: "$lastName" },
-                    gender: { $first: "$gender" },
-                    birthday: { $first: "$birthday" },
-                    faculty: { $first: "$faculty" },
-                    major: { $first: "$major" },
-                    cohort: { $first: "$cohort" },
-                    isActive: { $first: "$isActive" },
-                    email: { $first: "$email" },
-                    phone: { $first: "$phone" },
-                    annualTemporaryActivitiesProgress: { $first: "$annualTemporaryActivitiesProgress" },
-                    annualActivitiesProgress: { $first: "$annualActivitiesProgress" },
-                    levelYear: { $first: "$levelYear" },
-                    groups: {
-                        $push: "$groups"
+            const aggregatePipe = [
+                { $match: fields },
+                ...lookupData,
+                {
+                    $match: {
+                        "groups.groupCode": groupCode
                     }
+                },
+                {
+                    $project: {
+                        "groups.method": 0,
+                        "groups.description": 0
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        avatar: { $first: "$avatar" },
+                        userId: { $first: "$userId" },
+                        firstName: { $first: "$firstName" },
+                        lastName: { $first: "$lastName" },
+                        gender: { $first: "$gender" },
+                        birthday: { $first: "$birthday" },
+                        faculty: { $first: "$faculty" },
+                        major: { $first: "$major" },
+                        cohort: { $first: "$cohort" },
+                        isActive: { $first: "$isActive" },
+                        email: { $first: "$email" },
+                        phone: { $first: "$phone" },
+                        annualTemporaryActivitiesProgress: { $first: "$annualTemporaryActivitiesProgress" },
+                        annualActivitiesProgress: { $first: "$annualActivitiesProgress" },
+                        levelYear: { $first: "$levelYear" },
+                        groups: {
+                            $push: "$groups"
+                        }
+                    }
+                },
+                {
+                    $sort: sort
                 }
-            },
-            {
-                $sort: sort
-            }
-        ];
+            ];
 
-        if (!fields) aggregatePipe.splice(0, 1);
-        if (!groupCode) aggregatePipe.splice(1, 3);
-        if (!sort) aggregatePipe.splice(-1, 1);
+            if (!fields) aggregatePipe.splice(0, 1);
+            if (!groupCode) aggregatePipe.splice(1, 3);
+            if (!sort) aggregatePipe.splice(-1, 1);
 
-        const pagination = new Pagination(User.aggregate(aggregatePipe), queryString);
+            const pagination = new Pagination(User.aggregate(aggregatePipe), queryString);
 
-        return await pagination.paginating();
+            return await pagination.paginating();
+        } catch (error) {
+            throw error;
+        }
     };
 
     static updateUser = async ({ password, userId, userData }) => {
@@ -139,7 +180,6 @@ class UserService {
 
             if (isInfoDifferent) {
                 const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                    facultyName: faculty,
                     majorName: major,
                     cohortName: cohort
                 });
@@ -318,8 +358,7 @@ class UserService {
                         }
                     ),
                     FacultyService.updateAdditionalApplyCohort({
-                        facultyName: faculty.toLowerCase(),
-                        majorName: major.toLowerCase(),
+                        majorName: major,
                         cohortName: cohort,
                         levelYear: parseInt(levelYear),
                         isActive: false
@@ -348,17 +387,7 @@ class UserService {
                     {
                         $match: filterData
                     },
-                    {
-                        $lookup: {
-                            from: "groups",
-                            localField: "groups",
-                            foreignField: "_id",
-                            as: "groups"
-                        }
-                    },
-                    {
-                        $unwind: "$groups"
-                    },
+                    ...lookupData,
                     {
                         $match: {
                             "groups.groupCode": groupCode,
@@ -371,6 +400,7 @@ class UserService {
                             faculty: 1,
                             firstName: 1,
                             lastName: 1,
+                            gender: 1,
                             major: 1,
                             levelYear: 1,
                             cohort: 1,
@@ -387,20 +417,16 @@ class UserService {
                     {
                         $group: {
                             _id: "$_id",
-                            avatar: { $first: "$avatar" },
                             userId: { $first: "$userId" },
+                            faculty: { $first: "$faculty" },
                             firstName: { $first: "$firstName" },
                             lastName: { $first: "$lastName" },
                             gender: { $first: "$gender" },
                             birthday: { $first: "$birthday" },
-                            faculty: { $first: "$faculty" },
                             major: { $first: "$major" },
                             cohort: { $first: "$cohort" },
                             isActive: { $first: "$isActive" },
-                            email: { $first: "$email" },
-                            phone: { $first: "$phone" },
-                            annualTemporaryActivitiesProgress: { $first: "$annualTemporaryActivitiesProgress" },
-                            annualActivitiesProgress: { $first: "$annualActivitiesProgress" },
+                            progressData: { $first: "$progressData" },
                             levelYear: { $first: "$levelYear" },
                             groups: {
                                 $push: "$groups"
@@ -424,6 +450,7 @@ class UserService {
 
             return studentList;
         } catch (error) {
+            console.log(error);
             throw error;
         }
     };

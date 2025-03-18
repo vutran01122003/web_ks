@@ -15,7 +15,8 @@ import Account from '../Account/ComponentAccount';
 const { VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
 
 const TopHeader = ({ auth }) => {
-    const groupCodeList = auth?.user?.groups.map((group) => group.groupCode);
+    const user = auth?.user;
+    const groupCodeList = user?.groups.map((group) => group.groupCode);
 
     const [dropBoxAccount, setDropBoxAccount] = useState(false);
     const [dropBoxProductList, setDropBoxProductList] = useState(false);
@@ -94,13 +95,13 @@ const TopHeader = ({ auth }) => {
                         {groupCodeList.includes(VITE_APP_ADMIN_CODE) ? (
                             <div className="khoa_style">QUẢN TRỊ VIÊN HỆ THỐNG</div>
                         ) : (
-                            <div className="khoa_style">KHOA : {auth?.user?.faculty}</div>
+                            <div className="khoa_style">KHOA : {user?.faculty?.facultyName}</div>
                         )}
                     </div>
 
                     <div className="box__control">
                         {determineAuth ? (
-                            <Tooltip placement="bottom" title={auth?.user?.groups[0].name.toUpperCase()}>
+                            <Tooltip placement="bottom" title={user?.groups[0].name.toUpperCase()}>
                                 <div className="border__text--role ">
                                     <RiAdminLine />
                                 </div>

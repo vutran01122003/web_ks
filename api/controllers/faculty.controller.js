@@ -1,25 +1,22 @@
 const FacultyService = require("../services/faculty.service");
-const UserService = require("../services/user.service");
 const createError = require("http-errors");
+const UserService = require("../services/user.service");
 
 class FacultyController {
     createFaculty = async (req, res, next) => {
         try {
-            let userDataList = [];
-            const { facultyName, managerIdList, majorList } = req.body;
-            const numIdList = managerIdList.length;
+            const { facultyName, managerIdList } = req.body;
+
+            if (managerIdList && managerIdList.length > 0) {
+                const users = await UserService.getUserAndPopulateGroupById({ idList: managerIdList });
+                if (users.length !== managerIdList.length) throw createError.NotFound(`Quản lý khoa không tồn tại`);
+            }
 
             if (!facultyName.trim()) throw createError.BadRequest("Tên khoa không được để trống");
 
-            if (managerIdList && numIdList > 0) {
-                userDataList = await UserService.getUserAndPopulateGroupById({ idList: managerIdList });
-                if (userDataList.length !== numIdList) throw createError.NotFound(`Quản lý khoa không tồn tại`);
-            }
-
             const createdFaculty = await FacultyService.createFaculty({
                 facultyName,
-                managerIdList,
-                majorList
+                managers: managerIdList
             });
 
             res.status(200).json({
@@ -28,6 +25,7 @@ class FacultyController {
                 data: createdFaculty
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -70,6 +68,7 @@ class FacultyController {
 
             return res.status(200).json(faculties);
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -104,14 +103,20 @@ class FacultyController {
         }
     };
 
-    createMajors = async (req, res, next) => {
+    createMajor = async (req, res, next) => {
         try {
-            const facultyId = req.params.facultyId;
-            const { majorNameList } = req.body;
+            const { facultyId } = req.params;
+            const { majorName, managerIdList } = req.body;
 
-            if (majorNameList.length === 0) throw createError.BadRequest("Tên chuyên ngành không được rỗng");
+            if (managerIdList && managerIdList.length > 0) {
+                const users = await UserService.getUserAndPopulateGroupById({ idList: managerIdList });
+                if (users.length !== managerIdList.length)
+                    throw createError.NotFound(`Quản lý chuyên ngành không tồn tại`);
+            }
 
-            const createdMajor = await FacultyService.createMajors({ majorNameList, facultyId });
+            if (!majorName.trim()) throw createError.BadRequest("Tên chuyên ngành không được rỗng");
+
+            const createdMajor = await FacultyService.createMajor({ majorName, managers: managerIdList, facultyId });
 
             return res.status(201).json({
                 msg: createdMajor.msg,
@@ -119,15 +124,16 @@ class FacultyController {
                 status: createdMajor.status
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
 
     getMajorById = async (req, res, next) => {
         try {
-            const { majorId, facultyId } = req.params;
+            const { majorId } = req.params;
 
-            const major = await FacultyService.getMajorById({ majorId, facultyId });
+            const major = await FacultyService.getMajorById({ majorId });
 
             res.status(200).json({
                 status: 200,
@@ -159,12 +165,11 @@ class FacultyController {
     deleteMajor = async (req, res, next) => {
         try {
             const { facultyId, majorId } = req.params;
-            const deletedMajor = await FacultyService.deleteMajor({ majorId, facultyId });
+            await FacultyService.deleteMajor({ majorId, facultyId });
 
             res.status(200).json({
                 status: 200,
-                msg: "Xóa chuyên ngành thành công",
-                data: deletedMajor
+                msg: "Xóa chuyên ngành thành công"
             });
         } catch (error) {
             next(error);
@@ -173,20 +178,12 @@ class FacultyController {
 
     createCohort = async (req, res, next) => {
         try {
-            const { facultyId, majorId } = req.params;
+            const { majorId } = req.params;
             const { cohortName } = req.body;
 
-            const major = await FacultyService.getMajorById({
-                facultyId,
-                majorId
-            });
-
-            const isExists = major.cohortList.find((cohort) => cohort.cohortName === cohortName);
-
-            if (isExists) throw createError.Conflict(`Khóa ${cohortName} đã tồn tại`);
+            if (!cohortName) throw createError.BadRequest("Tên Khoá không được để trống");
 
             const createdCohort = await FacultyService.createCohort({
-                facultyId,
                 majorId,
                 cohortName
             });
@@ -197,15 +194,16 @@ class FacultyController {
                 data: createdCohort.data
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
 
     getCohortById = async (req, res, next) => {
         try {
-            const { facultyId, majorId, cohortId } = req.params;
+            const { cohortId } = req.params;
 
-            const cohort = await FacultyService.getCohortById({ facultyId, majorId, cohortId });
+            const cohort = await FacultyService.getCohortById({ cohortId });
 
             res.status(200).json({
                 msg: "Lấy danh sách khóa sinh viên thành công",
@@ -219,11 +217,10 @@ class FacultyController {
 
     deleteCohortById = async (req, res, next) => {
         try {
-            const { facultyId, majorId, cohortId } = req.params;
+            const { majorId, cohortId } = req.params;
 
             const deletedCohort = await FacultyService.deleteCohortById({
                 majorId,
-                facultyId,
                 cohortId
             });
 
@@ -239,12 +236,10 @@ class FacultyController {
 
     updateCohortById = async (req, res, next) => {
         try {
-            const { facultyId, majorId, cohortId } = req.params;
+            const { cohortId } = req.params;
             const data = req.body;
 
             const updatedCohort = await FacultyService.updateCohortById({
-                majorId,
-                facultyId,
                 cohortId,
                 data
             });

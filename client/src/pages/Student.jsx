@@ -136,6 +136,12 @@ const Student = () => {
         }
     }, [pageNumber, sortByName]);
 
+    useEffect(() => {
+        dispatch({
+            type: GLOBALTYPES.STUDENT.RESET_STUDENT_LIST
+        });
+    }, []);
+
     return (
         <>
             {isVisibleStudentDetailsModal && (

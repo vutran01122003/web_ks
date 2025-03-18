@@ -39,7 +39,7 @@ function ProgressUI() {
         major && cohort && talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
             ? facultyState.faculty.majors
                   .find((_major) => _major.majorName === major.majorName)
-                  .cohortList.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalRegisterInfo
+                  .cohorts.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalRegisterInfo
             : null;
 
     const stopButtonDisplayConditions =
@@ -264,6 +264,7 @@ function ProgressUI() {
                                     <th>STT</th>
                                     <th>Mã Sinh Viên</th>
                                     <th>Tên Sinh Viên</th>
+                                    <th>Giới Tính</th>
                                     <th>Ngày Sinh</th>
                                     <th className="progress_header">
                                         <span>Tổng Tiến Độ</span>
@@ -282,7 +283,7 @@ function ProgressUI() {
 
                             <tbody>
                                 {progress.annualTaskProgress.data.map((progressItem, index) => {
-                                    const { progressData, lastName, firstName, userId, isActive, birthday } =
+                                    const { progressData, lastName, firstName, userId, isActive, birthday, gender } =
                                         progressItem;
                                     const progressPercentage = progressData?.progressPercentage ?? 0;
                                     const totalScore = progressData?.totalScore ?? 0;
@@ -293,6 +294,7 @@ function ProgressUI() {
                                                 <td>{index + 1}</td>
                                                 <td>{userId}</td>
                                                 <td>{toFullName({ firstName, lastName })}</td>
+                                                <td>{gender}</td>
                                                 <td>{moment(birthday).format('DD/MM/yyyy')}</td>
                                                 <td>{`${progressPercentage.toFixed(2)}%`}</td>
                                                 <td>{totalScore}</td>
@@ -307,6 +309,7 @@ function ProgressUI() {
                                             <td>{index + 1}</td>
                                             <td>{userId}</td>
                                             <td>{toFullName({ firstName, lastName })}</td>
+                                            <td>{gender}</td>
                                             <td>{moment(birthday).format('DD/MM/yyyy')}</td>
                                             <td>{`${progressPercentage.toFixed(2)}%`}</td>
                                             <td>{totalScore}</td>

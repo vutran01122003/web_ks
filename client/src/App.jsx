@@ -36,7 +36,7 @@ const App = () => {
     useEffect(() => {
         if (user) {
             dispatch(getNumUnreadNotification({ userId: user._id }));
-            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: user?.faculty }));
+            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: user?.faculty.facultyName }));
         }
     }, [user, dispatch]);
 

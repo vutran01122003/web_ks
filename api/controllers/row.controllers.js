@@ -198,7 +198,6 @@ class RowControllers {
                 );
 
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                facultyName: user.faculty,
                 majorName: user.major,
                 cohortName: user.cohort
             });
