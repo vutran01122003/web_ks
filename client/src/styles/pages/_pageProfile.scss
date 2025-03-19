@@ -1,4 +1,4 @@
-$coll_span: 3;
+$coll_span: 2;
 
 .pageProfile {
     padding: 10px 15px;
@@ -33,11 +33,10 @@ $coll_span: 3;
     .info__items {
         display: grid;
         grid-template-columns: repeat($coll_span, 1fr);
-        gap: 10px;
+        gap: 5px;
         width: 100%;
         place-items: start center;
         padding: 25px;
-        padding-left: 40px;
 
         .info__text {
             display: flex;

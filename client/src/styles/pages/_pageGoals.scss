@@ -507,18 +507,25 @@
                                 transition: 0.1s linear;
                                 margin: 10px;
 
-                                &:hover {
-                                    color: #1677ff;
-                                    text-decoration: underline;
+                                &:active {
+                                    opacity: 0.8;
                                 }
 
-                                &.remove_page_goal_btn,
-                                &.update_status_page_goal_btn {
-                                    &:hover {
-                                        color: #f0635c;
-                                        text-decoration: underline;
-                                    }
+                                &.active {
+                                    color: #f0635c;
                                 }
+
+                                &.inactive {
+                                    color: #1677ff;
+                                }
+                            }
+
+                            .add_goal_btn {
+                                color: #1677ff;
+                            }
+
+                            .remove_page_goal_btn {
+                                color: #f0635c;
                             }
                         }
 

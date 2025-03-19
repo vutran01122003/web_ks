@@ -9,10 +9,13 @@ const populatedOptions = [
     {
         path: "majors",
         model: "major",
-        populate: {
-            path: "cohorts",
-            model: "cohort"
-        }
+        populate: [
+            { path: "managers", model: "user", select: "lastName firstName userId" },
+            {
+                path: "cohorts",
+                model: "cohort"
+            }
+        ]
     }
 ];
 

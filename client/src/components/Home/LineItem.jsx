@@ -1,7 +1,7 @@
-const LineItem = ({ info, text, className }) => {
+const LineItem = ({ label, content }) => {
     return (
-        <div className={`line ${className ? className : ''}`}>
-            <span>{info}</span>:<p>{text}</p>
+        <div className="line">
+            <span>{label}</span>:<p>{content}</p>
         </div>
     );
 };

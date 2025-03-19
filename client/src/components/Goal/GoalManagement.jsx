@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoSearch } from 'react-icons/io5';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import { RxUpdate } from 'react-icons/rx';
 import { goalsSelector } from '../../redux/selector';
-import { capitalizeFirstLetter } from '../../utils/handleString';
-import UpdateTableModal from '../Modal/UpdateTableModal';
-import RemovePageModal from '../Modal/RemovePageModal';
 import ConfirmModal from '../Modal/ConfirmModal';
 import AddTableModal from '../Modal/AddTableModal';
+import UpdateTableModal from '../Modal/UpdateTableModal';
+import RemovePageModal from '../Modal/RemovePageModal';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import SearchFilterComponent from '../Filter/SearchFilter';
 import TableDetailsModel from '../Modal/TableDetailsModal';
-import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 import EmptyDataNotification from '../Notification/EmptyDataNotification';
+import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
 
 function GoalsManagement() {
@@ -253,9 +256,9 @@ function GoalsManagement() {
 
                                             <td className="page_status">
                                                 {filteredPageItem.isActive ? (
-                                                    <span className="active">Đang Hiển Thị</span>
+                                                    <span className="active">Đang Hoạt Động</span>
                                                 ) : (
-                                                    <span className="inactive">Không Hiển Thị</span>
+                                                    <span className="inactive">Không Hoạt Động</span>
                                                 )}
                                             </td>
 
@@ -338,11 +341,12 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
+                                                    <IoIosAddCircleOutline size={17} />
                                                     <span>Thêm Chỉ Tiêu Mới Vào Nhóm Chỉ Tiêu</span>
                                                 </div>
 
                                                 <div
-                                                    className="update_status_page_goal_btn btn_item"
+                                                    className={`update_status_page_goal_btn ${filteredPageItem.isActive ? 'active' : 'inactive'} btn_item`}
                                                     onClick={() => {
                                                         onOpenUpdateStatusPageModal({
                                                             pageName: filteredPageItem.pageName,
@@ -351,6 +355,7 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
+                                                    <RxUpdate size={16} />
                                                     <span>
                                                         {filteredPageItem.isActive
                                                             ? `Ẩn ${capitalizeFirstLetter(filteredPageItem.pageName)}`
@@ -367,6 +372,7 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
+                                                    <TiDeleteOutline size={17} />
                                                     <span>{`Xóa ${capitalizeFirstLetter(filteredPageItem.pageName)}`}</span>
                                                 </div>
                                             </td>

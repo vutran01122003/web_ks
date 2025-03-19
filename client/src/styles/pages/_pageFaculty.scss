@@ -10,19 +10,25 @@
         text-align: center;
 
         th {
-            border: 1px solid #dddddd;
+            border: 1px solid gray;
             background: #1677ff;
             color: #fff;
             padding: 8px;
         }
 
         td {
-            border: 1px solid #dddddd;
+            border: 1px solid gray;
             padding: 0 4px;
         }
 
-        tr:nth-child(even) {
-            background-color: #f5f5f5;
+        .status {
+            &.active {
+                color: #1677ff;
+            }
+
+            &.inactive {
+                color: #f0635c;
+            }
         }
 
         .major_item,
@@ -50,11 +56,9 @@
         .delete_btn,
         .add_btn {
             display: flex;
-            justify-content: center;
             align-items: center;
             gap: 5px;
-            width: 50px;
-            padding: 5px;
+            margin: 10px;
             outline: none;
             cursor: pointer;
             font-weight: 600;
@@ -65,17 +69,15 @@
             transition: 0.1s linear;
 
             &:active {
-                transform: scale(0.9);
+                opacity: 0.9;
             }
         }
 
         .updated_btn {
-            border: 1px solid #006fee;
             color: #006fee;
         }
 
         .delete_btn {
-            border: 1px solid #f0635c;
             color: #f0635c;
         }
 
@@ -87,11 +89,7 @@
             .updated_btn,
             .delete_btn,
             .add_btn {
-                width: 200px;
-                display: flex;
-                justify-content: flex-start;
-                margin: 5px;
-                border: none;
+                white-space: nowrap;
             }
         }
     }
@@ -109,6 +107,7 @@
         }
     }
 
+    .create_major_btn,
     .create_faculty_btn {
         display: flex;
         align-items: center;
@@ -122,7 +121,7 @@
         font-weight: 600;
         cursor: pointer;
         max-height: 40px;
-        width: 140px;
+        min-width: 140px;
         transition: 0.1s linear;
 
         &:active {
@@ -130,6 +129,7 @@
         }
     }
 
+    .cohort_form,
     .major_form,
     .faculty_form {
         width: 600px;
@@ -138,6 +138,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: 10px;
 
         fieldset {
             display: flex;
@@ -147,26 +148,25 @@
             padding: 20px;
         }
 
+        label {
+            min-width: 165px;
+            font-weight: bold;
+        }
+
         .input_item_wrapper {
             display: flex;
             width: 100%;
             align-items: center;
 
-            label {
-                display: inline-block;
-                min-width: 160px;
-                font-weight: 600;
-            }
-
-            input {
-                height: 35px;
+            input,
+            select {
                 flex: 1;
-                padding: 8px 12px;
-                outline: none;
+                height: 35px;
+                padding: 4px 12px;
                 border-radius: 3px;
-                border: 1px solid gray;
-                font-weight: 500;
-                font-size: 14px;
+                font-weight: 600;
+                outline: none;
+                border: 1px solid rgb(229, 229, 229);
             }
 
             .add_major_btn,
@@ -231,31 +231,13 @@
             }
         }
 
-        .major_list,
-        .faculy_major_list {
-            .major_item {
-                padding: 8px 12px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-weight: 600;
-                transition: 0.1s linear;
-
-                &:hover {
-                    background: #f7f7f7;
-                }
-
-                .major_item_delete_btn {
-                    font-size: 20px;
-                    color: red;
-                    cursor: pointer;
-                }
-            }
-        }
-
+        .create_new_cohort_btn,
         .create_new_major_btn,
         .create_new_faculty_btn {
+            margin-right: auto;
+            margin-left: auto;
             margin-top: 15px;
+            width: 100%;
             height: 35px;
             outline: none;
             border-radius: 3px;
@@ -264,56 +246,10 @@
             color: #fff;
             font-weight: 600;
             transition: 0.1s linear;
+            cursor: pointer;
 
             &:active {
                 transform: scale(0.9);
-            }
-        }
-    }
-
-    .cohort_form {
-        fieldset {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: 10px;
-            padding: 20px;
-        }
-
-        label {
-            display: inline-block;
-            min-width: 150px;
-            font-weight: 600;
-        }
-
-        button {
-            height: 35px;
-            outline: none;
-            border-radius: 3px;
-            border: none;
-            background: #006fee;
-            color: #fff;
-            font-weight: 600;
-            transition: 0.1s linear;
-
-            &:active {
-                transform: scale(0.9);
-            }
-        }
-
-        .cohort_input_item {
-            display: flex;
-            width: 100%;
-
-            input,
-            select {
-                flex: 1;
-                height: 35px;
-                padding: 4px 12px;
-                border-radius: 3px;
-                font-weight: 600;
-                outline: none;
-                border: 1px solid rgb(229, 229, 229);
             }
         }
     }
