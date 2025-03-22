@@ -143,19 +143,20 @@ const PageManagement = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Tiêu đề</th>
+                            <th>STT</th>
+                            <th>Tên trang</th>
                             <th>Quyền truy cập</th>
                             <th>Trạng thái</th>
-                            <th>Action</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         {Object.keys(pages).length > 0 &&
                             pages.map((menu_item, index) => {
                                 let role = null;
+                                let roles = menu_item?.roles;
 
-                                switch (menu_item?.role) {
+                                switch (roles ? roles[0] : null) {
                                     case VITE_APP_TALENT_ENGINEER_CODE: {
                                         role = 'Kỹ Sư Tài Năng';
                                         break;
@@ -187,7 +188,7 @@ const PageManagement = () => {
                                                 )}
                                             </td>
                                             <td>
-                                                <div className="icon__show">Hiện</div>
+                                                <div className="icon__show">Đang hoạt động</div>
                                             </td>
                                             <td></td>
                                         </tr>

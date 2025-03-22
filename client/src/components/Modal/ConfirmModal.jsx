@@ -22,7 +22,13 @@ function ConfirmModal({ headerContent, bodyContent, noteContent, onAccept, toggl
                         <button className="confirm_modal_deny_btn" onClick={toggleConfirmModalDisplay}>
                             Thoát
                         </button>
-                        <button className="confirm_modal_accept_btn" onClick={onAccept}>
+                        <button
+                            className="confirm_modal_accept_btn"
+                            onClick={() => {
+                                onAccept();
+                                toggleConfirmModalDisplay();
+                            }}
+                        >
                             Đồng ý
                         </button>
                     </div>

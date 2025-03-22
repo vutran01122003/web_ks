@@ -64,7 +64,6 @@ function GoalsManagement() {
 
     const removeTableHandling = () => {
         dispatch(removeTable(tableInfo));
-        handleToggleRemoveTableModalDisplay();
     };
 
     const handleToggleVisibleUpdateTableModal = () => {
@@ -88,7 +87,6 @@ function GoalsManagement() {
 
     const handleUpdateStatusPage = () => {
         dispatch(updateStatusPage({ pageId, currentStatus }));
-        onHideUpdateStatusPageModal();
     };
 
     const handleHideRemovePageModal = () => {
@@ -110,7 +108,6 @@ function GoalsManagement() {
                 tableIndex: tableInfo.tableIndex
             })
         );
-        handleToggleUpdateStatusTableModalDisplay();
     };
 
     const onGetPages = async () => {

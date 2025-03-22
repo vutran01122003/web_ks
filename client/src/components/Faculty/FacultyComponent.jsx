@@ -1,21 +1,60 @@
 import { Fragment, useState } from 'react';
-import { FaPen } from 'react-icons/fa';
-import { MdRemoveCircle } from 'react-icons/md';
-import CreateFacultyModal from '../Modal/CreateFacultyModal';
-import { IoIosAddCircleOutline, IoMdAddCircle } from 'react-icons/io';
+import { TbEdit } from 'react-icons/tb';
+import { TiDeleteOutline } from 'react-icons/ti';
+import FacultyModal from '../Modal/FacultyModal';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
+import { useDispatch } from 'react-redux';
+import { deleteFaculty } from '../../redux/actions/facultyAction';
+import ConfirmModal from '../Modal/ConfirmModal';
 
 function FacultyComponent({ faculty }) {
+    const dispatch = useDispatch();
+    const facultyData = faculty.facultyData;
     const [isDisplayCreateFacultyModal, setIsDisplayCreateFacultyModal] = useState(false);
+    const [isDisplayUpdateFacultyModal, setIsDisplayUpdateFacultyModal] = useState(false);
+    const [isDisplayDeleteFacultyModal, setIsDisplayDeleteFacultyModal] = useState(false);
+    const [currentFacultyIndex, setCurrentFacultyIndex] = useState(null);
+    const currentFaculty = facultyData[currentFacultyIndex];
 
     const handleToggleDisplayCreateFacultyModal = () => {
         setIsDisplayCreateFacultyModal((prev) => !prev);
     };
 
+    const handleToggleDisplayUpdateFacultyModal = () => {
+        setIsDisplayUpdateFacultyModal((prev) => !prev);
+    };
+
+    const handleToggleDisplayDeleteFacultyModal = () => {
+        setIsDisplayDeleteFacultyModal((prev) => !prev);
+    };
+
+    const handleDeleteFaculty = () => {
+        dispatch(deleteFaculty({ facultyId: currentFaculty._id }));
+    };
+
     return (
         <Fragment>
             {isDisplayCreateFacultyModal && (
-                <CreateFacultyModal onHiddenModal={handleToggleDisplayCreateFacultyModal} />
+                <FacultyModal onHiddenModal={handleToggleDisplayCreateFacultyModal} header="Tạo Mới Khoa" />
+            )}
+
+            {isDisplayUpdateFacultyModal && (
+                <FacultyModal
+                    onHiddenModal={handleToggleDisplayUpdateFacultyModal}
+                    header={`Chỉnh Sửa Khoa ${currentFaculty.facultyName}`}
+                    faculty={currentFaculty}
+                />
+            )}
+
+            {isDisplayDeleteFacultyModal && (
+                <ConfirmModal
+                    headerContent="Xóa Khoa"
+                    bodyContent="Bạn chắc chắn muốn xóa khoa này"
+                    noteContent="Chỉ có thể xóa các khoa chưa có người tham gia."
+                    onAccept={handleDeleteFaculty}
+                    toggleConfirmModalDisplay={handleToggleDisplayDeleteFacultyModal}
+                />
             )}
 
             <div className="table_heading">
@@ -37,43 +76,49 @@ function FacultyComponent({ faculty }) {
                 </thead>
 
                 <tbody>
-                    {faculty.facultyData.map((facultyItem) => (
+                    {facultyData.map((facultyItem, index) => (
                         <tr key={facultyItem._id}>
                             <td>{capitalizeFirstLetter(facultyItem.facultyName)}</td>
+
                             <td>
-                                {facultyItem.managers.map((manager) => {
-                                    const { lastName, firstName, userId } = manager;
-                                    return (
-                                        <div key={userId}>
-                                            <span>
-                                                {userId} - {toFullName({ lastName, firstName })}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
+                                {facultyItem.managers.length > 0 ? (
+                                    facultyItem.managers.map((manager) => {
+                                        const { lastName, firstName, userId } = manager;
+                                        return (
+                                            <div className="manager_item" key={userId}>
+                                                <span>
+                                                    {userId} - {toFullName({ lastName, firstName })}
+                                                </span>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <span>Trống</span>
+                                )}
                             </td>
+
                             <td className={`status ${facultyItem.isActive ? 'active' : 'inactive'}`}>
                                 {facultyItem.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}
                             </td>
+
                             <td className="interactive_btn_wrapper">
-                                <div className="updated_btn">
-                                    <FaPen /> <span>Chỉnh Sửa Khoa</span>
-                                </div>
                                 <div
-                                    className="add_btn"
+                                    className="updated_btn"
                                     onClick={() => {
-                                        handleToggleDisplayAddMajorsModal(facultyItem._id);
+                                        handleToggleDisplayUpdateFacultyModal();
+                                        setCurrentFacultyIndex(index);
                                     }}
                                 >
-                                    <IoMdAddCircle /> <span>Thêm Quản Lý Khoa</span>
+                                    <TbEdit size={18} /> <span>Chỉnh Sửa Khoa</span>
                                 </div>
-
-                                <div className="delete_btn">
-                                    <MdRemoveCircle /> <span>Xóa Quản Lý Khoa</span>
-                                </div>
-
-                                <div className="delete_btn">
-                                    <MdRemoveCircle /> <span>Ẩn Khoa</span>
+                                <div
+                                    className="delete_btn"
+                                    onClick={() => {
+                                        setCurrentFacultyIndex(index);
+                                        handleToggleDisplayDeleteFacultyModal();
+                                    }}
+                                >
+                                    <TiDeleteOutline size={18} /> <span>Xóa Khoa</span>
                                 </div>
                             </td>
                         </tr>

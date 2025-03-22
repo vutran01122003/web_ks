@@ -46,7 +46,6 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                 userData
             })
         );
-        onToggleModal();
     };
 
     const onCloseModal = (e) => {

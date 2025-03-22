@@ -41,7 +41,7 @@ GET {{url}}/api/faculty/điện ảnh
 GET {{url}}/api/faculties
 
 ### Create majors
-POST {{url}}/api/faculties/67d9ac48409de33ad406b76f/majors
+POST {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors
 Content-Type: application/json
 
 {
@@ -64,11 +64,11 @@ Content-Type: application/json
 DELETE {{url}}/api/faculties/67d9ac48409de33ad406b76f/majors/67d9ac5e409de33ad406b77a
 
 ### Create cohort
-POST {{url}}/api/faculties/67d96b01e4ca5f9f70f20580/majors/67d96b2ae4ca5f9f70f20587/cohorts
+POST {{url}}/api/faculties/67d8ea6aa50148be3f5adbbf/majors/67daae174b71cf1edf744686/cohorts
 Content-Type: application/json
 
 {
-    "cohortName": "20"
+    "cohortName": "19"
 }
 
 ### Get cohort

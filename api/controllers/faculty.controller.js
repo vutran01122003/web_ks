@@ -25,7 +25,6 @@ class FacultyController {
                 data: createdFaculty
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -68,7 +67,6 @@ class FacultyController {
 
             return res.status(200).json(faculties);
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -124,7 +122,6 @@ class FacultyController {
                 status: createdMajor.status
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -148,7 +145,7 @@ class FacultyController {
     updateMajor = async (req, res, next) => {
         try {
             const { majorId, facultyId } = req.params;
-            const data = req.body;
+            const data = req.body.data;
 
             const updatedMajor = await FacultyService.updateMajor({ majorId, facultyId, data });
 
@@ -194,7 +191,6 @@ class FacultyController {
                 data: createdCohort.data
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };
@@ -236,10 +232,11 @@ class FacultyController {
 
     updateCohortById = async (req, res, next) => {
         try {
-            const { cohortId } = req.params;
-            const data = req.body;
+            const { majorId, cohortId } = req.params;
+            const data = req.body.data;
 
             const updatedCohort = await FacultyService.updateCohortById({
+                majorId,
                 cohortId,
                 data
             });
@@ -250,6 +247,7 @@ class FacultyController {
                 data: updatedCohort
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };

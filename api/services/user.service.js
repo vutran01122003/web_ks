@@ -450,7 +450,6 @@ class UserService {
 
             return studentList;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };
@@ -644,7 +643,6 @@ class UserService {
 
             if (!userData) throw createError.NotFound("Người dùng không tồn tại");
 
-            console.log(userData);
             const annualActivitiesField =
                 userData.groups[0].groupCode === TALENT_ENGINEER_CODE
                     ? `annualActivitiesProgress`

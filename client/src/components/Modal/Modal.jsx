@@ -2,7 +2,12 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 const Modal = ({ children, onHiddenModal, headerTitle }) => {
     return (
-        <div className="modal_overlap" onDoubleClick={onHiddenModal}>
+        <div
+            className="modal_overlap"
+            onDoubleClick={(e) => {
+                if (e.target === e.currentTarget) onHiddenModal();
+            }}
+        >
             <div className="box_wrapper">
                 {headerTitle && <h2 className="modal_header">{headerTitle}</h2>}
                 <div className="modal_close_icon_wrapper" onClick={onHiddenModal}>

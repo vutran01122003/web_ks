@@ -36,7 +36,6 @@ class ExcelService {
 
             return workbook;
         } catch (error) {
-            console.log(error);
             throw createHttpError.BadRequest("Lỗi xuất dữ liệu excel");
         }
     };

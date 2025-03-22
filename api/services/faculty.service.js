@@ -3,6 +3,8 @@ const Faculty = require("../models/faculty.model");
 const Major = require("../models/major.model");
 const Cohort = require("../models/cohort.model");
 const { capitalizeFirstLetter } = require("../utils/handleString");
+const convertToObjectId = require("../utils/convertToObjectId");
+const User = require("../models/user.model");
 
 const populatedOptions = [
     { path: "managers", model: "user", select: "lastName firstName userId" },
@@ -22,7 +24,6 @@ const populatedOptions = [
 class FacultyService {
     static createFaculty = async ({ facultyName, managers }) => {
         try {
-            console.log(managers);
             const isExists = await Faculty.findOne({ facultyName }).lean();
 
             if (isExists) throw createHttpError.Conflict("Tên khoa đã tồn tại");
@@ -43,7 +44,10 @@ class FacultyService {
     static updateFaculty = async ({ facultyId, data }) => {
         try {
             if (data.facultyName) {
-                const checkDuplicateName = await Faculty.findOne({ facultyName: data.facultyName });
+                const checkDuplicateName = await Faculty.findOne({
+                    facultyName: data.facultyName,
+                    _id: { $ne: facultyId }
+                });
                 if (checkDuplicateName) throw createHttpError.Conflict("Tên khoa đã tồn tại");
             }
 
@@ -61,6 +65,10 @@ class FacultyService {
 
     static deleteFaculty = async ({ facultyId }) => {
         try {
+            const user = await User.findOne({ faculty: facultyId });
+
+            if (user) throw createHttpError.BadRequest("Khoa đã có người tham gia");
+
             const deletedFaculty = await Faculty.findOneAndDelete({ _id: facultyId });
 
             if (!deletedFaculty) throw createHttpError.NotFound("Khoa không tồn tại");
@@ -164,7 +172,7 @@ class FacultyService {
     static updateMajor = async ({ majorId, data }) => {
         try {
             if (data.majorName) {
-                const isExists = await Major.findOne({ majorName: data.majorName });
+                const isExists = await Major.findOne({ majorName: data.majorName, _id: { $ne: majorId } });
                 if (isExists) throw createHttpError.Conflict("Chuyên ngành đã tồn tại");
             }
 
@@ -178,6 +186,10 @@ class FacultyService {
 
     static deleteMajor = async ({ facultyId, majorId }) => {
         try {
+            const user = await User.findOne({ major: majorId });
+
+            if (user) throw createHttpError.BadRequest("Chuyên ngành đã có người tham gia");
+
             await Major.findOneAndDelete({ _id: majorId });
             await Faculty.findByIdAndUpdate(facultyId, {
                 $pull: {
@@ -252,6 +264,10 @@ class FacultyService {
 
     static deleteCohortById = async ({ majorId, cohortId }) => {
         try {
+            const user = await User.findOne({ cohort: cohortId });
+
+            if (user) throw createHttpError.BadRequest("Khóa đã có người tham gia");
+
             await Cohort.findByIdAndDelete(cohortId);
 
             await Major.findByIdAndUpdate(majorId, {
@@ -264,8 +280,18 @@ class FacultyService {
         }
     };
 
-    static updateCohortById = async ({ cohortId, data }) => {
+    static updateCohortById = async ({ majorId, cohortId, data }) => {
         try {
+            const major = await Major.findById(majorId).populate("cohorts", "cohortName");
+            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+
+            if (
+                major.cohorts.find(
+                    (cohort) => cohort.cohortName === data.cohortName && cohort._id.toString() !== cohortId
+                )
+            )
+                throw createHttpError.Conflict(`Khoá ${data.cohortName} đã tồn tại`);
+
             return await Cohort.findByIdAndUpdate(cohortId, data, {
                 new: true
             });

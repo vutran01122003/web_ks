@@ -1,26 +1,74 @@
 import { Fragment, useState } from 'react';
-import { FaPen } from 'react-icons/fa';
-import { MdRemoveCircle } from 'react-icons/md';
-import CreateMajorModal from '../Modal/CreateMajorModal';
-import { IoIosAddCircleOutline, IoMdAddCircle } from 'react-icons/io';
+import { TbEdit } from 'react-icons/tb';
+import MajorModal from '../Modal/MajorModal';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
+import { useDispatch } from 'react-redux';
+import { deleteMajor } from '../../redux/actions/facultyAction';
+import ConfirmModal from '../Modal/ConfirmModal';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 function MajorComponent({ faculty }) {
-    const [isDisplayAddMajorsModal, setIsDisplayAddMajorsModal] = useState(false);
+    const dispatch = useDispatch();
+    const facultyData = faculty?.facultyData;
+    const [currentFacultyIndex, setCurrentFacultyIndex] = useState(null);
+    const [currentMajorIndex, setCurrentMajorIndex] = useState(null);
+    const [isDisplayAddMajorModal, setIsDisplayAddMajorModal] = useState(false);
+    const [isDisplayUpdateMajorModal, setIsDisplayUpdateMajorModal] = useState(false);
+    const [isDisplayDeleteMajorModal, setIsDisplayDeleteMajorModal] = useState(false);
+    const currentFaculty = facultyData[currentFacultyIndex];
+    const currentMajor = currentFaculty?.majors[currentMajorIndex];
 
-    const handleToggleDisplayAddMajorsModal = (facultyId) => {
-        setIsDisplayAddMajorsModal((prev) => !prev);
+    const handleToggleDisplayAddMajorModal = () => {
+        setIsDisplayAddMajorModal((prev) => !prev);
+    };
+
+    const handleToggleDisplayUpdateMajorModal = () => {
+        setIsDisplayUpdateMajorModal((prev) => !prev);
+    };
+
+    const handleToggleDisplayDeleteMajorModal = () => {
+        setIsDisplayDeleteMajorModal((prev) => !prev);
+    };
+
+    const handleDeleteMajor = () => {
+        if (!currentFaculty || !currentMajor) return;
+
+        dispatch(deleteMajor({ facultyId: currentFaculty._id, majorId: currentMajor._id }));
     };
 
     return (
         <Fragment>
-            {isDisplayAddMajorsModal && (
-                <CreateMajorModal onHiddenModal={handleToggleDisplayAddMajorsModal} faculty={faculty} />
+            {isDisplayAddMajorModal && (
+                <MajorModal
+                    onHiddenModal={handleToggleDisplayAddMajorModal}
+                    facultyState={faculty}
+                    header="Tạo Mới Chuyên Ngành"
+                />
+            )}
+
+            {isDisplayUpdateMajorModal && (
+                <MajorModal
+                    onHiddenModal={handleToggleDisplayUpdateMajorModal}
+                    faculty={currentFaculty}
+                    header="Cập Nhật Chuyên Ngành"
+                    major={currentMajor}
+                />
+            )}
+
+            {isDisplayDeleteMajorModal && (
+                <ConfirmModal
+                    headerContent="Xóa Chuyên Ngành"
+                    bodyContent="Bạn chắn chắc muốn xóa chuyên ngành này"
+                    noteContent="Chỉ có thể xóa các chuyên ngành chưa có người tham gia."
+                    onAccept={handleDeleteMajor}
+                    toggleConfirmModalDisplay={handleToggleDisplayDeleteMajorModal}
+                />
             )}
 
             <div className="table_heading">
                 <h3 className="heading">Danh Sách Chuyên Ngành</h3>
-                <button className="create_major_btn" onClick={handleToggleDisplayAddMajorsModal}>
+                <button className="create_major_btn" onClick={handleToggleDisplayAddMajorModal}>
                     <IoIosAddCircleOutline size={20} />
                     <span>Tạo Chuyên Ngành Mới</span>
                 </button>
@@ -38,7 +86,7 @@ function MajorComponent({ faculty }) {
                 </thead>
 
                 <tbody>
-                    {faculty.facultyData.reduce((arr, facultyItem) => {
+                    {faculty.facultyData.reduce((arr, facultyItem, facultyIndex) => {
                         const majors = facultyItem.majors;
 
                         return [
@@ -58,37 +106,43 @@ function MajorComponent({ faculty }) {
                                             </div>
                                         </td>
                                         <td>
-                                            {major.managers.map((manager) => {
-                                                const { lastName, firstName, userId } = manager;
-                                                return (
-                                                    <div key={userId}>
-                                                        {`${userId || 'Chưa Cập Nhật'} - ${toFullName({ lastName, firstName })}`}
-                                                    </div>
-                                                );
-                                            })}
+                                            {major.managers.length === 0 ? (
+                                                <span>Trống</span>
+                                            ) : (
+                                                major.managers.map((manager) => {
+                                                    const { lastName, firstName, userId } = manager;
+                                                    return (
+                                                        <div key={userId} className="manager_item">
+                                                            {`${userId || 'Chưa Cập Nhật'} - ${toFullName({ lastName, firstName })}`}
+                                                        </div>
+                                                    );
+                                                })
+                                            )}
                                         </td>
                                         <td className={`status ${major.isActive ? 'active' : 'inactive'}`}>
                                             {major.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}
                                         </td>
                                         <td className="interactive_btn_wrapper">
-                                            <div className="updated_btn">
-                                                <FaPen /> <span>Chỉnh Sửa Chuyên Ngành</span>
-                                            </div>
                                             <div
-                                                className="add_btn"
+                                                className="updated_btn"
                                                 onClick={() => {
-                                                    handleToggleDisplayAddMajorsModal(facultyItem._id);
+                                                    setCurrentFacultyIndex(facultyIndex);
+                                                    setCurrentMajorIndex(index);
+                                                    handleToggleDisplayUpdateMajorModal();
                                                 }}
                                             >
-                                                <IoMdAddCircle /> <span>Thêm Quản Lý Chuyên Ngành</span>
+                                                <TbEdit /> <span>Chỉnh Sửa Chuyên Ngành</span>
                                             </div>
 
-                                            <div className="delete_btn">
-                                                <MdRemoveCircle /> <span>Xóa Quản Lý Chuyên Ngành</span>
-                                            </div>
-
-                                            <div className="delete_btn">
-                                                <MdRemoveCircle /> <span>Ẩn Chuyên Ngành</span>
+                                            <div
+                                                className="delete_btn"
+                                                onClick={() => {
+                                                    handleToggleDisplayDeleteMajorModal();
+                                                    setCurrentFacultyIndex(facultyIndex);
+                                                    setCurrentMajorIndex(index);
+                                                }}
+                                            >
+                                                <TiDeleteOutline size={18} /> <span>Xóa Chuyên Ngành</span>
                                             </div>
                                         </td>
                                     </tr>

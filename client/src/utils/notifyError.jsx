@@ -1,8 +1,7 @@
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { getAccessToken } from './getCookie';
 
 export default function notifyError({ dispatch, error, defaultMessage }) {
-    const errorData = error?.response.data;
+    const errorData = error?.response?.data;
     const status = errorData?.status;
     const msg = errorData?.msg;
 

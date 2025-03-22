@@ -5,19 +5,23 @@ import Modal from './Modal';
 import { getDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import Avatar from '../Account/ComponentAvatar';
-import { createFaculty } from '../../redux/actions/facultyAction';
+import { createFaculty, updateFaculty } from '../../redux/actions/facultyAction';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
 
-function CreateFacultyModal({ onHiddenModal }) {
+function CreateFacultyModal({ onHiddenModal, header, faculty }) {
     const dispatch = useDispatch();
 
     const [userId, setUserId] = useState('');
-    const [majorList, setMajorList] = useState([]);
-    const [facultyName, setFacultyName] = useState('');
-    const [facultyManagerList, setFacultyManagerList] = useState([]);
+    const [status, setStatus] = useState(faculty?.isActive || null);
+    const [facultyName, setFacultyName] = useState(faculty ? faculty.facultyName : '');
+    const [facultyManagerList, setFacultyManagerList] = useState(faculty ? faculty.managers : []);
 
     const handleChangeFacultyName = (e) => {
         setFacultyName(e.target.value);
+    };
+
+    const handleChangeFacultyStatus = (e) => {
+        setStatus(e.target.value === true);
     };
 
     const handleChangeUserId = (e) => {
@@ -26,17 +30,16 @@ function CreateFacultyModal({ onHiddenModal }) {
 
     const addFacultyManager = async () => {
         try {
+            if (!userId) return;
+
             const res = await getDataApi(`/users/${userId}`);
             const userData = res.data.data;
 
-            if (facultyManagerList.some((facultyManager) => facultyManager._id === userData._id)) {
-                setUserId('');
-                return;
-            }
+            setUserId('');
 
-            if (userData) {
-                setFacultyManagerList((prev) => [...prev, userData]);
-            }
+            if (facultyManagerList.some((facultyManager) => facultyManager._id === userData._id)) return;
+
+            if (userData) setFacultyManagerList((prev) => [...prev, userData]);
         } catch (error) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -47,19 +50,41 @@ function CreateFacultyModal({ onHiddenModal }) {
         }
     };
 
+    const resetData = () => {
+        setFacultyName('');
+        setUserId('');
+        setFacultyManagerList([]);
+        onHiddenModal();
+    };
+
     const createNewFaculty = () => {
+        console.log('ok');
+        if (!facultyName.trim()) return;
+
         dispatch(
             createFaculty({
                 facultyName,
-                managerIdList: facultyManagerList.map((facultyManager) => facultyManager._id),
-                majorList
+                managerIdList: facultyManagerList.map((facultyManager) => facultyManager._id)
             })
         );
 
-        setFacultyName('');
-        setUserId('');
-        setMajorList([]);
-        setFacultyManagerList([]);
+        resetData();
+    };
+
+    const onUpdateFaculty = () => {
+        if (!facultyName.trim()) return;
+
+        dispatch(
+            updateFaculty({
+                facultyData: {
+                    facultyName,
+                    isActive: status,
+                    managers: facultyManagerList.map((facultyManager) => facultyManager._id)
+                },
+                facultyId: faculty._id
+            })
+        );
+        resetData();
     };
 
     const deleteFacultyManager = async (managerId) => {
@@ -67,10 +92,10 @@ function CreateFacultyModal({ onHiddenModal }) {
     };
 
     return (
-        <Modal onHiddenModal={onHiddenModal} headerTitle="Tạo Mới Khoa">
+        <Modal onHiddenModal={onHiddenModal} headerTitle={header}>
             <form className="faculty_form">
                 <div className="input_item_wrapper">
-                    <label htmlFor="faculty_name_input">Tên Khoa Mới:</label>
+                    <label htmlFor="faculty_name_input">{faculty ? 'Tên Khoa:' : 'Tên Khoa Mới:'}</label>
                     <input
                         id="faculty_name_input"
                         type="text"
@@ -79,6 +104,16 @@ function CreateFacultyModal({ onHiddenModal }) {
                         placeholder="Nhập tên khoa mới"
                     />
                 </div>
+
+                {faculty && (
+                    <div className="input_item_wrapper">
+                        <label>Trạng Thái:</label>
+                        <select defaultValue={faculty.isActive} onChange={handleChangeFacultyStatus}>
+                            <option value={true}>Đang Hoạt Động</option>
+                            <option value={false}>Dừng Hoạt Động</option>
+                        </select>
+                    </div>
+                )}
 
                 <div className="input_item_wrapper">
                     <label htmlFor="faculty_manager_input">Quản Lý Khoa:</label>
@@ -125,8 +160,14 @@ function CreateFacultyModal({ onHiddenModal }) {
                     </div>
                 )}
 
-                <button type="button" className="create_new_faculty_btn" onClick={createNewFaculty}>
-                    Tạo Khoa Mới
+                <button
+                    type="button"
+                    className="create_new_faculty_btn"
+                    onClick={() => {
+                        return faculty ? onUpdateFaculty() : createNewFaculty();
+                    }}
+                >
+                    {faculty ? 'Cập Nhật Thông Tin' : 'Tạo Khoa Mới'}
                 </button>
             </form>
         </Modal>

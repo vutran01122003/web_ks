@@ -1,4 +1,4 @@
-import { replaceElem } from '../../utils/handleArray';
+import { removeElem, replaceElem } from '../../utils/handleArray';
 import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
@@ -30,8 +30,8 @@ function facultyReducer(state = initialState, action) {
         }
 
         case GLOBALTYPES.FACULTY.UPDATE_FACULTY: {
-            const newElem = action.payload.newElem;
-            const elemId = action.payload.facultyId;
+            const newElem = action.payload.faculty;
+            const elemId = newElem._id;
             const elemList = state.facultyData;
 
             const newData = replaceElem({ elemId, newElem, elemList });
@@ -41,6 +41,18 @@ function facultyReducer(state = initialState, action) {
                 facultyData: newData
             };
         }
+
+        case GLOBALTYPES.FACULTY.DELETE_FACULTY: {
+            const facultyId = action.payload.facultyId;
+            const faculties = state.facultyData;
+
+            const newFaculties = removeElem(faculties, facultyId);
+
+            return {
+                facultyData: [...newFaculties]
+            };
+        }
+
         default:
             return state;
     }

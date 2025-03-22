@@ -127,7 +127,6 @@ class AccessService {
 
             return populatedUser;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     };

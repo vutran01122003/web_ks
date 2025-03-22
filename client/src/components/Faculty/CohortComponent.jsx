@@ -1,21 +1,78 @@
 import { Fragment, useState } from 'react';
-import { FaPen } from 'react-icons/fa';
-import { MdRemoveCircle } from 'react-icons/md';
+import { TbEdit } from 'react-icons/tb';
 import { IoIosAddCircleOutline } from 'react-icons/io';
-import CreateCohortModal from '../Modal/CreateCohortModal';
+import CohortModal from '../Modal/CohortModal';
 import { capitalizeFirstLetter } from '../../utils/handleString';
+import { useDispatch } from 'react-redux';
+import { deleteCohort } from '../../redux/actions/facultyAction';
+import ConfirmModal from '../Modal/ConfirmModal';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 function CohortComponent({ faculty }) {
+    const dispatch = useDispatch();
+    const facultyData = faculty?.facultyData;
     const [isDisplayCreateCohortModal, setIsDisplayCreateCohortModal] = useState(false);
+    const [isDisplayUpdateCohortModal, setIsDisplayUpdateCohortModal] = useState(false);
+    const [isDisplayDeleteCohortModal, setIsDisplayDeleteCohortModal] = useState(false);
+    const [currentFacultyIndex, setCurrentFacultyIndex] = useState(null);
+    const [currentMajorIndex, setCurrentMajorIndex] = useState(null);
+    const [currentCohortIndex, setCurrentCohortIndex] = useState(null);
+    const currentFaculty = facultyData[currentFacultyIndex];
+    const currentMajor = currentFaculty?.majors[currentMajorIndex];
+    const currentCohort = currentMajor?.cohorts[currentCohortIndex];
 
-    const handleToggleDisplayAddCohortModal = (facultyId) => {
+    const handleToggleDisplayAddCohortModal = () => {
         setIsDisplayCreateCohortModal((prev) => !prev);
+    };
+
+    const handleToggleDisplayUpdateCohortModal = () => {
+        setIsDisplayUpdateCohortModal((prev) => !prev);
+    };
+
+    const handleToggleDisplayDeleteCohortModal = () => {
+        setIsDisplayDeleteCohortModal((prev) => !prev);
+    };
+
+    const handleDeleteCohort = () => {
+        if (!currentFaculty || !currentMajor || !currentCohort) return;
+
+        dispatch(
+            deleteCohort({
+                facultyId: currentFaculty._id,
+                majorId: currentMajor._id,
+                cohortId: currentCohort._id
+            })
+        );
     };
 
     return (
         <Fragment>
             {isDisplayCreateCohortModal && (
-                <CreateCohortModal onHiddenModal={handleToggleDisplayAddCohortModal} faculty={faculty} />
+                <CohortModal
+                    onHiddenModal={handleToggleDisplayAddCohortModal}
+                    facultyState={faculty}
+                    header="Tạo Khoá Sinh Viên"
+                />
+            )}
+
+            {isDisplayUpdateCohortModal && (
+                <CohortModal
+                    onHiddenModal={handleToggleDisplayUpdateCohortModal}
+                    faculty={currentFaculty}
+                    major={currentMajor}
+                    cohort={currentCohort}
+                    header="Cập Nhật Khóa Sinh Viên"
+                />
+            )}
+
+            {isDisplayDeleteCohortModal && (
+                <ConfirmModal
+                    headerContent="Xóa khóa sinh viên"
+                    bodyContent="Bạn chắn chắn muốn xóa khóa sinh viên này"
+                    noteContent="Chỉ có thể xóa các khóa sinh viên chưa có người tham gia."
+                    onAccept={handleDeleteCohort}
+                    toggleConfirmModalDisplay={handleToggleDisplayDeleteCohortModal}
+                />
             )}
 
             <div className="table_heading">
@@ -38,7 +95,7 @@ function CohortComponent({ faculty }) {
                 </thead>
 
                 <tbody>
-                    {faculty.facultyData.reduce((arr, facultyItem) => {
+                    {faculty.facultyData.reduce((arr, facultyItem, facultyIndex) => {
                         const majors = facultyItem.majors;
                         if (majors.length === 0) return arr;
 
@@ -49,7 +106,6 @@ function CohortComponent({ faculty }) {
                         return [
                             ...arr,
                             ...majors.reduce((arr, major, majorIndex) => {
-                                console.log(majorIndex);
                                 const cohorts = major.cohorts;
 
                                 return [
@@ -76,12 +132,28 @@ function CohortComponent({ faculty }) {
                                                     {cohort.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}
                                                 </td>
                                                 <td className="interactive_btn_wrapper">
-                                                    <div className="updated_btn">
-                                                        <FaPen /> <span>Chỉnh Sửa Khóa</span>
+                                                    <div
+                                                        className="updated_btn"
+                                                        onClick={() => {
+                                                            setCurrentFacultyIndex(facultyIndex);
+                                                            setCurrentMajorIndex(majorIndex);
+                                                            setCurrentCohortIndex(index);
+                                                            handleToggleDisplayUpdateCohortModal();
+                                                        }}
+                                                    >
+                                                        <TbEdit /> <span>Chỉnh Sửa Khóa</span>
                                                     </div>
 
-                                                    <div className="delete_btn">
-                                                        <MdRemoveCircle /> <span>Ẩn Khóa</span>
+                                                    <div
+                                                        className="delete_btn"
+                                                        onClick={() => {
+                                                            setCurrentFacultyIndex(facultyIndex);
+                                                            setCurrentMajorIndex(majorIndex);
+                                                            setCurrentCohortIndex(index);
+                                                            handleToggleDisplayDeleteCohortModal();
+                                                        }}
+                                                    >
+                                                        <TiDeleteOutline size={18} /> <span>Xóa Khóa</span>
                                                     </div>
                                                 </td>
                                             </tr>
