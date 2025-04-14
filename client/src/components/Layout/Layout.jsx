@@ -4,19 +4,19 @@ import TopHeader from './TopHeader';
 
 const {
     VITE_APP_TALENT_ENGINEER_CODE,
-    VITE_APP_FACULTY_MANAGER_CODE,
+    VITE_APP_MAJOR_MANAGER_CODE,
     VITE_APP_ADMIN_CODE,
     VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
 } = import.meta.env;
 
 const defaultPathMapping = {
-    [VITE_APP_FACULTY_MANAGER_CODE]: '/activity',
+    [VITE_APP_MAJOR_MANAGER_CODE]: '/activity',
     [VITE_APP_ADMIN_CODE]: '/faculty'
 };
 
 function Layout({ auth, pathName, groupCodeList }) {
     const paths = ['/', '/home'];
-    const cond1 = groupCodeList.includes(VITE_APP_FACULTY_MANAGER_CODE) || groupCodeList.includes(VITE_APP_ADMIN_CODE);
+    const cond1 = groupCodeList.includes(VITE_APP_MAJOR_MANAGER_CODE) || groupCodeList.includes(VITE_APP_ADMIN_CODE);
     const cond2 =
         groupCodeList.includes(VITE_APP_TALENT_ENGINEER_CODE) ||
         groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE);

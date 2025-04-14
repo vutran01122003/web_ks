@@ -20,8 +20,8 @@ function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
         dispatch(
             getProgressByYear({
                 userId: currentUserData._id,
-                studentCohort: currentUserData.cohort,
-                studentMajor: currentUserData.major,
+                studentCohort: currentUserData.cohort.cohortName,
+                studentMajor: currentUserData.major.majorName,
                 studentLevelYear: levelYear
             })
         );

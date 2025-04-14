@@ -350,18 +350,18 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                         type="text"
                                         value={table.description}
                                         readOnly={tableDetailsData ? true : false}
-                                        placeholder="Nhập mô tả chỉ tiêu"
+                                        placeholder="Nhập mô tả chi tiết chỉ tiêu"
                                         onChange={(e) => updateTable(tableIndex, 'description', e.target.value)}
                                         id="mo_ta_chi_tieu"
                                     />
                                 </div>
                                 <div className="flex__line_lable">
-                                    <label htmlFor="mo_ta_chi_tieu">Số Lượng:</label>
+                                    <label htmlFor="mo_ta_chi_tieu">Số Lượng Tối Thiểu:</label>
                                     <input
                                         type="text"
                                         value={table.quantityDemanded}
                                         readOnly={tableDetailsData ? true : false}
-                                        placeholder="Nhập số lượng cần hoàn thành"
+                                        placeholder="Nhập số lượng hoạt động tối thiểu cần hoàn thành"
                                         onChange={(e) => {
                                             updateTable(
                                                 tableIndex,
@@ -401,14 +401,14 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 {table.scoreType === FIXED_SCORE_TYPE && (
                                     <div className="flex__line_lable">
                                         <label htmlFor="score_input">
-                                            {!tableDetailsData ? 'Nhập Điểm:' : 'Điểm Số:'}
+                                            {!tableDetailsData ? 'Nhập Điểm' : 'Điểm Số:'}
                                         </label>
                                         <input
                                             className={`score_input`}
                                             type="text"
                                             value={table.fixedScore}
                                             readOnly={tableDetailsData ? true : false}
-                                            placeholder="Nhập điểm số chỉ tiêu"
+                                            placeholder="Nhập điểm sẽ nhận được khi hoàn thành 1 hoạt động"
                                             id="score_input"
                                             onChange={(e) =>
                                                 updateTable(

@@ -159,7 +159,7 @@ function CreateMajorModal({ onHiddenModal, facultyState, header, faculty, major 
 
                 {majorManagerList.length > 0 && (
                     <div className="faculy_manager_list">
-                        <h5 className="faculy_manager_list title">Danh sách quản lý khoa: </h5>
+                        <h5 className="faculy_manager_list title">Danh sách quản lý chuyên ngành: </h5>
                         {majorManagerList.map((majorManager, index) => (
                             <div key={index} className="manager_info">
                                 <div className="manager_info_wrapper">

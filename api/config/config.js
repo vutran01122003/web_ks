@@ -10,8 +10,7 @@ const dev = {
         uri: process.env.DEV_MONGODB_URI
     },
     redis: {
-        port: process.env.DEV_REDIS_PORT || 6379,
-        host: process.env.DEV_REDIS_HOST || "127.0.0.1"
+        uri: process.env.DEV_REDIS_URI
     }
 };
 

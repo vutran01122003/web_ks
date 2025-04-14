@@ -7,6 +7,7 @@ import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
 import { useDispatch } from 'react-redux';
 import { deleteFaculty } from '../../redux/actions/facultyAction';
 import ConfirmModal from '../Modal/ConfirmModal';
+import { formatTimeStr } from '../../utils/formatDatetime';
 
 function FacultyComponent({ faculty }) {
     const dispatch = useDispatch();
@@ -69,7 +70,6 @@ function FacultyComponent({ faculty }) {
                 <thead>
                     <tr>
                         <th>Tên Khoa</th>
-                        <th>Quản Lý Khoa</th>
                         <th>Tình Trạng</th>
                         <th>Thao Tác</th>
                     </tr>
@@ -79,23 +79,6 @@ function FacultyComponent({ faculty }) {
                     {facultyData.map((facultyItem, index) => (
                         <tr key={facultyItem._id}>
                             <td>{capitalizeFirstLetter(facultyItem.facultyName)}</td>
-
-                            <td>
-                                {facultyItem.managers.length > 0 ? (
-                                    facultyItem.managers.map((manager) => {
-                                        const { lastName, firstName, userId } = manager;
-                                        return (
-                                            <div className="manager_item" key={userId}>
-                                                <span>
-                                                    {userId} - {toFullName({ lastName, firstName })}
-                                                </span>
-                                            </div>
-                                        );
-                                    })
-                                ) : (
-                                    <span>Trống</span>
-                                )}
-                            </td>
 
                             <td className={`status ${facultyItem.isActive ? 'active' : 'inactive'}`}>
                                 {facultyItem.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}

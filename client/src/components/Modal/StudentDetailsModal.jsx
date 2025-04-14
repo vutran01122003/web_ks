@@ -8,7 +8,6 @@ import ConfirmModal from '../Modal/ConfirmModal';
 function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
     const dispatch = useDispatch();
     const faculty = facultyState.faculty;
-
     const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
 
     const dateParts = currentUserData?.birthday
@@ -23,14 +22,14 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
         userId: currentUserData?.userId || '',
         firstName: capitalizeFirstLetter(currentUserData?.firstName) || '',
         lastName: capitalizeFirstLetter(currentUserData?.lastName) || '',
-        gender: capitalizeFirstLetter(currentUserData?.gender) || '',
+        gender: currentUserData?.gender || '',
         email: currentUserData?.email || '',
         phone: currentUserData?.phone || '',
         birthday: dateParts
             ? `${dateParts[2]}-${addZeroPrefix(dateParts[1])}-${addZeroPrefix(dateParts[0])}`
             : dateParts,
-        major: currentUserData?.major || '',
-        cohort: currentUserData?.cohort || '',
+        major: currentUserData?.major?._id || '',
+        cohort: currentUserData?.cohort?._id || '',
         isActive: currentUserData?.isActive || false,
         password: ''
     });
@@ -46,6 +45,7 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                 userData
             })
         );
+        onToggleModal();
     };
 
     const onCloseModal = (e) => {
@@ -171,6 +171,7 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                                         name="gender"
                                         onChange={onChangeUserData}
                                     >
+                                        <option value="">Chọn giới tính</option>
                                         <option value="nam">Nam</option>
                                         <option value="nữ">Nữ</option>
                                     </select>
@@ -225,13 +226,13 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                                         className="select_item"
                                         id="major"
                                         name="major"
-                                        value={userData?.major.majorName}
+                                        value={userData?.major}
                                         onChange={onChangeUserData}
                                     >
                                         <option value="">Chọn Chuyên Ngành</option>
                                         {faculty.majors.length > 0 &&
                                             faculty.majors.map((major) => (
-                                                <option key={major._id} value={major.majorName}>
+                                                <option key={major._id} value={major._id}>
                                                     {capitalizeFirstLetter(major.majorName)}
                                                 </option>
                                             ))}
@@ -250,15 +251,15 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                                         className="select_item"
                                         id="cohort"
                                         name="cohort"
-                                        value={userData?.cohort.cohortName}
+                                        value={userData?.cohort}
                                         onChange={onChangeUserData}
                                     >
                                         <option value="">Chọn Khóa</option>
                                         {userData.major &&
                                             faculty.majors
-                                                .find((major) => major.majorName === userData?.major.majorName)
+                                                .find((major) => major._id === userData?.major)
                                                 ?.cohorts.map((cohort) => (
-                                                    <option key={cohort._id} value={cohort.cohortName}>
+                                                    <option key={cohort._id} value={cohort._id}>
                                                         {cohort.cohortName}
                                                     </option>
                                                 ))}

@@ -1,16 +1,35 @@
 import Avatar from '../Account/ComponentAvatar';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
 
-const {
-    VITE_APP_ADMIN_CODE,
-    VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE,
-    VITE_APP_TALENT_ENGINEER_CODE,
-    VITE_APP_FACULTY_MANAGER_CODE
-} = import.meta.env;
+const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_MAJOR_MANAGER_CODE } =
+    import.meta.env;
 
 const LayoutInfo = ({ user, isDetailedRow }) => {
     const groupCodeList = user?.groups.map((group) => group.groupCode);
-    const heading = 'Thông Tin Cá Nhân';
+    let heading = 'Thông Tin Cá Nhân';
+
+    switch (groupCodeList[0]) {
+        case '001': {
+            heading = 'Kỹ Sư Tài Năng Tạm Thời';
+            break;
+        }
+        case '002': {
+            heading = 'Kỹ Sư Tài Năng';
+            break;
+        }
+        case '003': {
+            heading = 'Quản Lý Kỹ Sư Tài Năng';
+            break;
+        }
+        case '004': {
+            heading = 'Quản Trị Hệ Thống';
+            break;
+        }
+        default: {
+            heading = 'Thông Tin Cá Nhân';
+            break;
+        }
+    }
 
     const userDataList = [
         {
@@ -38,7 +57,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             label: 'Khoa',
             value: user?.faculty.facultyName ? capitalizeFirstLetter(user?.faculty.facultyName) : 'Chưa Cập Nhật',
             roles: [
-                VITE_APP_FACULTY_MANAGER_CODE,
+                VITE_APP_MAJOR_MANAGER_CODE,
                 VITE_APP_TALENT_ENGINEER_CODE,
                 VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
             ],
@@ -49,6 +68,12 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             value: user?.major.majorName ? capitalizeFirstLetter(user?.major.majorName) : 'Chưa Cập Nhật',
             roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
             isShow: isDetailedRow ? false : true
+        },
+        {
+            label: 'Năm',
+            value: user?.major.majorName ? user?.levelYear : 'Chưa Cập Nhật',
+            roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
+            isShow: true
         }
     ];
 

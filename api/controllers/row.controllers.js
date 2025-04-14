@@ -9,11 +9,11 @@ const { slugifyWithSlashes } = require("../utils");
 
 const [PENDING_STATUS, RESUBMITED_STATUS] = ["chờ duyệt", "phải nộp lại"];
 const { TALENT_ENGINEER_CODE, S3_IS_ENABLE } = process.env;
+const s3IsEnable = S3_IS_ENABLE === "true";
 
 class RowControllers {
     addRow = async (req, res, next) => {
         try {
-            const s3IsEnable = S3_IS_ENABLE === "true";
             const rowData = JSON.parse(req.body.rowData);
             const { faculty, major, cohort, userId, tableName, user, levelYear, pageStudentLevelYear } = rowData;
 
@@ -91,15 +91,30 @@ class RowControllers {
 
             const updatedRow = await RowService.resubmitRow({ rowData });
 
-            const uploadedFiles = await UploadService.uploadFilesToS3({
-                files: req.files,
-                folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
-            });
+            let uploadedFiles = null;
+            const mineTypeList = req.files.map((file) => file.mimetype);
+
+            if (s3IsEnable) {
+                uploadedFiles = await UploadService.uploadFilesToS3({
+                    files: req.files,
+                    folderName: `proof_files/${faculty}/${major}/${cohort}/${userId}/${tableName}`
+                });
+            } else {
+                const destination = slugifyWithSlashes(
+                    `${faculty}/${major}/khoá ${cohort}/năm ${levelYear}/${tableName}`
+                );
+
+                uploadedFiles = await storeFiles({
+                    destination,
+                    files: req.files
+                });
+            }
 
             await Promise.all([
                 RowService.addProofFiles({
                     data: req.body,
                     uploadedFiles,
+                    mineTypeList,
                     rowListId: rowListId,
                     rowItemId: contentId
                 }),
@@ -188,6 +203,7 @@ class RowControllers {
             const levelYear = pageInfo.pageStudentLevelYear;
 
             const user = await UserService.getUserAndPopulateGroupById({ id: _id });
+            const populatedUser = await user.populate("major cohort");
 
             if (!user.isActive) throw createError.BadRequest("Người dùng đã bị khóa tài khoản");
             if (user.groups[0].groupCode !== groupCode)
@@ -198,8 +214,8 @@ class RowControllers {
                 );
 
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                majorName: user.major,
-                cohortName: user.cohort
+                majorName: populatedUser.major.majorName,
+                cohortName: populatedUser.cohort.cohortName
             });
 
             if (levelYear < currentLevelYear)

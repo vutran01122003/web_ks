@@ -1,0 +1,474 @@
+[{
+  "_id": {
+    "$oid": "670cc61358c8cef6bf3f0dec"
+  },
+  "name": "kỹ sư tài năng",
+  "groupCode": "002",
+  "description": "nhóm kỹ sư tài năng, có các quyền như nộp minh chứng và xem tiến độ hoàn thành của bản thân",
+  "method": {
+    "get": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d77"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d79"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d91"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0db7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de3"
+      }
+    ],
+    "post": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7f"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d93"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc3"
+      }
+    ],
+    "patch": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d95"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de5"
+      }
+    ],
+    "delete": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de9"
+      }
+    ]
+  },
+  "createdAt": {
+    "$date": "2024-10-14T07:19:47.504Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T09:03:58.409Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "670cca0858c8cef6bf3f0df2"
+  },
+  "name": "quản lý kstn",
+  "groupCode": "003",
+  "description": "nhóm quản lý kỹ sư tài năng, có các quyền như: quản lý các chỉ tiêu, tổng kết tiến độ hoạt động của các chỉ tiêu và xét duyệt các kỹ sư đạt chuẩn, quản lý khóa và chuyên ngành, quản lý tài khoản của kỹ sư tài năng",
+  "method": {
+    "get": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d75"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d85"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d91"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d97"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d9b"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d9d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d9f"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0da9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0db1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0db9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbd"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d77"
+      }
+    ],
+    "post": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7f"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d81"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d87"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8f"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0da1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0da7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0daf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbb"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc3"
+      }
+    ],
+    "patch": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d89"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d99"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0da3"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dab"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0db5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dcb"
+      }
+    ],
+    "delete": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7b"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8b"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0da5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dad"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0db3"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de9"
+      }
+    ]
+  },
+  "createdAt": {
+    "$date": "2024-10-14T07:36:40.695Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T09:47:27.374Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "670cdd2e58c8cef6bf3f0df8"
+  },
+  "name": "quản trị hệ thống",
+  "groupCode": "004",
+  "description": "nhóm quản trị hệ thống có các quyền như: quản lý tài khoản của các quản lý ktsn, quản lý các khoa, quản lý các trang website và phân quyền",
+  "method": {
+    "get": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d91"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d9b"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dcd"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dcf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de1"
+      },
+      {
+        "$oid": "67fb5d2b9440a441a053facb"
+      }
+    ],
+    "post": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7f"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0da1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc3"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dd1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dd7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0ddb"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0ddf"
+      },
+      {
+        "$oid": "67fb2862d490a4bfabfe2534"
+      }
+    ],
+    "patch": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0da3"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dd3"
+      }
+    ],
+    "delete": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0da5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dd5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dd9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0ddd"
+      }
+    ]
+  },
+  "createdAt": {
+    "$date": "2024-10-14T08:58:22.074Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-13T06:44:09.818Z"
+  },
+  "__v": 5
+},
+{
+  "_id": {
+    "$oid": "670e339505a1b1f420d29986"
+  },
+  "name": "kỹ sư tài năng tạm thời",
+  "groupCode": "001",
+  "description": "nhóm kstn tạm thời là những người chờ xét duyệt lên kstn chính thức bằng cách hoàn thành các chỉ tiêu hoặc nộp các tài liệu chứng minh bản thân có thể trở thành kstn",
+  "method": {
+    "get": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d77"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d79"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d91"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0db7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de3"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de7"
+      }
+    ],
+    "post": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7f"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d93"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc3"
+      }
+    ],
+    "patch": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d95"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc5"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc7"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de5"
+      }
+    ],
+    "delete": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc9"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de9"
+      }
+    ]
+  },
+  "createdAt": {
+    "$date": "2024-10-15T09:19:17.697Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-15T09:19:33.073Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6774eae20d98178e703c80ec"
+  },
+  "name": "kỹ sư tài năng bị loại",
+  "groupCode": "005",
+  "description": "nhóm người kstn bị loại là những người không đạt yêu cầu của hệ thống, các quyền cơ bản của kstn đã bị thu hồi trừ quyền xem các thông tin của bản thân",
+  "method": {
+    "get": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d77"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d79"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d8d"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0d91"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dbf"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0dc1"
+      },
+      {
+        "$oid": "670cc56458c8cef6bf3f0de7"
+      }
+    ],
+    "post": [
+      {
+        "$oid": "670cc56458c8cef6bf3f0d7f"
+      }
+    ],
+    "patch": [],
+    "delete": []
+  },
+  "createdAt": {
+    "$date": "2025-01-01T07:12:34.301Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-01T07:18:21.049Z"
+  },
+  "__v": 1
+}]

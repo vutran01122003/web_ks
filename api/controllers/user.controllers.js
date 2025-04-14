@@ -35,6 +35,25 @@ class UserControllers {
         }
     };
 
+    getUsersByGroup = async (req, res, next) => {
+        try {
+            const { groupCode } = req.query;
+            const users = await UserService.getUsersByFields({
+                groupCode,
+                sort: {
+                    "faculty.facultyName": 1
+                }
+            });
+
+            res.status(200).json({
+                msg: "Lấy danh sách người dùng thành công",
+                status: 200,
+                data: users
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
     getUsers = async (req, res, next) => {
         try {
             const { limit, page, cohort, groupCode, major, userId, status, sortByName } = req.query;
@@ -78,7 +97,6 @@ class UserControllers {
         try {
             const userId = req.params.userId;
             const { password, ...userData } = req.body.userData;
-
             if (Object.keys(userData).some((key) => userData[key] === ""))
                 throw createError.BadRequest("Vui lòng nhập đầy đủ thông tin");
 

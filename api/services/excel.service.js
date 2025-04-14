@@ -4,6 +4,7 @@ const AccessService = require("../services/access.service");
 const createHttpError = require("http-errors");
 const { capitalizeFirstLetter } = require("../utils/handleString");
 const conn = require("../dbs/init.mongodb");
+const User = require("../models/user.model");
 
 const { TALENT_ENGINEER_CODE } = process.env;
 
@@ -16,10 +17,15 @@ class ExcelService {
             sheet.columns = userColumn;
 
             qualifiedUsersData.forEach((user, index) => {
-                const { firstName, lastName, faculty, major, cohort } = user;
+                console.log(user);
+                const { firstName, lastName, faculty, major, cohort, userId, birthday, email, phone, gender } = user;
                 const data = {
                     s_no: index + 1,
-                    ...user,
+                    userId,
+                    birthday,
+                    email,
+                    phone,
+                    gender,
                     firstName: capitalizeFirstLetter(firstName),
                     lastName: capitalizeFirstLetter(lastName),
                     faculty: capitalizeFirstLetter(faculty.facultyName),
@@ -76,13 +82,11 @@ class ExcelService {
     };
 
     static importUser = async (req) => {
-        const session = await conn.startSession();
-        const transaction = { session };
-        let prevRegisterUserList = [];
+        const password = process.env.DEFAULT_PASSWORD;
+        const prevRegisterUserList = [];
+        const userIdList = [];
 
         try {
-            session.startTransaction();
-
             const workbook = new ExcelJS.Workbook();
             const buffer = req.file.buffer;
 
@@ -90,7 +94,7 @@ class ExcelService {
 
             const worksheet = workbook.getWorksheet(1);
 
-            let headerColumns = [];
+            const headerColumns = [];
             worksheet.getRow(1).eachCell((cell) => {
                 const value = cell.text.toLowerCase();
                 if (value) headerColumns.push(value);
@@ -100,40 +104,37 @@ class ExcelService {
                 if (rowNumber > 1) {
                     const data = {};
 
-                    data.password = "1111";
+                    data.password = password;
                     row.eachCell((cell, colNumber) => {
-                        // In ExcelJS, Column index start from 1.
-                        // The first column is STT which is ignored
+                        // In ExcelJS, Column index start from 1. The first column is STT which is ignored.
                         if (colNumber > 1) {
                             // headerColumns must subtract 1 index because the first index is zero.
                             addUserData(cell, headerColumns[colNumber - 1], data);
                         }
                     });
 
+                    const userId = data.userId;
+                    if (userIdList.includes(userId))
+                        throw createHttpError.BadRequest(`Mã số ${userId} đã bị trùng lặp.`);
+                    userIdList.push(userId);
                     prevRegisterUserList.push(data);
                 }
             });
 
-            const results = await Promise.allSettled(
+            const user = await User.findOne({ userId: { $in: userIdList } });
+            if (user) throw createHttpError.BadRequest(`Đã có sinh viên ${user.userId} tồn tại trong hệ thống.`);
+
+            await Promise.allSettled(
                 prevRegisterUserList.map((prevRegisterUser) =>
                     AccessService.register({
                         data: prevRegisterUser,
                         groupCode: TALENT_ENGINEER_CODE,
-                        transaction: transaction
+                        isExcelImport: true
                     })
                 )
             );
-
-            for (let i = 0; i < results.length; i++) {
-                if (results[i].status === "rejected") throw createHttpError.BadRequest(results[i].reason.message);
-            }
-
-            await session.commitTransaction();
         } catch (error) {
-            await session.abortTransaction();
             throw error;
-        } finally {
-            await session.endSession();
         }
     };
 }

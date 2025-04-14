@@ -11,11 +11,10 @@ import { pageSelector } from '../redux/selector';
 import { ImBin2 } from 'react-icons/im';
 import { IoMdAddCircle } from 'react-icons/io';
 import { LuView } from 'react-icons/lu';
+const { VITE_APP_ADMIN_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_MAJOR_MANAGER_CODE, VITE_APP_GOAL_PAGE } =
+    import.meta.env;
 
 const PageManagement = () => {
-    const { VITE_APP_ADMIN_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_GOAL_PAGE } =
-        import.meta.env;
-
     const { Search } = Input;
     const page = useSelector(pageSelector);
     const [pages, setPages] = useState({});
@@ -112,7 +111,6 @@ const PageManagement = () => {
         <div className="container_page__manager">
             <div className="heading_text--pages">QUẢN LÝ TRANG</div>
             <div className="body__data--pages">
-                <ComponentSort />
                 {openAddTableModal && (
                     <AddTableModal
                         handleHideAddTableModal={handleHideAddTableModal}
@@ -147,7 +145,6 @@ const PageManagement = () => {
                             <th>Tên trang</th>
                             <th>Quyền truy cập</th>
                             <th>Trạng thái</th>
-                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -162,7 +159,7 @@ const PageManagement = () => {
                                         break;
                                     }
 
-                                    case VITE_APP_FACULTY_MANAGER_CODE: {
+                                    case VITE_APP_MAJOR_MANAGER_CODE: {
                                         role = 'Quản Lý Khoa';
                                         break;
                                     }
@@ -190,7 +187,6 @@ const PageManagement = () => {
                                             <td>
                                                 <div className="icon__show">Đang hoạt động</div>
                                             </td>
-                                            <td></td>
                                         </tr>
                                         {menu_item?.sub_menu_item && menu_item?.sub_menu_item.length > 0 ? (
                                             <>

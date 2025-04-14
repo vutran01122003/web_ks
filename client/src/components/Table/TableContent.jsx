@@ -57,7 +57,6 @@ function TableContent({
     };
 
     const handleHiddenFileContentModal = (e) => {
-        e.preventDefault();
         setVisibleFileContentModal(false);
     };
 

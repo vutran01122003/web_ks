@@ -4,10 +4,12 @@ const {
     mongodb: { uri }
 } = require("../config/config");
 
-const conn = mongoose.createConnection(uri);
+const conn = mongoose.createConnection(uri, {
+    connectTimeoutMS: 1000 * 60 * 5
+});
 
-// conn.set("debug", true);
-// conn.set("debug", { color: true });
+// mongoose.set("debug", true);
+// mongoose.set("debug", { color: true });
 
 conn.on("connected", function () {
     console.log(`Connect to ${this.name} successful`);

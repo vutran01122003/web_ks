@@ -38,37 +38,42 @@ export const login =
         }
     };
 
-export const register = (data) => async (dispatch) => {
-    try {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                loading: true
-            }
-        });
+export const register =
+    ({ isDirectRegister, ...data }) =>
+    async (dispatch) => {
+        try {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    loading: true
+                }
+            });
 
-        const res = await postDataApi('/register', data);
+            let res = null;
 
-        dispatch({
-            type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
-            payload: res.data.data
-        });
+            if (isDirectRegister) {
+                res = await postDataApi('/register', data);
+                dispatch({
+                    type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
+                    payload: res.data.data
+                });
+            } else res = await postDataApi('/admin/register', data);
 
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                success: res.data.status
-            }
-        });
-    } catch (error) {
-        dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: {
-                error: error?.response?.data.msg || 'Cập Nhật Thông Tin Không Thành Công'
-            }
-        });
-    }
-};
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res.data.status
+                }
+            });
+        } catch (error) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: error?.response?.data.msg || 'Tạo người dùng Không Thành Công'
+                }
+            });
+        }
+    };
 export const logout = () => async (dispatch) => {
     try {
         dispatch({

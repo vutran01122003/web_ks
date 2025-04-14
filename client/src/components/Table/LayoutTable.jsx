@@ -4,6 +4,7 @@ import TableModal from '../Modal/TableModal';
 import PreviewFilesModal from '../Modal/PreviewFilesModal';
 import { authSelector } from '../../redux/selector';
 import TableContent from './TableContent';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 
 const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentEngineerType }) => {
     const [useStateModal, setUseStateModal] = useState(false);
@@ -65,11 +66,15 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                 <Fragment>
                     <h5 className="table_description">
                         <span>Mô Tả Chỉ Tiêu: </span>
-                        <span>{table.description ? table.description : 'Không có mô tả cụ thể cho chỉ tiêu này'}</span>
+                        <span>
+                            {table.description
+                                ? capitalizeFirstLetter(table.description)
+                                : 'Không có mô tả cụ thể cho chỉ tiêu này'}
+                        </span>
                     </h5>
                     <h5 className="table_description">
-                        <span>Số Lượng Tối Đa: </span>
-                        <span>{table.quantityDemanded}</span>
+                        <span>Số Lượng Tối Thiểu: </span>
+                        <span>{`${table.quantityDemanded} Hoạt Động`}</span>
                     </h5>
                 </Fragment>
             )}

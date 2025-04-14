@@ -20,13 +20,11 @@ const UserSchema = new Schema(
         firstName: {
             type: String,
             lowercase: true,
-            required: true,
             trim: true
         },
         lastName: {
             type: String,
             lowercase: true,
-            required: true,
             trim: true
         },
         password: {
@@ -40,8 +38,8 @@ const UserSchema = new Schema(
         gender: {
             type: String,
             enum: ["nam", "nữ"],
-            default: "nam",
-            lowercase: true
+            lowercase: true,
+            default: "nam"
         },
         birthday: {
             type: Schema.Types.Date
@@ -70,17 +68,19 @@ const UserSchema = new Schema(
         },
         email: {
             type: String,
-            lowercase: true,
-            unique: true
+            lowercase: true
         },
         phone: {
             type: String,
-            lowercase: true,
-            unique: true
+            lowercase: true
         },
         // Thuộc tính annualTaskProgress cho biết tiến độ hoàn thành nhiệm vụ mỗi năm của sinh viên
-        annualTemporaryActivitiesProgress: [ProgressSchema],
-        annualActivitiesProgress: [ProgressSchema]
+        annualTemporaryActivitiesProgress: {
+            type: [ProgressSchema]
+        },
+        annualActivitiesProgress: {
+            type: [ProgressSchema]
+        }
     },
     {
         collection: COL,

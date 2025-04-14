@@ -51,7 +51,7 @@ class AccessControllers {
             res.status(200)
                 .cookie("accessToken", accessToken, {
                     // httpOnly: true,
-                    // secure: true,
+                    // secure: true
                 })
                 .send({
                     status: "Đăng nhập thành công",
@@ -62,6 +62,32 @@ class AccessControllers {
                         }
                     }
                 });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    createAccountByAdmin = async (req, res, next) => {
+        try {
+            const data = req.body;
+            const groupCode = data.groupCode || TALENT_ENGINEER_CODE;
+
+            const createdUser = await accessService.register({
+                data: {
+                    ...data,
+                    password: process.env.DEFAULT_PASSWORD
+                },
+                groupCode
+            });
+
+            if (!createdUser) throw createError.BadRequest("Tạo tài khoản người dùng thất bại");
+
+            res.status(201).json({
+                status: "Tạo tài khoản người dùng thành công",
+                data: {
+                    user: createdUser
+                }
+            });
         } catch (error) {
             next(error);
         }

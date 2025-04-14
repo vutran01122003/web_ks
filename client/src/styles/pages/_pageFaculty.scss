@@ -9,14 +9,19 @@
         font-weight: 500;
 
         th {
-            border: 1px solid gray;
-            background: #1677ff;
-            color: #fff;
-            padding: 8px;
+            border: 1px solid rgb(171, 170, 170);
+            background: #fff;
+            padding: 10px 5px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            user-select: none;
+            color: #333;
+            text-align: center;
         }
 
         td {
-            border: 1px solid gray;
+            border: 1px solid rgb(171, 170, 170);
             padding: 10px;
         }
 

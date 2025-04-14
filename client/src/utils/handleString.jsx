@@ -7,8 +7,8 @@ export function capitalizeFirstLetter(str) {
 }
 
 export function toFullName({ firstName, lastName }) {
-    if (!firstName || !lastName) return 'Chưa Cập Nhật';
-    return `${capitalizeFirstLetter(lastName)} ${capitalizeFirstLetter(firstName)}`;
+    if (!firstName && !lastName) return 'Chưa Cập Nhật';
+    return `${lastName ? capitalizeFirstLetter(lastName) : ''} ${firstName ? capitalizeFirstLetter(firstName) : ''}`;
 }
 
 export function StandardizePageName(pageName) {

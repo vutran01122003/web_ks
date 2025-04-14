@@ -63,6 +63,13 @@ export const getGoals = (params) => async (dispatch) => {
                 pages: res?.data.data
             }
         });
+
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                success: res?.data.msg || 'Tìm kiếm thành công'
+            }
+        });
     } catch (error) {
         notifyError({
             dispatch,

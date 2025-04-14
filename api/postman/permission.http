@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21013481",
+    "userId": "21078101",
     "password": "1111"
 }
 
@@ -37,31 +37,13 @@ POST {{url}}/api/roles
 Content-Type: application/json
 
 {
-    "method": "patch",
-    "url": "/page",
+    "method": "get",
+    "url": "/users/groups",
     "description": ""
 }
 
 ### Delete role
-DELETE {{url}}/api/roles/65d869e64f4c55561ee57878
-
-### Add roles to the non-talent engineer's group
-POST {{url}}/api/groups/6774eae20d98178e703c80ec/roles
-Content-Type: application/json
-
-{
-    "roleIdList": [
-      "670cc56458c8cef6bf3f0d77",
-      "670cc56458c8cef6bf3f0d79",
-      "670cc56458c8cef6bf3f0d7d",
-      "670cc56458c8cef6bf3f0d8d",
-      "670cc56458c8cef6bf3f0d91",
-      "670cc56458c8cef6bf3f0d7f",
-      "670cc56458c8cef6bf3f0dbf",
-      "670cc56458c8cef6bf3f0de7",
-      "670cc56458c8cef6bf3f0dc1"
-    ]
-}
+DELETE {{url}}/api/roles/67fb2854d490a4bfabfe2529
 
 ### Add roles to the talent engineer's group
 POST {{url}}/api/groups/670cc61358c8cef6bf3f0dec/roles
@@ -148,31 +130,7 @@ Content-Type: application/json
 
 {
     "roleIdList": [
-       "670cc56458c8cef6bf3f0d7d",
-       "670cc56458c8cef6bf3f0d8d",
-       "670cc56458c8cef6bf3f0d91",
-       "670cc56458c8cef6bf3f0d7f",
-       "670cc56458c8cef6bf3f0d9b",
-       "670cc56458c8cef6bf3f0da1",
-       "670cc56458c8cef6bf3f0da3",
-       "670cc56458c8cef6bf3f0da5",
-       "670cc56458c8cef6bf3f0dbf",
-       "670cc56458c8cef6bf3f0dc3",
-       "670cc56458c8cef6bf3f0dc5",
-       "670cc56458c8cef6bf3f0dc7",
-       "670cc56458c8cef6bf3f0dc9",
-       "670cc56458c8cef6bf3f0dcd",
-       "670cc56458c8cef6bf3f0dcf",
-       "670cc56458c8cef6bf3f0dd1",
-       "670cc56458c8cef6bf3f0dd3",
-       "670cc56458c8cef6bf3f0dd7",
-       "670cc56458c8cef6bf3f0dd9",
-       "670cc56458c8cef6bf3f0ddb",
-       "670cc56458c8cef6bf3f0ddd",
-       "670cc56458c8cef6bf3f0ddf",
-       "670cc56458c8cef6bf3f0dd5",
-       "670cc56458c8cef6bf3f0dc1",
-       "670cc56458c8cef6bf3f0de1"
+     "67fb5d2b9440a441a053facb"
     ]
 }
 

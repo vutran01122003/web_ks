@@ -42,7 +42,8 @@ function FirstLogin() {
             register({
                 ...data,
                 levelYear: parseInt(data.levelYear),
-                groupCode: VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
+                groupCode: VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE,
+                isDirectRegister: true
             })
         );
     };
@@ -209,6 +210,7 @@ function FirstLogin() {
                                 value={data?.birthday || ''}
                                 data-date-format="DD MMMM YYYY"
                                 placeholder="Nhập ngày sinh"
+                                max="2006-12-31"
                                 onChange={handleChangeData}
                             />
 

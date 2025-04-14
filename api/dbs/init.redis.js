@@ -1,7 +1,10 @@
 const { createClient } = require("redis");
+const {
+    redis: { uri }
+} = require("../config/config");
 
 const client = createClient({
-    url: "redis://127.0.0.1:6379"
+    url: uri
 });
 
 client
@@ -9,7 +12,7 @@ client
         console.log("Redis Client Error", err);
     })
     .on("connect", function () {
-        console.log("Connect to a Redis successfull");
+        console.log("Connect to a Redis successful");
     })
     .connect();
 

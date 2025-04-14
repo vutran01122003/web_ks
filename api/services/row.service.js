@@ -78,8 +78,6 @@ class RowService {
 
                 await Promise.all([rowList.save(), PageService.addRowIntoTableOfPage({ page, table, rowList })]);
             } else {
-                await this.checkquantityDemanded({ page, table, user, pageData });
-
                 rowList.content.push({ rowValue: contentObj });
                 rowItemId = rowList?.content[rowList.content.length - 1]._id;
                 rowList.content[rowList.content.length - 1].totalScore = totalScore;

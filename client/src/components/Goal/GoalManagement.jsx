@@ -338,7 +338,9 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <IoIosAddCircleOutline size={17} />
+                                                    <div>
+                                                        <IoIosAddCircleOutline size={17} />
+                                                    </div>
                                                     <span>Thêm Chỉ Tiêu Mới Vào Nhóm Chỉ Tiêu</span>
                                                 </div>
 
@@ -352,7 +354,9 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <RxUpdate size={16} />
+                                                    <div>
+                                                        <RxUpdate size={16} />
+                                                    </div>
                                                     <span>
                                                         {filteredPageItem.isActive
                                                             ? `Ẩn ${capitalizeFirstLetter(filteredPageItem.pageName)}`
@@ -369,7 +373,9 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <TiDeleteOutline size={17} />
+                                                    <div>
+                                                        <TiDeleteOutline size={17} />
+                                                    </div>
                                                     <span>{`Xóa ${capitalizeFirstLetter(filteredPageItem.pageName)}`}</span>
                                                 </div>
                                             </td>

@@ -15,18 +15,10 @@ POST {{url}}/api/register
 Content-Type: application/json
 
 {
-    "userId": "21013482",
-    "firstName": "Trung",
-    "lastName": "Trần Đức",
-    "birthday": "2003-05-19",
-    "cohort": 18,
-    "faculty": "Công nghệ thông tin",
-    "major": "kỹ thuật phần mềm",
+    "userId": "21013481",
+    "firstName": "Admin",
     "password": "1111",
-    "email": "tranducvu234@gmail.com",
-    "phone": "0943608225",
-    "gender": "nam",
-    "levelYear": 1
+    "groupCode": "004"
 }
 
 ### Get access token

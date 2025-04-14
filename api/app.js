@@ -17,13 +17,14 @@ const {
     morganType,
     app: { clientDomain_v1, clientDomain_v2 }
 } = require("./config/config");
+const { initRoleCollection, initGroupCollection, initAdminUser } = require("./helpers/initdb/initDB");
 
 // CORS config
 const whitelist = [clientDomain_v1, clientDomain_v2];
 
 const corsOptions = {
     origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
+        if (whitelist.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error("Not allowed by CORS"));
@@ -32,16 +33,21 @@ const corsOptions = {
     credentials: true
 };
 
+(async function () {
+    await Promise.all([initRoleCollection(), initGroupCollection(), initAdminUser()]);
+})();
+
 // MiddleWare
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(morganType));
-app.use(cors(corsOptions));
+
 app.use(helmet());
 app.use(compression());
 app.use(cookieParser());
 
 // Static
+app.use(cors(corsOptions));
 app.use("/files", [auth, express.static("data")]);
 
 // Router
@@ -65,6 +71,7 @@ app.use((req, res, next) => {
 
 // Catch Error
 app.use((err, req, res, next) => {
+    console.log(err);
     if (err instanceof MulterError) {
         let errInfo = {};
         switch (err.code) {

@@ -36,7 +36,8 @@ const App = () => {
     useEffect(() => {
         if (user) {
             dispatch(getNumUnreadNotification({ userId: user._id }));
-            if (!facultyState.faculty) dispatch(getFacultyByName({ facultyName: user?.faculty.facultyName }));
+            if (!facultyState.faculty && !groupCodeList.includes('004'))
+                dispatch(getFacultyByName({ facultyName: user?.faculty?.facultyName }));
         }
     }, [user, dispatch]);
 

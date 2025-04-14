@@ -1,0 +1,139 @@
+.permission_container {
+    padding: 10px;
+
+    table {
+        margin-top: 5px;
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        font-weight: 500;
+
+        th {
+            border: 1px solid rgb(171, 170, 170);
+            background: #fff;
+            padding: 10px 5px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            user-select: none;
+            color: #333;
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid rgb(171, 170, 170);
+            padding: 10px;
+        }
+    }
+
+    .table_heading {
+        display: flex;
+        padding: 10px 5px;
+        justify-content: space-between;
+        align-items: center;
+
+        .heading {
+            color: #0153b1;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    }
+
+    .add_major_manager_btn,
+    .add_faculty_manager_btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: #1677ff;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        padding: 8px;
+        border-radius: 3px;
+        font-weight: 600;
+        cursor: pointer;
+        max-height: 40px;
+        min-width: 140px;
+        transition: 0.1s linear;
+
+        &:active {
+            transform: scale(0.9);
+        }
+    }
+
+    td {
+        &.active {
+            color: #007bff;
+        }
+
+        &.inactive {
+            color: #f0635c;
+        }
+    }
+
+    .user_form_container {
+        max-width: 100%;
+        margin: auto;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .input_item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .level_year_input {
+                    cursor: not-allowed;
+                }
+
+                label {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    display: block;
+                    min-width: 180px;
+                }
+
+                input,
+                select {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    font-size: 1rem;
+                }
+            }
+
+            button {
+                margin-left: auto;
+                margin-right: auto;
+                font-weight: 600;
+                width: 400px;
+                max-width: 100%;
+                background: #007bff;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: background 0.3s ease;
+
+                &:hover {
+                    background: #0056b3;
+                }
+            }
+        }
+    }
+}

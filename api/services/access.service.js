@@ -3,8 +3,9 @@ const { createNewAnnualActivitiesProgress } = require("./user.service");
 const FacultyService = require("./faculty.service");
 const PermissionService = require("./permission.service");
 const createHttpError = require("http-errors");
+const { capitalizeFirstLetter } = require("../utils/handleString");
 
-const { TALENT_ENGINEER_CODE, TEMPORARY_TALENT_ENGINEER_CODE } = process.env;
+const { TALENT_ENGINEER_CODE, TEMPORARY_TALENT_ENGINEER_CODE, ADMIN_CODE, MAJOR_MANAGER_CODE } = process.env;
 const populatedOptions = [
     {
         path: "groups",
@@ -39,36 +40,25 @@ class AccessService {
                     typePassword: "password",
                     data: user
                 };
-            } else throw createHttpError.Unauthorized("Mã sinh viên hoặc mật khẩu không đúng");
+            } else throw createHttpError.Unauthorized("Mã tài khoản hoặc mật khẩu không đúng");
         } catch (error) {
             throw error;
         }
     };
 
-    static register = async ({ data, groupCode, transaction }) => {
+    static register = async ({ data, groupCode, isExcelImport }) => {
         try {
-            const { userId, lastName, firstName, password, birthday, major, cohort, faculty, email, phone } = data;
             let levelYear = 0;
+            const { userId, lastName, firstName, password, birthday, major, cohort, faculty, email, phone } = data;
 
-            const results = await Promise.all([
-                User.findOne({ userId }),
-                User.findOne({ email }),
-                User.findOne({ phone })
-            ]);
-
-            if (results[0]) throw createHttpError.Conflict(`Mã sinh viên ${userId} đã tồn tại`);
-            if (results[1]) throw createHttpError.Conflict(`Email ${email} đã tồn tại`);
-            if (results[2]) throw createHttpError.Conflict(`Số điện thoại ${phone} đã tồn tại`);
+            if (!isExcelImport && (await User.findOne({ userId })))
+                throw createHttpError.BadRequest(`Người dùng ${userId} đã tồn tại trong hệ thống`);
 
             const [facultyData, majorData, cohortData] = await Promise.all([
-                FacultyService.getFacultyByName({ facultyName: faculty.toLowerCase() }),
-                FacultyService.getMajorByName({ majorName: major.toLowerCase() }),
-                FacultyService.getCohortByName({ majorName: major.toLowerCase(), cohortName: cohort.toLowerCase() })
+                faculty ? FacultyService.getFacultyByName({ facultyName: faculty }) : null,
+                major ? FacultyService.getMajorByName({ majorName: major }) : null,
+                cohort ? FacultyService.getCohortByName({ majorName: major, cohortName: cohort }) : null
             ]);
-
-            if (!facultyData) throw createHttpError.NotFound("Khoa không tồn tại");
-            if (!majorData) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
-            if (!cohortData) throw createHttpError.NotFound("Khóa sinh viên không tồn tại");
 
             const group = await PermissionService.getGroupByGroupCode(groupCode);
 
@@ -76,10 +66,10 @@ class AccessService {
                 userId,
                 firstName,
                 lastName,
-                birthday: new Date(birthday),
-                faculty: facultyData._id,
-                major: majorData._id,
-                cohort: cohortData._id,
+                birthday: birthday ? new Date(birthday) : null,
+                faculty: facultyData?._id,
+                major: majorData?._id,
+                cohort: cohortData?._id,
                 email,
                 phone,
                 groups: [group._id]
@@ -90,6 +80,7 @@ class AccessService {
                     majorName: major,
                     cohortName: String(cohort)
                 });
+
                 createdUser.levelYear = levelYear;
             } else if (TEMPORARY_TALENT_ENGINEER_CODE === groupCode) {
                 const additionalRegisterInfo = await FacultyService.getAdditionalRegisterInfo({
@@ -99,18 +90,29 @@ class AccessService {
 
                 levelYear = additionalRegisterInfo.levelYear;
 
+                if (!additionalRegisterInfo)
+                    throw createHttpError.BadRequest(
+                        `Chuyên ngành ${capitalizeFirstLetter(major)} chưa tổ chức tuyển bổ sung`
+                    );
+
                 if (!additionalRegisterInfo.isActive)
                     throw createHttpError.BadRequest("Năm học đăng ký bổ sung đã kết thúc");
 
                 createdUser.levelYear = levelYear;
             }
 
-            createdUser.encodePassword(password);
+            createdUser.encodePassword(password ? password : process.env.DEFAULT_PASSWORD);
 
-            if (transaction) await createdUser.save(transaction);
-            else await createdUser.save();
+            await createdUser.save();
 
             const populatedUser = await User.populate(createdUser, populatedOptions);
+
+            if (groupCode === MAJOR_MANAGER_CODE) {
+                await FacultyService.addManagerToMajor({
+                    majorName: major,
+                    userId: populatedUser._id
+                });
+            }
 
             if ([TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE].includes(groupCode)) {
                 await createNewAnnualActivitiesProgress({

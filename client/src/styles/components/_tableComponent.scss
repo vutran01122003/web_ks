@@ -60,6 +60,9 @@
         color: gray;
         font-weight: 400;
         padding-left: 10px;
+        & + .table_description {
+            margin-top: 5px;
+        }
 
         span:first-child {
             font-weight: bold;

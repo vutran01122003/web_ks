@@ -18,20 +18,14 @@ function StopSubmittingProofModal({
 
     const dispatch = useDispatch();
     const progressPercentageInputRef = useRef();
-    const scoreInputRef = useRef();
 
     const [confirmValue, setConfirmValue] = useState('');
     const [progressPercentage, setProgressPercentage] = useState('');
-    const [score, setScore] = useState('');
 
     const handleChangeProgressPercentageValue = (e) => {
         if (e.target.value === '' || /^\d*\.?\d*$/.test(e.target.value)) {
             setProgressPercentage(e.target.value);
         }
-    };
-
-    const handleChangeScoreValue = (e) => {
-        setScore(e.target.value);
     };
 
     const handleConfirmValue = (e) => {
@@ -42,44 +36,14 @@ function StopSubmittingProofModal({
         if (e.target === e.currentTarget) handleHiddenStopSubmittingProofModal();
     };
 
-    const handleChangeProgressPercentageCheckboxValue = (e) => {
-        if (e.target.checked) {
-            setProgressPercentage('');
-            progressPercentageInputRef.current.readOnly = true;
-            progressPercentageInputRef.current.style.cursor = 'not-allowed';
-            progressPercentageInputRef.current.style.opacity = 0.65;
-        } else {
-            progressPercentageInputRef.current.readOnly = false;
-            progressPercentageInputRef.current.style.cursor = 'text';
-            progressPercentageInputRef.current.style.opacity = 1;
-        }
-    };
-
-    const handleChangeScoreCheckboxValue = (e) => {
-        if (e.target.checked) {
-            setScore('');
-            scoreInputRef.current.readOnly = true;
-            scoreInputRef.current.style.cursor = 'not-allowed';
-            scoreInputRef.current.style.opacity = 0.65;
-        } else {
-            scoreInputRef.current.readOnly = false;
-            scoreInputRef.current.style.cursor = 'text';
-            scoreInputRef.current.style.opacity = 1;
-        }
-    };
-
     const handleStopSubmittingProof = () => {
         if (confirmValue.trim() !== confirm) return;
 
-        if (
-            (progressPercentage || progressPercentageInputRef.current.readOnly) &&
-            (score || scoreInputRef.current.readOnly)
-        ) {
+        if (progressPercentage || progressPercentageInputRef.current.readOnly) {
             dispatch(
                 stopSubmittingProof({
                     conditions: {
-                        progressPercentage: progressPercentage || 0,
-                        score: score || 0
+                        progressPercentage: progressPercentage || 0
                     },
                     major,
                     cohort,
@@ -90,6 +54,7 @@ function StopSubmittingProofModal({
                 })
             );
             handleHiddenStopSubmittingProofModal();
+            window.location.reload();
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -135,26 +100,6 @@ function StopSubmittingProofModal({
                                 value={progressPercentage}
                                 ref={progressPercentageInputRef}
                             />
-                            <span className="input_checkbox_item">
-                                <input type="checkbox" onClick={handleChangeProgressPercentageCheckboxValue} />
-                                <span>Không bắt buộc</span>
-                            </span>
-                        </div>
-
-                        <div className="input_item">
-                            <label>Số Điểm:</label>
-                            <input
-                                className="input_text_item"
-                                type="text"
-                                placeholder="Nhập số điểm tối thiểu"
-                                value={score}
-                                onChange={handleChangeScoreValue}
-                                ref={scoreInputRef}
-                            />
-                            <span className="input_checkbox_item">
-                                <input type="checkbox" onClick={handleChangeScoreCheckboxValue} />
-                                <span>Không bắt buộc</span>
-                            </span>
                         </div>
                     </div>
 

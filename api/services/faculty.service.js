@@ -3,11 +3,9 @@ const Faculty = require("../models/faculty.model");
 const Major = require("../models/major.model");
 const Cohort = require("../models/cohort.model");
 const { capitalizeFirstLetter } = require("../utils/handleString");
-const convertToObjectId = require("../utils/convertToObjectId");
 const User = require("../models/user.model");
 
 const populatedOptions = [
-    { path: "managers", model: "user", select: "lastName firstName userId" },
     {
         path: "majors",
         model: "major",
@@ -159,10 +157,8 @@ class FacultyService {
     static getMajorByName = async ({ majorName }) => {
         try {
             const major = await Major.findOne({ majorName });
-
             if (!major)
                 throw createHttpError.NotFound(`Chuyên ngành ${capitalizeFirstLetter(majorName)} không tồn tại`);
-
             return major;
         } catch (error) {
             throw error;
@@ -225,6 +221,29 @@ class FacultyService {
         }
     };
 
+    static addManagerToMajor = async ({ userId, majorName }) => {
+        try {
+            const updatedMajor = await Major.findOneAndUpdate(
+                {
+                    majorName,
+                    managers: {
+                        $nin: [userId]
+                    }
+                },
+                {
+                    $push: {
+                        managers: userId
+                    }
+                },
+                { new: true }
+            );
+
+            return updatedMajor;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static getCohortById = async ({ cohortId }) => {
         try {
             return await Cohort.findById(cohortId);
@@ -236,14 +255,14 @@ class FacultyService {
     static getCohortByName = async ({ majorName, cohortName }) => {
         try {
             const major = await this.getMajorByName({ majorName });
-            const populatedMajor = await major.populate("cohorts", "cohortName");
-            const cohort = populatedMajor.cohorts.find((cohort) => cohort.cohortName === cohortName);
+            const populatedMajor = await major.populate("cohorts");
 
+            const cohort = populatedMajor.cohorts.find((cohort) => cohort.cohortName === cohortName.toLowerCase());
             if (!cohort) throw createHttpError.NotFound("Khóa sinh viên không tồn tại");
 
             return cohort;
         } catch (error) {
-            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu năm hiện tại");
+            throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu khóa sinh viên");
         }
     };
 
@@ -282,10 +301,11 @@ class FacultyService {
 
     static updateCohortById = async ({ majorId, cohortId, data }) => {
         try {
-            const major = await Major.findById(majorId).populate("cohorts", "cohortName");
-            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+            const major = await Major.findById(majorId).populate("cohorts");
 
+            if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
             if (
+                data?.cohortName &&
                 major.cohorts.find(
                     (cohort) => cohort.cohortName === data.cohortName && cohort._id.toString() !== cohortId
                 )
@@ -312,7 +332,6 @@ class FacultyService {
     static getAdditionalRegisterInfo = async ({ majorName, cohortName }) => {
         try {
             const cohort = await this.getCohortByName({ majorName, cohortName });
-
             return cohort.additionalRegisterInfo;
         } catch (error) {
             throw error;

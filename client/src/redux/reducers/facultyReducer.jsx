@@ -30,14 +30,14 @@ function facultyReducer(state = initialState, action) {
         }
 
         case GLOBALTYPES.FACULTY.UPDATE_FACULTY: {
-            const newElem = action.payload.faculty;
-            const elemId = newElem._id;
+            const faculty = action.payload?.faculty;
+            const facultyId = faculty._id;
             const elemList = state.facultyData;
 
-            const newData = replaceElem({ elemId, newElem, elemList });
+            const newData = replaceElem({ facultyId, faculty, elemList });
 
             return {
-                faculty: newElem,
+                faculty,
                 facultyData: newData
             };
         }

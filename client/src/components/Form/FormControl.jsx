@@ -13,7 +13,8 @@ const FormControl = ({
     disabled,
     onChange,
     name,
-    readonly
+    readonly,
+    max
 }) => {
     return (
         <div className={`component__input ${classNameRoot ? classNameRoot : ''}`}>
@@ -30,6 +31,7 @@ const FormControl = ({
                         name={name}
                         readOnly={readonly}
                         className={classNameInputItem}
+                        max={max}
                     />
 
                     <div className="icon__before">{iconBefore}</div>

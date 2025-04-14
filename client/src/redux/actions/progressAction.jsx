@@ -94,14 +94,12 @@ export const stopSubmittingProof =
                 groupCode,
                 updatedCohortData
             });
-
             const updatedFaculty = await getDataApi(`/faculties/${updatedCohortData.facultyId}`);
 
             dispatch({
                 type: GLOBALTYPES.FACULTY.UPDATE_FACULTY,
                 payload: {
-                    facultyId: updatedCohortData.facultyId,
-                    newElem: updatedFaculty.data.data
+                    faculty: updatedFaculty.data.data
                 }
             });
 
@@ -114,7 +112,7 @@ export const stopSubmittingProof =
 
             if (faculty) dispatch(getFacultyByName({ facultyName: faculty }));
 
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             notifyError({
                 dispatch,

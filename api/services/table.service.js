@@ -4,6 +4,7 @@ const UserService = require("./user.service");
 const Row = require("../models/row.model");
 const User = require("../models/user.model");
 const PermissionService = require("./permission.service");
+const FacultyService = require("./faculty.service");
 const { TALENT_ENGINEER_CODE } = process.env;
 
 class TableService {
@@ -131,11 +132,17 @@ class TableService {
 
             if (isDiffQuantity) {
                 const group = await PermissionService.getGroupByGroupCode(pageTalentEngineerType);
+                const [facultyData, majorData, cohortData] = await Promise.all([
+                    FacultyService.getFacultyByName({ facultyName: pageFaculty }),
+                    FacultyService.getMajorByName({ majorName: pageStudentMajor }),
+                    FacultyService.getCohortByName({ cohortName: pageStudentCohort, majorName: pageStudentMajor })
+                ]);
+
                 const [userList, pageList] = await Promise.all([
                     User.find({
-                        faculty: pageFaculty,
-                        major: pageStudentMajor,
-                        cohort: pageStudentCohort,
+                        faculty: facultyData._id,
+                        major: majorData._id,
+                        cohort: cohortData._id,
                         groups: {
                             $in: group._id
                         }

@@ -1,0 +1,915 @@
+[{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d75"
+  },
+  "url": "/page/activities",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.383Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.383Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d77"
+  },
+  "url": "/pages",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.388Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.388Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d79"
+  },
+  "url": "/page/:pageName",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.389Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.389Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d7b"
+  },
+  "url": "/page",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.391Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.391Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d7d"
+  },
+  "url": "/access-token",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.393Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.393Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d81"
+  },
+  "url": "/page",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.395Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.395Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d83"
+  },
+  "url": "/register",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.397Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.397Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d87"
+  },
+  "url": "/table",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.399Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.399Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d89"
+  },
+  "url": "/table",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.401Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.401Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d8b"
+  },
+  "url": "/table",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.402Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.402Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d8d"
+  },
+  "url": "/news",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.403Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.403Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d8f"
+  },
+  "url": "/news",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.404Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.404Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d91"
+  },
+  "url": "/news/:id",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.405Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.405Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d93"
+  },
+  "url": "/rows",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.407Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.407Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d95"
+  },
+  "url": "/rows/:rowId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.408Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.408Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d7f"
+  },
+  "url": "/login",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.394Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.394Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d99"
+  },
+  "url": "/dynamic-rows/:rowId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.410Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.410Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d9b"
+  },
+  "url": "/faculties",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.411Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.411Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d9d"
+  },
+  "url": "/faculties/:facultyId",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.412Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.412Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d9f"
+  },
+  "url": "/faculty/:facultyName",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.412Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.412Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0da1"
+  },
+  "url": "/faculties",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.413Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.413Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0da3"
+  },
+  "url": "/faculties/:facultyId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.414Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.414Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0da5"
+  },
+  "url": "/faculties/:facultyId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.415Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.415Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0da7"
+  },
+  "url": "/faculties/:facultyId/majors",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.416Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.416Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0da9"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.417Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.417Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d85"
+  },
+  "url": "/table",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.398Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.398Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dad"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.419Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.419Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0daf"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId/cohorts",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.419Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.419Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0db1"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId/cohorts/:cohortId",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.421Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.421Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0db3"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId/cohorts/:cohortId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.422Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0db5"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId/cohorts/:cohortId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.422Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0db7"
+  },
+  "url": "/progress",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.423Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.423Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0db9"
+  },
+  "url": "/progress/all",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.424Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.424Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dbb"
+  },
+  "url": "/progress/updated-users",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.425Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.425Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dbd"
+  },
+  "url": "/excel",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.425Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.425Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dbf"
+  },
+  "url": "/notifications/:recipientId",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.426Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.426Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0d97"
+  },
+  "url": "/dynamic-rows",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.409Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.409Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dc3"
+  },
+  "url": "/notifications",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.429Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.429Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dc5"
+  },
+  "url": "/notifications/:notificationId/updated-status",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.430Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.430Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dc7"
+  },
+  "url": "/notifications/updated-status",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.430Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.430Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dc9"
+  },
+  "url": "/notifications/:notificationId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.431Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.431Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dcb"
+  },
+  "url": "/page",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.432Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.432Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dcd"
+  },
+  "url": "/routes",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.433Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.433Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dcf"
+  },
+  "url": "/groups",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.434Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.434Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dd1"
+  },
+  "url": "/groups",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.434Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.434Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dd3"
+  },
+  "url": "/groups/:groupId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.435Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.435Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dab"
+  },
+  "url": "/faculties/:facultyId/majors/:majorId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.418Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.418Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dd7"
+  },
+  "url": "/roles",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.437Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.437Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dd9"
+  },
+  "url": "/roles/:roleId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.438Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.438Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0ddb"
+  },
+  "url": "/groups/:groupId/roles",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.438Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.438Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0ddd"
+  },
+  "url": "/groups/:groupId/roles/:roleId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.439Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.439Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0ddf"
+  },
+  "url": "/users/:userId/groups/:groupId",
+  "method": "post",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.440Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.440Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0de1"
+  },
+  "url": "/users/:userId",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.441Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.441Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0de3"
+  },
+  "url": "/users",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.442Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.442Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0de5"
+  },
+  "url": "/users/:userId",
+  "method": "patch",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.442Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.442Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0de7"
+  },
+  "url": "/logout",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.448Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.448Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0de9"
+  },
+  "url": "/notifications",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.452Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.452Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dc1"
+  },
+  "url": "/notifications/:recipientId/unread-notifications",
+  "method": "get",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.427Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.427Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "670cc56458c8cef6bf3f0dd5"
+  },
+  "url": "/groups/:groupId",
+  "method": "delete",
+  "description": "Không có mô tả",
+  "createdAt": {
+    "$date": "2024-10-14T07:16:52.436Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-14T07:16:52.436Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fb2862d490a4bfabfe2534"
+  },
+  "url": "/admin/register",
+  "method": "post",
+  "description": "",
+  "createdAt": {
+    "$date": "2025-04-13T02:58:42.451Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-13T02:58:42.451Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fb5d2b9440a441a053facb"
+  },
+  "url": "/users/groups",
+  "method": "get",
+  "description": "",
+  "createdAt": {
+    "$date": "2025-04-13T06:43:55.605Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-13T06:43:55.605Z"
+  },
+  "__v": 0
+}]

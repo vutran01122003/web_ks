@@ -12,7 +12,7 @@ import Notification from '../Notification/Notification';
 import { notificationSelector } from '../../redux/selector';
 import Account from '../Account/ComponentAccount';
 
-const { VITE_APP_FACULTY_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
+const { VITE_APP_MAJOR_MANAGER_CODE, VITE_APP_ADMIN_CODE } = import.meta.env;
 
 const TopHeader = ({ auth }) => {
     const user = auth?.user;
@@ -56,7 +56,7 @@ const TopHeader = ({ auth }) => {
     });
 
     const determineAuth =
-        groupCodeList.includes(VITE_APP_ADMIN_CODE) || groupCodeList.includes(VITE_APP_FACULTY_MANAGER_CODE);
+        groupCodeList.includes(VITE_APP_ADMIN_CODE) || groupCodeList.includes(VITE_APP_MAJOR_MANAGER_CODE);
 
     const ARRAY_LIST_PRODUCT = [
         {

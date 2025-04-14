@@ -11,15 +11,6 @@ const FacultySchema = new Schema(
             lowercase: true,
             unique: true
         },
-        managers: {
-            type: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: "user"
-                }
-            ],
-            default: []
-        },
         majors: {
             type: [
                 {

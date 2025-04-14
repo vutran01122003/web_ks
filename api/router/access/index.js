@@ -8,5 +8,6 @@ router.get("/access-token", auth, accessControllers.getInfoUser);
 router.post("/login", accessControllers.login);
 router.get("/logout", accessControllers.logout);
 router.post("/register", validateResource({ schema: registerSchema }), accessControllers.register);
+router.post("/admin/register", validateResource({ schema: registerSchema }), accessControllers.createAccountByAdmin);
 
 module.exports = router;

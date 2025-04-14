@@ -17,7 +17,12 @@ class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
         try {
             const { userId, pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
-
+            console.log({
+                userId,
+                pageStudentMajor,
+                pageStudentLevelYear,
+                pageStudentCohort
+            });
             const pageDetailsList = await ProgressService.getProgressByYear({
                 pageStudentMajor,
                 pageStudentLevelYear,
@@ -117,7 +122,6 @@ class ProgressControllers {
     updateUserActivityStatusByMajor = async (req, res, next) => {
         try {
             const { major, cohort, faculty, levelYear, groupCode, conditions, updatedCohortData } = req.body;
-
             const [currentLevelYear, group] = await Promise.all([
                 FacultyService.getCurrentLevelYearOfCohort({
                     majorName: major.toLowerCase(),
@@ -131,10 +135,10 @@ class ProgressControllers {
 
             await UserService.updateUserActivityStatusByMajor({
                 conditions,
-                faculty: faculty.toLowerCase(),
-                major: major.toLowerCase(),
+                faculty,
+                major,
                 cohort,
-                levelYear: parseInt(levelYear),
+                levelYear,
                 updatedCohortData,
                 groupData: {
                     groupCode: groupCode,

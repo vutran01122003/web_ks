@@ -7,6 +7,7 @@ module.exports = {
         try {
             const accessToken =
                 req?.headers["x-token"] || req.cookies?.accessToken || req?.headers["cookie"].split("=")[1];
+
             const { data, isExpired, error } = await jwtService.verifyAccessToken(accessToken);
 
             if (isExpired) {
