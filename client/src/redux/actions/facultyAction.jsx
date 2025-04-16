@@ -130,7 +130,8 @@ export const getFacultyById =
     ({ facultyId }) =>
     async (dispatch) => {
         try {
-            await getDataApi(`/faculties/${facultyId}`);
+            console.log(facultyId);
+            await getDataApi(`/faculties/id/${facultyId}`);
         } catch (error) {
             notifyError({
                 dispatch,
@@ -144,7 +145,7 @@ export const getFacultyByName =
     ({ facultyName }) =>
     async (dispatch) => {
         try {
-            const res = await getDataApi(`/faculties/${facultyName}`);
+            const res = await getDataApi(`/faculties/name/${facultyName}`);
 
             dispatch({
                 type: GLOBALTYPES.FACULTY.GET_FACULTY,
@@ -198,8 +199,17 @@ export const getMajors =
     ({ managerId }) =>
     async (dispatch) => {
         try {
-            const res = await getDataApi('/faculties/:facultyId/majors', {
+            const res = await getDataApi('/majors', {
                 managerId
+            });
+
+            console.log(res.data.data);
+
+            dispatch({
+                type: GLOBALTYPES.FACULTY.GET_MAJORS,
+                payload: {
+                    majors: res.data.data
+                }
             });
         } catch (error) {
             notifyError({

@@ -74,6 +74,7 @@ class FacultyController {
     getFacultyById = async (req, res, next) => {
         try {
             const { facultyId } = req.params;
+            console.log(facultyId);
             const faculty = await FacultyService.getFacultyById({ facultyId });
 
             return res.status(200).json({
@@ -144,12 +145,14 @@ class FacultyController {
 
     getMajors = async (req, res, next) => {
         try {
-            const { managerId } = req.query;
+            const { managerId, majorName } = req.query;
             const filterData = {
-                managers: managerId
+                managers: managerId,
+                majorName
             };
 
             if (!managerId) delete filterData.managers;
+            if (!majorName) delete filterData.majorName;
 
             const majors = await FacultyService.getMajors(filterData);
 

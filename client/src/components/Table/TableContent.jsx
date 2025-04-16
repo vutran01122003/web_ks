@@ -74,7 +74,7 @@ function TableContent({
                                     />
                                 )}
 
-                                {item?.proofFiles.length > 1 ? (
+                                {/* {item?.proofFiles.length > 1 ? (
                                     <span
                                         className="proof_files_download"
                                         onClick={() => {
@@ -89,7 +89,7 @@ function TableContent({
                                     <a href={item?.proofFiles[0]?.fileUrl} className="proof_files_download">
                                         {item?.proofNameLabel}
                                     </a>
-                                )}
+                                )} */}
 
                                 <span onClick={handleVisibleFileContentModal} className="preview_proof_files">
                                     {item?.proofPreviewLabel}

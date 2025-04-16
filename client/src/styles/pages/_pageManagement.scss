@@ -27,9 +27,7 @@
             border-radius: 10px;
             min-width: 220px;
             padding: 8px 12px;
-            color: #fff;
-            font-size: small;
-            font-weight: 600;
+            font-weight: bold;
             background: #1c7ae6;
             text-align: center;
         }
@@ -126,7 +124,6 @@
             }
 
             .name_menu {
-                color: #1c7ae6;
                 font-weight: 650;
             }
 
@@ -145,12 +142,10 @@
 
             .icon__show {
                 width: max-content;
-                background-color: #0ca379;
                 padding: 2px 5px;
-                color: #fff;
-                border-radius: 3px;
+                color: #1c7ae6;
+                font-weight: 600;
                 font-size: 15px;
-                cursor: pointer;
             }
 
             .btn_man-pages {

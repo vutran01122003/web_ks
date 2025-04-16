@@ -26,7 +26,7 @@ function SearchFilterComponent({
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
     const activities = useSelector(activitiesSelector);
-    const [majorValueList, setMajorValueList] = useState([]);
+    const majorValueList = facultyState?.majors;
     const isTemporaryEngineer = talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
 
     const handleMajorValue = (e) => {
@@ -92,17 +92,6 @@ function SearchFilterComponent({
     const handleStatusValue = (e) => {
         setStatus(e.target.value);
     };
-
-    useEffect(() => {
-        if (facultyState.facultyData.length === 0) dispatch(getAllFaculties());
-    }, []);
-
-    useEffect(() => {
-        const facultyData = facultyState?.faculty;
-        if (facultyData) {
-            setMajorValueList(facultyData.majors);
-        }
-    }, [facultyState?.faculty]);
 
     useEffect(() => {
         if (setActivityName) {

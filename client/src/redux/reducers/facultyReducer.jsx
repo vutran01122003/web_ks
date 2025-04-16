@@ -3,7 +3,8 @@ import GLOBALTYPES from '../actions/globalTypes';
 
 const initialState = {
     facultyData: [],
-    faculty: null
+    faculty: null,
+    majors: []
 };
 
 function facultyReducer(state = initialState, action) {
@@ -12,6 +13,23 @@ function facultyReducer(state = initialState, action) {
             return {
                 ...state,
                 facultyData: action.payload.facultyData
+            };
+        }
+
+        case GLOBALTYPES.FACULTY.GET_MAJORS: {
+            return {
+                ...state,
+                majors: action.payload.majors
+            };
+        }
+
+        case GLOBALTYPES.FACULTY.UPDATE_MAJORS: {
+            const major = action.payload.major;
+            const majors = replaceElem({ elemId: major._id, newElem: major, elemList: state.majors });
+
+            return {
+                ...state,
+                majors
             };
         }
 

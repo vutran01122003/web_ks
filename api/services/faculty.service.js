@@ -156,8 +156,7 @@ class FacultyService {
 
     static getMajors = async (filterData) => {
         try {
-            const majors = await Major.find(filterData).populate("cohorts");
-            return majors;
+            return await Major.find(filterData).populate("cohorts");
         } catch (error) {
             throw error;
         }

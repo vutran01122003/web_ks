@@ -14,14 +14,13 @@ import { authSelector, facultySelector, progressSelector } from '../redux/select
 import { exportProgressStatisticsExcel } from '../redux/actions/excelAction';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
+const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
 
 function ProgressUI() {
-    const LIMIT = import.meta.env.VITE_APP_API_LIMIT;
     const observer = useRef();
     const dispatch = useDispatch();
 
-    const facultyState = useSelector(facultySelector);
-    const faculty = facultyState.faculty;
+    const { majors, faculty } = useSelector(facultySelector);
     const progress = useSelector(progressSelector);
     const auth = useSelector(authSelector);
 
@@ -34,12 +33,11 @@ function ProgressUI() {
     const [vissibleModal, setVissibleModal] = useState(false);
     const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
     const [isVisibleStopSubmitingProofBtn, setIsVisibleStopSubmitingProofBtn] = useState(false);
-
     const additionalRegisterInfo =
         major && cohort && talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-            ? facultyState.faculty.majors
-                  .find((_major) => _major.majorName === major.majorName)
-                  .cohorts.find((_cohort) => _cohort.cohortName === cohort.cohortName).additionalRegisterInfo
+            ? majors
+                  .find((majorItem) => majorItem.majorName === major.majorName)
+                  .cohorts.find((cohortItem) => cohortItem.cohortName === cohort.cohortName).additionalRegisterInfo
             : null;
 
     const stopButtonDisplayConditions =

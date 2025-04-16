@@ -54,7 +54,6 @@ function StopSubmittingProofModal({
                 })
             );
             handleHiddenStopSubmittingProofModal();
-            window.location.reload();
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,

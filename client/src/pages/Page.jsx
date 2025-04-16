@@ -160,12 +160,12 @@ const PageManagement = () => {
                                     }
 
                                     case VITE_APP_MAJOR_MANAGER_CODE: {
-                                        role = 'Quản Lý Khoa';
+                                        role = 'Quản Lý Chuyên Ngành';
                                         break;
                                     }
 
                                     case VITE_APP_ADMIN_CODE: {
-                                        role = 'Admin';
+                                        role = 'Quản Trị Hệ Thống';
                                         break;
                                     }
                                     default:
@@ -185,7 +185,7 @@ const PageManagement = () => {
                                                 )}
                                             </td>
                                             <td>
-                                                <div className="icon__show">Đang hoạt động</div>
+                                                <div className="icon__show">Hoạt động</div>
                                             </td>
                                         </tr>
                                         {menu_item?.sub_menu_item && menu_item?.sub_menu_item.length > 0 ? (

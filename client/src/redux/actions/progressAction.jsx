@@ -28,7 +28,7 @@ export const getProgressByYear =
     };
 
 export const getAnnualTaskProgress =
-    ({ major, levelYear, faculty, cohort, groupCode, isCompleted, userId, sortProgressPercentage, page, limit }) =>
+    ({ major, levelYear, faculty, cohort, groupCode, userId, sortProgressPercentage, page, limit }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -44,7 +44,6 @@ export const getAnnualTaskProgress =
                 cohort,
                 groupCode,
                 levelYear,
-                isCompleted,
                 userId,
                 sortProgressPercentage,
                 page,
@@ -94,12 +93,15 @@ export const stopSubmittingProof =
                 groupCode,
                 updatedCohortData
             });
-            const updatedFaculty = await getDataApi(`/faculties/${updatedCohortData.facultyId}`);
+
+            const majorsRes = await getDataApi('/majors', {
+                majorName: major
+            });
 
             dispatch({
-                type: GLOBALTYPES.FACULTY.UPDATE_FACULTY,
+                type: GLOBALTYPES.FACULTY.UPDATE_MAJORS,
                 payload: {
-                    faculty: updatedFaculty.data.data
+                    major: majorsRes.data.data[0]
                 }
             });
 
@@ -109,11 +111,8 @@ export const stopSubmittingProof =
                     success: res.data.msg
                 }
             });
-
-            if (faculty) dispatch(getFacultyByName({ facultyName: faculty }));
-
-            // window.location.reload();
         } catch (error) {
+            console.log(error);
             notifyError({
                 dispatch,
                 error,

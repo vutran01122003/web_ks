@@ -14,7 +14,7 @@ import FirstLogin from './components/Login/FirstLogin';
 import { authSelector, facultySelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
-import { getFacultyByName } from './redux/actions/facultyAction';
+import { getFacultyByName, getMajors } from './redux/actions/facultyAction';
 
 const App = () => {
     const location = useLocation();
@@ -38,6 +38,7 @@ const App = () => {
             dispatch(getNumUnreadNotification({ userId: user._id }));
             if (!facultyState.faculty && !groupCodeList.includes('004'))
                 dispatch(getFacultyByName({ facultyName: user?.faculty?.facultyName }));
+            if (groupCodeList.includes('003')) dispatch(getMajors({ managerId: user._id }));
         }
     }, [user, dispatch]);
 
