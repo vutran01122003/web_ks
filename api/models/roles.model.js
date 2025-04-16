@@ -1,6 +1,6 @@
-const conn = require("../dbs/init.mongodb");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const conn = require("../dbs/init.mongodb");
 const [DOC, COL] = ["role", "roles"];
 
 const RoleSchema = new Schema(

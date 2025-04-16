@@ -1,5 +1,5 @@
-const conn = require("../dbs/init.mongodb");
 const mongoose = require("mongoose");
+const conn = require("../dbs/init.mongodb");
 const [COL, DOC] = ["notifications", "notification"];
 const NotificationSchema = new mongoose.Schema(
     {

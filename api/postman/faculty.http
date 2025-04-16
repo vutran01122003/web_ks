@@ -35,7 +35,7 @@ DELETE {{url}}/api/faculties/67d9787d6f196d9d54ae3c86
 GET {{url}}/api/faculties/67d8e18aee1f89c1d1661efc
 
 ### Get faculty by name
-GET {{url}}/api/faculty/điện ảnh
+GET {{url}}/api/faculties/điện ảnh
 
 ### Get faculties
 GET {{url}}/api/faculties

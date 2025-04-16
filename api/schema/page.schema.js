@@ -73,6 +73,7 @@ const PageSchema = Joi.object({
                         "string.max": "Tên chỉ tiêu có tối đa là 200 ký tự"
                     }),
                     quantityDemanded: Joi.number().min(1).messages({
+                        "any.required": "Vui lòng nhập số lượng hoạt động",
                         "number.min": "Số lượng cần làm cho chỉ tiêu tối thiểu là 1"
                     }),
                     description: Joi.string().max(200).optional().messages({

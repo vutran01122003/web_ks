@@ -12,13 +12,10 @@ services:
         restart: always
         ports:
             - 27017:27017
-
     redis:
         image: redis:7.2.4
         container_name: redis
         restart: always
-        ports:
-            - 6381:6381
         command: >
             redis-server --loadmodule /usr/lib/redis/modules/acl.so
             --aclfile /data/users.acl
@@ -29,15 +26,22 @@ services:
                     tail -f /dev/null"
         volumes:
             - ./database/redis/data:/data
-    backend:
-        container_name: backend
-        depends_on:
-            - redis
-            - mongo
-        restart: unless-stopped
-        build:
-            context: ../api
         ports:
-            - 4000:4000
-        volumes:
-            - ../api/data:/app/data
+            - 6379:6379
+    # backend:
+    #     container_name: backend
+    #     depends_on:
+    #         - redis
+    #         - mongo
+    #     restart: unless-stopped
+    #     environment:
+    #         DEV_MONGODB_URI: mongodb://vutran0943:0943608225a@mongo:27017/KSTN_DB?authSource=admin
+    #         PRO_MONGODB_URI: mongodb://vutran0943:0943608225a@mongo:27017/KSTN_DB?authSource=admin
+    #         DEV_REDIS_URI: redis://vutran0943:0943608225a@redis:6379
+    #         PRO_REDIS_URI: redis://vutran0943:0943608225a@redis:6379
+    #     build:
+    #         context: ../api
+    #     volumes:
+    #         - ../api/data:/app/data
+    #     ports:
+    #         - 4000:4000

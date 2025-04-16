@@ -7,7 +7,7 @@ const { CreateFacultySchema, CreateMajorListSchema, CreateCohortSchema } = requi
 
 router.get("/faculties", facultyController.getAllFaculty);
 router.get("/faculties/:facultyId", facultyController.getFacultyById);
-router.get("/faculty/:facultyName", facultyController.getFacultyByName);
+router.get("/faculties/:facultyName", facultyController.getFacultyByName);
 router.post("/faculties", validateResource({ schema: CreateFacultySchema }), facultyController.createFaculty);
 router.patch("/faculties/:facultyId", facultyController.updateFaculty);
 router.delete("/faculties/:facultyId", facultyController.deleteFaculty);
@@ -18,6 +18,7 @@ router.post(
     facultyController.createMajor
 );
 router.get("/faculties/:facultyId/majors/:majorId", facultyController.getMajorById);
+router.get("/faculties/:facultyId/majors", facultyController.getMajors);
 router.patch("/faculties/:facultyId/majors/:majorId", facultyController.updateMajor);
 router.delete("/faculties/:facultyId/majors/:majorId", facultyController.deleteMajor);
 

@@ -1,5 +1,5 @@
 const { Schema } = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const conn = require("../dbs/init.mongodb");
 const ProgressSchema = require("./progress.schema");
 

@@ -144,7 +144,7 @@ export const getFacultyByName =
     ({ facultyName }) =>
     async (dispatch) => {
         try {
-            const res = await getDataApi(`/faculty/${facultyName}`);
+            const res = await getDataApi(`/faculties/${facultyName}`);
 
             dispatch({
                 type: GLOBALTYPES.FACULTY.GET_FACULTY,
@@ -190,6 +190,22 @@ export const createMajor =
                 error,
                 dispatch,
                 defaultMessage: 'Thêm chuyên ngành thất bại'
+            });
+        }
+    };
+
+export const getMajors =
+    ({ managerId }) =>
+    async (dispatch) => {
+        try {
+            const res = await getDataApi('/faculties/:facultyId/majors', {
+                managerId
+            });
+        } catch (error) {
+            notifyError({
+                error,
+                dispatch,
+                defaultMessage: 'Lấy dữ liệu chuyên ngành thất bại'
             });
         }
     };

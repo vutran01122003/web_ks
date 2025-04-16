@@ -287,7 +287,7 @@
   "_id": {
     "$oid": "670cc56458c8cef6bf3f0d9f"
   },
-  "url": "/faculty/:facultyName",
+  "url": "/faculties/:facultyName",
   "method": "get",
   "description": "Không có mô tả",
   "createdAt": {

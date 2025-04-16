@@ -154,6 +154,15 @@ class FacultyService {
         }
     };
 
+    static getMajors = async (filterData) => {
+        try {
+            const majors = await Major.find(filterData).populate("cohorts");
+            return majors;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     static getMajorByName = async ({ majorName }) => {
         try {
             const major = await Major.findOne({ majorName });

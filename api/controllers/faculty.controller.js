@@ -142,6 +142,27 @@ class FacultyController {
         }
     };
 
+    getMajors = async (req, res, next) => {
+        try {
+            const { managerId } = req.query;
+            const filterData = {
+                managers: managerId
+            };
+
+            if (!managerId) delete filterData.managers;
+
+            const majors = await FacultyService.getMajors(filterData);
+
+            res.status(200).json({
+                status: 200,
+                msg: "Lấy dữ liệu chuyên ngành thành công",
+                data: majors
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     updateMajor = async (req, res, next) => {
         try {
             const { majorId, facultyId } = req.params;

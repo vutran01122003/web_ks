@@ -4,19 +4,13 @@ const {
     mongodb: { uri }
 } = require("../config/config");
 
-const conn = mongoose.createConnection(uri, {
-    connectTimeoutMS: 1000 * 60 * 5
-});
-
-// mongoose.set("debug", true);
-// mongoose.set("debug", { color: true });
+const conn = mongoose.createConnection(uri);
 
 conn.on("connected", function () {
     console.log(`Connect to ${this.name} successful`);
 });
-
-conn.on("error", function (e) {
-    console.log("Mongodb error", JSON.stringify(e));
+conn.on("error", (e) => {
+    console.log(err);
 });
 
 module.exports = conn;
