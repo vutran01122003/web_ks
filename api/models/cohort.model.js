@@ -6,7 +6,8 @@ const [DOC, COL] = ["cohort", "cohorts"];
 const CohortSchema = new Schema(
     {
         cohortName: {
-            type: String
+            type: String,
+            lowercase: true
         },
         currentLevelYear: {
             type: Number,

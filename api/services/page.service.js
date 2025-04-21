@@ -59,6 +59,9 @@ class PageService {
                         isActive: true
                     });
                 } else {
+                    if (pageStudentLevelYear === 1)
+                        throw createError.BadRequest("Không thể tạo nhóm chỉ tiêu cho năm 1");
+
                     const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                         majorName: pageStudentMajor,
                         cohortName: pageStudentCohort

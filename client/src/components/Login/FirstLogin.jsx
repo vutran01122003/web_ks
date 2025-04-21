@@ -8,11 +8,13 @@ import { getAllFaculties } from '../../redux/actions/facultyAction';
 import { facultySelector } from '../../redux/selector';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
 function FirstLogin() {
     const dispatch = useDispatch();
+    const [isVisiblePassword, setIsVisiblePassword] = useState(false);
     const { facultyData } = useSelector(facultySelector);
     const [data, setData] = useState({});
     const [majorList, setMajorList] = useState([]);
@@ -184,12 +186,16 @@ function FirstLogin() {
                             />
 
                             <FormControl
-                                i="password_new"
+                                id="password_new"
                                 label="Mật Khẩu"
-                                type="password"
+                                type={isVisiblePassword ? 'text' : 'password'}
                                 name="password"
                                 value={data?.password || ''}
+                                onClickBeforeIcon={() => {
+                                    setIsVisiblePassword((prev) => !prev);
+                                }}
                                 placeholder="Nhập mật khẩu"
+                                iconBefore={isVisiblePassword ? <IoEyeSharp /> : <IoEyeOffSharp />}
                                 onChange={handleChangeData}
                             />
 

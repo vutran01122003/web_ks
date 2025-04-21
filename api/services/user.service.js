@@ -288,6 +288,7 @@ class UserService {
                 cohortName: cohort,
                 majorName: major
             });
+
             const additionalRegisterLevelYear = additionalRegisterData?.levelYear;
 
             if (isTalentEngineer) {

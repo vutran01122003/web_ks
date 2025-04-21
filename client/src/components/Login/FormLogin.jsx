@@ -8,6 +8,7 @@ import { login } from '../../redux/actions/authAction';
 import ComponentButton from '../Button/ComponentButton';
 import FormControl from '../Form/FormControl';
 import FirstLogin from './FirstLogin';
+import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5';
 
 const RandomString = (length) => {
     const charRanDom = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -27,7 +28,7 @@ const FormLogin = () => {
     const [captchaLogin, setCaptchaLogin] = useState(RandomString(4));
     const [userInputCaptcha, setUserInputCaptcha] = useState('');
     const [isCapcha, setIsCapcha] = useState(false);
-
+    const [isVisiblePassword, setIsVisiblePassword] = useState(false);
     const onGoBackLogin = () => {
         setIsFirstLogin(false);
     };
@@ -99,11 +100,14 @@ const FormLogin = () => {
                         />
                         <FormControl
                             label="Mật khẩu"
-                            type="password"
+                            type={isVisiblePassword ? 'text' : 'password'}
                             id="password"
-                            iconBefore={<BiSolidLock />}
+                            iconBefore={isVisiblePassword ? <IoEyeSharp /> : <IoEyeOffSharp />}
                             value={password}
                             onChange={handleChangePassword}
+                            onClickBeforeIcon={() => {
+                                setIsVisiblePassword((prev) => !prev);
+                            }}
                         />
 
                         <div className="tr_line-captcha">

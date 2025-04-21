@@ -4,14 +4,15 @@ const groupCodeValue = [TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE];
 
 const registerSchema = Joi.object({
     body: Joi.object({
-        userId: Joi.string().pattern(new RegExp("^[0-9]{8}$")).required().messages({
-            "string.pattern.base": "Mã số sinh viên không đúng định dạng",
-            "any.required": "Vui lòng nhập mã số sinh viên"
+        userId: Joi.string().min(8).pattern(new RegExp("^[0-9]+$")).required().messages({
+            "string.min": "Mã số có độ dài tối thiểu là 8",
+            "string.pattern.base": "Mã số không đúng định dạng",
+            "any.required": "Vui lòng nhập mã số"
         }),
         firstName: Joi.string().min(2).max(30).required().messages({
             "string.min": "Độ dài tên tối thiểu là 2",
             "string.max": "Độ dài tên tối đa là 30",
-            "any.required": "Vui lòng nhập tên sinh viên"
+            "any.required": "Vui lòng nhập tên"
         }),
         lastName: Joi.string().min(2).max(30).messages({
             "string.min": "Độ dài họ đệm tối thiểu là 2",

@@ -23,7 +23,7 @@ function facultyReducer(state = initialState, action) {
             };
         }
 
-        case GLOBALTYPES.FACULTY.UPDATE_MAJORS: {
+        case GLOBALTYPES.FACULTY.UPDATE_MAJOR: {
             const major = action.payload.major;
             const majors = replaceElem({ elemId: major._id, newElem: major, elemList: state.majors });
 

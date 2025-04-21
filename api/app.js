@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const { MulterError } = require("multer");
 const { ValidationError } = require("joi");
 const createError = require("http-errors");
@@ -15,16 +16,16 @@ require("./dbs/init.mongodb");
 const { auth } = require("./middleware/auth");
 const {
     morganType,
-    app: { clientDomain_v1, clientDomain_v2 }
+    app: { clientDomain }
 } = require("./config/config");
 const { initRoleCollection, initGroupCollection, initAdminUser } = require("./helpers/initdb/initDB");
 
 // CORS config
-const whitelist = [clientDomain_v1, clientDomain_v2];
+const whitelist = [clientDomain];
 
 const corsOptions = {
     origin: function (origin, callback) {
-        if (whitelist.includes(origin)) {
+        if (!origin || whitelist.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error("Not allowed by CORS"));
@@ -41,14 +42,14 @@ const corsOptions = {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(morganType));
-
 app.use(helmet());
 app.use(compression());
 app.use(cookieParser());
-
-// Static
 app.use(cors(corsOptions));
-app.use("/files", [auth, express.static("data")]);
+
+app.get("/files/*", auth, (req, res) => {
+    res.sendFile(path.join(__dirname, "data", req.params[0]));
+});
 
 // Router
 app.use("/api", require("./router/page"));
@@ -56,7 +57,6 @@ app.use("/api", require("./router/access"));
 app.use("/api", require("./router/table"));
 app.use("/api", require("./router/news"));
 app.use("/api", require("./router/row"));
-// app.use('/api', require('./router/chat'));
 app.use("/api", require("./router/faculty"));
 app.use("/api", require("./router/progress"));
 app.use("/api", require("./router/excel"));

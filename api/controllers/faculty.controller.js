@@ -74,7 +74,6 @@ class FacultyController {
     getFacultyById = async (req, res, next) => {
         try {
             const { facultyId } = req.params;
-            console.log(facultyId);
             const faculty = await FacultyService.getFacultyById({ facultyId });
 
             return res.status(200).json({
@@ -271,7 +270,6 @@ class FacultyController {
                 data: updatedCohort
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     };

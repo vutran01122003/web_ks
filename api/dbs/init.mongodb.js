@@ -9,8 +9,9 @@ const conn = mongoose.createConnection(uri);
 conn.on("connected", function () {
     console.log(`Connect to ${this.name} successful`);
 });
-conn.on("error", (e) => {
-    console.log(err);
+
+conn.on("error", (error) => {
+    console.log(error);
 });
 
 module.exports = conn;

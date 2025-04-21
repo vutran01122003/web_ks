@@ -1,7 +1,10 @@
 import { getDataApi, postDataApi } from '../../utils/fetchData';
-import { getAccessToken } from '../../utils/getCookie';
+import { getAccessToken, removeAccessToken, setAccessToken } from '../../utils/handleCredentials';
 import notifyError from '../../utils/notifyError';
+import { getFacultyByName } from './facultyAction';
 import GLOBALTYPES from './globalTypes';
+
+const { VITE_APP_MAJOR_MANAGER_CODE } = import.meta.env;
 
 export const login =
     ({ userId, password }) =>
@@ -19,10 +22,14 @@ export const login =
                 password
             });
 
+            const data = res.data.data;
+
             dispatch({
                 type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
-                payload: res.data.data
+                payload: data
             });
+
+            setAccessToken(data.token.accessToken);
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -32,7 +39,7 @@ export const login =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error.response?.data.msg || 'Đăng Nhập Thất Bại'
+                    error: error.response?.data.msg || 'Đăng nhập thất bại'
                 }
             });
         }
@@ -53,11 +60,19 @@ export const register =
 
             if (isDirectRegister) {
                 res = await postDataApi('/register', data);
+                const resData = res.data.data;
+
                 dispatch({
                     type: GLOBALTYPES.AUTH.SET_INFO_LOGIN,
-                    payload: res.data.data
+                    payload: resData
                 });
-            } else res = await postDataApi('/admin/register', data);
+
+                setAccessToken(resData.token.accessToken);
+            } else {
+                res = await postDataApi('/admin/register', data);
+                if (data.groupCode === VITE_APP_MAJOR_MANAGER_CODE)
+                    dispatch(getFacultyByName({ facultyName: data.faculty }));
+            }
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -69,7 +84,7 @@ export const register =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    error: error?.response?.data.msg || 'Tạo người dùng Không Thành Công'
+                    error: error?.response?.data.msg || 'Tạo người dùng không thành công'
                 }
             });
         }
@@ -85,6 +100,8 @@ export const logout = () => async (dispatch) => {
 
         const res = await getDataApi('/logout');
 
+        removeAccessToken();
+
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
@@ -97,7 +114,7 @@ export const logout = () => async (dispatch) => {
         dispatch({
             type: GLOBALTYPES.ALERT,
             payload: {
-                error: error?.response?.data.msg || 'Đăng Xuất Không Thành Công'
+                error: error?.response?.data.msg || 'Đăng xuất không thành công'
             }
         });
     }
@@ -121,7 +138,7 @@ export const verifyAccessToken = () => async (dispatch) => {
         notifyError({
             dispatch,
             error,
-            defaultMessage: 'Tải trang thất bại'
+            defaultMessage: 'Lấy thông tin người dùng thất bại'
         });
     }
 };

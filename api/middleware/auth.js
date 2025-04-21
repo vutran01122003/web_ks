@@ -5,14 +5,15 @@ const UserService = require("../services/user.service");
 module.exports = {
     auth: async (req, res, next) => {
         try {
-            const accessToken =
-                req?.headers["x-token"] || req.cookies?.accessToken || req?.headers["cookie"].split("=")[1];
+            const accessToken = req?.headers["authorization"].split(" ")[1];
+
+            if (!accessToken) throw createHttpError.Unauthorized("Người dùng chưa đăng nhập");
 
             const { data, isExpired, error } = await jwtService.verifyAccessToken(accessToken);
 
             if (isExpired) {
-                return res.status(401).clearCookie("accessToken").json({
-                    status: 401,
+                return res.status(401).json({
+                    status: 301,
                     msg: "Hết phiên đăng nhập"
                 });
             }
@@ -25,6 +26,8 @@ module.exports = {
             });
 
             res.locals.userData = user;
+            res.locals.accessToken = accessToken;
+
             next();
         } catch (error) {
             next(error);

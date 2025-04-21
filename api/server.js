@@ -3,7 +3,7 @@ const { Server } = require("socket.io");
 const socket = require("./services/socket.service");
 const app = require("./app");
 const {
-    app: { port, clientDomain_v2 }
+    app: { port, clientDomain }
 } = require("./config/config");
 
 const server = app.listen(port, () => {
@@ -13,7 +13,7 @@ const server = app.listen(port, () => {
 // Initial Socket.io
 global._io = new Server(server, {
     cors: {
-        origin: clientDomain_v2
+        origin: "*"
     }
 });
 

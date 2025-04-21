@@ -1,20 +1,17 @@
 import { deleteDataApi, getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import notifyError from '../../utils/notifyError';
-import { getFacultyByName } from './facultyAction';
+import { getMajors } from './facultyAction';
 
 export const createPage =
-    ({ pageData, resetAllData }) =>
+    ({ pageData, resetAllData, isGoals }) =>
     async (dispatch) => {
         try {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    loading: true
-                }
-            });
-
             const res = await postDataApi('/page', pageData);
+
+            if (isGoals) dispatch(getMajors());
+            if (resetAllData) resetAllData();
+            if (pageData.majorName) dispatch(getMajors({ majorName: pageData.majorName }));
 
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -22,14 +19,11 @@ export const createPage =
                     success: res?.data.msg
                 }
             });
-
-            if (resetAllData) resetAllData();
-            if (pageData.pageFaculty) dispatch(getFacultyByName({ facultyName: pageData.pageFaculty }));
         } catch (error) {
             notifyError({
                 dispatch,
                 error,
-                defaultMessage: 'Tạo Trang Thất Bại'
+                defaultMessage: isGoals ? 'Tạo nhóm chỉ tiêu thất bại' : 'Tạo bài viết thất bại'
             });
         }
     };

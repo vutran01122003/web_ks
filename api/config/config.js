@@ -1,8 +1,7 @@
-const dev = {
+const DEV = {
     app: {
-        port: process.env.DEV_APP_PORT || 4000,
-        clientDomain_v1: process.env.DEV_CLIENT_DOMAIN_V1,
-        clientDomain_v2: process.env.DEV_CLIENT_DOMAIN_V2,
+        port: process.env.DEV_APP_PORT,
+        clientDomain: process.env.DEV_CLIENT_DOMAIN,
         uri_base: process.env.DEV_APP_URI_BASE
     },
     morganType: "dev",
@@ -14,7 +13,7 @@ const dev = {
     }
 };
 
-const pro = {
+const PRO = {
     app: {
         port: process.env.PRO_APP_PORT,
         clientDomain: process.env.PRO_CLIENT_DOMAIN,
@@ -25,12 +24,11 @@ const pro = {
         uri: process.env.PRO_MONGODB_URI
     },
     redis: {
-        port: process.env.PRO_REDIS_PORT,
-        host: process.env.PRO_REDIS_HOST
+        uri: process.env.PRO_REDIS_URI
     }
 };
 
-const config = { dev, pro };
-const env = process.env.NODE_ENV || "dev";
+const config = { DEV, PRO };
+const env = process.env.NODE_ENV || "DEV";
 
 module.exports = config[env];

@@ -17,12 +17,6 @@ class ProgressControllers {
     getProgressByYear = async (req, res, next) => {
         try {
             const { userId, pageStudentMajor, pageStudentLevelYear, pageStudentCohort } = req.query;
-            console.log({
-                userId,
-                pageStudentMajor,
-                pageStudentLevelYear,
-                pageStudentCohort
-            });
             const pageDetailsList = await ProgressService.getProgressByYear({
                 pageStudentMajor,
                 pageStudentLevelYear,

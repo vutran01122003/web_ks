@@ -257,7 +257,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 })
             };
 
-            dispatch(createPage({ pageData, resetAllData }));
+            dispatch(createPage({ pageData, resetAllData, isGoals: true }));
         } else {
             dispatch({
                 type: GLOBALTYPES.ALERT,

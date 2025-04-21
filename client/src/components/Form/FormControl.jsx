@@ -14,27 +14,34 @@ const FormControl = ({
     onChange,
     name,
     readonly,
-    max
+    max,
+    onClickBeforeIcon
 }) => {
     return (
         <div className={`component__input ${classNameRoot ? classNameRoot : ''}`}>
             <label htmlFor={id}>{label}</label>
             <div className={classNameWrap}>
                 <div className={`line__input ${className}`}>
-                    <input
-                        type={type}
-                        placeholder={placeholder}
-                        value={value}
-                        id={id}
-                        disabled={disabled}
-                        onChange={onChange}
-                        name={name}
-                        readOnly={readonly}
-                        className={classNameInputItem}
-                        max={max}
-                    />
+                    {type !== 'date' ? (
+                        <input
+                            type={type}
+                            placeholder={placeholder}
+                            value={value}
+                            id={id}
+                            disabled={disabled}
+                            onChange={onChange}
+                            name={name}
+                            readOnly={readonly}
+                            className={classNameInputItem}
+                            max={max}
+                        />
+                    ) : (
+                        <Fragment></Fragment>
+                    )}
 
-                    <div className="icon__before">{iconBefore}</div>
+                    <div className="icon__before" onClick={onClickBeforeIcon}>
+                        {iconBefore}
+                    </div>
                 </div>
 
                 {children}

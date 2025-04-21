@@ -113,6 +113,27 @@
                     border-radius: 5px;
                     font-size: 1rem;
                 }
+
+                .birthday_input_wrapper {
+                    width: 100%;
+                    position: relative;
+
+                    .birthday_input {
+                        width: 100%;
+                        padding: 10px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        font-size: 1rem;
+                    }
+
+                    input {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: -1;
+                        opacity: 0;
+                    }
+                }
             }
 
             button {

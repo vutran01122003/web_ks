@@ -1,7 +1,7 @@
 const fs = require("node:fs/promises");
 const path = require("path");
 const {
-    app: { uri_base }
+    app: { uri_base, clientDomain }
 } = require("../config/config");
 
 const storeFiles = async ({ destination, files }) => {
@@ -20,7 +20,9 @@ const storeFiles = async ({ destination, files }) => {
                 const filePath = path.join(uploadDir, fileName);
 
                 return fs.writeFile(filePath, file.buffer).then(() => ({
-                    fileUrl: `${uri_base}/files/${destination}/${fileName}`,
+                    fileUrl: `${
+                        process.env.NODE_ENV === "PRO" ? clientDomain : uri_base
+                    }/files/${destination}/${fileName}`,
                     originalName: fileName
                 }));
             })

@@ -17,7 +17,6 @@ class ExcelService {
             sheet.columns = userColumn;
 
             qualifiedUsersData.forEach((user, index) => {
-                console.log(user);
                 const { firstName, lastName, faculty, major, cohort, userId, birthday, email, phone, gender } = user;
                 const data = {
                     s_no: index + 1,

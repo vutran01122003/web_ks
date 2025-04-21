@@ -6,7 +6,7 @@ const { TALENT_ENGINEER_CODE } = process.env;
 class AccessControllers {
     getInfoUser = async (req, res, next) => {
         try {
-            const accessToken = req?.headers["x-token"] || req.cookies?.accessToken;
+            const accessToken = res.locals.accessToken;
             const userId = res.locals.userData._id;
 
             const user = await accessService.getUserInfo(userId);
@@ -48,20 +48,15 @@ class AccessControllers {
                 userData: loggedUser?.data
             });
 
-            res.status(200)
-                .cookie("accessToken", accessToken, {
-                    // httpOnly: true,
-                    // secure: true
-                })
-                .send({
-                    status: "Đăng nhập thành công",
-                    data: {
-                        user: loggedUser?.data,
-                        token: {
-                            accessToken
-                        }
+            res.status(200).json({
+                msg: "Đăng nhập thành công",
+                data: {
+                    user: loggedUser?.data,
+                    token: {
+                        accessToken
                     }
-                });
+                }
+            });
         } catch (error) {
             next(error);
         }
@@ -109,20 +104,15 @@ class AccessControllers {
                 userData: createdUser
             });
 
-            res.status(201)
-                .cookie("accessToken", accessToken, {
-                    sameSite: "none",
-                    secure: true
-                })
-                .send({
-                    status: "Cập nhật thông tin thành công",
-                    data: {
-                        user: createdUser,
-                        token: {
-                            accessToken
-                        }
+            res.status(201).json({
+                msg: "Tạo tài khoản thành công",
+                data: {
+                    user: createdUser,
+                    token: {
+                        accessToken
                     }
-                });
+                }
+            });
         } catch (error) {
             next(error);
         }
@@ -130,15 +120,9 @@ class AccessControllers {
 
     logout = async (req, res, next) => {
         try {
-            return res
-                .cookie("accessToken", "", {
-                    httpOnly: true,
-                    sameSite: "none",
-                    secure: true
-                })
-                .send({
-                    status: "Đăng xuất thành công"
-                });
+            return res.json({
+                msg: "Đăng xuất thành công"
+            });
         } catch (error) {
             next(error);
         }

@@ -99,7 +99,7 @@ export const stopSubmittingProof =
             });
 
             dispatch({
-                type: GLOBALTYPES.FACULTY.UPDATE_MAJORS,
+                type: GLOBALTYPES.FACULTY.UPDATE_MAJOR,
                 payload: {
                     major: majorsRes.data.data[0]
                 }
@@ -112,7 +112,6 @@ export const stopSubmittingProof =
                 }
             });
         } catch (error) {
-            console.log(error);
             notifyError({
                 dispatch,
                 error,

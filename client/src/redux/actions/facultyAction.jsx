@@ -130,7 +130,6 @@ export const getFacultyById =
     ({ facultyId }) =>
     async (dispatch) => {
         try {
-            console.log(facultyId);
             await getDataApi(`/faculties/id/${facultyId}`);
         } catch (error) {
             notifyError({
@@ -146,7 +145,6 @@ export const getFacultyByName =
     async (dispatch) => {
         try {
             const res = await getDataApi(`/faculties/name/${facultyName}`);
-
             dispatch({
                 type: GLOBALTYPES.FACULTY.GET_FACULTY,
                 payload: {
@@ -195,30 +193,30 @@ export const createMajor =
         }
     };
 
-export const getMajors =
-    ({ managerId }) =>
-    async (dispatch) => {
-        try {
-            const res = await getDataApi('/majors', {
-                managerId
-            });
+export const getMajors = (params) => async (dispatch) => {
+    try {
+        const managerId = params?.managerId;
+        const majorName = params?.majorName;
 
-            console.log(res.data.data);
+        const res = await getDataApi('/majors', {
+            managerId,
+            majorName
+        });
 
-            dispatch({
-                type: GLOBALTYPES.FACULTY.GET_MAJORS,
-                payload: {
-                    majors: res.data.data
-                }
-            });
-        } catch (error) {
-            notifyError({
-                error,
-                dispatch,
-                defaultMessage: 'Lấy dữ liệu chuyên ngành thất bại'
-            });
-        }
-    };
+        dispatch({
+            type: GLOBALTYPES.FACULTY.GET_MAJORS,
+            payload: {
+                majors: res.data.data
+            }
+        });
+    } catch (error) {
+        notifyError({
+            error,
+            dispatch,
+            defaultMessage: 'Lấy dữ liệu chuyên ngành thất bại'
+        });
+    }
+};
 
 export const updateMajor =
     ({ facultyId, majorId, majorData }) =>

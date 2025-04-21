@@ -262,6 +262,7 @@ class FacultyService {
 
     static getCohortByName = async ({ majorName, cohortName }) => {
         try {
+            console.log(cohortName);
             const major = await this.getMajorByName({ majorName });
             const populatedMajor = await major.populate("cohorts");
 
@@ -270,6 +271,7 @@ class FacultyService {
 
             return cohort;
         } catch (error) {
+            console.log(error);
             throw createHttpError.BadRequest("Xảy ra lỗi khi lấy dữ liệu khóa sinh viên");
         }
     };

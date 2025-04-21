@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import { register } from '../../redux/actions/authAction';
@@ -9,6 +9,7 @@ const { VITE_APP_MAJOR_MANAGER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEM
 function AccountCreatetion({ faculty }) {
     const dispatch = useDispatch();
     const facultyData = faculty.facultyData;
+    const dateRef = useRef();
     const [currentFaculty, setCurrentFaculty] = useState('');
     const [currentMajor, setCurrentMajor] = useState('');
     const [currentCohort, setCurrentCohort] = useState('');
@@ -145,14 +146,28 @@ function AccountCreatetion({ faculty }) {
 
                 <div className="input_item">
                     <label>Ngày Sinh:</label>
-                    <input
-                        type="date"
-                        name="birthday"
-                        value={formData.birthday}
-                        onChange={handleChange}
-                        required
-                        max="2006-12-31"
-                    />
+                    <div className="birthday_input_wrapper">
+                        <div
+                            className="birthday_input"
+                            onClick={() => {
+                                dateRef.current.showPicker();
+                            }}
+                        >
+                            {formData.birthday ? new Date(formData.birthday).toLocaleDateString('en-GB') : 'dd/mm/yyyy'}
+                        </div>
+
+                        <input
+                            ref={dateRef}
+                            id="date_input"
+                            type="date"
+                            name="birthday"
+                            value={formData.birthday}
+                            onChange={handleChange}
+                            lang="vi"
+                            required
+                            max="2006-12-31"
+                        />
+                    </div>
                 </div>
 
                 <div className="input_item">

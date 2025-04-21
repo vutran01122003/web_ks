@@ -1,4 +1,17 @@
 services:
+    nginx:
+        build:
+            context: .
+            dockerfile: ./nginx/Dockerfile
+        depends_on:
+            - backend
+        restart: always
+        volumes:
+            - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf
+            - ../client/dist/:/usr/share/nginx/html/
+        ports:
+            - 44380:44380
+        command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     mongo:
         image: mongo:6.0
         container_name: mongo
@@ -28,20 +41,19 @@ services:
             - ./database/redis/data:/data
         ports:
             - 6379:6379
-    # backend:
-    #     container_name: backend
-    #     depends_on:
-    #         - redis
-    #         - mongo
-    #     restart: unless-stopped
-    #     environment:
-    #         DEV_MONGODB_URI: mongodb://vutran0943:0943608225a@mongo:27017/KSTN_DB?authSource=admin
-    #         PRO_MONGODB_URI: mongodb://vutran0943:0943608225a@mongo:27017/KSTN_DB?authSource=admin
-    #         DEV_REDIS_URI: redis://vutran0943:0943608225a@redis:6379
-    #         PRO_REDIS_URI: redis://vutran0943:0943608225a@redis:6379
-    #     build:
-    #         context: ../api
-    #     volumes:
-    #         - ../api/data:/app/data
-    #     ports:
-    #         - 4000:4000
+    backend:
+        container_name: backend
+        depends_on:
+            - redis
+            - mongo
+        restart: unless-stopped
+        environment:
+            NODE_ENV: PRO
+            PRO_MONGODB_URI: mongodb://vutran0943:0943608225a@mongo:27017/KSTN_DB?authSource=admin
+            PRO_REDIS_URI: redis://vutran0943:0943608225a@redis:6379
+        build:
+            context: ../api
+        volumes:
+            - ../api/data:/app/data
+        ports:
+            - 4000:4000

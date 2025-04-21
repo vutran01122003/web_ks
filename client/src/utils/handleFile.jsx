@@ -2,6 +2,9 @@ import slugify from 'slugify';
 import instance from '../config/axios.config';
 import { s3Client } from '../config/aws.config';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { getDataApi } from './fetchData';
+import axios from 'axios';
+import { getAccessToken } from './handleCredentials';
 
 export const downloadExcel = async ({ endpoint, filterData, filename }) => {
     try {
@@ -77,11 +80,16 @@ export const getFileFromS3 = ({ Key, Bucket, type }) => {
 
 export const getFileFromServer = (fileUrl) => {
     return new Promise((resolve, reject) => {
-        fetch(fileUrl, {
-            method: 'GET',
-            credentials: 'include'
-        })
-            .then((res) => resolve(res.blob()))
+        axios
+            .get(fileUrl, {
+                headers: {
+                    Authorization: `Bearer ${getAccessToken()}`
+                },
+                responseType: 'blob'
+            })
+            .then((res) => {
+                resolve(new Blob([res.data], { type: 'application/pdf' }));
+            })
             .catch((error) => {
                 reject(error);
             });
