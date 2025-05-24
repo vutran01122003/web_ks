@@ -15,6 +15,7 @@ import { authSelector, facultySelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
 import { getFacultyByName, getMajors } from './redux/actions/facultyAction';
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 const App = () => {
     const location = useLocation();
@@ -22,7 +23,7 @@ const App = () => {
 
     const auth = useSelector(authSelector);
     const facultyState = useSelector(facultySelector);
-
+    const [showMobileWarning, setShowMobileWarning] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const user = auth?.user;
@@ -32,6 +33,10 @@ const App = () => {
     useEffect(() => {
         dispatch(verifyAccessToken()).finally(() => setIsLoading(false));
     }, [dispatch]);
+
+    useEffect(() => {
+        if (window.innerWidth <= 800) setShowMobileWarning(true);
+    }, []);
 
     useEffect(() => {
         if (user) {
@@ -44,7 +49,17 @@ const App = () => {
 
     if (isLoading) return null;
 
-    return (
+    return showMobileWarning ? (
+        <div className="show_mobile_warning">
+            <div className="mobile-warning">
+                <div className="warning-card">
+                    <FaExclamationTriangle className="warning-icon" />
+                    <h1>Không hỗ trợ thiết bị di động</h1>
+                    <p>Vui lòng sử dụng trình duyệt trên máy tính để tiếp tục.</p>
+                </div>
+            </div>
+        </div>
+    ) : (
         <Fragment>
             <Alert />
             <Routes>

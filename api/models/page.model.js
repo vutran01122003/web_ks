@@ -73,6 +73,9 @@ const PageSchema = new Schema(
             }
         },
         tables: [TableSchema],
+        editingTime: {
+            type: Schema.Types.Date
+        },
         isActive: {
             type: Boolean,
             default: true

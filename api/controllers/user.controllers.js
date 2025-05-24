@@ -96,7 +96,11 @@ class UserControllers {
     updateUser = async (req, res, next) => {
         try {
             const userId = req.params.userId;
-            const { password, ...userData } = req.body.userData;
+
+            const password = req.body.userData?.password;
+            delete req.body.userData?.password;
+            const userData = req.body.userData;
+
             if (Object.keys(userData).some((key) => userData[key] === ""))
                 throw createError.BadRequest("Vui lòng nhập đầy đủ thông tin");
 

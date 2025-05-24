@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllFaculties } from '../redux/actions/facultyAction';
 import { facultySelector } from '../redux/selector';
 import AccountCreatetion from '../components/Permisson/AccountCreation';
-import MajorManager from '../components/Permisson/MajorManager';
+import FacultyManager from '../components/Permisson/FacultyManager';
 
 function Permission() {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ function Permission() {
         {
             key: 'major_manager',
             label: 'Danh Sách Quản Lý Chuyên Ngành',
-            children: <MajorManager />
+            children: <FacultyManager />
         }
     ];
 

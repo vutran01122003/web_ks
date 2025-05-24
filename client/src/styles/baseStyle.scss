@@ -77,13 +77,18 @@ select {
 }
 
 // Search
-.search_input {
+.search_input,
+.search_input_v2 {
     outline: none;
     width: 160px;
     padding: 10px;
     border: 1px solid #ccc;
     color: #333;
     font-weight: 600;
+}
+
+.search_input_v2 {
+    width: 220px;
 }
 
 .search_btn {

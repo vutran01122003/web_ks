@@ -35,6 +35,10 @@ const TableSchema = new Schema({
         type: Schema.Types.Number,
         required: true
     },
+    allowExceedQuantity: {
+        type: Schema.Types.Boolean,
+        default: true
+    },
     rowValueList: {
         type: [{ type: Schema.Types.ObjectId, ref: "row" }],
         default: []

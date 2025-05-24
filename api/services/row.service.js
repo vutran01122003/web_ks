@@ -65,6 +65,8 @@ class RowService {
                 })
             ]);
 
+            await this.checkquantityDemanded({ page, table, user, pageData });
+
             if (!rowList) {
                 rowList = new Row({
                     user,
@@ -129,7 +131,13 @@ class RowService {
                 }
             ]);
 
-            if (quantityDemanded[0] && quantityDemanded[0].count === pageData.tables.id(table).quantityDemanded)
+            const specificTable = pageData.tables.id(table);
+
+            if (
+                quantityDemanded[0] &&
+                quantityDemanded[0].count === specificTable.quantityDemanded &&
+                !specificTable.allowExceedQuantity
+            )
                 throw createError.BadRequest("Số Lượng Đã Đạt Tối Đa");
 
             return quantityDemanded;

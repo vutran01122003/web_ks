@@ -141,41 +141,11 @@ class UserService {
             if (!originalUser) throw createError.NotFound("Người dùng không tồn tại");
 
             const updatedUser = await this.getUserAndPopulateGroupById({ id: userId });
-            const { faculty, major, cohort } = updatedUser;
 
-            const isInfoDifferent = originalUser.major !== major || originalUser.cohort !== cohort;
-
-            const [facultyData, majorData, cohortData] = await Promise.all([
-                FacultyService.getFacultyById({ facultyId: faculty }),
-                FacultyService.getMajorById({ majorId: major }),
-                FacultyService.getCohortById({ cohortId: cohort })
-            ]);
-
-            if (isInfoDifferent) {
-                const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
-                    majorName: majorData.majorName,
-                    cohortName: cohortData.cohortName
-                });
-
-                updatedUser.levelYear = currentLevelYear;
-
-                await Promise.all([
-                    this.createNewAnnualActivitiesProgress({
-                        pageInfo: {
-                            pageTalentEngineerType: updatedUser.groups[0].groupCode,
-                            pageFaculty: facultyData.facultyName,
-                            pageStudentCohort: cohortData.cohortName,
-                            pageStudentMajor: majorData.majorName
-                        },
-                        currentLevelYear,
-                        userId
-                    }),
-                    Row.deleteMany({ user: userId })
-                ]);
+            if (password) {
+                updatedUser.encodePassword(password);
+                await updatedUser.save();
             }
-
-            if (password) updatedUser.encodePassword(password);
-            if (isInfoDifferent || password) await updatedUser.save();
 
             return updatedUser;
         } catch (error) {
@@ -478,19 +448,19 @@ class UserService {
                 updatedInfo[`${annualActivitiesField}.${index}.totalScore`] = totalScore;
             }
 
+            const [facultyData, majorData, cohortData] = await Promise.all([
+                FacultyService.getFacultyById({ facultyId: user.faculty }),
+                FacultyService.getMajorById({ majorId: user.major }),
+                FacultyService.getCohortById({ majorId: user.major, cohortId: user.cohort })
+            ]);
+
+            const [facultyName, majorName, cohortName] = [
+                facultyData.facultyName,
+                majorData.majorName,
+                cohortData.cohortName
+            ];
+
             if (!user[annualActivitiesField] || !user[annualActivitiesField][index]) {
-                const [facultyData, majorData, cohortData] = await Promise.all([
-                    FacultyService.getFacultyById({ facultyId: user.faculty }),
-                    FacultyService.getMajorById({ majorId: user.major }),
-                    FacultyService.getCohortById({ majorId: user.major, cohortId: user.cohort })
-                ]);
-
-                const [facultyName, majorName, cohortName] = [
-                    facultyData.facultyName,
-                    majorData.majorName,
-                    cohortData.cohortName
-                ];
-
                 await this.createNewAnnualActivitiesProgress({
                     pageInfo: {
                         pageTalentEngineerType: user.groups[0].groupCode,

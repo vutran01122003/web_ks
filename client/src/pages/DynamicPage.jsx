@@ -35,8 +35,9 @@ const DynamicPage = () => {
             });
 
             const tableList = pageData?.tables || [];
+            const editingTime = pageData?.editingTime;
 
-            setTables(tableList.map((table) => renderTable({ table })));
+            setTables(tableList.map((table) => renderTable({ editingTime, table })));
         }
     }, [page.pages, dynamicPage]);
 

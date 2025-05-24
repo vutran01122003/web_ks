@@ -1,6 +1,6 @@
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 
-export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
+export const renderTable = ({ editingTime, table, dynamicRowsInfo, rowsType }) => {
     const TABLE = {};
     const dynamicTable = dynamicRowsInfo ? dynamicRowsInfo.page.tables : null;
 
@@ -230,13 +230,18 @@ export const renderTable = ({ table, dynamicRowsInfo, rowsType }) => {
                       },
                       {
                           editLabel: 'Sửa',
-                          editValue: rowValueItem.status === 'phải nộp lại' ? true : false,
+                          editValue: editingTime
+                              ? new Date(editingTime).getTime() > new Date().getTime() ||
+                                rowValueItem.status === 'phải nộp lại'
+                              : rowValueItem.status === 'phải nộp lại',
                           rowInfo: {
                               ...rowValueItem,
+                              editingTime,
                               rowListId: table.rowValueList[0]._id
                           }
                       }
                   );
+            console.log(tbody);
             return tbody;
         });
     }

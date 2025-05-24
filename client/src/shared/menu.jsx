@@ -44,13 +44,13 @@ export const ARRAY_LIST_MENU = [
         to_link: '/goal',
         submenu: false
     },
-    {
-        roles: [VITE_APP_ADMIN_CODE],
-        name_menu: 'Quản Lý Trang',
-        icon_before: <CgBrowser />,
-        to_link: '/page',
-        submenu: false
-    },
+    // {
+    //     roles: [VITE_APP_ADMIN_CODE],
+    //     name_menu: 'Quản Lý Trang',
+    //     icon_before: <CgBrowser />,
+    //     to_link: '/page',
+    //     submenu: false
+    // },
     // {
     //     roles: [VITE_APP_MAJOR_MANAGER_CODE],
     //     name_menu: 'Tạo Tin Tức & Thông Báo',

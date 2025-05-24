@@ -9,6 +9,7 @@ import GLOBALTYPES from '../redux/actions/globalTypes';
 import ComponentDynamicRow from '../components/DynamicRow/ComponentDynamicRow';
 import SearchFilterComponent from '../components/Filter/SearchFilter';
 import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+import { getPages } from '../redux/actions/pageAction';
 
 const items = [
     {

@@ -23,11 +23,10 @@ function ApproveActivityModal({
 }) {
     const dispatch = useDispatch();
     const [noteValue, setNoteValue] = useState('');
-    const [visibleDateInput, setVisibleDateInput] = useState(false);
     const [datetimeValue, setDateTimeValue] = useState('');
 
     const handleUpdateRowsStatus = () => {
-        if (visibleDateInput === true && !datetimeValue) {
+        if (status === 'phải nộp lại' && !datetimeValue) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -89,12 +88,6 @@ function ApproveActivityModal({
         setDateTimeValue(e.target.value);
     };
 
-    const handleChangeVisiableStatusDateInput = (e) => {
-        const boolean = e.target.value === 'true';
-        if (!boolean) setDateTimeValue('');
-        setVisibleDateInput(boolean);
-    };
-
     const handleChangeNoteValue = (e) => {
         setNoteValue(e.target.value);
     };
@@ -119,49 +112,20 @@ function ApproveActivityModal({
                         {content}
                         <span>(Kiểm tra thật kỹ minh chứng trước khi đồng ý)</span>
                     </p>
+
                     {status === 'phải nộp lại' && (
                         <div className="deadline_submit">
-                            {!isTimedExtension && (
-                                <div className="deadline_submit_radio_group">
-                                    <label>Tạo Thời Hạn:</label>
-
-                                    <div className="deadline_submit_radio_item">
-                                        <input
-                                            type="radio"
-                                            name="deadline_submit_radio"
-                                            onChange={handleChangeVisiableStatusDateInput}
-                                            id="deadline_submit_radio_optional"
-                                            defaultChecked
-                                            value={false}
-                                        />
-                                        <label htmlFor="deadline_submit_radio_optional">Không bắt buộc</label>
-                                    </div>
-
-                                    <div className="deadline_submit_radio_item">
-                                        <input
-                                            type="radio"
-                                            onChange={handleChangeVisiableStatusDateInput}
-                                            name="deadline_submit_radio"
-                                            id="required_deadline_submit"
-                                            value={true}
-                                        />
-                                        <label htmlFor="required_deadline_submit">Bắt buộc</label>
-                                    </div>
-                                </div>
-                            )}
-
-                            {(visibleDateInput === true || isTimedExtension) && (
-                                <div className="deadline_submit_input_wrapper">
-                                    <label htmlFor="deadline_submit_input">Nhập Thời Gian:</label>
-                                    <input
-                                        type="datetime-local"
-                                        onChange={handleChangeDatetimeValue}
-                                        id="deadline_submit_input"
-                                    />
-                                </div>
-                            )}
+                            <div className="deadline_submit_input_wrapper">
+                                <label htmlFor="deadline_submit_input">Nhập Thời Gian:</label>
+                                <input
+                                    type="datetime-local"
+                                    onChange={handleChangeDatetimeValue}
+                                    id="deadline_submit_input"
+                                />
+                            </div>
                         </div>
                     )}
+
                     <div className="approve_modal_body_note">
                         <textarea
                             placeholder="Nhập ghi chú cho hoạt động (nếu có)"

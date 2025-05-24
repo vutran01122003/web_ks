@@ -30,6 +30,10 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
     const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = [true, false];
+    const [MINIMUM_QUANTITY, MAXIMUM_QUANTITY] = [true, false];
+    const [isAllowEdit, setIsAllowEdit] = useState(true);
+    const [editingTime, setEditingTime] = useState('');
+
     const [tables, setTables] = useState([
         {
             tableName: '',
@@ -43,7 +47,8 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
             ],
             rowValueList: [],
             fixedScore: '',
-            scoreType: FIXED_SCORE_TYPE
+            scoreType: FIXED_SCORE_TYPE,
+            allowExceedQuantity: MINIMUM_QUANTITY
         }
     ]);
 
@@ -62,7 +67,8 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 ],
                 rowValueList: [],
                 fixedScore: '',
-                scoreType: FIXED_SCORE_TYPE
+                scoreType: FIXED_SCORE_TYPE,
+                allowExceedQuantity: MINIMUM_QUANTITY
             }
         ]);
     };
@@ -181,7 +187,8 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 ],
                 rowValueList: [],
                 fixedScore: '',
-                scoreType: FIXED_SCORE_TYPE
+                scoreType: FIXED_SCORE_TYPE,
+                allowExceedQuantity: MINIMUM_QUANTITY
             }
         ]);
     };
@@ -242,13 +249,15 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 pageStudentMajor: pageStudentMajor.majorName,
                 pageTalentEngineerType: talentEngineerType,
                 pageStudentLevelYear: +pageStudentLevelYear,
+                editingTime,
                 tables: tables.map((table) => {
                     const tableData = {
                         tableName: table.tableName,
                         quantityDemanded: table.quantityDemanded,
                         description: table.description,
                         rowTitleList: table.rowTitleList,
-                        fixedScore: +table.fixedScore
+                        fixedScore: +table.fixedScore,
+                        allowExceedQuantity: table.allowExceedQuantity
                     };
 
                     if (!table.fixedScore) delete table.fixedScore;
@@ -356,12 +365,36 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                     />
                                 </div>
                                 <div className="flex__line_lable">
-                                    <label htmlFor="mo_ta_chi_tieu">Số Lượng Tối Thiểu:</label>
+                                    <label htmlFor="mo_ta_chi_tieu">Số Lượng:</label>
+
+                                    {!tableDetailsData ? (
+                                        <select
+                                            className="option"
+                                            value={tables[tableIndex].allowExceedQuantity}
+                                            onChange={(e) => {
+                                                updateTable(tableIndex, 'allowExceedQuantity', e.target.value);
+                                            }}
+                                        >
+                                            <option value={MINIMUM_QUANTITY}>Số lượng tối thiểu</option>
+                                            <option value={MAXIMUM_QUANTITY}>Số lượng tối đa</option>
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            value={
+                                                tables[tableIndex].allowExceedQuantity
+                                                    ? 'Số lượng tối thiểu'
+                                                    : 'Số lượng tối đa'
+                                            }
+                                            readOnly={true}
+                                        />
+                                    )}
+
                                     <input
                                         type="text"
                                         value={table.quantityDemanded}
                                         readOnly={tableDetailsData ? true : false}
-                                        placeholder="Nhập số lượng hoạt động tối thiểu cần hoàn thành"
+                                        placeholder="Nhập số lượng hoạt động cần hoàn thành"
                                         onChange={(e) => {
                                             updateTable(
                                                 tableIndex,
@@ -401,7 +434,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 {table.scoreType === FIXED_SCORE_TYPE && (
                                     <div className="flex__line_lable">
                                         <label htmlFor="score_input">
-                                            {!tableDetailsData ? 'Nhập Điểm' : 'Điểm Số:'}
+                                            {!tableDetailsData ? 'Nhập Điểm:' : 'Điểm Số:'}
                                         </label>
                                         <input
                                             className={`score_input`}
@@ -608,23 +641,53 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
 
                 {!tableDetailsData && (
                     <div className="line__flex">
-                        <ComponentButton
-                            onClick={handleAddTable ? handleAddGoal : handleUpdateTable ? handleUpdateGoal : addTable}
-                            type="button"
-                            textButton={handleUpdateTable ? 'Cập Nhật Chỉ Tiêu' : 'Thêm Chỉ Tiêu'}
-                            className={`btn__add_table ${handleAddTable || handleUpdateTable ? 'active' : ''}`}
-                            icon_before={handleUpdateTable ? <AiFillEdit /> : <BiSolidAddToQueue />}
-                        />
+                        {!handleAddTable && (
+                            <div className="edit_option">
+                                <div className="edit_option_input">
+                                    <label>Cho phép sinh viên chỉnh sửa sau khi nộp hoạt động: </label>
+                                    <select
+                                        value={isAllowEdit}
+                                        onChange={(e) => setIsAllowEdit(e.target.value === 'true')}
+                                    >
+                                        <option value={true}>Cho phép chỉnh sửa</option>
+                                        <option value={false}>Không cho phép</option>
+                                    </select>
+                                </div>
 
-                        {!handleAddTable && !handleUpdateTable && (
-                            <ComponentButton
-                                textButton="Tạo Nhóm Chỉ Tiêu"
-                                onClick={handleCreatePage}
-                                type="button"
-                                className="btn__create--page"
-                                icon_before={<AiFillSave />}
-                            />
+                                {isAllowEdit && (
+                                    <div className="edit_option_input">
+                                        <label>Thời hạn sinh viên được phép chỉnh sửa hoạt động: </label>
+                                        <input
+                                            type="datetime-local"
+                                            value={editingTime}
+                                            onChange={(e) => setEditingTime(e.target.value)}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         )}
+
+                        <div className="btn_group">
+                            <ComponentButton
+                                onClick={
+                                    handleAddTable ? handleAddGoal : handleUpdateTable ? handleUpdateGoal : addTable
+                                }
+                                type="button"
+                                textButton={handleUpdateTable ? 'Cập Nhật Chỉ Tiêu' : 'Thêm Chỉ Tiêu'}
+                                className={`btn__add_table ${handleAddTable || handleUpdateTable ? 'active' : ''}`}
+                                icon_before={handleUpdateTable ? <AiFillEdit /> : <BiSolidAddToQueue />}
+                            />
+
+                            {!handleAddTable && !handleUpdateTable && (
+                                <ComponentButton
+                                    textButton="Tạo Nhóm Chỉ Tiêu"
+                                    onClick={handleCreatePage}
+                                    type="button"
+                                    className="btn__create--page"
+                                    icon_before={<AiFillSave />}
+                                />
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

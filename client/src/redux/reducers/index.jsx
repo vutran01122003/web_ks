@@ -13,6 +13,7 @@ import facultyReducer from './facultyReducer';
 import activitiesReducer from './activitiesReducer';
 import goalsReduce from './goalsReduce';
 import studentReducer from './studentReducer';
+import permissionReducer from './permissionReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     faculty: facultyReducer,
     activities: activitiesReducer,
     goals: goalsReduce,
-    student: studentReducer
+    student: studentReducer,
+    permission: permissionReducer
 });
 
 export default rootReducer;

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import { register } from '../../redux/actions/authAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import { getFacultyManagers } from '../../redux/actions/permissonAction';
 const { VITE_APP_MAJOR_MANAGER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } =
     import.meta.env;
 
@@ -70,7 +71,13 @@ function AccountCreatetion({ faculty }) {
                     levelYear,
                     isDirectRegister: false
                 })
-            );
+            ).then(() => {
+                dispatch(
+                    getFacultyManagers({
+                        groupCode: VITE_APP_MAJOR_MANAGER_CODE
+                    })
+                );
+            });
 
             resetFormData();
             resetFacultyData();

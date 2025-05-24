@@ -1,0 +1,38 @@
+.mobile-warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: hsl(210, 36%, 96%);
+    padding: 1rem;
+
+    .warning-card {
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 100%;
+        width: 400px;
+
+        .warning-icon {
+            font-size: 3rem;
+            color: #ff9900;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #d9534f;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        p {
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+    }
+}

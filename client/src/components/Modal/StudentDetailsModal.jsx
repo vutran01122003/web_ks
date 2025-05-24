@@ -3,12 +3,10 @@ import { HiMiniXMark } from 'react-icons/hi2';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/actions/studentAction';
-import ConfirmModal from '../Modal/ConfirmModal';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
 
-function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
+function StudentDetailsModal({ currentUserData, onToggleModal }) {
     const dispatch = useDispatch();
-    const faculty = facultyState.faculty;
-    const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
 
     const dateParts = currentUserData?.birthday
         ? new Date(currentUserData?.birthday).toLocaleDateString().split('/')
@@ -28,17 +26,23 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
         birthday: dateParts
             ? `${dateParts[2]}-${addZeroPrefix(dateParts[1])}-${addZeroPrefix(dateParts[0])}`
             : dateParts,
-        major: currentUserData?.major?._id || '',
-        cohort: currentUserData?.cohort?._id || '',
         isActive: currentUserData?.isActive || false,
         password: ''
     });
 
-    const onToggleConfirmModal = () => {
-        setIsVisibleConfirmModal((prev) => !prev);
-    };
-
     const onUpdateUser = () => {
+        const newUserData = { ...userData };
+        delete newUserData.password;
+
+        if (!Object.values(newUserData).every((value) => value)) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
+            });
+        }
+
         dispatch(
             updateUser({
                 userId: currentUserData._id,
@@ -217,58 +221,6 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
 
                             <tr>
                                 <td>
-                                    <label className="label_item" htmlFor="major">
-                                        Chuyên Ngành:
-                                    </label>
-                                </td>
-                                <td>
-                                    <select
-                                        className="select_item"
-                                        id="major"
-                                        name="major"
-                                        value={userData?.major}
-                                        onChange={onChangeUserData}
-                                    >
-                                        <option value="">Chọn Chuyên Ngành</option>
-                                        {faculty.majors.length > 0 &&
-                                            faculty.majors.map((major) => (
-                                                <option key={major._id} value={major._id}>
-                                                    {capitalizeFirstLetter(major.majorName)}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <label className="label_item" htmlFor="cohort">
-                                        Khóa Sinh Viên:
-                                    </label>
-                                </td>
-                                <td>
-                                    <select
-                                        className="select_item"
-                                        id="cohort"
-                                        name="cohort"
-                                        value={userData?.cohort}
-                                        onChange={onChangeUserData}
-                                    >
-                                        <option value="">Chọn Khóa</option>
-                                        {userData.major &&
-                                            faculty.majors
-                                                .find((major) => major._id === userData?.major)
-                                                ?.cohorts.map((cohort) => (
-                                                    <option key={cohort._id} value={cohort._id}>
-                                                        {cohort.cohortName}
-                                                    </option>
-                                                ))}
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
                                     <label className="label_item" htmlFor="password">
                                         Mật Khẩu Mới:
                                     </label>
@@ -326,17 +278,7 @@ function StudentDetailsModal({ currentUserData, onToggleModal, facultyState }) {
                         Thoát
                     </button>
 
-                    {isVisibleConfirmModal && (
-                        <ConfirmModal
-                            headerContent="Cập Nhật Thông Tin Kỹ Sư"
-                            bodyContent="Bạn chắn chắn muốn cập nhật thông tin kỹ sư"
-                            noteContent="Nếu bạn thay đổi chuyên ngành hoặc khóa sinh viên thì toàn bộ tiến độ và điểm của sinh viên sẽ mất đi và không bao giờ khôi phục lại được. Vui lòng cân nhắc kỹ trước khi chỉnh sửa !"
-                            onAccept={onUpdateUser}
-                            toggleConfirmModalDisplay={onToggleConfirmModal}
-                        />
-                    )}
-
-                    <button className="update_btn" onClick={onToggleConfirmModal}>
+                    <button className="update_btn" onClick={onUpdateUser}>
                         Cập Nhật
                     </button>
                 </div>

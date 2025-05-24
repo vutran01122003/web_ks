@@ -74,23 +74,6 @@ function TableContent({
                                     />
                                 )}
 
-                                {/* {item?.proofFiles.length > 1 ? (
-                                    <span
-                                        className="proof_files_download"
-                                        onClick={() => {
-                                            handleOpenPreviewFilesModal({
-                                                proofData: item?.proofFiles
-                                            });
-                                        }}
-                                    >
-                                        {item?.proofNameLabel}
-                                    </span>
-                                ) : (
-                                    <a href={item?.proofFiles[0]?.fileUrl} className="proof_files_download">
-                                        {item?.proofNameLabel}
-                                    </a>
-                                )} */}
-
                                 <span onClick={handleVisibleFileContentModal} className="preview_proof_files">
                                     {item?.proofPreviewLabel}
                                 </span>
@@ -230,16 +213,21 @@ function TableContent({
                         </td>
                     );
                 } else if (item?.editLabel) {
+                    const editingTime = item.rowInfo?.editingTime;
+                    const deadline = item.rowInfo?.deadline;
+
                     return !isDetailedRow ? (
                         <td className="line__item" key={index}>
                             {
                                 <abbr
                                     title={`${
                                         item.editValue
-                                            ? item.rowInfo?.deadline
-                                                ? `Hạn nộp: ${new Date(item.rowInfo?.deadline).toLocaleString('en-GB')}`
-                                                : 'Sửa minh chứng'
-                                            : 'Không được chỉnh sửa'
+                                            ? 'Sửa minh chứng'
+                                            : deadline
+                                              ? `Hạn nộp lại: ${new Date(deadline).toLocaleString('en-GB')}`
+                                              : editingTime && new Date(editingTime).getTime() < new Date().getTime()
+                                                ? `Hạn chỉnh sửa: ${new Date(editingTime).toLocaleString('en-GB')}`
+                                                : 'Không được chỉnh sửa'
                                     }`}
                                 >
                                     <span

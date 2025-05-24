@@ -50,18 +50,53 @@
             }
 
             .line__flex {
-                display: flex;
-                justify-content: space-between;
+                .edit_option {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
 
-                > h1 {
-                    color: #0153b1;
-                    text-align: center;
-                    width: 100%;
-                    margin-bottom: 30px;
-                    font-size: 25px;
-                    text-transform: uppercase;
+                    .edit_option_input {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        label {
+                            font-size: 16px;
+                            font-weight: 500;
+                            color: #333;
+                            min-width: 390px;
+                        }
+
+                        select,
+                        input {
+                            height: 30px;
+                            border: none;
+                            border: 1px solid #afafaf;
+                            height: 40px;
+                            font-size: 16px;
+                            font-weight: 500;
+                            padding: 0 5px;
+                            outline: none;
+                            width: 220px;
+                        }
+                    }
+                }
+
+                .btn_group {
+                    display: flex;
+                    justify-content: space-between;
+
+                    > h1 {
+                        color: #0153b1;
+                        text-align: center;
+                        width: 100%;
+                        margin-bottom: 30px;
+                        font-size: 25px;
+                        text-transform: uppercase;
+                    }
                 }
             }
+
             .filed__line {
                 display: flex;
                 margin: 20px 0px;
@@ -136,12 +171,12 @@
                     }
                     .input_title--chi_tieu {
                         width: 100%;
-                        margin: 0px 10px;
+                        margin: 0px 5px;
                         padding: 5px 10px;
                         font-size: 18px;
                         font-weight: 500;
-                        border: none;
-                        border-bottom: 1px solid #afafaf;
+                        height: 40px;
+                        border: 1px solid #afafaf;
                         background-color: transparent;
                         outline: none;
                         &:placeholder-shown {
@@ -159,21 +194,39 @@
                         cursor: pointer;
                     }
                 }
+
                 .flex__line_lable {
                     padding: 20px 20px 0;
                     display: flex;
                     align-items: center;
 
+                    .checkbox_input {
+                        display: flex;
+                        align-items: center;
+                        height: 40px;
+                        gap: 2px;
+
+                        span {
+                            font-weight: 600;
+                            white-space: nowrap;
+                        }
+                    }
+
                     select {
                         height: 30px;
-                        margin-left: 10px;
+                        margin-left: 5px;
                         border: none;
-                        border-bottom: 1px solid #afafaf;
+                        border: 1px solid #afafaf;
+                        height: 40px;
                         font-size: 16px;
                         font-weight: 500;
                         padding: 0 5px;
                         width: 100%;
                         outline: none;
+
+                        &.option {
+                            width: 240px;
+                        }
                     }
 
                     > label {
@@ -187,10 +240,11 @@
                     > input {
                         width: 100%;
                         height: 30px;
-                        margin: 0px 10px;
+                        margin: 0px 5px;
                         background: transparent;
                         border: none;
-                        border-bottom: 1px solid #afafaf;
+                        border: 1px solid #afafaf;
+                        height: 40px;
                         outline: none;
                         font-size: 18px;
                         font-weight: 500;
@@ -531,7 +585,7 @@
 
                         .page_name,
                         .page_status {
-                            text-align: center;
+                            text-align: left;
                         }
 
                         .page_status {

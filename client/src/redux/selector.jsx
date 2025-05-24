@@ -23,3 +23,5 @@ export const activitiesSelector = (state) => state.activities;
 export const goalsSelector = (state) => state.goals;
 
 export const studentSelector = (state) => state.student;
+
+export const permissionSelector = (state) => state.permission;
