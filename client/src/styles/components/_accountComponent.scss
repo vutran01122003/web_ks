@@ -2,7 +2,7 @@
     border-left: 1px solid #e0dede;
     padding-left: 20px;
 
-    &.in_modal{
+    &.in_modal {
         padding: 0;
         border: none;
     }
@@ -15,10 +15,10 @@
         display: flex;
         align-items: center;
 
-        &.in_modal{
+        &.in_modal {
             cursor: unset;
 
-            .info__avatar  {
+            .info__avatar {
                 order: 1;
                 margin-right: 15px;
             }
@@ -38,7 +38,7 @@
                 text-transform: uppercase;
                 margin-bottom: 2px;
                 color: #000000;
-                display: block; 
+                display: block;
                 min-width: 100px;
             }
 
@@ -93,7 +93,7 @@
             display: flex;
             justify-content: left;
             padding: 7px 10px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             color: #414141;
             font-weight: 600;

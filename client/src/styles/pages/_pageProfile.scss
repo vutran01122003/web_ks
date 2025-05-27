@@ -28,6 +28,10 @@ $coll_span: 2;
             height: 100%;
             border-left: 1px solid $line_color;
         }
+
+        .info__avatar {
+            margin-bottom: 20px;
+        }
     }
 
     .info__items {
@@ -41,7 +45,6 @@ $coll_span: 2;
         .info__text {
             display: flex;
             flex-direction: column;
-            width: 100%;
             gap: 10px;
         }
     }

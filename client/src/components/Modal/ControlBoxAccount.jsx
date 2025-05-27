@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { PiUserCircleGear } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -31,11 +31,6 @@ const ControlBoxAccount = ({ setState }) => {
             toLink: '/profile'
         },
         {
-            name_select: 'Cài đặt',
-            icon_before: <IoSettingsOutline />,
-            onClick: handleOpenModalSetting
-        },
-        {
             name_select: 'Hỗ trợ',
             icon_before: <IoIosHelpCircleOutline />,
             onClick: handleOpenModalHelp
@@ -56,8 +51,9 @@ const ControlBoxAccount = ({ setState }) => {
             </div>
         );
     });
+
     return (
-        <>
+        <Fragment>
             <Modal
                 title="Thông Tin Liên Hệ"
                 centered
@@ -71,21 +67,19 @@ const ControlBoxAccount = ({ setState }) => {
                 2. Email: abc@gmail.com <br />
                 3. Zalo: 09123123123
             </Modal>
+
             {returnListControlAccount}
-            <div className="border__collpe"></div>
-            <React.Fragment>
-                <div
-                    className="item_btn_control"
-                    onClick={() => {
-                        setState(false);
-                        handleLogout();
-                    }}
-                >
-                    {<RiLogoutCircleRLine />}
-                    {'Đăng xuất'}
-                </div>
-            </React.Fragment>
-        </>
+            <div
+                className="item_btn_control"
+                onClick={() => {
+                    setState(false);
+                    handleLogout();
+                }}
+            >
+                {<RiLogoutCircleRLine />}
+                {'Đăng xuất'}
+            </div>
+        </Fragment>
     );
 };
 

@@ -1,5 +1,4 @@
 import { Tabs } from 'antd';
-import { IoSearch } from 'react-icons/io5';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, rowSelector } from '../redux/selector';
@@ -9,7 +8,6 @@ import GLOBALTYPES from '../redux/actions/globalTypes';
 import ComponentDynamicRow from '../components/DynamicRow/ComponentDynamicRow';
 import SearchFilterComponent from '../components/Filter/SearchFilter';
 import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
-import { getPages } from '../redux/actions/pageAction';
 
 const items = [
     {
@@ -168,18 +166,12 @@ const ActivityUi = () => {
                                 talentEngineerType={talentEngineerType}
                                 currentLevelYearValue={currentLevelYearValue}
                                 activityName={activityName}
+                                userId={userId}
+                                handleChangeUserId={onChangeUserId}
                             />
 
                             <div className="search_wrapper">
-                                <input
-                                    className="search_input"
-                                    placeholder="Mã sinh viên"
-                                    value={userId}
-                                    onChange={onChangeUserId}
-                                />
-
                                 <button className="search_btn" onClick={() => onSearch(tab)} type="primary">
-                                    <IoSearch size={20} />
                                     <span>Tìm Kiếm</span>
                                 </button>
                             </div>

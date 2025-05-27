@@ -18,12 +18,12 @@ function Faculty() {
     const items = [
         {
             key: 'faculty',
-            label: 'Khoa',
+            label: 'Danh Sách Khoa',
             children: <FacultyComponent faculty={faculty} />
         },
         {
             key: 'major',
-            label: 'Chuyên Ngành',
+            label: 'Danh Sách Chuyên Ngành',
             children: <MajorComponent faculty={faculty} />
         },
         {

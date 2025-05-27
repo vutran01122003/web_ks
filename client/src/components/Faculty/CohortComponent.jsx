@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { TbEdit } from 'react-icons/tb';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import CohortModal from '../Modal/CohortModal';
@@ -6,17 +6,19 @@ import { capitalizeFirstLetter } from '../../utils/handleString';
 import { useDispatch } from 'react-redux';
 import { deleteCohort } from '../../redux/actions/facultyAction';
 import ConfirmModal from '../Modal/ConfirmModal';
-import { TiDeleteOutline } from 'react-icons/ti';
+import FacultySearchFilter from '../Filter/FacultySearchFilter';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 function CohortComponent({ faculty }) {
     const dispatch = useDispatch();
     const facultyData = faculty?.facultyData;
+    const [facultyList, setFacultyList] = useState([]);
     const [isDisplayCreateCohortModal, setIsDisplayCreateCohortModal] = useState(false);
     const [isDisplayUpdateCohortModal, setIsDisplayUpdateCohortModal] = useState(false);
     const [isDisplayDeleteCohortModal, setIsDisplayDeleteCohortModal] = useState(false);
-    const [currentFacultyIndex, setCurrentFacultyIndex] = useState(null);
-    const [currentMajorIndex, setCurrentMajorIndex] = useState(null);
-    const [currentCohortIndex, setCurrentCohortIndex] = useState(null);
+    const [currentFacultyIndex, setCurrentFacultyIndex] = useState('');
+    const [currentMajorIndex, setCurrentMajorIndex] = useState('');
+    const [currentCohortIndex, setCurrentCohortIndex] = useState('');
     const currentFaculty = facultyData[currentFacultyIndex];
     const currentMajor = currentFaculty?.majors[currentMajorIndex];
     const currentCohort = currentMajor?.cohorts[currentCohortIndex];
@@ -44,6 +46,10 @@ function CohortComponent({ faculty }) {
             })
         );
     };
+
+    useEffect(() => {
+        if (facultyData.length > 0) setFacultyList(facultyData);
+    }, [JSON.stringify(facultyData)]);
 
     return (
         <Fragment>
@@ -76,11 +82,19 @@ function CohortComponent({ faculty }) {
             )}
 
             <div className="table_heading">
-                <h3 className="heading">Danh Sách Khóa Sinh Viên</h3>
-                <button className="create_major_btn" onClick={handleToggleDisplayAddCohortModal}>
-                    <IoIosAddCircleOutline size={20} />
-                    <span>Tạo Khóa Mới</span>
-                </button>
+                <div className="options">
+                    <FacultySearchFilter
+                        setFacultyList={setFacultyList}
+                        majorFilter={true}
+                        cohortFilter={true}
+                        facultyData={facultyData}
+                    />
+
+                    <button className="create_major_btn" onClick={handleToggleDisplayAddCohortModal}>
+                        <IoIosAddCircleOutline size={20} />
+                        <span>Tạo Khóa Mới</span>
+                    </button>
+                </div>
             </div>
 
             <table>
@@ -95,7 +109,7 @@ function CohortComponent({ faculty }) {
                 </thead>
 
                 <tbody>
-                    {faculty.facultyData.reduce((arr, facultyItem, facultyIndex) => {
+                    {facultyList.reduce((arr, facultyItem, facultyIndex) => {
                         const majors = facultyItem.majors;
                         if (majors.length === 0) return arr;
 
@@ -127,33 +141,37 @@ function CohortComponent({ faculty }) {
                                                     </td>
                                                 )}
 
-                                                <td>{cohort.cohortName}</td>
+                                                <td className="cohort_td">
+                                                    {capitalizeFirstLetter(cohort.cohortName)}
+                                                </td>
                                                 <td className={`status ${cohort.isActive ? 'active' : 'inactive'}`}>
                                                     {cohort.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}
                                                 </td>
-                                                <td className="interactive_btn_wrapper">
-                                                    <div
-                                                        className="updated_btn"
-                                                        onClick={() => {
-                                                            setCurrentFacultyIndex(facultyIndex);
-                                                            setCurrentMajorIndex(majorIndex);
-                                                            setCurrentCohortIndex(index);
-                                                            handleToggleDisplayUpdateCohortModal();
-                                                        }}
-                                                    >
-                                                        <TbEdit /> <span>Chỉnh Sửa Khóa</span>
-                                                    </div>
+                                                <td>
+                                                    <div className="interactive_btn_wrapper">
+                                                        <div
+                                                            className="updated_btn"
+                                                            onClick={() => {
+                                                                setCurrentFacultyIndex(facultyIndex);
+                                                                setCurrentMajorIndex(majorIndex);
+                                                                setCurrentCohortIndex(index);
+                                                                handleToggleDisplayUpdateCohortModal();
+                                                            }}
+                                                        >
+                                                            <TbEdit size={22} />
+                                                        </div>
 
-                                                    <div
-                                                        className="delete_btn"
-                                                        onClick={() => {
-                                                            setCurrentFacultyIndex(facultyIndex);
-                                                            setCurrentMajorIndex(majorIndex);
-                                                            setCurrentCohortIndex(index);
-                                                            handleToggleDisplayDeleteCohortModal();
-                                                        }}
-                                                    >
-                                                        <TiDeleteOutline size={18} /> <span>Xóa Khóa</span>
+                                                        <div
+                                                            className="delete_btn"
+                                                            onClick={() => {
+                                                                setCurrentFacultyIndex(facultyIndex);
+                                                                setCurrentMajorIndex(majorIndex);
+                                                                setCurrentCohortIndex(index);
+                                                                handleToggleDisplayDeleteCohortModal();
+                                                            }}
+                                                        >
+                                                            <FaRegTrashAlt size={18} />
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

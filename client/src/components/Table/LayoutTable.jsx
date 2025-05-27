@@ -73,7 +73,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                         </span>
                     </h5>
                     <h5 className="table_description">
-                        <span>Số Lượng Tối Thiểu: </span>
+                        <span>Số Lượng: </span>
                         <span>{`${table.quantityDemanded} Hoạt Động`}</span>
                     </h5>
                 </Fragment>

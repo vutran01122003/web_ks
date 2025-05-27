@@ -225,7 +225,7 @@
 
         .file_item_link {
             display: block;
-            color: #006fee;
+            color: #0153b1;
             font-weight: 600;
             transition: 0.1s linear;
 
@@ -667,7 +667,7 @@
                 }
 
                 &:active {
-                    background: #1677ff;
+                    background: #0153b1;
                 }
             }
         }
@@ -781,7 +781,7 @@
 
         .table_label_goal {
             margin-bottom: 8px;
-            color: #006fee;
+            color: #0153b1;
         }
 
         .table_detail_goal {
@@ -975,7 +975,7 @@
 
         .pagination_pdf {
             &.active {
-                color: #1677ff;
+                color: #0153b1;
             }
         }
     }
@@ -1055,6 +1055,12 @@
             height: 100%;
             width: 100%;
 
+            tr,
+            th,
+            td {
+                border: none;
+            }
+
             tr {
                 height: 47px;
 
@@ -1123,11 +1129,11 @@
             }
 
             &.close_btn {
-                background: #f0635c;
+                background: #f5372f;
             }
 
             &.update_btn {
-                background: #1677ff;
+                background: #0153b1;
             }
         }
     }

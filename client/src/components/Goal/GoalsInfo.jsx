@@ -17,7 +17,7 @@ function GoalsInfo({ levelYear, goalsInfo }) {
                             <thead className="goal_info_header">
                                 <tr>
                                     <th>Tên Chỉ Tiêu</th>
-                                    <th>Số Lượng Tối Thiểu</th>
+                                    <th>Số Lượng</th>
                                     <th>Chờ Duyệt</th>
                                     <th>Từ Chối</th>
                                     <th>Hoàn Thành</th>

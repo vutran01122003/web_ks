@@ -117,7 +117,6 @@
                     font-size: 16px;
                     font-weight: 600;
                     margin-left: 20px;
-                    border-radius: 3px;
                 }
             }
 
@@ -539,6 +538,7 @@
                             font-size: 13.5px;
                             user-select: none;
                             color: #333;
+                            background: #f1f0f0;
                         }
 
                         td {
@@ -566,20 +566,20 @@
                                 }
 
                                 &.active {
-                                    color: #f0635c;
+                                    color: #f5372f;
                                 }
 
                                 &.inactive {
-                                    color: #1677ff;
+                                    color: #0153b1;
                                 }
                             }
 
                             .add_goal_btn {
-                                color: #1677ff;
+                                color: #0153b1;
                             }
 
                             .remove_page_goal_btn {
-                                color: #f0635c;
+                                color: #f5372f;
                             }
                         }
 
@@ -591,11 +591,11 @@
                         .page_status {
                             font-weight: 600;
                             .active {
-                                color: #1677ff;
+                                color: #0153b1;
                             }
 
                             .inactive {
-                                color: #f0635c;
+                                color: #f5372f;
                             }
                         }
 
@@ -647,21 +647,21 @@
 
                                 .activity_update_status_btn {
                                     &.inactive {
-                                        border: 1px solid #f0635c;
-                                        color: #f0635c;
+                                        border: 1px solid #f5372f;
+                                        color: #f5372f;
 
                                         &:hover {
-                                            background: #f0635c;
+                                            background: #f5372f;
                                             color: #fff;
                                         }
                                     }
 
                                     &.active {
-                                        border: 1px solid #1677ff;
-                                        color: #1677ff;
+                                        border: 1px solid #0153b1;
+                                        color: #0153b1;
 
                                         &:hover {
-                                            background: #1677ff;
+                                            background: #0153b1;
                                             color: #fff;
                                         }
                                     }
@@ -669,11 +669,11 @@
 
                                 .activity_delete_btn {
                                     float: right;
-                                    border: 1px solid #f0635c;
-                                    color: #f0635c;
+                                    border: 1px solid #f5372f;
+                                    color: #f5372f;
 
                                     &:hover {
-                                        background: #f0635c;
+                                        background: #f5372f;
                                         color: #fff;
                                     }
                                 }

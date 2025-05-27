@@ -30,9 +30,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
     const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = [true, false];
-    const [MINIMUM_QUANTITY, MAXIMUM_QUANTITY] = [true, false];
-    const [isAllowEdit, setIsAllowEdit] = useState(true);
-    const [editingTime, setEditingTime] = useState('');
 
     const [tables, setTables] = useState([
         {
@@ -48,7 +45,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
             rowValueList: [],
             fixedScore: '',
             scoreType: FIXED_SCORE_TYPE,
-            allowExceedQuantity: MINIMUM_QUANTITY
+            allowExceedQuantity: true
         }
     ]);
 
@@ -68,7 +65,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 rowValueList: [],
                 fixedScore: '',
                 scoreType: FIXED_SCORE_TYPE,
-                allowExceedQuantity: MINIMUM_QUANTITY
+                allowExceedQuantity: true
             }
         ]);
     };
@@ -188,7 +185,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 rowValueList: [],
                 fixedScore: '',
                 scoreType: FIXED_SCORE_TYPE,
-                allowExceedQuantity: MINIMUM_QUANTITY
+                allowExceedQuantity: true
             }
         ]);
     };
@@ -249,7 +246,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 pageStudentMajor: pageStudentMajor.majorName,
                 pageTalentEngineerType: talentEngineerType,
                 pageStudentLevelYear: +pageStudentLevelYear,
-                editingTime,
                 tables: tables.map((table) => {
                     const tableData = {
                         tableName: table.tableName,
@@ -366,29 +362,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 </div>
                                 <div className="flex__line_lable">
                                     <label htmlFor="mo_ta_chi_tieu">Số Lượng:</label>
-
-                                    {!tableDetailsData ? (
-                                        <select
-                                            className="option"
-                                            value={tables[tableIndex].allowExceedQuantity}
-                                            onChange={(e) => {
-                                                updateTable(tableIndex, 'allowExceedQuantity', e.target.value);
-                                            }}
-                                        >
-                                            <option value={MINIMUM_QUANTITY}>Số lượng tối thiểu</option>
-                                            <option value={MAXIMUM_QUANTITY}>Số lượng tối đa</option>
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            value={
-                                                tables[tableIndex].allowExceedQuantity
-                                                    ? 'Số lượng tối thiểu'
-                                                    : 'Số lượng tối đa'
-                                            }
-                                            readOnly={true}
-                                        />
-                                    )}
 
                                     <input
                                         type="text"
@@ -641,32 +614,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
 
                 {!tableDetailsData && (
                     <div className="line__flex">
-                        {!handleAddTable && (
-                            <div className="edit_option">
-                                <div className="edit_option_input">
-                                    <label>Cho phép sinh viên chỉnh sửa sau khi nộp hoạt động: </label>
-                                    <select
-                                        value={isAllowEdit}
-                                        onChange={(e) => setIsAllowEdit(e.target.value === 'true')}
-                                    >
-                                        <option value={true}>Cho phép chỉnh sửa</option>
-                                        <option value={false}>Không cho phép</option>
-                                    </select>
-                                </div>
-
-                                {isAllowEdit && (
-                                    <div className="edit_option_input">
-                                        <label>Thời hạn sinh viên được phép chỉnh sửa hoạt động: </label>
-                                        <input
-                                            type="datetime-local"
-                                            value={editingTime}
-                                            onChange={(e) => setEditingTime(e.target.value)}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
                         <div className="btn_group">
                             <ComponentButton
                                 onClick={

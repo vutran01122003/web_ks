@@ -1,33 +1,54 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, facultySelector, activitiesSelector } from '../../redux/selector';
+import { facultySelector, activitiesSelector } from '../../redux/selector';
 import { getActivities } from '../../redux/actions/activitiesAction';
-import { getAllFaculties } from '../../redux/actions/facultyAction';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE } = import.meta.env;
 
 function SearchFilterComponent({
+    facultyData,
+    setFacultyValue,
     setMajorValue,
     setCohortValue,
     setTalentEngineerType,
     setCurrentLevelYearValue,
     setActivityName,
     setStatus,
+    facultyValue,
     majorValue,
     cohortValue,
     talentEngineerType,
     currentLevelYearValue,
     activityName,
     statusValue,
-    isLevelYearInput
+    userId,
+    handleChangeUserId
 }) {
+    console.log(facultyData);
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
     const activities = useSelector(activitiesSelector);
-    const majorValueList = facultyState?.majors;
+    const majorValueList = facultyData ? facultyValue?.majors || [] : facultyState?.majors;
     const isTemporaryEngineer = talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
+
+    const handleFacultyValue = (e) => {
+        const value = e.target.value;
+
+        setMajorValue('');
+        setCohortValue('');
+        setTalentEngineerType('');
+
+        if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
+        if (setActivityName) setActivityName('');
+        if (!value) {
+            setMajorValue('');
+            return;
+        }
+
+        setFacultyValue(JSON.parse(value));
+    };
 
     const handleMajorValue = (e) => {
         const value = e.target.value;
@@ -115,6 +136,17 @@ function SearchFilterComponent({
     return (
         <div className="search_filter_container">
             <div className="search_filter_wrapper">
+                {setFacultyValue && (
+                    <select value={JSON.stringify(facultyValue)} onInput={handleFacultyValue}>
+                        <option value="">Chọn Chuyên Ngành</option>
+                        {facultyData.map((faculty, index) => (
+                            <option key={index} value={JSON.stringify(faculty)}>
+                                {capitalizeFirstLetter(faculty.facultyName)}
+                            </option>
+                        ))}
+                    </select>
+                )}
+
                 <select value={JSON.stringify(majorValue)} onInput={handleMajorValue}>
                     <option value="">Chọn Chuyên Ngành</option>
                     {majorValueList.map((major, index) => (
@@ -128,11 +160,15 @@ function SearchFilterComponent({
                     <option value="">Chọn khóa</option>
                     {majorValue?.cohorts &&
                         majorValue?.cohorts.length > 0 &&
-                        majorValue?.cohorts.map((cohort, index) => (
-                            <option key={index} value={JSON.stringify(cohort)}>
-                                {`Khóa ${cohort.cohortName}`}
-                            </option>
-                        ))}
+                        majorValue?.cohorts.map((_, index) => {
+                            const cohorts = majorValue?.cohorts;
+                            const length = cohorts.length;
+                            return (
+                                <option key={index} value={JSON.stringify(cohorts[length - index - 1])}>
+                                    {`Khóa ${cohorts[length - index - 1].cohortName}`}
+                                </option>
+                            );
+                        })}
                 </select>
 
                 <select onInput={handleTalentEngineerType} value={talentEngineerType}>
@@ -199,6 +235,17 @@ function SearchFilterComponent({
                                 </option>
                             ))}
                     </select>
+                )}
+
+                {handleChangeUserId && (
+                    <input
+                        className="search_input"
+                        type="text"
+                        name="userId"
+                        value={userId}
+                        placeholder="Nhập Mã Sinh Viên"
+                        onChange={handleChangeUserId}
+                    />
                 )}
             </div>
         </div>

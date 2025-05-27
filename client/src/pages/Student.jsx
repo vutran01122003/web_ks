@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiEdit } from 'react-icons/fi';
-import { IoSearch } from 'react-icons/io5';
-import { AiOutlineUserAdd } from 'react-icons/ai';
-import { FaSortAlphaDown, FaSortAlphaDownAlt, FaFileExport } from 'react-icons/fa';
+import { FaSortAlphaDown, FaSortAlphaDownAlt } from 'react-icons/fa';
 import { getStudents } from '../redux/actions/studentAction';
 import GLOBALTYPES from '../redux/actions/globalTypes';
-import { exportQualifiedUsersExcel, importUser } from '../redux/actions/excelAction';
+import { exportQualifiedUsersExcel } from '../redux/actions/excelAction';
 import { facultySelector, studentSelector } from '../redux/selector';
 import { capitalizeFirstLetter, toFullName } from '../utils/handleString';
 import SearchFilterComponent from '../components/Filter/SearchFilter';
@@ -15,7 +13,7 @@ import GoalDetailsModal from '../components/Modal/GoalDetailsModal';
 import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
 import ImportExcelModal from '../components/Modal/ImportExcelModal';
 
-const Student = () => {
+const Student = ({ isAdmin }) => {
     const { VITE_APP_API_LIMIT, VITE_APP_TALENT_ENGINEER_CODE } = import.meta.env;
     const dispatch = useDispatch();
     const observe = useRef();
@@ -25,6 +23,7 @@ const Student = () => {
     const studentList = studentState.studentList;
 
     const [userId, setUserId] = useState('');
+    const [faculty, setFaculty] = useState('');
     const [major, setMajor] = useState('');
     const [cohort, Setcohort] = useState('');
     const [talentEngineerType, setTalentEngineerType] = useState('');
@@ -182,26 +181,23 @@ const Student = () => {
                         <div className="filter_group">
                             <div className="left-section">
                                 <SearchFilterComponent
+                                    setFacultyValue={isAdmin ? setFaculty : null}
+                                    facultyData={isAdmin ? facultyState.facultyData : null}
                                     setMajorValue={setMajor}
                                     setCohortValue={Setcohort}
                                     setTalentEngineerType={setTalentEngineerType}
                                     setStatus={setStatus}
+                                    facultyValue={faculty}
                                     majorValue={major}
                                     cohortValue={cohort}
                                     talentEngineerType={talentEngineerType}
                                     statusValue={status}
+                                    userId={userId}
+                                    handleChangeUserId={handleChangeUserId}
                                 />
                             </div>
 
                             <div className="right_section">
-                                <input
-                                    className="search_input"
-                                    type="text"
-                                    name="userId"
-                                    placeholder="Nhập Mã Sinh Viên"
-                                    onChange={handleChangeUserId}
-                                />
-
                                 <div className="btn_group">
                                     <button
                                         className="search_btn"
@@ -212,20 +208,17 @@ const Student = () => {
                                             });
                                         }}
                                     >
-                                        <IoSearch size={20} />
                                         <span>Tìm Kiếm</span>
                                     </button>
 
                                     {talentEngineerType === VITE_APP_TALENT_ENGINEER_CODE && (
                                         <div className="add_student_wrapper" onClick={onToggleExcelModal}>
-                                            <AiOutlineUserAdd size={20} />
                                             <span>Thêm Kỹ Sư</span>
                                         </div>
                                     )}
 
                                     {studentList.length > 0 && (
                                         <button className="export_btn" onClick={exportExcelFile}>
-                                            <FaFileExport size={20} />
                                             <span>Xuất Excel</span>
                                         </button>
                                     )}

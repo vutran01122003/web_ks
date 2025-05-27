@@ -1,9 +1,8 @@
 import moment from 'moment';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoSearch } from 'react-icons/io5';
 import { LuTimerReset } from 'react-icons/lu';
-import { FaSortNumericDown, FaSortNumericDownAlt, FaFileExport } from 'react-icons/fa';
+import { FaSortNumericDown, FaSortNumericDownAlt } from 'react-icons/fa';
 import { toFullName } from '../utils/handleString';
 import GLOBALTYPES from '../redux/actions/globalTypes';
 import { getAnnualTaskProgress } from '../redux/actions/progressAction';
@@ -214,22 +213,16 @@ function ProgressUI() {
                                 cohortValue={cohort}
                                 talentEngineerType={talentEngineerType}
                                 currentLevelYearValue={levelYear}
-                            />
-                            <input
-                                type="text"
-                                className="search_input"
-                                placeholder="Nhập Mã Sinh Viên"
-                                onChange={handleChangeUserIdValue}
+                                userId={userId}
+                                handleChangeUserId={handleChangeUserIdValue}
                             />
 
                             <button className="search_btn" onClick={searchData}>
-                                <IoSearch size={20} />
                                 Tìm Kiếm
                             </button>
 
                             {progress.annualTaskProgress.data.length > 0 && (
                                 <button className="export_btn" onClick={exportExcelFile}>
-                                    <FaFileExport size={20} />
                                     Xuất Excel
                                 </button>
                             )}
@@ -243,7 +236,6 @@ function ProgressUI() {
                                                     className="btn__end_progress"
                                                     onClick={handleVissbleStopSubmittingProofModal}
                                                 >
-                                                    <LuTimerReset />
                                                     {talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
                                                         ? 'Dừng Xét Tuyển Bổ Sung'
                                                         : 'Dừng Nộp Minh Chứng'}

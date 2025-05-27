@@ -39,7 +39,7 @@
         display: inline-block;
 
         .goals_info_heading {
-            color: #006fee;
+            color: #0153b1;
             transition: 0.1s linear;
             text-transform: uppercase;
             margin-bottom: 10px;
@@ -68,7 +68,8 @@
                 text-align: center;
             }
 
-            td, th {
+            td,
+            th {
                 padding: 8px;
                 border: 1px solid #ddd;
             }
@@ -86,9 +87,9 @@
                     .goal_info_dangerous_status {
                         color: #f0635c;
                     }
-        
+
                     .goal_info_success_status {
-                        color: #1c7ae6;
+                        color: #0153b1;
                     }
                 }
             }

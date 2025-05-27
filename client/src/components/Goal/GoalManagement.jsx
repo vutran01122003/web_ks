@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoSearch } from 'react-icons/io5';
-import { TiDeleteOutline } from 'react-icons/ti';
-import { IoIosAddCircleOutline } from 'react-icons/io';
-import { RxUpdate } from 'react-icons/rx';
 import { goalsSelector } from '../../redux/selector';
 import ConfirmModal from '../Modal/ConfirmModal';
 import AddTableModal from '../Modal/AddTableModal';
@@ -163,7 +159,6 @@ function GoalsManagement() {
                     </div>
 
                     <button className="search_btn" onClick={onGetPages}>
-                        <IoSearch />
                         Tìm Kiếm
                     </button>
                 </div>
@@ -338,10 +333,7 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <div>
-                                                        <IoIosAddCircleOutline size={17} />
-                                                    </div>
-                                                    <span>Thêm Chỉ Tiêu Mới Vào Nhóm Chỉ Tiêu</span>
+                                                    <span>Thêm Chỉ Tiêu Mới</span>
                                                 </div>
 
                                                 <div
@@ -354,13 +346,10 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <div>
-                                                        <RxUpdate size={16} />
-                                                    </div>
                                                     <span>
                                                         {filteredPageItem.isActive
-                                                            ? `Ẩn ${capitalizeFirstLetter(filteredPageItem.pageName)}`
-                                                            : `Hiện ${capitalizeFirstLetter(filteredPageItem.pageName)}`}
+                                                            ? `Ẩn Nhóm Chỉ Tiêu`
+                                                            : `Hiện Nhóm Chỉ Tiêu`}
                                                     </span>
                                                 </div>
 
@@ -373,10 +362,7 @@ function GoalsManagement() {
                                                         });
                                                     }}
                                                 >
-                                                    <div>
-                                                        <TiDeleteOutline size={17} />
-                                                    </div>
-                                                    <span>{`Xóa ${capitalizeFirstLetter(filteredPageItem.pageName)}`}</span>
+                                                    <span>{`Xóa Nhóm Chỉ Tiêu`}</span>
                                                 </div>
                                             </td>
                                         </tr>

@@ -7,10 +7,11 @@
         border-collapse: collapse;
         width: 100%;
         font-weight: 500;
+        text-align: center;
 
         th {
             border: 1px solid rgb(171, 170, 170);
-            background: #fff;
+            background: #f1f0f0;
             padding: 10px 5px;
             font-size: 13px;
             font-weight: 700;
@@ -25,19 +26,43 @@
             padding: 10px;
         }
 
-        .manager_item {
-            & + .manager_item {
-                margin-top: 5px;
+        .cohort_td {
+            text-align: center;
+        }
+
+        .major_list {
+            text-align: left;
+
+            .manager_item {
+                & > span:first-child {
+                    display: inline-block;
+                    min-width: 75px;
+                }
+
+                & > span:nth-child(2) {
+                    margin-right: 11px;
+                }
+
+                & + .manager_item {
+                    margin-top: 5px;
+                }
+            }
+        }
+
+        .major_item {
+            & + .major_item {
+                margin-top: 8px;
             }
         }
 
         .status {
+            text-align: center;
             &.active {
-                color: #1677ff;
+                color: #0153b1;
             }
 
             &.inactive {
-                color: #f0635c;
+                color: #f5372f;
             }
         }
 
@@ -60,55 +85,65 @@
         .updated_btn,
         .delete_btn,
         .add_btn {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin: 10px;
             outline: none;
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            margin-left: 5px;
-            border-radius: 3px;
             background: transparent;
             transition: 0.1s linear;
 
             &:active {
                 opacity: 0.9;
             }
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         .updated_btn {
-            color: #006fee;
+            color: #0153b1;
         }
 
         .delete_btn {
-            color: #f0635c;
+            color: #f5372f;
         }
 
         .add_btn {
-            color: #006fee;
+            color: #0153b1;
         }
 
         .interactive_btn_wrapper {
-            .updated_btn,
-            .delete_btn,
-            .add_btn {
-                white-space: nowrap;
-            }
+            display: flex;
+            height: 100%;
+            width: 100%;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
         }
     }
 
     .table_heading {
         display: flex;
-        padding: 10px 5px;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        padding: 0 5px 5px 5px;
+        gap: 10px;
 
         .heading {
             color: #0153b1;
             font-weight: 700;
             text-transform: uppercase;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+
+            .search_container {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
         }
     }
 

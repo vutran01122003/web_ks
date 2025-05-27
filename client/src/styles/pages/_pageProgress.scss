@@ -13,11 +13,9 @@
             flex-direction: column;
             height: 100%;
             background-color: #fff;
-            gap: 10px;
 
             .line__sort__completion-Shedule {
                 background: #fff;
-                border-bottom: 1px solid #dddddd;
 
                 .line__search {
                     display: flex;
@@ -75,6 +73,7 @@
             }
 
             .completion_shedule_table_wrapper {
+                padding: 0 10px;
                 flex: 1;
                 overflow: auto;
 
@@ -108,6 +107,7 @@
                     }
 
                     th {
+                        background: #f1f0f0;
                         padding: 10px;
                         text-align: left;
                         font-size: 13.5px;
@@ -124,11 +124,11 @@
                         color: #4e545b;
 
                         &.active {
-                            color: #1677ff;
+                            color: #0153b1;
                         }
 
                         &.inactive {
-                            color: #f0635c;
+                            color: #f5372f;
                         }
 
                         &:first-child {

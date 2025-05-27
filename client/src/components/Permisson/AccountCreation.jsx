@@ -114,6 +114,7 @@ function AccountCreatetion({ faculty }) {
 
     return (
         <div className="user_form_container">
+            <h2>Thông Tin Tài Khoản</h2>
             <form onSubmit={handleSubmit}>
                 <div className="input_item">
                     <label>Mã Số:</label>
@@ -128,19 +129,16 @@ function AccountCreatetion({ faculty }) {
                 </div>
 
                 <div className="input_item">
-                    <label>Họ Tên Đệm:</label>
+                    <label>Họ Tên:</label>
                     <input
                         type="text"
                         name="lastName"
+                        className="lastname_input"
                         value={formData.lastName}
                         onChange={handleChange}
                         placeholder="Nhập Họ Tên Đệm"
                         required
                     />
-                </div>
-
-                <div className="input_item">
-                    <label>Tên Người Dùng:</label>
                     <input
                         type="text"
                         name="firstName"
@@ -152,7 +150,7 @@ function AccountCreatetion({ faculty }) {
                 </div>
 
                 <div className="input_item">
-                    <label>Ngày Sinh:</label>
+                    <label>Thông tin:</label>
                     <div className="birthday_input_wrapper">
                         <div
                             className="birthday_input"
@@ -162,7 +160,6 @@ function AccountCreatetion({ faculty }) {
                         >
                             {formData.birthday ? new Date(formData.birthday).toLocaleDateString('en-GB') : 'dd/mm/yyyy'}
                         </div>
-
                         <input
                             ref={dateRef}
                             id="date_input"
@@ -175,10 +172,7 @@ function AccountCreatetion({ faculty }) {
                             max="2006-12-31"
                         />
                     </div>
-                </div>
 
-                <div className="input_item">
-                    <label>Giới Tính</label>
                     <select name="gender" value={formData.gender} onChange={handleChange} required>
                         <option value="">Chọn Giới Tính</option>
                         <option value="nam">Nam</option>
@@ -187,7 +181,7 @@ function AccountCreatetion({ faculty }) {
                 </div>
 
                 <div className="input_item">
-                    <label>Email:</label>
+                    <label>Liên Hệ:</label>
                     <input
                         type="text"
                         name="email"
@@ -196,10 +190,6 @@ function AccountCreatetion({ faculty }) {
                         placeholder="Nhập Email"
                         required
                     />
-                </div>
-
-                <div className="input_item">
-                    <label>Số Điện Thoại:</label>
                     <input
                         type="text"
                         name="phone"
@@ -234,10 +224,7 @@ function AccountCreatetion({ faculty }) {
                             </option>
                         ))}
                     </select>
-                </div>
 
-                <div className="input_item">
-                    <label>Chọn Chuyên Ngành:</label>
                     <select
                         value={currentMajor ? JSON.stringify(currentMajor) : ''}
                         onChange={handleChangeMajorSelect}
@@ -253,14 +240,11 @@ function AccountCreatetion({ faculty }) {
                                 ))}
                         </Fragment>
                     </select>
-                </div>
 
-                {[VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(
-                    formData.groupCode
-                ) && (
-                    <Fragment>
-                        <div className="input_item">
-                            <label>Chọn Khóa</label>
+                    {[VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(
+                        formData.groupCode
+                    ) && (
+                        <Fragment>
                             <select
                                 value={currentCohort ? JSON.stringify(currentCohort) : ''}
                                 onChange={handleChangeCohortSelect}
@@ -284,13 +268,17 @@ function AccountCreatetion({ faculty }) {
                                         );
                                     })}
                             </select>
-                        </div>
+                        </Fragment>
+                    )}
+                </div>
 
-                        <div className="input_item">
-                            <label>Năm:</label>
-                            <input type="text" className="level_year_input" value={levelYear} readOnly required />
-                        </div>
-                    </Fragment>
+                {[VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE].includes(
+                    formData.groupCode
+                ) && (
+                    <div className="input_item">
+                        <label>Năm học</label>
+                        <input type="text" className="level_year_input" value={levelYear} readOnly required />
+                    </div>
                 )}
 
                 <button type="submit">Tạo Tài Khoản</button>

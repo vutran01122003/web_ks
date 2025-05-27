@@ -38,7 +38,7 @@
             outline: none;
             border: none;
             box-shadow: 0 0 3px;
-            border-radius: 5px;
+            border-radius: 3px;
             transition: 0.1s linear;
             text-transform: uppercase;
             font-size: 12px;
@@ -94,6 +94,7 @@
         }
 
         .table__line__header {
+            background: #f1f0f0;
             border-bottom: 1px solid $line_color;
 
             .header__item {
@@ -159,7 +160,7 @@
                         }
 
                         &.reject_button {
-                            color: #f0635c;
+                            color: #f5372f;
 
                             &:hover {
                                 color: #f24c44;
@@ -253,7 +254,7 @@
                 }
 
                 .note_row {
-                    color: #006fee;
+                    color: #0153b1;
                     cursor: pointer;
 
                     &:hover {
@@ -262,7 +263,7 @@
                 }
 
                 .edit_row {
-                    color: #006fee;
+                    color: #0153b1;
                     cursor: pointer;
                     font-size: 20px;
                     transition: 0.1s linear;
@@ -273,7 +274,7 @@
                     }
 
                     &.active:hover {
-                        color: #1c86ff;
+                        color: #0153b1;
                     }
                 }
             }

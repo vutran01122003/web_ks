@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { TbEdit } from 'react-icons/tb';
 import MajorModal from '../Modal/MajorModal';
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -6,11 +6,13 @@ import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
 import { useDispatch } from 'react-redux';
 import { deleteMajor } from '../../redux/actions/facultyAction';
 import ConfirmModal from '../Modal/ConfirmModal';
-import { TiDeleteOutline } from 'react-icons/ti';
+import FacultySearchFilter from '../Filter/FacultySearchFilter';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 function MajorComponent({ faculty }) {
     const dispatch = useDispatch();
     const facultyData = faculty?.facultyData;
+    const [facultyList, setFacultyList] = useState([]);
     const [currentFacultyIndex, setCurrentFacultyIndex] = useState(null);
     const [currentMajorIndex, setCurrentMajorIndex] = useState(null);
     const [isDisplayAddMajorModal, setIsDisplayAddMajorModal] = useState(false);
@@ -36,6 +38,10 @@ function MajorComponent({ faculty }) {
 
         dispatch(deleteMajor({ facultyId: currentFaculty._id, majorId: currentMajor._id }));
     };
+
+    useEffect(() => {
+        if (facultyData.length > 0) setFacultyList(facultyData);
+    }, [JSON.stringify(facultyData)]);
 
     return (
         <Fragment>
@@ -67,11 +73,13 @@ function MajorComponent({ faculty }) {
             )}
 
             <div className="table_heading">
-                <h3 className="heading">Danh Sách Chuyên Ngành</h3>
-                <button className="create_major_btn" onClick={handleToggleDisplayAddMajorModal}>
-                    <IoIosAddCircleOutline size={20} />
-                    <span>Tạo Chuyên Ngành Mới</span>
-                </button>
+                <div className="options">
+                    <FacultySearchFilter facultyData={facultyData} majorFilter={true} setFacultyList={setFacultyList} />
+                    <button className="create_major_btn" onClick={handleToggleDisplayAddMajorModal}>
+                        <IoIosAddCircleOutline size={20} />
+                        <span>Tạo Chuyên Ngành Mới</span>
+                    </button>
+                </div>
             </div>
 
             <table>
@@ -86,7 +94,7 @@ function MajorComponent({ faculty }) {
                 </thead>
 
                 <tbody>
-                    {faculty.facultyData.reduce((arr, facultyItem, facultyIndex) => {
+                    {facultyList.reduce((arr, facultyItem, facultyIndex) => {
                         const majors = facultyItem.majors;
 
                         return [
@@ -105,7 +113,7 @@ function MajorComponent({ faculty }) {
                                                 <span>{capitalizeFirstLetter(major.majorName)}</span>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td className="major_list">
                                             {major.managers.length === 0 ? (
                                                 <span>Trống</span>
                                             ) : (
@@ -113,7 +121,9 @@ function MajorComponent({ faculty }) {
                                                     const { lastName, firstName, userId } = manager;
                                                     return (
                                                         <div key={userId} className="manager_item">
-                                                            {`${userId || 'Chưa Cập Nhật'} - ${toFullName({ lastName, firstName })}`}
+                                                            <span>{`${userId || 'Chưa Cập Nhật'}`}</span>
+                                                            <span>-</span>
+                                                            <span>{`${toFullName({ lastName, firstName })}`}</span>
                                                         </div>
                                                     );
                                                 })
@@ -122,27 +132,29 @@ function MajorComponent({ faculty }) {
                                         <td className={`status ${major.isActive ? 'active' : 'inactive'}`}>
                                             {major.isActive ? 'Đang Hoạt Động' : 'Không Hoạt Động'}
                                         </td>
-                                        <td className="interactive_btn_wrapper">
-                                            <div
-                                                className="updated_btn"
-                                                onClick={() => {
-                                                    setCurrentFacultyIndex(facultyIndex);
-                                                    setCurrentMajorIndex(index);
-                                                    handleToggleDisplayUpdateMajorModal();
-                                                }}
-                                            >
-                                                <TbEdit /> <span>Chỉnh Sửa Chuyên Ngành</span>
-                                            </div>
+                                        <td>
+                                            <div className="interactive_btn_wrapper">
+                                                <div
+                                                    className="updated_btn"
+                                                    onClick={() => {
+                                                        setCurrentFacultyIndex(facultyIndex);
+                                                        setCurrentMajorIndex(index);
+                                                        handleToggleDisplayUpdateMajorModal();
+                                                    }}
+                                                >
+                                                    <TbEdit size={22} />
+                                                </div>
 
-                                            <div
-                                                className="delete_btn"
-                                                onClick={() => {
-                                                    handleToggleDisplayDeleteMajorModal();
-                                                    setCurrentFacultyIndex(facultyIndex);
-                                                    setCurrentMajorIndex(index);
-                                                }}
-                                            >
-                                                <TiDeleteOutline size={18} /> <span>Xóa Chuyên Ngành</span>
+                                                <div
+                                                    className="delete_btn"
+                                                    onClick={() => {
+                                                        handleToggleDisplayDeleteMajorModal();
+                                                        setCurrentFacultyIndex(facultyIndex);
+                                                        setCurrentMajorIndex(index);
+                                                    }}
+                                                >
+                                                    <FaRegTrashAlt size={18} />
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>

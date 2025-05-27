@@ -2,6 +2,9 @@
     display: flex;
     .main__body {
         width: 100%;
+        .ant-tabs-nav-operations {
+            display: none !important;
+        }
         .main {
             overflow-x: hidden;
         }
