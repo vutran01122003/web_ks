@@ -1,0 +1,44 @@
+@url=http://localhost:4000
+
+### Login
+POST {{url}}/api/login
+Content-Type: application/json
+
+{
+    "userId": "010220022",
+    "password": "1111"
+}
+
+### Create deadline
+POST {{url}}/api/deadline
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzNTc2NjRkNjRlZDA5YWRjNzU5NDEiLCJpYXQiOjE3NDg0MTg2NzgsImV4cCI6MTc0ODQzNjY3OH0.d5_A8TPkvmG7lEdW0NY0H3yW_ecvW9uv_nNwNC7NgK4
+
+{
+    "facultyId": "6803414a4d64ed09adc758e9",
+    "majorId": "6803414f4d64ed09adc758ed",
+    "cohortId": "680341714d64ed09adc758f3",
+    "talentEngineerType": "002",
+    "levelYear": 2,
+    "startDate": "5/29/2025, 12:36:55 AM",
+    "endDate": "6/28/2025, 12:36:55 AM"
+}
+
+### Update deadline
+PATCH {{url}}/api/deadline
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzNTc2NjRkNjRlZDA5YWRjNzU5NDEiLCJpYXQiOjE3NDgzNjcwMDgsImV4cCI6MTc0ODM4NTAwOH0.nbDZ9oLrJDQeaoIl_C_eXixesMMvqMEwXgMLrHxSd2I
+
+{
+    "deadlineId": "6835f721f536a2ff5f7ccf6f",
+    "startDate": "5/28/2025, 12:36:55 AM",
+    "endDate": "6/28/2025, 12:36:55 AM"
+}
+
+### Get deadline list
+GET {{url}}/api/deadline?facultyId=6803414a4d64ed09adc758e9&majorId=6803414f4d64ed09adc758ed&cohortId=680341714d64ed09adc758f3&talentEngineerType=002
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzNTc2NjRkNjRlZDA5YWRjNzU5NDEiLCJpYXQiOjE3NDgzNjcwMDgsImV4cCI6MTc0ODM4NTAwOH0.nbDZ9oLrJDQeaoIl_C_eXixesMMvqMEwXgMLrHxSd2I
+
+
+

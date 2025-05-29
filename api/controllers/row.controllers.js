@@ -2,23 +2,69 @@ const createError = require("http-errors");
 const RowService = require("../services/row.service");
 const UploadService = require("../services/upload.service");
 const UserService = require("../services/user.service");
+const DeadlineService = require("../services/deadline.service");
 const Row = require("../models/row.model");
 const FacultyService = require("../services/faculty.service");
 const { storeFiles } = require("../utils/storeFile");
 const { slugifyWithSlashes } = require("../utils");
+const createHttpError = require("http-errors");
 
 const [PENDING_STATUS, RESUBMITED_STATUS] = ["chờ duyệt", "phải nộp lại"];
 const { TALENT_ENGINEER_CODE, S3_IS_ENABLE } = process.env;
 const s3IsEnable = S3_IS_ENABLE === "true";
 
 class RowControllers {
+    checkDeadline = async ({ faculty, major, cohort, levelYear, user }) => {
+        try {
+            const [facultyData, majorData, cohortData, userData] = await Promise.all([
+                FacultyService.getFacultyByName({ facultyName: faculty }),
+                FacultyService.getMajorByName({ majorName: major }),
+                FacultyService.getCohortByName({ majorName: major, cohortName: cohort }),
+                UserService.getUserAndPopulateGroupById({ id: user })
+            ]);
+
+            if (!facultyData || !majorData || !cohortData)
+                throw createHttpError.BadRequest("Dữ liệu khoa không tồn tại");
+
+            const deadline = await DeadlineService.getDeadline({
+                facultyId: facultyData._id,
+                majorId: majorData._id,
+                cohortId: cohortData._id,
+                levelYear,
+                talentEngineerType: userData.groups[0].groupCode
+            });
+
+            if (!deadline || (deadline && !deadline.startDate))
+                throw createError.BadRequest("Thời hạn nộp minh chứng chưa công bố");
+
+            if (deadline) {
+                const startDate = new Date(deadline.startDate);
+                const endDate = new Date(deadline.endDate);
+                const currentDate = new Date();
+
+                if (startDate.getTime() > currentDate.getTime())
+                    throw createError.BadRequest("Thời gian nộp minh chứng chưa diễn ra");
+
+                if (endDate.getTime() < currentDate.getTime())
+                    throw createError.BadRequest("Thời gian nộp minh chứng đã kết thúc");
+            }
+        } catch (error) {
+            throw error;
+        }
+    };
+
     addRow = async (req, res, next) => {
         try {
             const rowData = JSON.parse(req.body.rowData);
-            const { faculty, major, cohort, userId, tableName, user, levelYear, pageStudentLevelYear } = rowData;
+            const { faculty, major, cohort, userId, tableName, user, levelYear } = rowData;
 
-            if (pageStudentLevelYear < levelYear)
-                throw createError.BadRequest(`Đã kết thúc hoạt động nộp minh chứng năm ${pageStudentLevelYear}`);
+            await this.checkDeadline({
+                faculty,
+                major,
+                cohort,
+                user,
+                levelYear
+            });
 
             const { rowList, rowItemId } = await RowService.addRow({
                 data: rowData
@@ -73,21 +119,19 @@ class RowControllers {
         try {
             const rowData = JSON.parse(req.body.rowData);
             rowData.content = JSON.parse(rowData.content);
-            const {
-                faculty,
-                major,
-                cohort,
-                userId,
-                tableName,
-                rowListId,
-                contentId,
-                levelYear,
-                pageStudentLevelYear,
-                user
-            } = rowData;
+            const { faculty, major, cohort, userId, tableName, rowListId, contentId, levelYear, user, deadline } =
+                rowData;
 
-            if (pageStudentLevelYear < levelYear)
-                throw createError.BadRequest(`Đã kết thúc hoạt động nộp minh chứng năm ${pageStudentLevelYear}`);
+            if (deadline && new Date(deadline).getTime() < new Date().getTime())
+                throw createError.BadRequest("Quá hạn nộp lại");
+            else
+                await this.checkDeadline({
+                    faculty,
+                    major,
+                    cohort,
+                    user,
+                    levelYear
+                });
 
             const updatedRow = await RowService.resubmitRow({ rowData });
 

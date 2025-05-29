@@ -25,3 +25,5 @@ export const goalsSelector = (state) => state.goals;
 export const studentSelector = (state) => state.student;
 
 export const permissionSelector = (state) => state.permission;
+
+export const deadlineSelector = (state) => state.deadline;

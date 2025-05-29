@@ -18,8 +18,7 @@ class PageService {
                 pageStudentCohort,
                 pageStudentMajor,
                 pageTalentEngineerType,
-                pageStudentLevelYear,
-                editingTime
+                pageStudentLevelYear
             } = data;
             const isTemporaryEngineer = pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_PAGE_TYPE;
 
@@ -83,7 +82,6 @@ class PageService {
                     pageTalentEngineerType,
                     pageStudentLevelYear,
                     tables,
-                    editingTime,
                     pageType
                 });
 
@@ -152,7 +150,6 @@ class PageService {
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
                         pageTalentEngineerType: { $first: "$pageTalentEngineerType" },
                         isActive: { $first: "$isActive" },
-                        editingTime: { $first: "$editingTime" },
                         tables: {
                             $push: "$tables"
                         }
@@ -306,7 +303,6 @@ class PageService {
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
                         pageTalentEngineerType: { $first: "$pageTalentEngineerType" },
                         isActive: { $first: "$isActive" },
-                        editingTime: { $first: "$editingTime" },
                         tables: {
                             $push: "$tables"
                         }

@@ -40,6 +40,38 @@ function FirstLogin() {
 
     const handleSumbitForm = (e) => {
         e.preventDefault();
+        if (
+            !data.lastName ||
+            !data.firstName ||
+            !data.password ||
+            !data.confirmPassword ||
+            !data.userId ||
+            !data.birthday ||
+            !data.gender ||
+            !data.email ||
+            !data.phone
+        ) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
+            });
+            return;
+        }
+
+        if (data.password !== data.confirmPassword) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Mật khẩu không giống nhau'
+                }
+            });
+            return;
+        }
+
+        delete data.confirmPassword;
+
         dispatch(
             register({
                 ...data,
@@ -166,23 +198,25 @@ function FirstLogin() {
                     {isValid && (
                         <Fragment>
                             <FormControl
-                                id="name_sv"
+                                id="lastname_sv"
                                 label="Họ Đệm"
                                 type="text"
                                 name="lastName"
                                 placeholder="Nguyễn Văn"
                                 value={data?.lastName || ''}
                                 onChange={handleChangeData}
+                                required={true}
                             />
 
                             <FormControl
-                                id="name_sv"
+                                id="firstname_sv"
                                 label="Tên Sinh Viên"
                                 type="text"
                                 name="firstName"
                                 value={data?.firstName || ''}
                                 placeholder="An"
                                 onChange={handleChangeData}
+                                required={true}
                             />
 
                             <FormControl
@@ -197,6 +231,22 @@ function FirstLogin() {
                                 placeholder="Nhập mật khẩu"
                                 iconBefore={isVisiblePassword ? <IoEyeSharp /> : <IoEyeOffSharp />}
                                 onChange={handleChangeData}
+                                required={true}
+                            />
+
+                            <FormControl
+                                id="confirm_password"
+                                label="Nhập Lại Mật Khẩu"
+                                type={isVisiblePassword ? 'text' : 'password'}
+                                name="confirmPassword"
+                                value={data?.confirmPassword || ''}
+                                onClickBeforeIcon={() => {
+                                    setIsVisiblePassword((prev) => !prev);
+                                }}
+                                placeholder="Nhập lại mật khẩu"
+                                iconBefore={isVisiblePassword ? <IoEyeSharp /> : <IoEyeOffSharp />}
+                                onChange={handleChangeData}
+                                required={true}
                             />
 
                             <FormControl
@@ -206,6 +256,7 @@ function FirstLogin() {
                                 value={data?.userId || ''}
                                 placeholder="Nhập mã sinh viên"
                                 onChange={handleChangeData}
+                                required={true}
                             />
 
                             <FormControl
@@ -218,6 +269,7 @@ function FirstLogin() {
                                 placeholder="Nhập ngày sinh"
                                 max="2006-12-31"
                                 onChange={handleChangeData}
+                                required={true}
                             />
 
                             <ComponentSelectOption
@@ -244,6 +296,7 @@ function FirstLogin() {
                                 name="email"
                                 placeholder="Nhập email"
                                 onChange={handleChangeData}
+                                required={true}
                             />
 
                             <FormControl
@@ -251,6 +304,7 @@ function FirstLogin() {
                                 name="phone"
                                 placeholder="Nhập số điện thoại liên hệ"
                                 onChange={handleChangeData}
+                                required={true}
                             />
 
                             <ComponentButton textButton="Lưu thông tin" type="submit" onClick={handleSumbitForm} />

@@ -302,7 +302,18 @@ class UserService {
                         User.updateMany(approveUserCond, {
                             $set: {
                                 groups: [talentEngineerGroup._id],
-                                levelYear: 2
+                                levelYear: 2,
+                                "annualActivitiesProgress.1": {
+                                    levelYear: nextYearValue,
+                                    totalScore: 0,
+                                    numberOfRequiredActivity: 0,
+                                    numberOfPendingActivity: 0,
+                                    numberOfAcceptedActivity: 0,
+                                    numberOfRejectedActivity: 0,
+                                    numberOfResubmitedActivity: 0,
+                                    progressPercentage: 0,
+                                    isActive: true
+                                }
                             }
                         }),
                         FacultyService.updateCohortById({ majorId, cohortId, data: { currentLevelYear: 2 } })
@@ -311,7 +322,18 @@ class UserService {
                     await User.updateMany(approveUserCond, {
                         $set: {
                             groups: [talentEngineerGroup._id],
-                            levelYear: additionalRegisterLevelYear
+                            levelYear: additionalRegisterLevelYear,
+                            [`annualActivitiesProgress.${index}`]: {
+                                levelYear: nextYearValue,
+                                totalScore: 0,
+                                numberOfRequiredActivity: 0,
+                                numberOfPendingActivity: 0,
+                                numberOfAcceptedActivity: 0,
+                                numberOfRejectedActivity: 0,
+                                numberOfResubmitedActivity: 0,
+                                progressPercentage: 0,
+                                isActive: true
+                            }
                         }
                     });
                 }
@@ -348,8 +370,10 @@ class UserService {
                     ...lookupData,
                     {
                         $match: {
-                            "groups.groupCode": groupCode,
-                            [`${annualActivitiesField}.${index}.isActive`]: true
+                            $or: [
+                                { "groups.groupCode": groupCode, [`${annualActivitiesField}.${index}.isActive`]: true },
+                                { [`${annualActivitiesField}.${index}.isActive`]: true }
+                            ]
                         }
                     },
                     {

@@ -26,19 +26,21 @@ function SearchFilterComponent({
     userId,
     handleChangeUserId
 }) {
-    console.log(facultyData);
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
     const activities = useSelector(activitiesSelector);
     const majorValueList = facultyData ? facultyValue?.majors || [] : facultyState?.majors;
     const isTemporaryEngineer = talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
+    const additionalRegisterInfo = cohortValue?.additionalRegisterInfo;
+    const currentAdditionalLevelYear = cohortValue?.additionalRegisterInfo?.levelYear;
+    const isActive = cohortValue?.additionalRegisterInfo?.isActive;
 
     const handleFacultyValue = (e) => {
         const value = e.target.value;
 
         setMajorValue('');
         setCohortValue('');
-        setTalentEngineerType('');
+        if (setTalentEngineerType) setTalentEngineerType('');
 
         if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
         if (setActivityName) setActivityName('');
@@ -54,8 +56,8 @@ function SearchFilterComponent({
         const value = e.target.value;
 
         setCohortValue('');
-        setTalentEngineerType('');
 
+        if (setTalentEngineerType) setTalentEngineerType('');
         if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
         if (setActivityName) setActivityName('');
         if (!value) {
@@ -69,8 +71,7 @@ function SearchFilterComponent({
     const handleCohortValue = (e) => {
         const value = e.target.value;
 
-        setTalentEngineerType('');
-
+        if (setTalentEngineerType) setTalentEngineerType('');
         if (setCurrentLevelYearValue) setCurrentLevelYearValue('');
         if (setActivityName) setActivityName('');
         if (!value) {
@@ -133,6 +134,15 @@ function SearchFilterComponent({
         }
     }, [majorValue?.majorName, cohortValue?.cohortName, currentLevelYearValue, talentEngineerType]);
 
+    // Update major data after stopping submit proof
+    useEffect(() => {
+        if (Object.keys(majorValue).length > 0 && Object.keys(cohortValue).length > 0) {
+            const major = majorValueList.find((major) => major._id === majorValue._id);
+            setMajorValue(major);
+            setCohortValue(major.cohorts.find((cohort) => cohort._id === cohortValue._id));
+        }
+    }, [JSON.stringify(majorValueList)]);
+
     return (
         <div className="search_filter_container">
             <div className="search_filter_wrapper">
@@ -165,21 +175,23 @@ function SearchFilterComponent({
                             const length = cohorts.length;
                             return (
                                 <option key={index} value={JSON.stringify(cohorts[length - index - 1])}>
-                                    {`Khóa ${cohorts[length - index - 1].cohortName}`}
+                                    {`Khóa ${capitalizeFirstLetter(cohorts[length - index - 1].cohortName)}`}
                                 </option>
                             );
                         })}
                 </select>
 
-                <select onInput={handleTalentEngineerType} value={talentEngineerType}>
-                    <option value="">Chọn Đối Tượng</option>
-                    {Object.keys(cohortValue).length > 0 && (
-                        <Fragment>
-                            <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng</option>
-                            <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>Xét Tuyển Bổ Sung</option>
-                        </Fragment>
-                    )}
-                </select>
+                {setTalentEngineerType && (
+                    <select onInput={handleTalentEngineerType} value={talentEngineerType}>
+                        <option value="">Chọn Đối Tượng</option>
+                        {Object.keys(cohortValue).length > 0 && (
+                            <Fragment>
+                                <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng</option>
+                                <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>Xét Tuyển Bổ Sung</option>
+                            </Fragment>
+                        )}
+                    </select>
+                )}
 
                 {setStatus && (
                     <select value={statusValue} onChange={handleStatusValue}>
@@ -193,15 +205,14 @@ function SearchFilterComponent({
                     (talentEngineerType && isTemporaryEngineer ? (
                         <select onInput={handleCurrentLevelYear} value={currentLevelYearValue}>
                             <option value={''}>{`Chọn Năm`}</option>
-                            {cohortValue?.additionalRegisterInfo?.levelYear ? (
-                                new Array(cohortValue.additionalRegisterInfo.levelYear).fill(0).map((_, index) => {
-                                    const currentAdditionalLevelYear = cohortValue.additionalRegisterInfo.levelYear;
-                                    const isActive = cohortValue.additionalRegisterInfo.isActive;
-                                    const levelYear = currentAdditionalLevelYear - index;
 
+                            {additionalRegisterInfo ? (
+                                cohortValue?.currentLevelYear &&
+                                new Array(cohortValue.currentLevelYear).fill(0).map((_, index) => {
+                                    const levelYear = cohortValue.currentLevelYear - index;
                                     return (
                                         <option key={index} value={levelYear}>
-                                            {`Năm ${levelYear} ${levelYear === currentAdditionalLevelYear && isActive ? '(Đang hoạt động)' : '(Đã kết thúc)'}`}
+                                            {`Năm ${levelYear} ${levelYear === currentAdditionalLevelYear && isActive ? '(Hiện tại)' : levelYear > currentAdditionalLevelYear ? '(Bổ sung thêm kỹ sư)' : '(Đã kết thúc)'}`}
                                         </option>
                                     );
                                 })

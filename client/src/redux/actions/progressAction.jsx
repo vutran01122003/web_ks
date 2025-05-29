@@ -1,7 +1,7 @@
 import GLOBALTYPES from './globalTypes';
 import { getDataApi, postDataApi } from '../../utils/fetchData';
 import notifyError from '../../utils/notifyError';
-import { getFacultyByName } from './facultyAction';
+import { getFacultyByName, getMajors } from './facultyAction';
 
 export const getProgressByYear =
     ({ userId, studentMajor, studentCohort, studentLevelYear }) =>
@@ -94,16 +94,28 @@ export const stopSubmittingProof =
                 updatedCohortData
             });
 
-            const majorsRes = await getDataApi('/majors', {
-                majorName: major
+            dispatch({
+                type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
             });
 
-            dispatch({
-                type: GLOBALTYPES.FACULTY.UPDATE_MAJOR,
-                payload: {
-                    major: majorsRes.data.data[0]
-                }
-            });
+            dispatch(
+                getMajors({
+                    majorName: major
+                })
+            );
+
+            dispatch(
+                getAnnualTaskProgress({
+                    major,
+                    cohort,
+                    levelYear,
+                    faculty,
+                    groupCode,
+                    sortProgressPercentage: 1,
+                    page: 1,
+                    limit: 10
+                })
+            );
 
             dispatch({
                 type: GLOBALTYPES.ALERT,

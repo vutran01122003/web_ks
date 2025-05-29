@@ -65,9 +65,6 @@ const PageSchema = Joi.object({
             "number.min": "Năm học tối thiểu là 1",
             "number.max": "Năm học tối đa là 15"
         }),
-        editingTime: Joi.date().optional().messages({
-            "date.base": "Giá trị thời hạn chỉnh sửa không đúng"
-        }),
         tables: Joi.array()
             .items(
                 Joi.object({
@@ -79,7 +76,7 @@ const PageSchema = Joi.object({
                         "any.required": "Vui lòng nhập số lượng hoạt động",
                         "number.min": "Số lượng cần làm cho chỉ tiêu tối thiểu là 1"
                     }),
-                    description: Joi.string().max(200).optional().messages({
+                    description: Joi.string().max(200).optional().allow("").messages({
                         "string.max": "Mô tả chỉ tiêu có tối đa là 200 ký tự"
                     }),
                     allowExceedQuantity: Joi.boolean().required().messages({

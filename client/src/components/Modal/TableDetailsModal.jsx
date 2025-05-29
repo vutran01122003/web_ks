@@ -11,7 +11,7 @@ function TableDetailsModel({ table, toggleTableDetailsModalDisplay }) {
     return (
         <div className="modal_overlap" onDoubleClick={handleClosePopup}>
             <div className="box_wrapper">
-                <h2 className="modal_header">{`${table?.tableName}`}</h2>
+                <h2 className="modal_header">{`Chỉ Tiêu ${table?.tableName}`}</h2>
                 <div className="modal_close_icon_wrapper" onClick={toggleTableDetailsModalDisplay}>
                     <AiOutlineClose />
                 </div>

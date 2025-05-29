@@ -63,6 +63,7 @@ app.use("/api", require("./router/excel"));
 app.use("/api", require("./router/notification"));
 app.use("/api", require("./router/permission"));
 app.use("/api", require("./router/user"));
+app.use("/api", require("./router/deadline"));
 
 // Catch NotFound
 app.use((req, res, next) => {

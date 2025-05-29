@@ -12,7 +12,9 @@ const storeFiles = async ({ destination, files }) => {
 
         const filesData = await Promise.all(
             files.map(async (file) => {
-                const originalname = file.originalname;
+                const originalname = decodeURIComponent(file.originalname)
+                    .replaceAll(/[%@#&*+?<>|\\/:]/g, "_")
+                    .trim();
                 const parts = originalname.split(".");
                 const extendName = parts[parts.length - 1];
                 const baseName = parts[0];

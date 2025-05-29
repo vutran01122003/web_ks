@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { goalsSelector } from '../../redux/selector';
 import ConfirmModal from '../Modal/ConfirmModal';
 import AddTableModal from '../Modal/AddTableModal';
@@ -12,6 +13,7 @@ import { capitalizeFirstLetter } from '../../utils/handleString';
 import EmptyDataNotification from '../Notification/EmptyDataNotification';
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
+import MenuGoalModal from '../Modal/MenuGoalModal';
 
 function GoalsManagement() {
     const dispatch = useDispatch();
@@ -33,6 +35,15 @@ function GoalsManagement() {
     const [isVisibleUpdateTableModal, setIsVisibleUpdateTableModal] = useState(false);
     const [isVisibleTableDetailsModal, setIsVisibleTableDetailsModal] = useState(false);
     const [isVisibleUpdateStatusTableModal, setIsVisibleUpdateStatusTableModal] = useState(false);
+    const [currentGoalId, setCurrentGoalId] = useState('');
+    const [isVisibleGoalModal, setIsVisibleGoalModal] = useState(false);
+
+    const handleToggleDisplayGoalModal = (goalId) => {
+        if (goalId !== currentGoalId || !isVisibleGoalModal) setCurrentGoalId(goalId);
+        else setCurrentGoalId('');
+
+        setIsVisibleGoalModal((prev) => !prev);
+    };
 
     const handleToggleTableDetailsModal = () => {
         setIsVisibleTableDetailsModal((prev) => !prev);
@@ -259,66 +270,36 @@ function GoalsManagement() {
                                                     filteredPageItem.tables.map((table, index) => (
                                                         <div key={table._id} className="activity_name">
                                                             <span>{capitalizeFirstLetter(table.tableName)}</span>
-                                                            <div className="activity_btn_group">
-                                                                <span
-                                                                    className="activity_edit_btn"
-                                                                    onClick={() => {
-                                                                        handleGetTable({
-                                                                            pageId: filteredPageItem._id,
-                                                                            tableId: table._id
-                                                                        });
-                                                                        handleToggleTableDetailsModal();
-                                                                    }}
-                                                                >
-                                                                    Xem
-                                                                </span>
-
-                                                                <span
-                                                                    className="activity_edit_btn"
-                                                                    onClick={() => {
-                                                                        setTableInfo({
-                                                                            pageId: filteredPageItem._id
-                                                                        });
-                                                                        handleGetTable({
-                                                                            pageId: filteredPageItem._id,
-                                                                            tableId: table._id
-                                                                        });
-                                                                        handleToggleVisibleUpdateTableModal();
-                                                                    }}
-                                                                >
-                                                                    Sửa
-                                                                </span>
-
-                                                                <span
-                                                                    className={`activity_update_status_btn ${table.isActive ? 'inactive' : 'active'}`}
-                                                                    onClick={() => {
-                                                                        setTableInfo({
-                                                                            pageId: filteredPageItem._id,
-                                                                            tableId: table._id,
-                                                                            tableName: table.tableName,
-                                                                            isActive: table.isActive,
-                                                                            tableIndex: index
-                                                                        });
-                                                                        handleToggleUpdateStatusTableModalDisplay();
-                                                                    }}
-                                                                >
-                                                                    {table.isActive ? 'Ẩn' : 'Hiện'}
-                                                                </span>
-
-                                                                <span
-                                                                    className="activity_delete_btn"
-                                                                    onClick={() => {
-                                                                        setTableInfo({
-                                                                            pageId: filteredPageItem._id,
-                                                                            tableId: table._id,
-                                                                            tableName: table.tableName
-                                                                        });
-                                                                        handleToggleRemoveTableModalDisplay();
-                                                                    }}
-                                                                >
-                                                                    Xóa
-                                                                </span>
-                                                            </div>
+                                                            <button
+                                                                className="btn_menu"
+                                                                onClick={() => handleToggleDisplayGoalModal(table._id)}
+                                                            >
+                                                                <HiOutlineDotsHorizontal size={22} />
+                                                            </button>
+                                                            {isVisibleGoalModal && table._id === currentGoalId && (
+                                                                <MenuGoalModal
+                                                                    table={table}
+                                                                    filteredPageItem={filteredPageItem}
+                                                                    handleGetTable={handleGetTable}
+                                                                    setTableInfo={setTableInfo}
+                                                                    handleToggleDisplayGoalModal={
+                                                                        handleToggleDisplayGoalModal
+                                                                    }
+                                                                    handleToggleTableDetailsModal={
+                                                                        handleToggleTableDetailsModal
+                                                                    }
+                                                                    handleToggleVisibleUpdateTableModal={
+                                                                        handleToggleVisibleUpdateTableModal
+                                                                    }
+                                                                    handleToggleUpdateStatusTableModalDisplay={
+                                                                        handleToggleUpdateStatusTableModalDisplay
+                                                                    }
+                                                                    handleToggleRemoveTableModalDisplay={
+                                                                        handleToggleRemoveTableModalDisplay
+                                                                    }
+                                                                    index={index}
+                                                                />
+                                                            )}
                                                         </div>
                                                     ))}
                                             </td>

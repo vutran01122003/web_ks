@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { pageSelector } from '../redux/selector';
+import { authSelector, deadlineSelector, pageSelector } from '../redux/selector';
 import { renderTable } from '../helpers/renderTable';
 import News from '../pages/News';
 import LayoutTable from '../components/Table/LayoutTable';
@@ -13,7 +13,10 @@ const { VITE_APP_GOAL_PAGE, VITE_APP_NEWS_PAGE } = import.meta.env;
 const DynamicPage = () => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
+    const { deadlineList } = useSelector(deadlineSelector);
+    const { user } = useSelector(authSelector);
     const [tables, setTables] = useState([]);
+    const [currentDeadline, setCurrentDeadline] = useState(null);
     const { dynamicPage } = useParams();
     const { pathname } = useLocation();
 
@@ -35,9 +38,8 @@ const DynamicPage = () => {
             });
 
             const tableList = pageData?.tables || [];
-            const editingTime = pageData?.editingTime;
 
-            setTables(tableList.map((table) => renderTable({ editingTime, table })));
+            setTables(tableList.map((table) => renderTable({ table })));
         }
     }, [page.pages, dynamicPage]);
 
@@ -51,13 +53,36 @@ const DynamicPage = () => {
         }
     }, [pathname]);
 
+    useEffect(() => {
+        const pageLevelYear = page.pageStudentLevelYear;
+        if (user && pageLevelYear) {
+            const { faculty, major, cohort } = user;
+            setCurrentDeadline(
+                deadlineList.find(
+                    (deadline) =>
+                        deadline.faculty === faculty._id &&
+                        deadline.major === major._id &&
+                        deadline.cohort === cohort._id &&
+                        deadline.levelYear === pageLevelYear
+                )
+            );
+        }
+    }, [user, page.pageStudentLevelYear]);
+
     return (
         <div className="dynamic_page_container">
             {page?.pageType && page.pageType === VITE_APP_GOAL_PAGE && (
                 <Fragment>
                     {tables.length > 0 ? (
                         tables.map((table) => {
-                            return <LayoutTable key={table.tableId} table={table} page={page}></LayoutTable>;
+                            return (
+                                <LayoutTable
+                                    key={table.tableId}
+                                    table={table}
+                                    page={page}
+                                    currentDeadline={currentDeadline}
+                                />
+                            );
                         })
                     ) : (
                         <EmptyDataNotification />

@@ -1,3 +1,4 @@
+import DeadlineManagement from '../components/Goal/DeadlineManagement';
 import GoalsCreation from '../components/Goal/GoalCreation';
 import GoalsManagement from '../components/Goal/GoalManagement';
 import { Tabs } from 'antd';
@@ -13,6 +14,11 @@ function GoalManagement() {
             key: 'goalsManagement',
             label: 'Quản Lý Nhóm Chỉ Tiêu',
             children: <GoalsManagement />
+        },
+        {
+            key: 'deadlineManagement',
+            label: 'Quản Lý Thời Hạn',
+            children: <DeadlineManagement />
         }
     ];
 

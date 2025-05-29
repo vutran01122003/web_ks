@@ -71,6 +71,7 @@ const ComponentModal = ({ auth, rowInfo, handleHideModal, tableId, title, thead,
         if (rowInfo)
             rowData = {
                 ...rowData,
+                deadline: rowInfo.deadline,
                 rowListId: rowInfo.rowListId,
                 contentId: rowInfo._id
             };

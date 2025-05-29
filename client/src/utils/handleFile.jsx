@@ -34,7 +34,7 @@ export function checkFilesUpload(file) {
     if (file.size > 10 * 1024 * 1024) {
         return {
             inValid: true,
-            msg: 'Kích thước hình ảnh tối đa cho phép là 5MB'
+            msg: 'Kích thước hình ảnh tối đa cho phép là 10MB'
         };
     }
 

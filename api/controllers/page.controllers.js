@@ -1,12 +1,50 @@
 const PageService = require("../services/page.service");
-const pageService = require("../services/page.service");
+const DeadlineService = require("../services/deadline.service");
+const FacultyService = require("../services/faculty.service");
+const createHttpError = require("http-errors");
 
-const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE } = process.env;
-
+const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE, GOAL_PAGE } = process.env;
 class PageControllers {
     createPage = async (req, res, next) => {
         try {
-            const createdPage = await pageService.createPage(req.body);
+            const {
+                pageType,
+                pageFaculty,
+                pageStudentCohort,
+                pageStudentMajor,
+                pageTalentEngineerType,
+                pageStudentLevelYear
+            } = req.body;
+
+            const createdPage = await PageService.createPage(req.body);
+
+            if (pageType === GOAL_PAGE) {
+                const [facultyData, majorData, cohortData] = await Promise.all([
+                    FacultyService.getFacultyByName({ facultyName: pageFaculty }),
+                    FacultyService.getMajorByName({ majorName: pageStudentMajor }),
+                    FacultyService.getCohortByName({ majorName: pageStudentMajor, cohortName: pageStudentCohort })
+                ]);
+
+                if (!facultyData || !majorData || !cohortData)
+                    throw createHttpError.BadRequest("Dữ liệu khoa không tồn tại");
+
+                const deadline = await DeadlineService.getDeadline({
+                    facultyId: facultyData._id,
+                    majorId: majorData._id,
+                    cohortId: cohortData._id,
+                    talentEngineerType: pageTalentEngineerType,
+                    levelYear: pageStudentLevelYear
+                });
+
+                if (!deadline)
+                    await DeadlineService.createDeadline({
+                        facultyId: facultyData._id,
+                        majorId: majorData._id,
+                        cohortId: cohortData._id,
+                        talentEngineerType: pageTalentEngineerType,
+                        levelYear: pageStudentLevelYear
+                    });
+            }
 
             res.status(201).json({
                 status: createdPage.status,
@@ -32,8 +70,8 @@ class PageControllers {
                 if (condition) fields.pageTalentEngineerType = groupCode;
                 if (pageStudentLevelYear) fields.pageStudentLevelYear = parseInt(pageStudentLevelYear);
 
-                pages = await pageService.getPages(fields, userId);
-            } else pages = await pageService.getGoals(fields);
+                pages = await PageService.getPages(fields, userId);
+            } else pages = await PageService.getGoals(fields);
 
             res.status(200).json({
                 status: "Lấy dữ liệu trang thành công",
@@ -47,7 +85,7 @@ class PageControllers {
     getActivities = async (req, res, next) => {
         try {
             const { pageStudentMajor, pageStudentCohort, pageStudentLevelYear, pageTalentEngineerType } = req.query;
-            const activities = await pageService.getActivities({
+            const activities = await PageService.getActivities({
                 pageStudentMajor,
                 pageStudentCohort,
                 pageStudentLevelYear,
@@ -79,7 +117,7 @@ class PageControllers {
 
         if (condition) fields.pageTalentEngineerType = groupCode;
 
-        const page = await pageService.getPage({
+        const page = await PageService.getPage({
             fields,
             userId: res.locals.userData._id
         });

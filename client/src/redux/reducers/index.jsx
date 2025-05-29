@@ -14,6 +14,7 @@ import activitiesReducer from './activitiesReducer';
 import goalsReduce from './goalsReduce';
 import studentReducer from './studentReducer';
 import permissionReducer from './permissionReducer';
+import deadlineReducer from './deadlineReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     activities: activitiesReducer,
     goals: goalsReduce,
     student: studentReducer,
-    permission: permissionReducer
+    permission: permissionReducer,
+    deadline: deadlineReducer
 });
 
 export default rootReducer;

@@ -16,6 +16,13 @@ import { verifyAccessToken } from './redux/actions/authAction';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
 import { getFacultyByName, getMajors } from './redux/actions/facultyAction';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import { getDeadlineList } from './redux/actions/deadlineAction';
+const {
+    VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE,
+    VITE_APP_TALENT_ENGINEER_CODE,
+    VITE_APP_MAJOR_MANAGER_CODE,
+    VITE_APP_ADMIN_CODE
+} = import.meta.env;
 
 const App = () => {
     const location = useLocation();
@@ -40,10 +47,25 @@ const App = () => {
 
     useEffect(() => {
         if (user) {
-            dispatch(getNumUnreadNotification({ userId: user._id }));
-            if (!facultyState.faculty && !groupCodeList.includes('004'))
-                dispatch(getFacultyByName({ facultyName: user?.faculty?.facultyName }));
-            if (groupCodeList.includes('003')) dispatch(getMajors({ managerId: user._id }));
+            const { faculty, major, cohort, _id } = user;
+
+            dispatch(getNumUnreadNotification({ userId: _id }));
+
+            if ([VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE].includes(groupCodeList[0])) {
+                dispatch(
+                    getDeadlineList({
+                        facultyId: faculty._id,
+                        majorId: major._id,
+                        cohortId: cohort._id,
+                        talentEngineerType: groupCodeList[0]
+                    })
+                );
+            }
+
+            if (!facultyState.faculty && !groupCodeList.includes(VITE_APP_ADMIN_CODE))
+                dispatch(getFacultyByName({ facultyName: faculty?.facultyName }));
+
+            if (groupCodeList.includes(VITE_APP_MAJOR_MANAGER_CODE)) dispatch(getMajors({ managerId: _id }));
         }
     }, [user, dispatch]);
 

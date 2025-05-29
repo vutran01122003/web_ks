@@ -28,7 +28,8 @@ function TableContent({
     isDetailedRow,
     handleOpenModal,
     handleOpenPreviewFilesModal,
-    talentEngineerType
+    talentEngineerType,
+    currentDeadline
 }) {
     const [visibleConfirmModal, setVisibleConfirmModal] = useState(false);
     const [visibleNoteModal, setVisibleNoteModal] = useState(false);
@@ -213,27 +214,27 @@ function TableContent({
                         </td>
                     );
                 } else if (item?.editLabel) {
-                    const editingTime = item.rowInfo?.editingTime;
-                    const deadline = item.rowInfo?.deadline;
+                    const deadlineCond =
+                        currentDeadline &&
+                        new Date(currentDeadline.startDate).getTime() < new Date().getTime() &&
+                        new Date(currentDeadline.endDate).getTime() > new Date().getTime() &&
+                        item.rowInfo.status === 'chờ duyệt';
+
+                    const resubmitCond =
+                        item.editValue && new Date(item.rowInfo.deadline).getTime() > new Date().getTime();
+
+                    const condition = deadlineCond || resubmitCond;
 
                     return !isDetailedRow ? (
                         <td className="line__item" key={index}>
                             {
                                 <abbr
-                                    title={`${
-                                        item.editValue
-                                            ? 'Sửa minh chứng'
-                                            : deadline
-                                              ? `Hạn nộp lại: ${new Date(deadline).toLocaleString('en-GB')}`
-                                              : editingTime && new Date(editingTime).getTime() < new Date().getTime()
-                                                ? `Hạn chỉnh sửa: ${new Date(editingTime).toLocaleString('en-GB')}`
-                                                : 'Không được chỉnh sửa'
-                                    }`}
+                                    title={`${condition ? 'Sửa minh chứng' : item.editValue ? `Quá hạn nộp lại: ${new Date(item.rowInfo.deadline).toLocaleString('en-GB')}` : 'Không được chỉnh sửa'}`}
                                 >
                                     <span
-                                        className={`edit_row ${item.editValue ? 'active' : 'inactive'}`}
+                                        className={`edit_row ${condition ? 'active' : 'inactive'}`}
                                         onClick={() => {
-                                            if (item.editValue) {
+                                            if (condition) {
                                                 setRowInfo(item.rowInfo);
                                                 handleOpenModal();
                                             }

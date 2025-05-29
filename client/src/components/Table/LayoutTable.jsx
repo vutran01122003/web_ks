@@ -6,7 +6,7 @@ import { authSelector } from '../../redux/selector';
 import TableContent from './TableContent';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 
-const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentEngineerType }) => {
+const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentEngineerType, currentDeadline }) => {
     const [useStateModal, setUseStateModal] = useState(false);
     const [visiblePreviewFileModal, setVisiblePreviewFileModal] = useState(false);
     const [proofFileDataList, setProofFileDataList] = useState(null);
@@ -74,7 +74,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                     </h5>
                     <h5 className="table_description">
                         <span>Số Lượng: </span>
-                        <span>{`${table.quantityDemanded} Hoạt Động`}</span>
+                        <span>{`${table.quantityDemanded}`}</span>
                     </h5>
                 </Fragment>
             )}
@@ -110,6 +110,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                                     key={index}
                                     page={page}
                                     talentEngineerType={talentEngineerType}
+                                    currentDeadline={currentDeadline}
                                 />
                             );
                         })}

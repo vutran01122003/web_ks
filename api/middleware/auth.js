@@ -5,7 +5,8 @@ const UserService = require("../services/user.service");
 module.exports = {
     auth: async (req, res, next) => {
         try {
-            const accessToken = req?.headers["authorization"].split(" ")[1];
+            const authorization = req?.headers["authorization"];
+            const accessToken = authorization ? authorization.split(" ")[1] : "";
 
             if (!accessToken) throw createHttpError.Unauthorized("Người dùng chưa đăng nhập");
 

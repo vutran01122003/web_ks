@@ -32,18 +32,13 @@ function ProgressUI() {
     const [vissibleModal, setVissibleModal] = useState(false);
     const [sortProgressPercentage, setSortProgressPercentage] = useState(-1);
     const [isVisibleStopSubmitingProofBtn, setIsVisibleStopSubmitingProofBtn] = useState(false);
-    const additionalRegisterInfo =
-        major && cohort && talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-            ? majors
-                  .find((majorItem) => majorItem.majorName === major.majorName)
-                  .cohorts.find((cohortItem) => cohortItem.cohortName === cohort.cohortName).additionalRegisterInfo
-            : null;
+    const [additionalRegisterInfo, setAdditionalRegisterInfo] = useState('');
 
     const stopButtonDisplayConditions =
         (talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE &&
             additionalRegisterInfo?.levelYear === levelYear &&
             additionalRegisterInfo?.isActive) ||
-        talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
+        (talentEngineerType !== VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE && cohort.currentLevelYear === levelYear);
 
     const lastStudentElementRef = (node) => {
         if (progress.annualTaskProgress.isLoading) return;
@@ -155,6 +150,16 @@ function ProgressUI() {
     const handleHiddenStopSubmittingProofModal = () => {
         setVissibleModal(false);
     };
+
+    useEffect(() => {
+        if (major && cohort && talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE)
+            setAdditionalRegisterInfo(
+                majors
+                    .find((majorItem) => majorItem.majorName === major.majorName)
+                    .cohorts.find((cohortItem) => cohortItem.cohortName === cohort.cohortName).additionalRegisterInfo
+            );
+        else setAdditionalRegisterInfo('');
+    }, [majors, major, cohort, talentEngineerType]);
 
     useEffect(() => {
         if (progress.annualTaskProgress.data.length > 0) {

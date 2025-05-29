@@ -1,23 +1,69 @@
-import React, { Fragment } from 'react';
-import { PiUserCircleGear } from 'react-icons/pi';
+import { Modal } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaRegUser } from 'react-icons/fa';
+import { MdOutlineHelpOutline } from 'react-icons/md';
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { MdLogout } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../redux/actions/authAction';
-import { IoSettingsOutline } from 'react-icons/io5';
-import { IoIosHelpCircleOutline } from 'react-icons/io';
-import { RiLogoutCircleRLine } from 'react-icons/ri';
-import { Modal } from 'antd';
-import { useState } from 'react';
+import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const ControlBoxAccount = ({ setState }) => {
     const dispatch = useDispatch();
     const [openHelp, setOpenHelp] = useState(false);
+    const [data, setData] = useState('');
+    const [visibleChangePasswordModal, setVisibleChangePasswordModal] = useState(false);
+    const [visiblePassword, setVisiblePassword] = useState(false);
+
+    const resetData = () => {
+        setData('');
+        setVisiblePassword(false);
+    };
+
+    const handleToggleVisiblePassword = () => {
+        setVisiblePassword((prev) => !prev);
+    };
+
+    const handleChangeData = (e) => {
+        setData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+    };
+
+    const handleChangePassword = () => {
+        if (!data.password || !data.newPassword || !data.newConfirmPassword) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Vui lòng nhập đầy đủ thông tin'
+                }
+            });
+
+            return;
+        }
+
+        if (data.newPassword !== data.newConfirmPassword) {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    error: 'Mật khẩu không giống nhau'
+                }
+            });
+
+            return;
+        }
+    };
+
     const handleOpenModalHelp = () => {
         setState(false);
         setOpenHelp(true);
     };
-    const handleOpenModalSetting = () => {
+
+    const handleOpenModalChangePassword = () => {
         setState(false);
+        setVisibleChangePasswordModal(true);
     };
 
     const handleLogout = () => {
@@ -27,12 +73,17 @@ const ControlBoxAccount = ({ setState }) => {
     const LIST_CONTROL_ACCOUNT = [
         {
             name_select: 'Thông tin cá nhân',
-            icon_before: <PiUserCircleGear />,
+            icon_before: <FaRegUser size={20} />,
             toLink: '/profile'
         },
         {
+            name_select: 'Đổi mật khẩu',
+            icon_before: <RiLockPasswordLine />,
+            onClick: handleOpenModalChangePassword
+        },
+        {
             name_select: 'Hỗ trợ',
-            icon_before: <IoIosHelpCircleOutline />,
+            icon_before: <MdOutlineHelpOutline />,
             onClick: handleOpenModalHelp
         }
     ];
@@ -62,10 +113,57 @@ const ControlBoxAccount = ({ setState }) => {
                 width={700}
                 footer={false}
             >
-                1. THÔNG TIN LIÊN LẠC: 099999999
-                <br />
-                2. Email: abc@gmail.com <br />
-                3. Zalo: 09123123123
+                Chưa cập nhật
+            </Modal>
+
+            <Modal
+                title="Thay Đổi Mật Khẩu"
+                centered
+                open={visibleChangePasswordModal}
+                onCancel={() => setVisibleChangePasswordModal(false)}
+                width={700}
+                footer={false}
+            >
+                <div className="change_password_modal">
+                    <div className="input_item">
+                        <label>Mật khẩu hiện tại:</label>
+                        <input
+                            name="password"
+                            type={visiblePassword ? 'text' : 'password'}
+                            placeholder="Nhập mật khẩu hiện tại"
+                            value={data.password || ''}
+                            onChange={handleChangeData}
+                        />
+                    </div>
+
+                    <div className="input_item">
+                        <label>Mật khẩu mới:</label>
+                        <input
+                            type={visiblePassword ? 'text' : 'password'}
+                            name="newPassword"
+                            placeholder="Nhập mật khẩu mới"
+                            value={data.newPassword || ''}
+                            onChange={handleChangeData}
+                        />
+                    </div>
+
+                    <div className="input_item">
+                        <label>Nhập lại mật khẩu mới:</label>
+                        <input
+                            type={visiblePassword ? 'text' : 'password'}
+                            name="newConfirmPassword"
+                            placeholder="Nhập lại mật khẩu mới"
+                            value={data.newConfirmPassword || ''}
+                            onChange={handleChangeData}
+                        />
+                    </div>
+
+                    <div className="password_display_input">
+                        <input type="checkbox" checked={visiblePassword} onClick={handleToggleVisiblePassword} />
+                        <span>{visiblePassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}</span>
+                    </div>
+                    <button onClick={handleChangePassword}>Cập nhật mật khẩu</button>
+                </div>
             </Modal>
 
             {returnListControlAccount}
@@ -76,7 +174,7 @@ const ControlBoxAccount = ({ setState }) => {
                     handleLogout();
                 }}
             >
-                {<RiLogoutCircleRLine />}
+                {<MdLogout />}
                 {'Đăng xuất'}
             </div>
         </Fragment>

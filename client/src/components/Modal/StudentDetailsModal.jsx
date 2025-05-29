@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import { useDispatch } from 'react-redux';
@@ -7,14 +7,7 @@ import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 function StudentDetailsModal({ currentUserData, onToggleModal }) {
     const dispatch = useDispatch();
-
-    const dateParts = currentUserData?.birthday
-        ? new Date(currentUserData?.birthday).toLocaleDateString().split('/')
-        : '';
-
-    const addZeroPrefix = (number) => {
-        return number < 10 ? '0' + number : number;
-    };
+    const dateRef = useRef();
 
     const [userData, setUserData] = useState({
         userId: currentUserData?.userId || '',
@@ -23,12 +16,12 @@ function StudentDetailsModal({ currentUserData, onToggleModal }) {
         gender: currentUserData?.gender || '',
         email: currentUserData?.email || '',
         phone: currentUserData?.phone || '',
-        birthday: dateParts
-            ? `${dateParts[2]}-${addZeroPrefix(dateParts[1])}-${addZeroPrefix(dateParts[0])}`
-            : dateParts,
+        birthday: currentUserData?.birthday || '',
         isActive: currentUserData?.isActive || false,
         password: ''
     });
+
+    console.log(userData);
 
     const onUpdateUser = () => {
         const newUserData = { ...userData };
@@ -188,14 +181,26 @@ function StudentDetailsModal({ currentUserData, onToggleModal }) {
                                         Ngày Sinh:
                                     </label>
                                 </td>
-                                <td>
+                                <td className="dob_td">
                                     <input
-                                        className="input_item"
+                                        ref={dateRef}
+                                        className="input_item input_item_ref"
                                         id="dob"
                                         name="birthday"
                                         type="date"
                                         onChange={onChangeUserData}
-                                        value={userData.birthday.toString()}
+                                        value={userData.birthday}
+                                        max="2006-12-31"
+                                    />
+                                    <input
+                                        className="input_item input_item_display"
+                                        type="text"
+                                        onChange={onChangeUserData}
+                                        readOnly
+                                        value={new Date(userData.birthday).toLocaleDateString('en-GB')}
+                                        onClick={() => {
+                                            if (dateRef.current) dateRef.current.showPicker();
+                                        }}
                                     />
                                 </td>
                             </tr>

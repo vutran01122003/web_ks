@@ -17,6 +17,7 @@ const FormControl = ({
     name,
     readonly,
     max,
+    required,
     onClickBeforeIcon
 }) => {
     const dateRef = useRef();
@@ -38,6 +39,7 @@ const FormControl = ({
                             readOnly={readonly}
                             className={classNameInputItem}
                             max={max}
+                            required={required}
                         />
                     ) : (
                         <Fragment>

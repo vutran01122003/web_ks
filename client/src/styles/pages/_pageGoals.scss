@@ -19,6 +19,71 @@
         }
     }
 
+    .deadline_management_container {
+        padding: 0 20px 20px;
+
+        .deadline_management_filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .table_wrapper {
+            margin-top: 20px;
+            width: 100%;
+
+            .edit_btn {
+                cursor: pointer;
+
+                &:active {
+                    .icon_wrapper {
+                        color: #006fee;
+                    }
+                }
+            }
+
+            table,
+            td,
+            th {
+                border: 1px solid #dddddd;
+            }
+
+            table {
+                text-align: center;
+                width: 100%;
+                border-collapse: collapse;
+
+                th {
+                    padding: 10px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    font-size: 13.5px;
+                    user-select: none;
+                    color: #333;
+                    background: #f1f0f0;
+                }
+
+                td {
+                    font-size: 14px;
+                    font-weight: 500;
+                    padding: 10px;
+                    color: #333;
+
+                    &.activity_wrapper {
+                        padding: 0;
+
+                        .btn_menu {
+                            background: none;
+                            border: none;
+
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // Goal Creation UI
     .wrap__goals {
         padding: 10px 20px 10px 20px;
@@ -549,10 +614,19 @@
 
                             &.activity_wrapper {
                                 padding: 0;
+
+                                .btn_menu {
+                                    background: none;
+                                    border: none;
+
+                                    cursor: pointer;
+                                }
                             }
                         }
 
                         .btn_group {
+                            justify-content: center;
+
                             .btn_item {
                                 display: flex;
                                 gap: 5px;
@@ -572,6 +646,10 @@
                                 &.inactive {
                                     color: #0153b1;
                                 }
+
+                                &:hover {
+                                    text-decoration: underline;
+                                }
                             }
 
                             .add_goal_btn {
@@ -583,12 +661,12 @@
                             }
                         }
 
-                        .page_name,
-                        .page_status {
+                        .page_name {
                             text-align: left;
                         }
 
                         .page_status {
+                            text-align: center;
                             font-weight: 600;
                             .active {
                                 color: #0153b1;
@@ -612,18 +690,19 @@
                             }
 
                             .activity_btn_group {
-                                margin-left: 20px;
                                 display: flex;
+                                flex-direction: column;
                                 gap: 5px;
+                                min-width: 400px;
+                                padding: 5px;
 
                                 .activity_edit_btn,
                                 .activity_delete_btn,
                                 .activity_update_status_btn {
                                     display: flex;
-                                    justify-content: center;
                                     align-items: center;
-                                    height: 30px;
-                                    min-width: 60px;
+                                    height: 40px;
+                                    padding: 0 15px;
                                     font-weight: 600;
                                     border-radius: 3px;
                                     user-select: none;
@@ -636,18 +715,16 @@
                                 }
 
                                 .activity_edit_btn {
-                                    border: 1px solid #1677ff;
-                                    color: #1677ff;
+                                    color: #0153b1;
 
                                     &:hover {
-                                        background: #1677ff;
+                                        background: #0153b1;
                                         color: #fff;
                                     }
                                 }
 
                                 .activity_update_status_btn {
                                     &.inactive {
-                                        border: 1px solid #f5372f;
                                         color: #f5372f;
 
                                         &:hover {
@@ -657,7 +734,6 @@
                                     }
 
                                     &.active {
-                                        border: 1px solid #0153b1;
                                         color: #0153b1;
 
                                         &:hover {
@@ -668,8 +744,6 @@
                                 }
 
                                 .activity_delete_btn {
-                                    float: right;
-                                    border: 1px solid #f5372f;
                                     color: #f5372f;
 
                                     &:hover {
