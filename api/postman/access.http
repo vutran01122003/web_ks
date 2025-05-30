@@ -5,10 +5,19 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21013482",
-    "password": "1111"
+    "userId": "010220022",
+    "password": "1234"
 }
 
+### Change password
+PATCH {{url}}/api/password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzNTc2NjRkNjRlZDA5YWRjNzU5NDEiLCJpYXQiOjE3NDg1OTM3MjcsImV4cCI6MTc0ODYxMTcyN30.gvdVKOXNviu4olMXwQ-iqXQsk4dGPxN5KpdrvrVNfOk
+
+{
+    "password": "1111",
+    "newPassword": "1234"
+}
 
 ### Register
 POST {{url}}/api/register 

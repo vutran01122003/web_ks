@@ -49,8 +49,8 @@ const addUserData = (cell, colName, data) => {
         case "chuyên ngành":
             data.major = cell.value;
             break;
-        case "khoá":
-            data.cohort = String(cell.value);
+        case "khóa":
+            data.cohort = cell.value;
             break;
         case "email":
             data.email = cell.value.text || cell.value;

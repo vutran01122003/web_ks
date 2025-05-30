@@ -1,4 +1,4 @@
-import { getDataApi, postDataApi } from '../../utils/fetchData';
+import { getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import { getAccessToken, removeAccessToken, setAccessToken } from '../../utils/handleCredentials';
 import notifyError from '../../utils/notifyError';
 import { getFacultyByName } from './facultyAction';
@@ -41,6 +41,30 @@ export const login =
                 payload: {
                     error: error.response?.data.msg || 'Đăng nhập thất bại'
                 }
+            });
+        }
+    };
+
+export const changePassword =
+    ({ password, newPassword }) =>
+    async (dispatch) => {
+        try {
+            const res = await patchDataApi('/password', {
+                password,
+                newPassword
+            });
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res.data.msg
+                }
+            });
+        } catch (error) {
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Thay đổi mật khẩu thất bại'
             });
         }
     };

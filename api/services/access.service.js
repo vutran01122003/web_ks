@@ -142,6 +142,24 @@ class AccessService {
             throw error;
         }
     };
+
+    static changePassword = async ({ userId, password, newPassword }) => {
+        try {
+            const user = await User.findById(userId);
+
+            if (!user) throw createHttpError.NotFound("Tài khoản người dùng không tồn tại");
+
+            const isValidPassword = user.checkPassword(password);
+
+            if (!isValidPassword) throw createHttpError.BadRequest("Mật khẩu hiện tại không đúng");
+
+            user.encodePassword(newPassword);
+
+            await user.save();
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AccessService;

@@ -262,6 +262,10 @@ class FacultyService {
 
     static getCohortByName = async ({ majorName, cohortName }) => {
         try {
+            console.log({
+                majorName,
+                cohortName
+            });
             const major = await this.getMajorByName({ majorName });
             const populatedMajor = await major.populate("cohorts");
 

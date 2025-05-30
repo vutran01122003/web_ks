@@ -123,7 +123,7 @@ class ExcelService {
             const user = await User.findOne({ userId: { $in: userIdList } });
             if (user) throw createHttpError.BadRequest(`Đã có sinh viên ${user.userId} tồn tại trong hệ thống.`);
 
-            await Promise.allSettled(
+            const result = await Promise.allSettled(
                 prevRegisterUserList.map((prevRegisterUser) =>
                     AccessService.register({
                         data: prevRegisterUser,
@@ -132,6 +132,9 @@ class ExcelService {
                     })
                 )
             );
+
+            if (result.some((res) => res.status === "rejected"))
+                throw createHttpError.BadRequest("Thêm kỹ sư không thành công, kiểm tra lại dữ liệu.");
         } catch (error) {
             throw error;
         }

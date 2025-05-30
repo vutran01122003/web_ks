@@ -1,3 +1,4 @@
+const AccessService = require("../services/access.service");
 const accessService = require("../services/access.service");
 const jwtService = require("../services/jwt.service");
 const createError = require("http-errors");
@@ -122,6 +123,28 @@ class AccessControllers {
         try {
             return res.json({
                 msg: "Đăng xuất thành công"
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    changePassword = async (req, res, next) => {
+        try {
+            const userData = res.locals.userData;
+            const { password, newPassword } = req.body;
+
+            if (!password.trim() || !newPassword.trim())
+                throw createError.BadRequest("Vui lòng nhập đầy đủ thông tin mật khẩu");
+
+            await AccessService.changePassword({
+                userId: userData._id,
+                password,
+                newPassword
+            });
+
+            res.status(200).json({
+                msg: "Đổi mật khẩu thành công"
             });
         } catch (error) {
             next(error);

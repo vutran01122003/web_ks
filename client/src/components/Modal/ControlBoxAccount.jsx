@@ -6,7 +6,7 @@ import { MdOutlineHelpOutline } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { MdLogout } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions/authAction';
+import { changePassword, logout } from '../../redux/actions/authAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const ControlBoxAccount = ({ setState }) => {
@@ -19,6 +19,7 @@ const ControlBoxAccount = ({ setState }) => {
     const resetData = () => {
         setData('');
         setVisiblePassword(false);
+        setVisibleChangePasswordModal(false);
     };
 
     const handleToggleVisiblePassword = () => {
@@ -54,6 +55,15 @@ const ControlBoxAccount = ({ setState }) => {
 
             return;
         }
+
+        dispatch(
+            changePassword({
+                password: data.password,
+                newPassword: data.newPassword
+            })
+        );
+
+        resetData();
     };
 
     const handleOpenModalHelp = () => {
