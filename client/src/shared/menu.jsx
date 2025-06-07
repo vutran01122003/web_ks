@@ -1,8 +1,8 @@
 import { TbTargetArrow } from 'react-icons/tb';
-import { MdOutlineCreate, MdOutlineSchool, MdManageAccounts } from 'react-icons/md';
-import { CgBrowser } from 'react-icons/cg';
+import { MdOutlineSchool, MdManageAccounts } from 'react-icons/md';
 import { BiBookBookmark } from 'react-icons/bi';
-import { HiOutlineNewspaper, HiOutlineUserGroup, HiOutlineClipboardList } from 'react-icons/hi';
+import { IoMdTime } from 'react-icons/io';
+import { HiOutlineUserGroup, HiOutlineClipboardList } from 'react-icons/hi';
 import { RiHome3Fill } from 'react-icons/ri';
 import { FaListCheck } from 'react-icons/fa6';
 
@@ -42,6 +42,13 @@ export const ARRAY_LIST_MENU = [
         name_menu: 'Quản lý Nhóm Chỉ Tiêu',
         icon_before: <TbTargetArrow />,
         to_link: '/goal',
+        submenu: false
+    },
+    {
+        roles: [VITE_APP_MAJOR_MANAGER_CODE],
+        name_menu: 'Quản lý Thời Hạn',
+        icon_before: <IoMdTime />,
+        to_link: '/deadline',
         submenu: false
     },
     // {

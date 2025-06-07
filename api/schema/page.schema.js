@@ -65,6 +65,10 @@ const PageSchema = Joi.object({
             "number.min": "Năm học tối thiểu là 1",
             "number.max": "Năm học tối đa là 15"
         }),
+        totalScore: Joi.number().min(0).messages({
+            "number.base": "Giá trị của tổng điểm tối thiểu là ký tự số",
+            "number.min": "Năm học tối thiểu là 0"
+        }),
         tables: Joi.array()
             .items(
                 Joi.object({

@@ -18,7 +18,8 @@ class PageService {
                 pageStudentCohort,
                 pageStudentMajor,
                 pageTalentEngineerType,
-                pageStudentLevelYear
+                pageStudentLevelYear,
+                totalScore
             } = data;
             const isTemporaryEngineer = pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_PAGE_TYPE;
 
@@ -82,7 +83,8 @@ class PageService {
                     pageTalentEngineerType,
                     pageStudentLevelYear,
                     tables,
-                    pageType
+                    pageType,
+                    totalScore
                 });
 
                 await UserService.updateNumOfRequiredActivity({
@@ -149,6 +151,7 @@ class PageService {
                         pageStudentCohort: { $first: "$pageStudentCohort" },
                         pageStudentLevelYear: { $first: "$pageStudentLevelYear" },
                         pageTalentEngineerType: { $first: "$pageTalentEngineerType" },
+                        totalScore: { $first: "totalScore" },
                         isActive: { $first: "$isActive" },
                         tables: {
                             $push: "$tables"
@@ -342,19 +345,13 @@ class PageService {
         }
     };
 
-    static updateStatusPage = async ({ pageId, currentStatus }) => {
+    static updatePage = async ({ pageId, updatedData }) => {
         try {
-            await Page.findByIdAndUpdate(
-                pageId,
-                {
-                    isActive: !currentStatus
-                },
-                { new: true }
-            );
+            await Page.findByIdAndUpdate(pageId, updatedData, { new: true });
 
             return {
                 status: 200,
-                msg: "Cập nhật trạng thái trang thành công"
+                msg: "Cập nhật thành công"
             };
         } catch (error) {
             throw error;

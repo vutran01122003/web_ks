@@ -1,4 +1,8 @@
 .goal_container {
+    &.deadline_container {
+        padding: 20px 0;
+    }
+
     .tab__tables--goal-feature {
         .ant-tabs-nav {
             background-color: #fafafa;
@@ -169,9 +173,10 @@
 
                 > label {
                     color: #0153b1;
-                    font-size: 21px;
-                    white-space: nowrap;
+                    font-size: 16px;
                     font-weight: 700;
+                    text-transform: uppercase;
+                    min-width: 185px;
                 }
                 > input {
                     width: 100%;
@@ -663,6 +668,10 @@
 
                         .page_name {
                             text-align: left;
+                        }
+
+                        .page_score {
+                            text-align: center;
                         }
 
                         .page_status {

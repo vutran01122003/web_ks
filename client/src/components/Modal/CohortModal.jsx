@@ -148,7 +148,7 @@ function CohortModal({ onHiddenModal, facultyState, header, faculty, major, coho
                     className="create_new_cohort_btn"
                     onClick={() => (cohort ? onUpdateCohort() : createNewCohort())}
                 >
-                    {cohort ? 'Cập Nhật Thông Tin' : ' Thêm Khóa Sinh Viên Mới'}
+                    {cohort ? 'Cập Nhật' : 'Tạo Mới'}
                 </button>
             </form>
         </Modal>

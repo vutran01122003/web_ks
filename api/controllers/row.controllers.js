@@ -56,7 +56,7 @@ class RowControllers {
     addRow = async (req, res, next) => {
         try {
             const rowData = JSON.parse(req.body.rowData);
-            const { faculty, major, cohort, userId, tableName, user, levelYear } = rowData;
+            const { faculty, major, cohort, page, userId, tableName, user, levelYear } = rowData;
 
             await this.checkDeadline({
                 faculty,
@@ -119,8 +119,19 @@ class RowControllers {
         try {
             const rowData = JSON.parse(req.body.rowData);
             rowData.content = JSON.parse(rowData.content);
-            const { faculty, major, cohort, userId, tableName, rowListId, contentId, levelYear, user, deadline } =
-                rowData;
+            const {
+                faculty,
+                major,
+                cohort,
+                userId,
+                pageId,
+                tableName,
+                rowListId,
+                contentId,
+                levelYear,
+                user,
+                deadline
+            } = rowData;
 
             if (deadline && new Date(deadline).getTime() < new Date().getTime())
                 throw createError.BadRequest("Quá hạn nộp lại");
@@ -285,6 +296,8 @@ class RowControllers {
             const row = await Row.findById(rowListId);
 
             await UserService.updateAnnualActivityProgress({
+                table: row.table,
+                page: row.page,
                 userId: _id,
                 levelYear,
                 prevStatus,

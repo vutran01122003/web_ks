@@ -190,14 +190,19 @@ class UserService {
         cohort,
         levelYear,
         groupData,
-        conditions,
-        updatedCohortData
+        updatedCohortData,
+        limit
     }) => {
         try {
             const index = levelYear - 1;
             const { groupId, groupCode } = groupData;
-            const { progressPercentage } = conditions;
             const { facultyId, majorId, cohortId, nextYearValue } = updatedCohortData;
+
+            const pages = await Page.find({
+                pageStudentMajor: major,
+                pageStudentCohort: cohort,
+                pageTalentEngineerType: groupCode
+            });
 
             const studentInfo = {
                 faculty: facultyId,
@@ -211,9 +216,57 @@ class UserService {
                 ? "annualActivitiesProgress"
                 : "annualTemporaryActivitiesProgress";
 
+            const [invalidCond, validCond] = pages.reduce((arr, page) => {
+                return [
+                    [
+                        ...(arr[0] || []),
+                        {
+                            [`${annualActivitiesField}.${index}.detailsTotalScore.${page._id}`]: {
+                                $lt: page?.totalScore || 0
+                            }
+                        },
+                        {
+                            [`${annualActivitiesField}.${index}.detailsTotalScore.${page._id}`]: {
+                                $exists: false
+                            }
+                        },
+
+                        ...page.tables.reduce((arr, table) => {
+                            return [
+                                ...arr,
+                                {
+                                    [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
+                                        $lt: table?.quantityDemanded || 0
+                                    }
+                                },
+                                {
+                                    [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
+                                        $exists: false
+                                    }
+                                }
+                            ];
+                        }, [])
+                    ],
+                    {
+                        ...arr[1],
+                        [`${annualActivitiesField}.${index}.detailsTotalScore.${page._id}`]: {
+                            $gte: page?.totalScore || 0
+                        },
+                        ...page.tables.reduce((obj, table) => {
+                            return {
+                                ...obj,
+                                [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
+                                    $gte: table?.quantityDemanded || 0
+                                }
+                            };
+                        }, {})
+                    }
+                ];
+            }, []);
+
             const invalidUserList = await User.find({
                 ...studentInfo,
-                [`${annualActivitiesField}.${index}.progressPercentage`]: {
+                [`${annualActivitiesField}.${index}`]: {
                     $exists: false
                 }
             });
@@ -235,20 +288,6 @@ class UserService {
                 );
             }
 
-            const rejectUserCond = {
-                ...studentInfo,
-                [`${annualActivitiesField}.${index}.progressPercentage`]: {
-                    $lt: Number.parseFloat(progressPercentage)
-                }
-            };
-
-            const approveUserCond = {
-                ...studentInfo,
-                [`${annualActivitiesField}.${index}.progressPercentage`]: {
-                    $gte: Number.parseFloat(progressPercentage)
-                }
-            };
-
             const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                 cohortName: cohort,
                 majorName: major
@@ -260,6 +299,59 @@ class UserService {
             });
 
             const additionalRegisterLevelYear = additionalRegisterData?.levelYear;
+
+            let rejectUserCond = {
+                ...studentInfo,
+                $or: invalidCond
+            };
+
+            let approveUserCond = {
+                ...studentInfo,
+                ...validCond
+            };
+
+            let topUserCond = null;
+            let restUserCond = null;
+
+            if (limit) {
+                const result = await Promise.all([
+                    User.find(approveUserCond)
+                        .sort({
+                            [`${annualActivitiesField}.${index}.totalScore`]: -1,
+                            [`${annualActivitiesField}.${index}.updatedAt`]: 1,
+                            [`${annualActivitiesField}.${index}.progressPercentage`]: -1
+                        })
+                        .limit(limit * 1),
+                    User.find(approveUserCond)
+                        .sort({
+                            [`${annualActivitiesField}.${index}.totalScore`]: -1,
+                            [`${annualActivitiesField}.${index}.updatedAt`]: 1,
+                            [`${annualActivitiesField}.${index}.progressPercentage`]: -1
+                        })
+                        .skip(limit * 1)
+                ]);
+
+                topUserCond = {
+                    _id: { $in: result[0].map((user) => user._id) }
+                };
+
+                restUserCond = {
+                    _id: { $in: result[1].map((user) => user._id) }
+                };
+
+                rejectUserCond = {
+                    ...rejectUserCond,
+                    $or: [...rejectUserCond["$or"], restUserCond]
+                };
+
+                approveUserCond = topUserCond;
+            }
+
+            console.log(rejectUserCond);
+            console.log(approveUserCond);
+
+            const a = await User.find(rejectUserCond);
+            console.log(a);
 
             if (isTalentEngineer) {
                 await User.updateMany(rejectUserCond, {
@@ -369,12 +461,15 @@ class UserService {
                     },
                     ...lookupData,
                     {
-                        $match: {
-                            $or: [
-                                { "groups.groupCode": groupCode, [`${annualActivitiesField}.${index}.isActive`]: true },
-                                { [`${annualActivitiesField}.${index}.isActive`]: true }
-                            ]
-                        }
+                        $match:
+                            groupCode === TALENT_ENGINEER_CODE
+                                ? {
+                                      "groups.groupCode": groupCode,
+                                      [`${annualActivitiesField}.${index}.isActive`]: true
+                                  }
+                                : {
+                                      [`${annualActivitiesField}.${index}.isActive`]: true
+                                  }
                     },
                     {
                         $project: {
@@ -436,9 +531,17 @@ class UserService {
         }
     };
 
-    static updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore }) => {
+    static updateAnnualActivityProgress = async ({
+        userId,
+        levelYear,
+        prevStatus,
+        status,
+        totalScore,
+        page,
+        table
+    }) => {
         try {
-            const user = await this.getUserAndPopulateGroupById({ id: userId });
+            let user = await this.getUserAndPopulateGroupById({ id: userId });
 
             if (!user) throw createError.NotFound("Người dùng không tồn tại");
 
@@ -459,7 +562,9 @@ class UserService {
 
             const updatedInfo = {
                 [`${annualActivitiesField}.${index}.${fieldOfStatus[status]}`]: 1,
-                [`${annualActivitiesField}.${index}.${fieldOfStatus[prevStatus]}`]: -1
+                [`${annualActivitiesField}.${index}.${fieldOfStatus[prevStatus]}`]: -1,
+                [`${annualActivitiesField}.${index}.detailsGoalDemand.${table}.${fieldOfStatus[status]}`]: 1,
+                [`${annualActivitiesField}.${index}.detailsGoalDemand.${table}.${fieldOfStatus[prevStatus]}`]: -1
             };
 
             if (prevStatus === status) return;
@@ -468,8 +573,17 @@ class UserService {
 
             if (prevStatus === ACCEPTED_STATUS) {
                 updatedInfo[`${annualActivitiesField}.${index}.totalScore`] = -totalScore;
+                if (page && table) {
+                    updatedInfo[`${annualActivitiesField}.${index}.detailsTotalScore.${page}`] = -totalScore;
+                    updatedInfo[`${annualActivitiesField}.${index}.detailsApprovedGoals.${table}`] = -1;
+                }
             } else if (status === ACCEPTED_STATUS) {
                 updatedInfo[`${annualActivitiesField}.${index}.totalScore`] = totalScore;
+
+                if (page && table) {
+                    updatedInfo[`${annualActivitiesField}.${index}.detailsTotalScore.${page}`] = totalScore;
+                    updatedInfo[`${annualActivitiesField}.${index}.detailsApprovedGoals.${table}`] = 1;
+                }
             }
 
             const [facultyData, majorData, cohortData] = await Promise.all([

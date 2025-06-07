@@ -169,7 +169,12 @@ const ControlBoxAccount = ({ setState }) => {
                     </div>
 
                     <div className="password_display_input">
-                        <input type="checkbox" checked={visiblePassword} onClick={handleToggleVisiblePassword} />
+                        <input
+                            type="checkbox"
+                            checked={visiblePassword}
+                            onClick={handleToggleVisiblePassword}
+                            readOnly
+                        />
                         <span>{visiblePassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}</span>
                     </div>
                     <button onClick={handleChangePassword}>Cập nhật mật khẩu</button>

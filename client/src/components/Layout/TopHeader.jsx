@@ -51,7 +51,7 @@ const TopHeader = ({ auth }) => {
                         {groupCodeList.includes(VITE_APP_ADMIN_CODE) ? (
                             <div className="khoa_style">QUẢN TRỊ VIÊN HỆ THỐNG</div>
                         ) : (
-                            <div className="khoa_style">KHOA : {user?.faculty?.facultyName}</div>
+                            <div className="khoa_style">Chuyên Ngành : {user?.major?.majorName}</div>
                         )}
                     </div>
 

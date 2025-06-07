@@ -534,7 +534,7 @@
     }
 
     .stop_submitting_proof_body {
-        padding: 20px;
+        padding: 20px 20px 30px 20px;
 
         .stop_submitting_proof_body_content {
             font-size: 16px;
@@ -556,7 +556,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 15px;
 
             .input_item {
                 display: flex;
@@ -1036,6 +1036,47 @@
         }
         &:hover {
             background: #faf9f9;
+        }
+    }
+}
+
+.update_total_score_modal {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 400px;
+    gap: 20px;
+
+    .body {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        label {
+            font-weight: 600;
+        }
+
+        input {
+            height: 35px;
+            padding: 0 12px;
+            flex: 1;
+            outline: none;
+        }
+    }
+
+    button {
+        padding: 10px;
+        text-align: center;
+        background: #1677ff;
+        color: white;
+        font-weight: 600;
+        border: none;
+        transition: all 0.1s linear;
+        border-radius: 3px;
+        cursor: pointer;
+
+        &:active {
+            transform: scale(0.95);
         }
     }
 }

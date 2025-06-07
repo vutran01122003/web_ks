@@ -5,7 +5,6 @@ import { getAllFaculties } from '../redux/actions/facultyAction';
 import { facultySelector } from '../redux/selector';
 import AccountCreatetion from '../components/Permisson/AccountCreation';
 import MajorManager from '../components/Permisson/MajorManager';
-import Student from './Student';
 
 function Permission() {
     const dispatch = useDispatch();
@@ -25,11 +24,6 @@ function Permission() {
             key: 'major_manager',
             label: 'Danh Sách QLCN',
             children: <MajorManager />
-        },
-        {
-            key: 'student_list',
-            label: 'Danh Sách KSTN',
-            children: <Student isAdmin={true} />
         }
     ];
 

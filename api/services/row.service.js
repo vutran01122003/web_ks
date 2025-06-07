@@ -239,7 +239,7 @@ class RowService {
         let skip = (page - 1) * limit;
         const removedDynamicRows = skip - currentRows;
         if (removedDynamicRows > 0) skip = skip - removedDynamicRows;
-
+        console.log(skip);
         switch (rowsType) {
             case "pendingRows":
                 rowStatus = "chờ duyệt";
@@ -257,6 +257,11 @@ class RowService {
                 throw createError.BadRequest();
         }
 
+        console.log({
+            page,
+            limit: limit * 1,
+            skip: skip * 1
+        });
         try {
             const dynamicRows = await Row.aggregate([
                 {
@@ -293,6 +298,12 @@ class RowService {
                     }
                 },
                 {
+                    $skip: skip * 1
+                },
+                {
+                    $limit: limit * 1
+                },
+                {
                     $unwind: {
                         path: "$content",
                         preserveNullAndEmptyArrays: true
@@ -302,13 +313,6 @@ class RowService {
                     $match: {
                         "content.status": rowStatus
                     }
-                },
-
-                {
-                    $skip: skip * 1
-                },
-                {
-                    $limit: limit * 1
                 },
                 {
                     $unwind: {

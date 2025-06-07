@@ -15,7 +15,7 @@ router.get(
     pageControllers.getPage
 );
 router.post("/page", auth, checkPermission, validateResource({ schema: PageSchema }), pageControllers.createPage);
-router.patch("/page", auth, checkPermission, pageControllers.updateStatusPage);
+router.patch("/page", auth, checkPermission, pageControllers.updatePage);
 router.delete("/page", auth, checkPermission, pageControllers.removePage);
 
 module.exports = router;

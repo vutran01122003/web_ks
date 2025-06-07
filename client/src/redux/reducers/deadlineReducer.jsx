@@ -26,6 +26,12 @@ function deadlineReducer(state = initialState, action) {
                 })
             };
         }
+        case GLOBALTYPES.DEADLINE.RESET_DATA: {
+            return {
+                deadlineList: []
+            };
+        }
+
         default: {
             return state;
         }

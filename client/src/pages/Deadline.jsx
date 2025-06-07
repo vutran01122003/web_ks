@@ -1,12 +1,12 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { TbEdit } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
-import SearchFilterComponent from '../Filter/SearchFilter';
-import { deadlineSelector, facultySelector } from '../../redux/selector';
-import GLOBALTYPES from '../../redux/actions/globalTypes';
-import { getDeadlineList, updateDealine } from '../../redux/actions/deadlineAction';
-import EmptyDataNotification from '../Notification/EmptyDataNotification';
-import UpdateDeadlineModal from '../Modal/UpdateDeadlineModal';
+import SearchFilterComponent from '../components/Filter/SearchFilter';
+import { deadlineSelector, facultySelector } from '../redux/selector';
+import GLOBALTYPES from '../redux/actions/globalTypes';
+import { getDeadlineList, updateDealine } from '../redux/actions/deadlineAction';
+import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
+import UpdateDeadlineModal from '../components/Modal/UpdateDeadlineModal';
 
 function DeadlineManagement() {
     const dispatch = useDispatch();
@@ -97,8 +97,14 @@ function DeadlineManagement() {
         handleToggleDisplayUpdateDeadlineModal();
     };
 
+    useEffect(() => {
+        dispatch({
+            type: GLOBALTYPES.DEADLINE.RESET_DATA
+        });
+    }, []);
+
     return (
-        <Fragment>
+        <div className="goal_container deadline_container">
             <div className="deadline_management_container">
                 <div className="deadline_management_filter">
                     <SearchFilterComponent
@@ -184,7 +190,7 @@ function DeadlineManagement() {
                     {deadlineList.length === 0 && <EmptyDataNotification />}
                 </div>
             </div>
-        </Fragment>
+        </div>
     );
 }
 

@@ -20,8 +20,8 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
             MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
         volumes:
-            - ./database/mongodb/data/mongo_data:/data/db
-            - ./database/mongodb/config/mongo_config:/data/configdb
+            - ./data/database/mongodb/data/mongo_data:/data/db
+            - ./data/database/mongodb/config/mongo_config:/data/configdb
         restart: always
         ports:
             - 27017:27017
@@ -38,7 +38,7 @@ services:
                     redis-cli ACL SETUSER default off &&
                     tail -f /dev/null"
         volumes:
-            - ./database/redis/data:/data
+            - ./data/database/redis/data:/data
         ports:
             - 6379:6379
     backend:
@@ -54,6 +54,6 @@ services:
         build:
             context: ../api
         volumes:
-            - ../api/data:/app/data
+            - ./data/files:/app/data
         ports:
             - 4000:4000

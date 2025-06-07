@@ -14,6 +14,7 @@ import EmptyDataNotification from '../Notification/EmptyDataNotification';
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
 import MenuGoalModal from '../Modal/MenuGoalModal';
+import UpdateTotalScore from '../Modal/UpdateTotalScore';
 
 function GoalsManagement() {
     const dispatch = useDispatch();
@@ -29,6 +30,8 @@ function GoalsManagement() {
     const [tableInfo, setTableInfo] = useState(null);
 
     const [openAddTableModal, setOpenAddTableModal] = useState(false);
+    const [openUpdateTotalScoreModal, setOpenUpdateTotalScoreModal] = useState(false);
+    const [currentTotalScore, setCurrentTotalScore] = useState('');
     const [openRemovePageModal, setOpenRemovePageModal] = useState(false);
     const [isVisibleUpdateStatusPageModal, setIsVisibleUpdateStatusPageModal] = useState(false);
     const [isVisibleRemoveTableModal, setIsVisibleRemoveTableModal] = useState(false);
@@ -53,6 +56,18 @@ function GoalsManagement() {
         setOpenAddTableModal(true);
         setSubPageName(pageName);
         setPageId(pageId);
+    };
+
+    const handleOpenUpdateTotalScore = ({ pageId, currentTotalScore }) => {
+        setOpenUpdateTotalScoreModal(true);
+        setCurrentTotalScore(currentTotalScore);
+        setPageId(pageId);
+    };
+
+    const handleHideUpdateTotalScoreModal = () => {
+        setOpenUpdateTotalScoreModal(false);
+        setCurrentTotalScore('');
+        setPageId(null);
     };
 
     const handleHideAddTableModal = () => {
@@ -174,6 +189,14 @@ function GoalsManagement() {
                     </button>
                 </div>
 
+                {openUpdateTotalScoreModal && (
+                    <UpdateTotalScore
+                        pageId={pageId}
+                        currentTotalScore={currentTotalScore}
+                        handleHideUpdateTotalScoreModal={handleHideUpdateTotalScoreModal}
+                    />
+                )}
+
                 {openAddTableModal && (
                     <AddTableModal
                         handleHideAddTableModal={handleHideAddTableModal}
@@ -230,8 +253,8 @@ function GoalsManagement() {
                         bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'ẩn' : 'hiện'} chỉ tiêu ${tableInfo.tableName}`}
                         noteContent={
                             tableInfo.isActive
-                                ? `Chỉ tiêu ${tableInfo.tableName} sẽ không thể tương tác và thấy được sau khi ẩn đi. Tiến độ và điểm số của sinh viên cho chỉ tiêu này sẽ không bị ảnh hưởng.`
-                                : `Chỉ tiêu ${tableInfo.tableName} sẽ có thể tương tác và thấy được chỉ tiêu này sau khi hiện thị.`
+                                ? `Tiến độ và điểm số của sinh viên cho chỉ tiêu này sẽ không bị ảnh hưởng.`
+                                : `Các kỹ sư sẽ tương tác được chỉ tiêu ${tableInfo.tableName} sau khi hiển thị.`
                         }
                         toggleConfirmModalDisplay={handleToggleUpdateStatusTableModalDisplay}
                         onAccept={onUpdateStatusTable}
@@ -244,6 +267,7 @@ function GoalsManagement() {
                             <thead>
                                 <tr>
                                     <th>Nhóm Chỉ Tiêu</th>
+                                    <th>Tổng điểm phải đạt</th>
                                     <th>Trạng Thái</th>
                                     <th>Chỉ Tiêu</th>
                                     <th>Thao Tác Với Nhóm Chỉ Tiêu</th>
@@ -256,6 +280,8 @@ function GoalsManagement() {
                                             <td className="page_name">
                                                 {capitalizeFirstLetter(filteredPageItem.pageName)}
                                             </td>
+
+                                            <td className="page_score">{filteredPageItem?.totalScore || 0}</td>
 
                                             <td className="page_status">
                                                 {filteredPageItem.isActive ? (
@@ -315,6 +341,18 @@ function GoalsManagement() {
                                                     }}
                                                 >
                                                     <span>Thêm Chỉ Tiêu Mới</span>
+                                                </div>
+
+                                                <div
+                                                    className="add_goal_btn btn_item"
+                                                    onClick={() => {
+                                                        handleOpenUpdateTotalScore({
+                                                            currentTotalScore: filteredPageItem.totalScore,
+                                                            pageId: filteredPageItem._id
+                                                        });
+                                                    }}
+                                                >
+                                                    <span>Cập Nhật Tổng Điểm</span>
                                                 </div>
 
                                                 <div

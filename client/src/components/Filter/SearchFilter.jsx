@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { facultySelector, activitiesSelector } from '../../redux/selector';
+import { facultySelector, activitiesSelector, authSelector } from '../../redux/selector';
 import { getActivities } from '../../redux/actions/activitiesAction';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
@@ -28,6 +28,7 @@ function SearchFilterComponent({
 }) {
     const dispatch = useDispatch();
     const facultyState = useSelector(facultySelector);
+    const { user } = useSelector(authSelector);
     const activities = useSelector(activitiesSelector);
     const majorValueList = facultyData ? facultyValue?.majors || [] : facultyState?.majors;
     const isTemporaryEngineer = talentEngineerType === VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE;
@@ -143,6 +144,12 @@ function SearchFilterComponent({
         }
     }, [JSON.stringify(majorValueList)]);
 
+    useEffect(() => {
+        if (user && majorValueList.length > 0) {
+            setMajorValue(majorValueList.find((major) => major._id === user.major._id));
+        }
+    }, [user, JSON.stringify(majorValueList)]);
+
     return (
         <div className="search_filter_container">
             <div className="search_filter_wrapper">
@@ -157,7 +164,7 @@ function SearchFilterComponent({
                     </select>
                 )}
 
-                <select value={JSON.stringify(majorValue)} onInput={handleMajorValue}>
+                <select value={JSON.stringify(majorValue)} onInput={handleMajorValue} hidden>
                     <option value="">Chọn Chuyên Ngành</option>
                     {majorValueList.map((major, index) => (
                         <option key={index} value={JSON.stringify(major)}>
@@ -175,7 +182,7 @@ function SearchFilterComponent({
                             const length = cohorts.length;
                             return (
                                 <option key={index} value={JSON.stringify(cohorts[length - index - 1])}>
-                                    {`Khóa ${capitalizeFirstLetter(cohorts[length - index - 1].cohortName)}`}
+                                    {`${capitalizeFirstLetter(cohorts[length - index - 1].cohortName)}`}
                                 </option>
                             );
                         })}
@@ -212,7 +219,7 @@ function SearchFilterComponent({
                                     const levelYear = cohortValue.currentLevelYear - index;
                                     return (
                                         <option key={index} value={levelYear}>
-                                            {`Năm ${levelYear} ${levelYear === currentAdditionalLevelYear && isActive ? '(Hiện tại)' : levelYear > currentAdditionalLevelYear ? '(Bổ sung thêm kỹ sư)' : '(Đã kết thúc)'}`}
+                                            {`Năm ${levelYear} ${levelYear === currentAdditionalLevelYear && isActive ? '(Hiện tại)' : levelYear > currentAdditionalLevelYear ? '' : '(Đã kết thúc)'}`}
                                         </option>
                                     );
                                 })

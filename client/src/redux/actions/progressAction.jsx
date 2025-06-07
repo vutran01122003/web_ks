@@ -74,7 +74,7 @@ export const getAnnualTaskProgress =
     };
 
 export const stopSubmittingProof =
-    ({ conditions, major, cohort, groupCode, faculty, levelYear, updatedCohortData }) =>
+    ({ limit, major, cohort, groupCode, faculty, levelYear, updatedCohortData }) =>
     async (dispatch) => {
         try {
             dispatch({
@@ -85,7 +85,7 @@ export const stopSubmittingProof =
             });
 
             const res = await postDataApi('/progress/updated-users', {
-                conditions,
+                limit,
                 major,
                 cohort,
                 faculty,

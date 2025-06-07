@@ -53,21 +53,27 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             roles: [],
             isShow: isDetailedRow ? false : true
         },
-        {
-            label: 'Khoa',
-            value: user?.faculty.facultyName ? capitalizeFirstLetter(user?.faculty.facultyName) : 'Chưa Cập Nhật',
-            roles: [
-                VITE_APP_MAJOR_MANAGER_CODE,
-                VITE_APP_TALENT_ENGINEER_CODE,
-                VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-            ],
-            isShow: true
-        },
+        // {
+        //     label: 'Khoa',
+        //     value: user?.faculty.facultyName ? capitalizeFirstLetter(user?.faculty.facultyName) : 'Chưa Cập Nhật',
+        //     roles: [
+        //         VITE_APP_MAJOR_MANAGER_CODE,
+        //         VITE_APP_TALENT_ENGINEER_CODE,
+        //         VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
+        //     ],
+        //     isShow: true
+        // },
         {
             label: 'Ngành',
             value: user?.major.majorName ? capitalizeFirstLetter(user?.major.majorName) : 'Chưa Cập Nhật',
             roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
             isShow: isDetailedRow ? false : true
+        },
+        {
+            label: 'Khóa',
+            value: user?.cohort.cohortName ? capitalizeFirstLetter(user?.cohort.cohortName) : 'Chưa Cập Nhật',
+            roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
+            isShow: true
         },
         {
             label: 'Năm',

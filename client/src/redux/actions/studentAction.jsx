@@ -35,7 +35,7 @@ export const getStudents =
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
-                    success: 'Tìm kiếm thành công'
+                    success: 'Lấy dữ liệu thành công'
                 }
             });
         } catch (error) {

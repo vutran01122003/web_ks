@@ -76,6 +76,10 @@ const PageSchema = new Schema(
         isActive: {
             type: Boolean,
             default: true
+        },
+        totalScore: {
+            type: Number,
+            default: 0
         }
     },
     {

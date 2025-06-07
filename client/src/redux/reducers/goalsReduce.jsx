@@ -86,6 +86,23 @@ function goalsReduce(state = initialState, action) {
             };
         }
 
+        case GLOBALTYPES.GOALS.UPDATE_TOTAL_SCORE: {
+            const { pageId, totalScore } = action.payload;
+            const goalList = [...state.filteredPage];
+
+            for (let i = 0; i < goalList.length; i++) {
+                if (goalList[i]._id === pageId) {
+                    goalList[i].totalScore = totalScore;
+                    break;
+                }
+            }
+
+            return {
+                ...state,
+                filteredPages: goalList
+            };
+        }
+
         case GLOBALTYPES.GOALS.UPDATE_STATUS_TABLE: {
             const { pageId, tableIndex, status } = action.payload;
 

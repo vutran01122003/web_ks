@@ -115,7 +115,7 @@ class ProgressControllers {
 
     updateUserActivityStatusByMajor = async (req, res, next) => {
         try {
-            const { major, cohort, faculty, levelYear, groupCode, conditions, updatedCohortData } = req.body;
+            const { major, cohort, faculty, levelYear, groupCode, updatedCohortData, limit } = req.body;
             const [currentLevelYear, group] = await Promise.all([
                 FacultyService.getCurrentLevelYearOfCohort({
                     majorName: major.toLowerCase(),
@@ -128,12 +128,12 @@ class ProgressControllers {
                 throw createError.BadRequest(`Hoạt động nộp minh chứng năm ${levelYear} đã kết thúc`);
 
             await UserService.updateUserActivityStatusByMajor({
-                conditions,
                 faculty,
                 major,
                 cohort,
                 levelYear,
                 updatedCohortData,
+                limit,
                 groupData: {
                     groupCode: groupCode,
                     groupId: group._id

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { FaCaretRight } from 'react-icons/fa';
 import { BiSolidAddToQueue } from 'react-icons/bi';
@@ -30,6 +30,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
     const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = [true, false];
+    const [totalScore, setTotalScore] = useState('');
 
     const [tables, setTables] = useState([
         {
@@ -225,7 +226,14 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     };
 
     const handleCreatePage = async () => {
-        if (!pageName || !pageStudentCohort || !pageStudentMajor || !pageFaculty || !pageStudentLevelYear) {
+        if (
+            !pageName ||
+            !pageStudentCohort ||
+            !pageStudentMajor ||
+            !pageFaculty ||
+            !pageStudentLevelYear ||
+            totalScore === ''
+        ) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -246,6 +254,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 pageStudentMajor: pageStudentMajor.majorName,
                 pageTalentEngineerType: talentEngineerType,
                 pageStudentLevelYear: +pageStudentLevelYear,
+                totalScore,
                 tables: tables.map((table) => {
                     const tableData = {
                         tableName: table.tableName,
@@ -313,16 +322,32 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 )}
 
                 {!handleAddTable && !handleUpdateTable && !tableDetailsData && (
-                    <div className="filed__line">
-                        <label>Tên Nhóm Chỉ Tiêu</label>
-                        <input
-                            type="text"
-                            id="name__chi_tieu"
-                            placeholder="Nhập Tên Nhóm Chỉ Tiêu"
-                            value={pageName}
-                            onChange={(e) => setPageName(e.target.value)}
-                        />
-                    </div>
+                    <Fragment>
+                        <div className="filed__line">
+                            <label>Tên Nhóm Chỉ Tiêu</label>
+                            <input
+                                type="text"
+                                id="name__chi_tieu"
+                                placeholder="Nhập Tên Nhóm Chỉ Tiêu"
+                                value={pageName}
+                                onChange={(e) => setPageName(e.target.value)}
+                            />
+                        </div>
+                        <div className="filed__line">
+                            <label>Tổng Điểm Phải Đạt</label>
+                            <input
+                                type="text"
+                                id="name__chi_tieu"
+                                placeholder="Nhập Tổng Điểm Tối Thiểu Mà Kỹ Sư Phải Đạt"
+                                value={totalScore}
+                                onChange={(e) =>
+                                    setTotalScore(
+                                        Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : ''
+                                    )
+                                }
+                            />
+                        </div>
+                    </Fragment>
                 )}
                 <div className="connection__table">
                     {tables.map((table, tableIndex) => {
@@ -407,14 +432,14 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 {table.scoreType === FIXED_SCORE_TYPE && (
                                     <div className="flex__line_lable">
                                         <label htmlFor="score_input">
-                                            {!tableDetailsData ? 'Nhập Điểm:' : 'Điểm Số:'}
+                                            {!tableDetailsData ? 'Điểm Tích Lũy:' : 'Điểm Số:'}
                                         </label>
                                         <input
                                             className={`score_input`}
                                             type="text"
                                             value={table.fixedScore}
                                             readOnly={tableDetailsData ? true : false}
-                                            placeholder="Nhập điểm sẽ nhận được khi hoàn thành 1 hoạt động"
+                                            placeholder="Nhập điểm tích lũy sẽ đạt khi hoàn thành hoạt động"
                                             id="score_input"
                                             onChange={(e) =>
                                                 updateTable(

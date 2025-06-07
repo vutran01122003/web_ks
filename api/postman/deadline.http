@@ -36,9 +36,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzN
 }
 
 ### Get deadline list
-GET {{url}}/api/deadline?facultyId=6803414a4d64ed09adc758e9&majorId=6803414f4d64ed09adc758ed&cohortId=680341714d64ed09adc758f3&talentEngineerType=002
+GET {{url}}/api/deadline?facultyId=6801e7302b0f4911421d9785&majorId=6801e7362b0f4911421d9789&cohortId=6801e73b2b0f4911421d978f&talentEngineerType=001
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzNTc2NjRkNjRlZDA5YWRjNzU5NDEiLCJpYXQiOjE3NDgzNjcwMDgsImV4cCI6MTc0ODM4NTAwOH0.nbDZ9oLrJDQeaoIl_C_eXixesMMvqMEwXgMLrHxSd2I
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzNTc2NjRkNjRlZDA5YWRjNzU5NDEiLCJpYXQiOjE3NDg2MDI2OTAsImV4cCI6MTc0ODYyMDY5MH0.8kj4xv4lY0ZrIAWqlBgwMfR0a2mHb7loC_9yjWLcePY
 
 

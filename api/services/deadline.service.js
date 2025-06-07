@@ -66,6 +66,9 @@ class DeadlineService {
     static async getDeadlineList({ facultyId, majorId, cohortId, talentEngineerType }) {
         try {
             const cohortData = await FacultyService.getCohortById({ cohortId });
+
+            if (!cohortData) throw createError.BadRequest("Khóa không tồn tại");
+
             const currentLevelYear = cohortData.currentLevelYear;
             const deadlineList = await Deadline.find({
                 faculty: facultyId,

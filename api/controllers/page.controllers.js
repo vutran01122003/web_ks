@@ -133,11 +133,15 @@ class PageControllers {
         }
     };
 
-    updateStatusPage = async (req, res, next) => {
+    updatePage = async (req, res, next) => {
         try {
-            const { pageId, currentStatus } = req.body;
+            const { pageId, currentStatus, totalScore } = req.body;
+            const updatedData = {};
 
-            const updatedPage = await PageService.updateStatusPage({ pageId, currentStatus });
+            if (currentStatus !== undefined) updatedData.isActive = !currentStatus;
+            if (totalScore) updatedData.totalScore = totalScore;
+
+            const updatedPage = await PageService.updatePage({ pageId, updatedData });
 
             res.status(200).json({
                 status: updatedPage.status,
