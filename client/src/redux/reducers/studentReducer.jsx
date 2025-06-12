@@ -11,12 +11,12 @@ const initialState = {
 function studentReducer(state = initialState, action) {
     switch (action.type) {
         case GLOBALTYPES.STUDENT.GET_STUDENTS: {
-            const studentLits = action.payload.studentList;
+            const { studentList, page } = action.payload;
             return {
                 ...state,
-                studentList: [...state.studentList, ...studentLits],
+                studentList: page === 1 ? studentList : [...state.studentList, ...studentList],
                 page: action.payload.page,
-                isMaxPage: studentLits.length === 0 ? true : false
+                isMaxPage: studentList.length === 0 ? true : false
             };
         }
 

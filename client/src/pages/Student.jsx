@@ -157,6 +157,16 @@ const Student = ({ isAdmin }) => {
 
             {isVisibleExcelModal && (
                 <ImportExcelModal
+                    searchInput={{
+                        major: major.majorName,
+                        cohort: cohort.cohortName,
+                        groupCode: talentEngineerType,
+                        status: status,
+                        userId: userId,
+                        limit: VITE_APP_API_LIMIT,
+                        page: 1,
+                        sortByName: 1
+                    }}
                     headerTitle="Thêm Danh Sách Kỹ Sư Tài Năng"
                     columns={[
                         'STT',

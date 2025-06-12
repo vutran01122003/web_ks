@@ -262,10 +262,6 @@ class FacultyService {
 
     static getCohortByName = async ({ majorName, cohortName }) => {
         try {
-            console.log({
-                majorName,
-                cohortName
-            });
             const major = await this.getMajorByName({ majorName });
             const populatedMajor = await major.populate("cohorts");
 
@@ -278,14 +274,52 @@ class FacultyService {
         }
     };
 
-    static updateAdditionalApplyCohort = async ({ majorName, cohortName, levelYear, isActive }) => {
+    static updateAdditionalApplyCohort = async ({
+        majorName,
+        cohortName,
+        levelYear,
+        isActive,
+        userId,
+        approvedUsers,
+        rejectedUsers,
+        status
+    }) => {
         try {
             const cohort = await this.getCohortByName({ cohortName, majorName });
+            const length = cohort.additionalRegisterInfo.length;
 
-            cohort.additionalRegisterInfo = {
-                levelYear,
-                isActive
-            };
+            if (levelYear) {
+                let isExist = false;
+                for (let i = 0; i < length; i++) {
+                    if (cohort.additionalRegisterInfo[i].levelYear === levelYear) {
+                        cohort.additionalRegisterInfo[i].levelYear = levelYear;
+                        cohort.additionalRegisterInfo[i].isActive = isActive;
+
+                        isExist = true;
+                        break;
+                    }
+                }
+
+                if (!isExist)
+                    cohort.additionalRegisterInfo.push({
+                        levelYear,
+                        isActive
+                    });
+            }
+
+            if (userId) cohort.additionalRegisterInfo[length - 1].users.push(userId);
+
+            if (rejectedUsers && approvedUsers) {
+                console.log("ok");
+                console.log({
+                    rejectedUsers,
+                    approvedUsers
+                });
+                cohort.additionalRegisterInfo[length - 1].approvedUsers = approvedUsers;
+                cohort.additionalRegisterInfo[length - 1].rejectedUsers = rejectedUsers;
+            }
+
+            if (status) cohort.additionalRegisterInfo[length - 1].status = status;
 
             await cohort.save();
         } catch (error) {
@@ -313,9 +347,11 @@ class FacultyService {
 
     static updateCohortById = async ({ majorId, cohortId, data }) => {
         try {
+            let result = null;
             const major = await Major.findById(majorId).populate("cohorts");
 
             if (!major) throw createHttpError.NotFound("Chuyên ngành không tồn tại");
+
             if (
                 data?.cohortName &&
                 major.cohorts.find(
@@ -324,9 +360,43 @@ class FacultyService {
             )
                 throw createHttpError.Conflict(`Khoá ${data.cohortName} đã tồn tại`);
 
-            return await Cohort.findByIdAndUpdate(cohortId, data, {
-                new: true
-            });
+            if (data?.isActive !== undefined && data?.status) {
+                const { status, isActive, levelYear, currentLevelYear } = data;
+                const cohort = await Cohort.findById(cohortId);
+                const levelYearInfo = cohort.levelYearInfo.find((item) => item.levelYear === levelYear);
+                cohort.currentLevelYear = currentLevelYear;
+                cohort.levelYearInfo.id(levelYearInfo._id).isActive = isActive;
+                cohort.levelYearInfo.id(levelYearInfo._id).status = status;
+                result = await cohort.save();
+            }
+
+            if (data?.approvedUsers && data?.rejectedUsers) {
+                const { approvedUsers, rejectedUsers, levelYear, status } = data;
+                const cohort = await Cohort.findById(cohortId);
+                const levelYearInfo = cohort?.levelYearInfo
+                    ? cohort.levelYearInfo.find((item) => item.levelYear === levelYear)
+                    : false;
+
+                if (levelYearInfo) {
+                    cohort.levelYearInfo.id(levelYearInfo._id).approvedUsers = approvedUsers;
+                    cohort.levelYearInfo.id(levelYearInfo._id).rejectedUsers = rejectedUsers;
+                    cohort.levelYearInfo.id(levelYearInfo._id).status = status;
+                } else
+                    cohort.levelYearInfo.push({
+                        approvedUsers,
+                        rejectedUsers,
+                        levelYear,
+                        status
+                    });
+
+                result = await cohort.save();
+            } else {
+                result = await Cohort.findByIdAndUpdate(cohortId, data, {
+                    new: true
+                });
+            }
+
+            return result;
         } catch (error) {
             throw error;
         }
@@ -344,7 +414,8 @@ class FacultyService {
     static getAdditionalRegisterInfo = async ({ majorName, cohortName }) => {
         try {
             const cohort = await this.getCohortByName({ majorName, cohortName });
-            return cohort.additionalRegisterInfo;
+
+            return cohort.additionalRegisterInfo.sort((b, a) => a.levelYear - b.levelYear)[0];
         } catch (error) {
             throw error;
         }

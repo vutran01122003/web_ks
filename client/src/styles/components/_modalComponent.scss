@@ -534,7 +534,7 @@
     }
 
     .stop_submitting_proof_body {
-        padding: 20px 20px 30px 20px;
+        padding: 15px 20px 30px 20px;
 
         .stop_submitting_proof_body_content {
             font-size: 16px;
@@ -555,11 +555,12 @@
         .condition_filter_wrapper {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 5px;
             margin-top: 15px;
 
             .input_item {
                 display: flex;
+                align-items: center;
                 gap: 10px;
 
                 label {
@@ -574,7 +575,8 @@
                     padding: 4px 8px;
                     width: 250px;
                     border-radius: 2px;
-                    border: 1px solid #333;
+                    border: 1px solid #a8a8a8;
+                    height: 35px;
                 }
 
                 .input_checkbox_item {
@@ -1100,6 +1102,25 @@
             height: 100%;
             width: 100%;
 
+            tr,
+            th,
+            td {
+                border: none;
+            }
+
+            td {
+                width: 300px;
+            }
+
+            tr {
+                height: 47px;
+
+                > td:first-child {
+                    width: 140px;
+                    font-weight: 600;
+                }
+            }
+
             .dob_td {
                 position: relative;
 
@@ -1112,21 +1133,7 @@
                     top: 12px;
                     left: 0;
                     width: 100%;
-                }
-            }
-
-            tr,
-            th,
-            td {
-                border: none;
-            }
-
-            tr {
-                height: 47px;
-
-                > td:first-child {
-                    width: 140px;
-                    font-weight: 600;
+                    z-index: 10;
                 }
             }
 
@@ -1421,25 +1428,49 @@
         }
     }
 
-    button {
+    .btn_group {
         display: flex;
-        justify-content: center;
         align-items: center;
-        width: 220px;
-        height: 40px;
-        background: #1677ff;
-        border-radius: 3px;
-        outline: none;
-        border: none;
-        color: white;
-        font-weight: 600;
-        margin-left: auto;
-        margin-right: auto;
+        justify-content: space-between;
+        margin-top: 15px;
+        margin: 0 8px;
+
+        .control_btn_group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .end_btn,
+        .cancel_btn {
+            background: #f0635c;
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 40px;
+            background: #1677ff;
+            border-radius: 3px;
+            outline: none;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
     }
 }
 
 .z-99 {
     z-index: 99;
+}
+
+.contact_modal {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .change_password_modal {

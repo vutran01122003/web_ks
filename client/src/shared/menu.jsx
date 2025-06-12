@@ -32,16 +32,23 @@ export const ARRAY_LIST_MENU = [
     },
     {
         roles: [VITE_APP_MAJOR_MANAGER_CODE],
-        name_menu: 'Thống Kê Tiến Độ Hoàn Thành',
+        name_menu: 'Thống Kê Tiến Độ',
         icon_before: <HiOutlineClipboardList />,
         to_link: '/progress',
         submenu: false
     },
     {
         roles: [VITE_APP_MAJOR_MANAGER_CODE],
-        name_menu: 'Quản lý Nhóm Chỉ Tiêu',
+        name_menu: 'Tạo Nhóm Chỉ Tiêu',
         icon_before: <TbTargetArrow />,
-        to_link: '/goal',
+        to_link: '/goal-creation',
+        submenu: false
+    },
+    {
+        roles: [VITE_APP_MAJOR_MANAGER_CODE],
+        name_menu: 'Quản lý Nhóm Chỉ Tiêu',
+        icon_before: <HiOutlineClipboardList />,
+        to_link: '/goal-management',
         submenu: false
     },
     {
@@ -51,28 +58,6 @@ export const ARRAY_LIST_MENU = [
         to_link: '/deadline',
         submenu: false
     },
-    // {
-    //     roles: [VITE_APP_ADMIN_CODE],
-    //     name_menu: 'Quản Lý Trang',
-    //     icon_before: <CgBrowser />,
-    //     to_link: '/page',
-    //     submenu: false
-    // },
-    // {
-    //     roles: [VITE_APP_MAJOR_MANAGER_CODE],
-    //     name_menu: 'Tạo Tin Tức & Thông Báo',
-    //     icon_before: <MdOutlineCreate />,
-    //     to_link: '/media',
-    //     submenu: false
-    // },
-    // {
-    //     name_menu: 'Tin Tức',
-    //     allow: true,
-    //     icon_before: <HiOutlineNewspaper />,
-    //     dynamicPage: VITE_APP_NEWS_PAGE,
-    //     submenu: true,
-    //     sub_menu_item: []
-    // },
     {
         name_menu: 'Nhóm Chỉ Tiêu Năm',
         roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
@@ -89,16 +74,30 @@ export const ARRAY_LIST_MENU = [
         submenu: false
     },
     {
-        name_menu: 'Quản Lý Khoa & Chuyên Ngành',
+        name_menu: 'Khoa Và Chuyên Ngành',
         roles: [VITE_APP_ADMIN_CODE],
         to_link: '/faculty',
         icon_before: <MdOutlineSchool />,
-        submenu: false
+        submenu: true,
+        sub_menu_item: [
+            {
+                sub_name_menu: 'Danh sách khoa',
+                sub_to_link: '/details-faculty'
+            },
+            {
+                sub_name_menu: 'Danh sách chuyên ngành',
+                sub_to_link: '/details-major'
+            },
+            {
+                sub_name_menu: 'Danh sách khóa',
+                sub_to_link: '/details-cohort'
+            }
+        ]
     },
     {
-        name_menu: 'Phân Quyền Người Dùng',
+        name_menu: 'Danh sách QLCN',
         roles: [VITE_APP_ADMIN_CODE],
-        to_link: '/permission',
+        to_link: '/manager',
         icon_before: <MdManageAccounts />,
         submenu: false
     }

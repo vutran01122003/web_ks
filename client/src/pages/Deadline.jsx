@@ -7,6 +7,7 @@ import GLOBALTYPES from '../redux/actions/globalTypes';
 import { getDeadlineList, updateDealine } from '../redux/actions/deadlineAction';
 import EmptyDataNotification from '../components/Notification/EmptyDataNotification';
 import UpdateDeadlineModal from '../components/Modal/UpdateDeadlineModal';
+const [NOT_STARTED, IN_PROGRESS, COMPLETED] = ['not-started', 'in-progress', 'completed'];
 
 function DeadlineManagement() {
     const dispatch = useDispatch();
@@ -19,6 +20,19 @@ function DeadlineManagement() {
     const [currentDeadlineId, setCurrentDeadlineId] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+
+    const convertStatus = (status) => {
+        switch (status) {
+            case NOT_STARTED:
+                return 'Chưa bắt đầu';
+            case IN_PROGRESS:
+                return 'Đang diễn ra';
+            case COMPLETED:
+                return 'Đã kết thúc';
+            default:
+                return 'Chưa cập nhật';
+        }
+    };
 
     const handleChangeStartDate = (e) => {
         setStartDate(e.target.value);
@@ -72,7 +86,7 @@ function DeadlineManagement() {
         );
     };
 
-    const onUpdateDeadline = () => {
+    const onUpdateDeadline = (status) => {
         if (!startDate || !endDate) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
@@ -93,7 +107,7 @@ function DeadlineManagement() {
             return;
         }
 
-        dispatch(updateDealine({ deadlineId: currentDeadlineId, startDate, endDate }));
+        dispatch(updateDealine({ deadlineId: currentDeadlineId, startDate, endDate, status }));
         handleToggleDisplayUpdateDeadlineModal();
     };
 
@@ -147,15 +161,7 @@ function DeadlineManagement() {
                                                 ? new Date(deadline.endDate).toLocaleString('en-GB')
                                                 : 'Chưa cập nhật'}
                                         </td>
-                                        <td>
-                                            {deadline.startDate && deadline.endDate
-                                                ? new Date(deadline.startDate).getTime() > new Date().getTime()
-                                                    ? 'Chưa bắt đầu'
-                                                    : new Date(deadline.endDate).getTime() < new Date().getTime()
-                                                      ? 'Đã kết thúc'
-                                                      : 'Đang diễn ra'
-                                                : 'Chưa cập nhật'}
-                                        </td>
+                                        <td>{convertStatus(deadline?.status)}</td>
                                         <td className="edit_btn">
                                             {visibleUpdateDeadlineModal && currentDeadlineId === deadline._id && (
                                                 <UpdateDeadlineModal

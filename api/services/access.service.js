@@ -88,8 +88,6 @@ class AccessService {
                     cohortName: cohort
                 });
 
-                levelYear = additionalRegisterInfo.levelYear;
-
                 if (!additionalRegisterInfo)
                     throw createHttpError.BadRequest(
                         `Chuyên ngành ${capitalizeFirstLetter(major)} chưa tổ chức tuyển bổ sung`
@@ -98,12 +96,30 @@ class AccessService {
                 if (!additionalRegisterInfo.isActive)
                     throw createHttpError.BadRequest("Năm học đăng ký bổ sung đã kết thúc");
 
+                levelYear = additionalRegisterInfo.levelYear;
                 createdUser.levelYear = levelYear;
+            } else if (MAJOR_MANAGER_CODE == groupCode) {
+                FacultyService.updateMajor({
+                    majorId: majorData._id,
+                    data: {
+                        $pull: {
+                            managers: [createdUser._id]
+                        }
+                    }
+                });
             }
 
             createdUser.encodePassword(password ? password : process.env.DEFAULT_PASSWORD);
 
-            await createdUser.save();
+            const user = await createdUser.save();
+
+            if (TEMPORARY_TALENT_ENGINEER_CODE === groupCode) {
+                await FacultyService.updateAdditionalApplyCohort({
+                    majorName: major,
+                    cohortName: cohort,
+                    userId: user._id
+                });
+            }
 
             const populatedUser = await User.populate(createdUser, populatedOptions);
 

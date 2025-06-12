@@ -1,7 +1,7 @@
 import GLOBALTYPES from './globalTypes';
 import { getDataApi, postDataApi } from '../../utils/fetchData';
 import notifyError from '../../utils/notifyError';
-import { getFacultyByName, getMajors } from './facultyAction';
+import { getMajors } from './facultyAction';
 
 export const getProgressByYear =
     ({ userId, studentMajor, studentCohort, studentLevelYear }) =>
@@ -84,7 +84,7 @@ export const stopSubmittingProof =
                 }
             });
 
-            const res = await postDataApi('/progress/updated-users', {
+            const res = await postDataApi('/progress/process', {
                 limit,
                 major,
                 cohort,
@@ -111,7 +111,7 @@ export const stopSubmittingProof =
                     levelYear,
                     faculty,
                     groupCode,
-                    sortProgressPercentage: 1,
+                    sortProgressPercentage: -1,
                     page: 1,
                     limit: 10
                 })
@@ -128,6 +128,119 @@ export const stopSubmittingProof =
                 dispatch,
                 error,
                 defaultMessage: 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
+            });
+        }
+    };
+
+export const confirmProgress =
+    ({ levelYear, faculty, major, cohort, groupCode, updatedCohortData }) =>
+    async (dispatch) => {
+        try {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    loading: true
+                }
+            });
+
+            const res = await postDataApi('/progress/confirm', {
+                major,
+                cohort,
+                levelYear,
+                groupCode,
+                updatedCohortData
+            });
+
+            dispatch({
+                type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
+            });
+
+            dispatch(
+                getMajors({
+                    majorName: major
+                })
+            );
+
+            dispatch(
+                getAnnualTaskProgress({
+                    major,
+                    cohort,
+                    levelYear,
+                    faculty,
+                    groupCode,
+                    sortProgressPercentage: -1,
+                    page: 1,
+                    limit: 10
+                })
+            );
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res.data.msg
+                }
+            });
+        } catch (error) {
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
+            });
+        }
+    };
+
+export const revertProgress =
+    ({ major, cohort, groupCode, levelYear, faculty }) =>
+    async (dispatch) => {
+        try {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    loading: true
+                }
+            });
+
+            const res = await postDataApi('/progress/revert', {
+                majorName: major,
+                cohortName: cohort,
+                groupCode,
+                levelYear
+            });
+
+            dispatch({
+                type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
+            });
+
+            dispatch(
+                getMajors({
+                    majorName: major
+                })
+            );
+
+            dispatch(
+                getAnnualTaskProgress({
+                    major,
+                    cohort,
+                    levelYear,
+                    faculty,
+                    groupCode,
+                    sortProgressPercentage: -1,
+                    page: 1,
+                    limit: 10
+                })
+            );
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res.data.msg
+                }
+            });
+        } catch (error) {
+            notifyError({
+                dispatch,
+                error,
+                defaultMessage: 'Duyệt lại thất bại'
             });
         }
     };

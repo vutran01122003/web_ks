@@ -4,7 +4,7 @@ const UserService = require("./user.service");
 const convertToObjectId = require("../utils/convertToObjectId");
 const FacultyService = require("./faculty.service");
 
-const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE, GOAL_PAGE, NEWS_PAGE } = process.env;
+const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE, GOAL_PAGE } = process.env;
 
 class PageService {
     static createPage = async (data) => {
@@ -19,7 +19,8 @@ class PageService {
                 pageStudentMajor,
                 pageTalentEngineerType,
                 pageStudentLevelYear,
-                totalScore
+                totalScore,
+                cohortData
             } = data;
             const isTemporaryEngineer = pageTalentEngineerType === TEMPORARY_TALENT_ENGINEER_PAGE_TYPE;
 
@@ -35,22 +36,8 @@ class PageService {
 
             if (pageType === GOAL_PAGE) {
                 if (isTemporaryEngineer) {
-                    const additionalRegisterInfo = await FacultyService.getAdditionalRegisterInfo({
-                        majorName: pageStudentMajor,
-                        cohortName: pageStudentCohort
-                    });
-
-                    const levelYear = additionalRegisterInfo?.levelYear;
-                    const isActive = additionalRegisterInfo?.isActive;
-
-                    const levelYearConditions =
-                        levelYear > pageStudentLevelYear || (!isActive && levelYear === pageStudentLevelYear);
-                    const validConditions = levelYear !== undefined && isActive !== undefined;
-
-                    if (validConditions && levelYearConditions) {
-                        throw createError.BadRequest("Năm đăng ký bổ sung đã kết thúc");
-                    } else if (validConditions && pageStudentLevelYear > levelYear && isActive) {
-                        throw createError.BadRequest(`Năm đăng ký bổ sung hiện tại chưa kết thúc (Năm ${levelYear})`);
+                    if (pageStudentLevelYear !== cohortData.currentLevelYear) {
+                        throw createError.BadRequest(`Năm ${pageStudentLevelYear} không thể xét tuyển bổ sung`);
                     }
 
                     await FacultyService.updateAdditionalApplyCohort({

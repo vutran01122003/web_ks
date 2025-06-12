@@ -75,7 +75,12 @@ class ExcelController {
                 sortProgressPercentage: sortProgressPercentage * 1
             });
 
-            const workbook = await excelService.exportProgressStatisticsExcel(progressStatisticsData);
+            const workbook = await excelService.exportProgressStatisticsExcel({
+                progressStatisticsData,
+                groupCode,
+                levelYear,
+                cohortData
+            });
 
             res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 

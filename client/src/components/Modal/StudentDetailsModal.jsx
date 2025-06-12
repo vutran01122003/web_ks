@@ -1,62 +1,87 @@
-import { useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
 import { capitalizeFirstLetter } from '../../utils/handleString';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../redux/actions/studentAction';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
+import { facultySelector } from '../../redux/selector';
 
-function StudentDetailsModal({ currentUserData, onToggleModal }) {
+function StudentDetailsModal({ currentUserData, onToggleModal, isManager }) {
     const dispatch = useDispatch();
     const dateRef = useRef();
+    const { facultyData } = useSelector(facultySelector);
 
     const [userData, setUserData] = useState({
-        userId: currentUserData?.userId || '',
-        firstName: capitalizeFirstLetter(currentUserData?.firstName) || '',
-        lastName: capitalizeFirstLetter(currentUserData?.lastName) || '',
-        gender: currentUserData?.gender || '',
+        userId: currentUserData?.userId,
+        firstName: capitalizeFirstLetter(currentUserData?.firstName),
+        lastName: capitalizeFirstLetter(currentUserData?.lastName),
+        gender: currentUserData?.gender,
         email: currentUserData?.email || '',
         phone: currentUserData?.phone || '',
-        birthday: currentUserData?.birthday || '',
-        isActive: currentUserData?.isActive || false,
+        birthday: currentUserData?.birthday,
+        faculty: '',
+        major: '',
+        isActive: currentUserData?.isActive,
         password: ''
     });
-
-    console.log(userData);
 
     const onUpdateUser = () => {
         const newUserData = { ...userData };
         delete newUserData.password;
 
-        if (!Object.values(newUserData).every((value) => value)) {
+        if (Object.values(newUserData).some((value) => ['', undefined, null].includes(value))) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
                     error: 'Vui lòng nhập đầy đủ thông tin'
                 }
             });
+            return;
         }
 
         dispatch(
             updateUser({
                 userId: currentUserData._id,
-                userData
+                userData: {
+                    ...userData,
+                    faculty: userData.faculty._id,
+                    major: userData.major._id
+                }
             })
         );
         onToggleModal();
     };
 
     const onCloseModal = (e) => {
-        if (e.target === e.currentTarget) onToggleModal();
+        if (e.target === e.currentTarget) {
+            setUserData({
+                userId: '',
+                firstName: '',
+                lastName: '',
+                gender: '',
+                email: '',
+                phone: '',
+                birthday: '',
+                faculty: '',
+                major: '',
+                isActive: '',
+                password: ''
+            });
+            onToggleModal();
+        }
     };
 
     const onChangeUserData = (e) => {
-        const key = e.target.name;
-        const value = e.target.value;
+        let key = e.target.name;
+        let value = e.target.value;
 
         const obj = { [key]: value };
 
-        if (key === 'major') {
-            obj.cohort = '';
+        if (key === 'faculty' && value) {
+            obj.major = '';
+            obj.faculty = JSON.parse(value);
+        } else if (key === 'major' && value) {
+            obj.major = JSON.parse(value);
         } else if (key === 'isActive') {
             obj[key] = value === 'true';
         }
@@ -67,11 +92,23 @@ function StudentDetailsModal({ currentUserData, onToggleModal }) {
         }));
     };
 
+    useEffect(() => {
+        if (facultyData.length > 0) {
+            const faculty = facultyData.find((facultyItem) => facultyItem._id === currentUserData.faculty._id);
+            const major = faculty.majors.find((majorItem) => majorItem._id === currentUserData.major._id);
+            setUserData((prev) => ({
+                ...prev,
+                faculty,
+                major
+            }));
+        }
+    }, [JSON.stringify(facultyData)]);
+
     return (
         <div className="modal_overlap" onDoubleClick={onCloseModal}>
             <div className="box_wrapper student_details_modal">
                 <div className="modal_header student_details_header">
-                    <h3>Thông tin kỹ sư</h3>
+                    <h3>{isManager ? 'Thông tin quản lý chuyên ngành' : 'Thông tin kỹ sư'}</h3>
                     <span className="modal_close_icon_wrapper" onClick={onToggleModal}>
                         <HiMiniXMark />
                     </span>
@@ -223,6 +260,59 @@ function StudentDetailsModal({ currentUserData, onToggleModal }) {
                                     />
                                 </td>
                             </tr>
+                            {isManager && (
+                                <Fragment>
+                                    <tr>
+                                        <td>
+                                            <label className="label_item" htmlFor="major">
+                                                Khoa:
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <select
+                                                className="select_item"
+                                                id="faculty"
+                                                name="faculty"
+                                                value={userData.faculty ? JSON.stringify(userData.faculty) : ''}
+                                                onChange={onChangeUserData}
+                                            >
+                                                <option value="">Chọn Chuyên Ngành</option>
+                                                {facultyData.length > 0 &&
+                                                    facultyData.map((faculty, index) => (
+                                                        <option key={index} value={JSON.stringify(faculty)}>
+                                                            {capitalizeFirstLetter(faculty.facultyName)}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <label className="label_item" htmlFor="major">
+                                                Chuyên Ngành:
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <select
+                                                className="select_item"
+                                                id="major"
+                                                name="major"
+                                                value={userData.major ? JSON.stringify(userData.major) : ''}
+                                                onChange={onChangeUserData}
+                                            >
+                                                <option value="">Chọn Chuyên Ngành</option>
+                                                {userData.faculty &&
+                                                    userData.faculty.majors.map((major, index) => (
+                                                        <option key={index} value={JSON.stringify(major)}>
+                                                            {capitalizeFirstLetter(major.majorName)}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </Fragment>
+                            )}
 
                             <tr>
                                 <td>

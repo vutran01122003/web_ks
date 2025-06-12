@@ -1,10 +1,8 @@
 import { getDataApi, patchDataApi, postDataApi } from '../../utils/fetchData';
 import { getAccessToken, removeAccessToken, setAccessToken } from '../../utils/handleCredentials';
 import notifyError from '../../utils/notifyError';
-import { getFacultyByName } from './facultyAction';
+import { getAllFaculties } from './facultyAction';
 import GLOBALTYPES from './globalTypes';
-
-const { VITE_APP_MAJOR_MANAGER_CODE } = import.meta.env;
 
 export const login =
     ({ userId, password }) =>
@@ -94,8 +92,7 @@ export const register =
                 setAccessToken(resData.token.accessToken);
             } else {
                 res = await postDataApi('/admin/register', data);
-                if (data.groupCode === VITE_APP_MAJOR_MANAGER_CODE)
-                    dispatch(getFacultyByName({ facultyName: data.faculty }));
+                dispatch(getAllFaculties());
             }
 
             dispatch({

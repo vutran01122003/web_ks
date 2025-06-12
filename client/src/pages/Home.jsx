@@ -5,20 +5,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import GoalsInfo from '../components/Goal/GoalsInfo';
 import { getProgressByYear } from '../redux/actions/progressAction';
 import Quantity from '../components/Notification/Quantity';
-import { progressSelector } from '../redux/selector';
+import { deadlineSelector, progressSelector } from '../redux/selector';
 import { GoArrowRight } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 import { toFullName } from '../utils/handleString';
+import { formatTimeStr } from '../utils/formatDatetime';
 
 const { VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
 
 const Home = ({ auth }) => {
     const user = auth?.user;
+    const { deadlineList } = useSelector(deadlineSelector);
     const dispatch = useDispatch();
     const progress = useSelector(progressSelector);
     const [chartData, setChartData] = useState([]);
     const [goalsInfo, setGoalInfo] = useState([]);
-    const [levelYear, setLevelYear] = useState(user?.levelYear || 1);
+    const currentLevelYear = user?.levelYear;
+    const [levelYear, setLevelYear] = useState(currentLevelYear || 1);
+    const [deadline, setDeadline] = useState('');
     const groupCodeList = user.groups.map((group) => group.groupCode);
     const condition =
         groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) ||
@@ -39,7 +43,8 @@ const Home = ({ auth }) => {
 
     useEffect(() => {
         handleGetProgressByYear();
-    }, [user, levelYear]);
+        if (deadlineList.length > 0) setDeadline(deadlineList[levelYear - 1]);
+    }, [user, levelYear, deadlineList]);
 
     useEffect(() => {
         if (progress.goalsInfoData[levelYear]) {
@@ -67,14 +72,13 @@ const Home = ({ auth }) => {
                         firstName: user?.firstName
                     })}!`}
                     </span>
-                    <div className="to__profile">
-                        <Link to="/profile">
-                            <GoArrowRight />
-                        </Link>
-                    </div>
                 </div>
                 <div className="bio__user">
-                    &quot;Hãy thường xuyên kiểm tra tình trạng xét duyệt của các hoạt động để kịp thời xử lý&quot;
+                    {user.isActive
+                        ? !deadline.startDate || !deadline.endDate
+                            ? 'Thời hạn nộp minh chứng chưa công bố'
+                            : `Thời hạn nộp minh chứng: ${formatTimeStr(deadline.startDate)} đến ${formatTimeStr(deadline.endDate)}`
+                        : 'Bạn đã không đạt yêu cầu để trở thành kỹ sư tài năng.'}
                 </div>
             </div>
 

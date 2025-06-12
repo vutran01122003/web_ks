@@ -5,6 +5,9 @@ import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
 import { getFacultyManagers } from '../../redux/actions/permissonAction';
 import { facultySelector, permissionSelector } from '../../redux/selector';
 import StudentDetailsModal from '../Modal/StudentDetailsModal';
+import AccountCreatetion from './AccountCreation';
+import AccountCreatetionModal from '../Modal/AccountCreationModal';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 const { VITE_APP_MAJOR_MANAGER_CODE } = import.meta.env;
 
 function MajorManager() {
@@ -17,9 +20,14 @@ function MajorManager() {
     const [currentMajor, setCurrentMajor] = useState('');
     const [visibleDetailsUserModal, setVisibleDetailsUserModal] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
+    const [visibleAccountCreationModal, setVisibleAccountCreationModal] = useState(false);
 
     const handleToggleDisplayDetailsUserModal = () => {
         setVisibleDetailsUserModal((prev) => !prev);
+    };
+
+    const handleToggleDisplayAccountCreationModal = () => {
+        setVisibleAccountCreationModal((prev) => !prev);
     };
 
     const handleEditUser = (currentUser) => {
@@ -103,42 +111,57 @@ function MajorManager() {
     return (
         <Fragment>
             {visibleDetailsUserModal && (
-                <StudentDetailsModal currentUserData={currentUser} onToggleModal={handleEditUser} />
+                <StudentDetailsModal currentUserData={currentUser} onToggleModal={handleEditUser} isManager />
             )}
+
+            {visibleAccountCreationModal && (
+                <AccountCreatetionModal
+                    facultyData={facultyData}
+                    onToggleModal={handleToggleDisplayAccountCreationModal}
+                />
+            )}
+
             <div className="manager_list_container">
                 <div className="search_container">
-                    <input
-                        type="text"
-                        placeholder="Nhập mã số hoặc tên quản lý"
-                        className="search_input_v2"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                    />
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Nhập mã số hoặc tên quản lý"
+                            className="search_input_v2"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                        />
 
-                    <select onChange={(e) => setCurrentFaculty(e.target.value)} value={currentFaculty}>
-                        <option value="">Chọn khoa</option>
-                        {facultyData.map((faculty) => (
-                            <option key={faculty._id} value={JSON.stringify(faculty)}>
-                                {capitalizeFirstLetter(faculty.facultyName)}
-                            </option>
-                        ))}
-                    </select>
-
-                    <select value={currentMajor} onChange={(e) => setCurrentMajor(e.target.value)}>
-                        <option value="">Chọn chuyên ngành</option>
-                        {currentFaculty &&
-                            JSON.parse(currentFaculty).majors.map((major) => (
-                                <option value={JSON.stringify(major)} key={major._id}>
-                                    {capitalizeFirstLetter(major.majorName)}
+                        <select onChange={(e) => setCurrentFaculty(e.target.value)} value={currentFaculty}>
+                            <option value="">Chọn khoa</option>
+                            {facultyData.map((faculty) => (
+                                <option key={faculty._id} value={JSON.stringify(faculty)}>
+                                    {capitalizeFirstLetter(faculty.facultyName)}
                                 </option>
                             ))}
-                    </select>
+                        </select>
+
+                        <select value={currentMajor} onChange={(e) => setCurrentMajor(e.target.value)}>
+                            <option value="">Chọn chuyên ngành</option>
+                            {currentFaculty &&
+                                JSON.parse(currentFaculty).majors.map((major) => (
+                                    <option value={JSON.stringify(major)} key={major._id}>
+                                        {capitalizeFirstLetter(major.majorName)}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
+
+                    <button onClick={handleToggleDisplayAccountCreationModal}>
+                        <IoIosAddCircleOutline size={20} />
+                        <span>Thêm Quản Lý Chuyên Ngành</span>
+                    </button>
                 </div>
 
                 <table>
                     <thead>
                         <tr>
-                            <th>Mã Số</th>
+                            <th>Mã GV</th>
                             <th>Tên Quản Lý</th>
                             <th>Khoa</th>
                             <th>Chuyên Ngành</th>
@@ -156,16 +179,22 @@ function MajorManager() {
 
                             return (
                                 <tr key={user._id}>
-                                    <td>{user?.userId}</td>
-                                    <td>{toFullName({ firstName: user.firstName, lastName: user.lastName })}</td>
-                                    <td>{facultyName ? capitalizeFirstLetter(facultyName) : 'Chưa Cập Nhật'}</td>
-                                    <td>{majorName ? capitalizeFirstLetter(majorName) : 'Chưa Cập Nhật'}</td>
-                                    <td>{user?.phone || 'Chưa Cập Nhật'}</td>
-                                    <td>{user?.email || 'Chưa Cập Nhật'}</td>
-                                    <td className={`status ${user?.isActive ? 'active' : 'inactive'}`}>
+                                    <td className="td_item">{user?.userId}</td>
+                                    <td className="td_item">
+                                        {toFullName({ firstName: user.firstName, lastName: user.lastName })}
+                                    </td>
+                                    <td className="td_item">
+                                        {facultyName ? capitalizeFirstLetter(facultyName) : 'Chưa Cập Nhật'}
+                                    </td>
+                                    <td className="td_item">
+                                        {majorName ? capitalizeFirstLetter(majorName) : 'Chưa Cập Nhật'}
+                                    </td>
+                                    <td className="td_item">{user?.phone || 'Chưa Cập Nhật'}</td>
+                                    <td className="td_item">{user?.email || 'Chưa Cập Nhật'}</td>
+                                    <td className={`status td_item ${user?.isActive ? 'active' : 'inactive'}`}>
                                         {user?.isActive ? 'Hoạt Động' : 'Đã Khóa'}
                                     </td>
-                                    <td>
+                                    <td className="td_item">
                                         <button className="account_btn" onClick={() => handleEditUser(user)}>
                                             <FaRegEdit />
                                         </button>

@@ -7,11 +7,11 @@ const Row = require("../models/row.model");
 const FacultyService = require("../services/faculty.service");
 const { storeFiles } = require("../utils/storeFile");
 const { slugifyWithSlashes } = require("../utils");
-const createHttpError = require("http-errors");
 
-const [PENDING_STATUS, RESUBMITED_STATUS] = ["chờ duyệt", "phải nộp lại"];
 const { TALENT_ENGINEER_CODE, S3_IS_ENABLE } = process.env;
 const s3IsEnable = S3_IS_ENABLE === "true";
+const [PENDING_STATUS, RESUBMITED_STATUS] = ["chờ duyệt", "phải nộp lại"];
+const [NOT_STARTED, IN_PROGRESS, COMPLETED, NOT_UPDATED] = ["not-started", "in-progress", "completed", "not-updated"];
 
 class RowControllers {
     checkDeadline = async ({ faculty, major, cohort, levelYear, user }) => {
@@ -23,8 +23,7 @@ class RowControllers {
                 UserService.getUserAndPopulateGroupById({ id: user })
             ]);
 
-            if (!facultyData || !majorData || !cohortData)
-                throw createHttpError.BadRequest("Dữ liệu khoa không tồn tại");
+            if (!facultyData || !majorData || !cohortData) throw createError.BadRequest("Dữ liệu khoa không tồn tại");
 
             const deadline = await DeadlineService.getDeadline({
                 facultyId: facultyData._id,
@@ -34,19 +33,19 @@ class RowControllers {
                 talentEngineerType: userData.groups[0].groupCode
             });
 
-            if (!deadline || (deadline && !deadline.startDate))
+            if (!deadline || !deadline.status || deadline.status === NOT_UPDATED)
                 throw createError.BadRequest("Thời hạn nộp minh chứng chưa công bố");
-
-            if (deadline) {
-                const startDate = new Date(deadline.startDate);
-                const endDate = new Date(deadline.endDate);
-                const currentDate = new Date();
-
-                if (startDate.getTime() > currentDate.getTime())
-                    throw createError.BadRequest("Thời gian nộp minh chứng chưa diễn ra");
-
-                if (endDate.getTime() < currentDate.getTime())
-                    throw createError.BadRequest("Thời gian nộp minh chứng đã kết thúc");
+            else {
+                switch (deadline.status) {
+                    case NOT_STARTED:
+                        throw createError.BadRequest("Thời hạn nộp minh chứng chưa diễn ra");
+                    case IN_PROGRESS:
+                        return true;
+                    case COMPLETED:
+                        throw createError.BadRequest("Thời hạn nộp minh chứng đã kết thúc");
+                    default:
+                        throw createError.BadRequest("Thời hạn nộp minh chứng xảy ra lỗi");
+                }
             }
         } catch (error) {
             throw error;
@@ -57,6 +56,10 @@ class RowControllers {
         try {
             const rowData = JSON.parse(req.body.rowData);
             const { faculty, major, cohort, page, userId, tableName, user, levelYear } = rowData;
+
+            const userData = await UserService.getUserById(user);
+
+            if (!userData.isActive) throw createError.BadRequest("Tài Khoản Đã Bị Khóa");
 
             await this.checkDeadline({
                 faculty,
@@ -119,19 +122,12 @@ class RowControllers {
         try {
             const rowData = JSON.parse(req.body.rowData);
             rowData.content = JSON.parse(rowData.content);
-            const {
-                faculty,
-                major,
-                cohort,
-                userId,
-                pageId,
-                tableName,
-                rowListId,
-                contentId,
-                levelYear,
-                user,
-                deadline
-            } = rowData;
+            const { faculty, major, cohort, userId, tableName, rowListId, contentId, levelYear, user, deadline } =
+                rowData;
+
+            const userData = await UserService.getUserById(user);
+
+            if (!userData.isActive) throw createError.BadRequest("Tài Khoản Đã Bị Khóa");
 
             if (deadline && new Date(deadline).getTime() < new Date().getTime())
                 throw createError.BadRequest("Quá hạn nộp lại");
@@ -297,7 +293,6 @@ class RowControllers {
 
             await UserService.updateAnnualActivityProgress({
                 table: row.table,
-                page: row.page,
                 userId: _id,
                 levelYear,
                 prevStatus,

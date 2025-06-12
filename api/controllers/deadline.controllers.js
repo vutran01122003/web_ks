@@ -32,6 +32,7 @@ class DeadlineController {
             const { deadlineId } = req.body;
             const startDate = req.body?.startDate;
             const endDate = req.body?.endDate;
+            const status = req.body?.status;
 
             if (!startDate || !endDate) throw createError.BadRequest("Ngày bắt đầu và ngày kết thúc không được rỗng");
             if (new Date(startDate).getTime() > new Date(endDate).getTime())
@@ -40,7 +41,8 @@ class DeadlineController {
             const updatedDeadline = await DeadlineService.updateDeadline({
                 deadlineId,
                 startDate,
-                endDate
+                endDate,
+                status
             });
 
             res.status(200).json({

@@ -7,12 +7,13 @@ import TableContent from './TableContent';
 import { capitalizeFirstLetter } from '../../utils/handleString';
 
 const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentEngineerType, currentDeadline }) => {
+    const auth = useSelector(authSelector);
+    const levelYear = auth.user.cohort.currentLevelYear;
     const [useStateModal, setUseStateModal] = useState(false);
     const [visiblePreviewFileModal, setVisiblePreviewFileModal] = useState(false);
     const [proofFileDataList, setProofFileDataList] = useState(null);
     const [rowInfo, setRowInfo] = useState(null);
 
-    const auth = useSelector(authSelector);
     const handleOpenPreviewFilesModal = ({ proofData }) => {
         setProofFileDataList(proofData);
         setVisiblePreviewFileModal(true);
@@ -36,9 +37,9 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                         {!isDynamicRows && !isDetailedRow && (
                             <button
                                 className={`modal_btn_open ${
-                                    page.pageStudentLevelYear === auth.user.levelYear ? 'active' : 'inactive'
+                                    page.pageStudentLevelYear === levelYear ? 'active' : 'inactive'
                                 }`}
-                                onClick={page.pageStudentLevelYear === auth.user.levelYear ? handleOpenModal : null}
+                                onClick={page.pageStudentLevelYear === levelYear ? handleOpenModal : null}
                             >
                                 Thêm hoạt động
                             </button>

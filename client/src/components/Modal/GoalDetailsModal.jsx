@@ -10,7 +10,8 @@ import GLOBALTYPES from '../../redux/actions/globalTypes';
 function GoalDetailsModal({ currentUserData, onToggleModalDisplay }) {
     const dispatch = useDispatch();
     const progress = useSelector(progressSelector);
-    const [levelYear, setLevelYear] = useState(currentUserData.levelYear);
+    const currentLevelYear = currentUserData.cohort.currentLevelYear;
+    const [levelYear, setLevelYear] = useState(currentLevelYear);
 
     const onChangeLevelYear = (e) => {
         setLevelYear(parseInt(e.target.value));

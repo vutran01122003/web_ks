@@ -30,7 +30,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
     const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = [true, false];
-    const [totalScore, setTotalScore] = useState('');
 
     const [tables, setTables] = useState([
         {
@@ -45,8 +44,9 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
             ],
             rowValueList: [],
             fixedScore: '',
-            scoreType: FIXED_SCORE_TYPE,
-            allowExceedQuantity: true
+            scoreType: DYNAMIC_SCORE_TYPE,
+            allowExceedQuantity: true,
+            totalScore: ''
         }
     ]);
 
@@ -65,8 +65,9 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 ],
                 rowValueList: [],
                 fixedScore: '',
-                scoreType: FIXED_SCORE_TYPE,
-                allowExceedQuantity: true
+                scoreType: DYNAMIC_SCORE_TYPE,
+                allowExceedQuantity: true,
+                totalScore: ''
             }
         ]);
     };
@@ -185,8 +186,9 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 ],
                 rowValueList: [],
                 fixedScore: '',
-                scoreType: FIXED_SCORE_TYPE,
-                allowExceedQuantity: true
+                scoreType: DYNAMIC_SCORE_TYPE,
+                allowExceedQuantity: true,
+                totalScore: ''
             }
         ]);
     };
@@ -226,14 +228,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     };
 
     const handleCreatePage = async () => {
-        if (
-            !pageName ||
-            !pageStudentCohort ||
-            !pageStudentMajor ||
-            !pageFaculty ||
-            !pageStudentLevelYear ||
-            totalScore === ''
-        ) {
+        if (!pageName || !pageStudentCohort || !pageStudentMajor || !pageFaculty || !pageStudentLevelYear) {
             dispatch({
                 type: GLOBALTYPES.ALERT,
                 payload: {
@@ -254,7 +249,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                 pageStudentMajor: pageStudentMajor.majorName,
                 pageTalentEngineerType: talentEngineerType,
                 pageStudentLevelYear: +pageStudentLevelYear,
-                totalScore,
                 tables: tables.map((table) => {
                     const tableData = {
                         tableName: table.tableName,
@@ -262,6 +256,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                         description: table.description,
                         rowTitleList: table.rowTitleList,
                         fixedScore: +table.fixedScore,
+                        totalScore: +table.totalScore,
                         allowExceedQuantity: table.allowExceedQuantity
                     };
 
@@ -333,20 +328,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 onChange={(e) => setPageName(e.target.value)}
                             />
                         </div>
-                        <div className="filed__line">
-                            <label>Tổng Điểm Phải Đạt</label>
-                            <input
-                                type="text"
-                                id="name__chi_tieu"
-                                placeholder="Nhập Tổng Điểm Tối Thiểu Mà Kỹ Sư Phải Đạt"
-                                value={totalScore}
-                                onChange={(e) =>
-                                    setTotalScore(
-                                        Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : ''
-                                    )
-                                }
-                            />
-                        </div>
                     </Fragment>
                 )}
                 <div className="connection__table">
@@ -385,6 +366,26 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                         id="mo_ta_chi_tieu"
                                     />
                                 </div>
+
+                                <div className="flex__line_lable">
+                                    <label htmlFor="mo_ta_chi_tieu">Tổng Điểm Yêu Cầu:</label>
+
+                                    <input
+                                        type="text"
+                                        value={table.totalScore}
+                                        readOnly={tableDetailsData ? true : false}
+                                        placeholder="Nhập Tổng Điểm Kỹ Sư Phải Đạt"
+                                        onChange={(e) => {
+                                            updateTable(
+                                                tableIndex,
+                                                'totalScore',
+                                                Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : ''
+                                            );
+                                        }}
+                                        id="mo_ta_chi_tieu"
+                                    />
+                                </div>
+
                                 <div className="flex__line_lable">
                                     <label htmlFor="mo_ta_chi_tieu">Số Lượng:</label>
 
@@ -404,29 +405,23 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                     />
                                 </div>
 
-                                <div className="flex__line_lable">
-                                    <label>Loại Điểm Số:</label>
-                                    {!tableDetailsData ? (
-                                        <select
-                                            value={tables[tableIndex].scoreType}
-                                            onChange={(e) => {
-                                                updateTable(tableIndex, 'scoreType', e.target.value);
-                                            }}
-                                        >
-                                            <option value={FIXED_SCORE_TYPE}>Điểm số cố định</option>
-                                            <option value={DYNAMIC_SCORE_TYPE}>Điểm số không cố định</option>
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            value={
-                                                tables[tableIndex].scoreType === FIXED_SCORE_TYPE
-                                                    ? 'Điểm số cố định'
-                                                    : 'Điểm số không cố định'
-                                            }
-                                            readOnly={true}
-                                        />
-                                    )}
+                                <div className="allow_input">
+                                    <input
+                                        id="allow_item"
+                                        type="checkbox"
+                                        readOnly
+                                        checked={!table.allowExceedQuantity}
+                                        onClick={() => {
+                                            !tableDetailsData
+                                                ? updateTable(
+                                                      tableIndex,
+                                                      'allowExceedQuantity',
+                                                      !table.allowExceedQuantity
+                                                  )
+                                                : null;
+                                        }}
+                                    />
+                                    <label htmlFor="allow_item">Không cho phép nộp vượt quá số lượng</label>
                                 </div>
 
                                 {table.scoreType === FIXED_SCORE_TYPE && (

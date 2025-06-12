@@ -24,6 +24,7 @@
         td {
             border: 1px solid rgb(171, 170, 170);
             padding: 10px;
+            font-size: 14px;
         }
 
         .cohort_td {
@@ -36,7 +37,7 @@
             .manager_item {
                 & > span:first-child {
                     display: inline-block;
-                    min-width: 75px;
+                    min-width: 85px;
                 }
 
                 & > span:nth-child(2) {
@@ -190,7 +191,7 @@
 
         label {
             min-width: 165px;
-            font-weight: bold;
+            font-weight: 500;
         }
 
         .input_item_wrapper {

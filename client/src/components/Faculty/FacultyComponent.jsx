@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
 import { TbEdit } from 'react-icons/tb';
-import { TiDeleteOutline } from 'react-icons/ti';
 import FacultyModal from '../Modal/FacultyModal';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';

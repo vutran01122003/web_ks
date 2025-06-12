@@ -56,7 +56,7 @@ function StopSubmittingProofModal({
                     </p>
 
                     <div className="stop_submitting_proof_body_notify">
-                        <span>{`Lưu ý: Sinh viên ngành ${capitalizeFirstLetter(major)} của khóa ${cohort} không đạt điều kiện sẽ bị loại khỏi chương trình kỹ sư tài năng.`}</span>
+                        <span>{`Sinh viên ngành ${capitalizeFirstLetter(major)} của khóa ${cohort} không đạt điều kiện sẽ bị loại khỏi chương trình kỹ sư tài năng.`}</span>
                     </div>
 
                     <div className="condition_filter_wrapper">

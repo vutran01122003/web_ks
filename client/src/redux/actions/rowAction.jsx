@@ -86,7 +86,6 @@ export const getDynamicRows =
                 pageTalentEngineerType
             });
 
-            console.log(res.data.data);
             dispatch({
                 type: GLOBALTYPES.ROW.GET_DYNAMIC_ROWS,
                 payload: {

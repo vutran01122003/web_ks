@@ -3,6 +3,7 @@ import NotFound from '../../pages/NotFound';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../../redux/selector';
+import { capitalizeFirstLetter } from '../../utils/handleString';
 
 const pages = import.meta.glob('../../pages/**/*.jsx');
 
@@ -16,7 +17,11 @@ function PageRender() {
     const auth = useSelector(authSelector);
     const pageName = id
         ? `${page?.replace(/\w/, page?.charAt(0).toUpperCase())}/[id]`
-        : page?.replace(/\w/, page?.charAt(0).toUpperCase());
+        : page?.includes('-')
+          ? page.split('-').reduce((pageName, part) => {
+                return pageName + capitalizeFirstLetter(part);
+            }, '')
+          : page?.replace(/\w/, page?.charAt(0).toUpperCase());
 
     useEffect(() => {
         const pagePath = `../../pages/${pathName.includes('/page/') ? 'DynamicPage' : pageName}.jsx`;

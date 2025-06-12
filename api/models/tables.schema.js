@@ -55,6 +55,10 @@ const TableSchema = new Schema({
     isActive: {
         type: Schema.Types.Boolean,
         default: true
+    },
+    totalScore: {
+        type: Number,
+        default: 0
     }
 });
 

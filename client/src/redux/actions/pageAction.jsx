@@ -125,47 +125,6 @@ export const removePage =
         }
     };
 
-export const updateTotalScorePage =
-    ({ pageId, totalScore }) =>
-    async (dispatch) => {
-        try {
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    loading: true
-                }
-            });
-
-            console.log({
-                pageId,
-                totalScore
-            });
-
-            const res = await patchDataApi('/page', { pageId, totalScore });
-
-            dispatch({
-                type: GLOBALTYPES.GOALS.UPDATE_TOTAL_SCORE,
-                payload: {
-                    pageId,
-                    totalScore
-                }
-            });
-
-            dispatch({
-                type: GLOBALTYPES.ALERT,
-                payload: {
-                    success: res.data.msg
-                }
-            });
-        } catch (error) {
-            notifyError({
-                dispatch,
-                error,
-                defaultMessage: 'Cập Nhật Trạng Thái Trang Thất Bại'
-            });
-        }
-    };
-
 export const updateStatusPage =
     ({ pageId, currentStatus }) =>
     async (dispatch) => {

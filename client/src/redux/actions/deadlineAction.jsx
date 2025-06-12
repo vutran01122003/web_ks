@@ -67,13 +67,14 @@ export const getDeadlineList =
     };
 
 export const updateDealine =
-    ({ deadlineId, startDate, endDate }) =>
+    ({ deadlineId, startDate, endDate, status }) =>
     async (dispatch) => {
         try {
             const res = await patchDataApi('/deadline', {
                 deadlineId,
                 startDate,
-                endDate
+                endDate,
+                status
             });
 
             dispatch({

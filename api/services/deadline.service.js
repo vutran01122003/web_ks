@@ -1,6 +1,7 @@
 const Deadline = require("../models/deadline.model");
 const FacultyService = require("./faculty.service");
 const createError = require("http-errors");
+const [NOT_STARTED, IN_PROGRESS, COMPLETED, NOT_UPDATED] = ["not-started", "in-progress", "completed", "not-updated"];
 
 class DeadlineService {
     static async createDeadline({ facultyId, majorId, cohortId, talentEngineerType, levelYear, startDate, endDate }) {
@@ -43,15 +44,30 @@ class DeadlineService {
         }
     }
 
-    static async updateDeadline({ deadlineId, startDate, endDate }) {
+    static async updateDeadline({ deadlineId, startDate, endDate, status }) {
         try {
             const updatedData = {
                 startDate,
-                endDate
+                endDate,
+                status
             };
 
             if (!startDate) delete updatedData.startDate;
             if (!endDate) delete updatedData.endDate;
+            if (!status) delete updatedData.status;
+
+            if (startDate && endDate && !status) {
+                const sDate = new Date(startDate).getTime();
+                const eDate = new Date(endDate).getTime();
+                const cDate = new Date().getTime();
+
+                if (sDate > cDate) updatedData.status = NOT_STARTED;
+                else if (sDate <= cDate && eDate > cDate) updatedData.status = IN_PROGRESS;
+                else if (eDate <= cDate) updatedData.status = COMPLETED;
+                else updatedData.status = NOT_UPDATED;
+            }
+
+            console.log(updatedData);
 
             const updatedDeadline = await Deadline.findByIdAndUpdate(deadlineId, updatedData, {
                 new: true

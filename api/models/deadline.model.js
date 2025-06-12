@@ -27,6 +27,11 @@ const DeadlineSchema = new Schema(
         },
         endDate: {
             type: Schema.Types.Date
+        },
+        status: {
+            type: String,
+            enum: ["not-started", "in-progress", "completed", "not-updated"],
+            default: "not-updated"
         }
     },
     {

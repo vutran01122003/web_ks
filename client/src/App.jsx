@@ -14,7 +14,7 @@ import FirstLogin from './components/Login/FirstLogin';
 import { authSelector, facultySelector } from './redux/selector';
 import { verifyAccessToken } from './redux/actions/authAction';
 import { getNumUnreadNotification } from './redux/actions/notifyAction';
-import { getFacultyByName, getMajors } from './redux/actions/facultyAction';
+import { getAllFaculties, getFacultyByName, getMajors } from './redux/actions/facultyAction';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { getDeadlineList } from './redux/actions/deadlineAction';
 const {
@@ -62,8 +62,10 @@ const App = () => {
                 );
             }
 
-            if (!facultyState.faculty && !groupCodeList.includes(VITE_APP_ADMIN_CODE))
+            if (facultyState.facultyData.length === 0) dispatch(getAllFaculties());
+            if (!facultyState.faculty && !groupCodeList.includes(VITE_APP_ADMIN_CODE)) {
                 dispatch(getFacultyByName({ facultyName: faculty?.facultyName }));
+            }
 
             if (groupCodeList.includes(VITE_APP_MAJOR_MANAGER_CODE)) dispatch(getMajors({ managerId: _id }));
         }

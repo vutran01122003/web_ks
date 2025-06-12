@@ -106,12 +106,6 @@ class TableService {
                     table: table._id,
                     [`content.${newLargestIndex + 1}`]: { $exists: true }
                 });
-
-                if (row) {
-                    throw createError.BadRequest(
-                        `Đã có kỹ sư hoàn thành hơn ${newQuantityDemanded} hoạt động trong chỉ tiêu ${table.tableName}`
-                    );
-                }
             }
 
             const updatedData = Object.keys(table).reduce((obj, key) => {

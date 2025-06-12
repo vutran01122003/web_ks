@@ -1,5 +1,6 @@
 import { getDataApi, patchDataApi } from '../../utils/fetchData';
 import notifyError from '../../utils/notifyError';
+import { getAllFaculties } from './facultyAction';
 import GLOBALTYPES from './globalTypes';
 
 export const getStudents =
@@ -61,6 +62,8 @@ export const updateUser =
             const res = await patchDataApi(`/users/${userId}`, {
                 userData
             });
+
+            dispatch(getAllFaculties());
 
             dispatch({
                 type: GLOBALTYPES.STUDENT.UPDATE_STUDENT,

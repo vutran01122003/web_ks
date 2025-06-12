@@ -16,9 +16,10 @@ const LayoutSideBar = ({ auth }) => {
     const dispatch = useDispatch();
     const page = useSelector(pageSelector);
     const [toggleMenu, setToggleMenu] = useState(false);
-    const [levelYear, setLevelYear] = useState(auth.user.levelYear);
+    const currentLevelYear = auth.user?.cohort?.currentLevelYear;
+    const [levelYear, setLevelYear] = useState(currentLevelYear);
     const groupCodeList = user?.groups.map((group) => group.groupCode);
-    const levelYearList = Array.from(Array(user?.levelYear || 1).keys()).map((x) => x + 1);
+    const levelYearList = Array.from(Array(currentLevelYear || 1).keys()).map((x) => x + 1);
 
     const menuRef = useRef([
         ...ARRAY_LIST_MENU.map(() => ({
@@ -174,10 +175,10 @@ const LayoutSideBar = ({ auth }) => {
                                     height: `${subMenu[index] ? heightBoxSub[index] : '0px'}`
                                 }}
                             >
-                                {item.sub_menu_item.map((item_sub) => {
+                                {item.sub_menu_item.map((item_sub, index) => {
                                     return (
                                         <NavLink
-                                            key={item_sub?.id}
+                                            key={index}
                                             className="sub_menu_item"
                                             to={item_sub?.sub_to_link}
                                             title={item_sub?.sub_name_menu}

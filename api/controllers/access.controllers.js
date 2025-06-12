@@ -2,7 +2,7 @@ const AccessService = require("../services/access.service");
 const accessService = require("../services/access.service");
 const jwtService = require("../services/jwt.service");
 const createError = require("http-errors");
-const { TALENT_ENGINEER_CODE } = process.env;
+const { TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE } = process.env;
 
 class AccessControllers {
     getInfoUser = async (req, res, next) => {
@@ -12,7 +12,11 @@ class AccessControllers {
 
             const user = await accessService.getUserInfo(userId);
 
-            if (!user.isActive) throw createError.BadRequest("Tài khoản đã bị khóa");
+            if (
+                !user.isActive &&
+                ![TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE].includes(user.groups[0].groupCode)
+            )
+                throw createError.BadRequest("Tài khoản đã bị khóa");
 
             res.status(200).json({
                 user,
@@ -43,7 +47,13 @@ class AccessControllers {
                 });
             }
 
-            if (loggedUser?.data && !loggedUser?.data.isActive) throw createError.BadRequest("Tài khoản đã bị khóa");
+            const user = loggedUser?.data;
+            if (
+                user &&
+                !user.isActive &&
+                ![TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE].includes(user.groups[0].groupCode)
+            )
+                throw createError.BadRequest("Tài khoản đã bị khóa");
 
             const accessToken = await jwtService.signAccessToken({
                 userData: loggedUser?.data

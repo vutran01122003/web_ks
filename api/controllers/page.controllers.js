@@ -16,15 +16,18 @@ class PageControllers {
                 pageStudentLevelYear
             } = req.body;
 
-            const createdPage = await PageService.createPage(req.body);
+            const [facultyData, majorData, cohortData] = await Promise.all([
+                FacultyService.getFacultyByName({ facultyName: pageFaculty }),
+                FacultyService.getMajorByName({ majorName: pageStudentMajor }),
+                FacultyService.getCohortByName({ majorName: pageStudentMajor, cohortName: pageStudentCohort })
+            ]);
+
+            const createdPage = await PageService.createPage({
+                ...req.body,
+                cohortData
+            });
 
             if (pageType === GOAL_PAGE) {
-                const [facultyData, majorData, cohortData] = await Promise.all([
-                    FacultyService.getFacultyByName({ facultyName: pageFaculty }),
-                    FacultyService.getMajorByName({ majorName: pageStudentMajor }),
-                    FacultyService.getCohortByName({ majorName: pageStudentMajor, cohortName: pageStudentCohort })
-                ]);
-
                 if (!facultyData || !majorData || !cohortData)
                     throw createHttpError.BadRequest("Dữ liệu khoa không tồn tại");
 
@@ -135,11 +138,10 @@ class PageControllers {
 
     updatePage = async (req, res, next) => {
         try {
-            const { pageId, currentStatus, totalScore } = req.body;
+            const { pageId, currentStatus } = req.body;
             const updatedData = {};
 
             if (currentStatus !== undefined) updatedData.isActive = !currentStatus;
-            if (totalScore) updatedData.totalScore = totalScore;
 
             const updatedPage = await PageService.updatePage({ pageId, updatedData });
 

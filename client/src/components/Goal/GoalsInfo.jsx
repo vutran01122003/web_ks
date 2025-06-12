@@ -17,6 +17,8 @@ function GoalsInfo({ levelYear, goalsInfo }) {
                             <thead className="goal_info_header">
                                 <tr>
                                     <th>Tên Chỉ Tiêu</th>
+                                    <th>Tổng Điểm Yêu Cầu</th>
+                                    <th>Tổng Điểm Hiện Tại</th>
                                     <th>Số Lượng</th>
                                     <th>Chờ Duyệt</th>
                                     <th>Từ Chối</th>
@@ -30,20 +32,21 @@ function GoalsInfo({ levelYear, goalsInfo }) {
                                 {Object.keys(goals.tables).map((key, index) => (
                                     <tr key={key + index} className="goal_info">
                                         <td className="goal_info_item goal_name">{capitalizeFirstLetter(key)}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.totalScore || 0}</td>
+                                        <td className="goal_info_item">{goals.tables[key]?.currentTotalScore || 0}</td>
                                         <td className="goal_info_item">{goals.tables[key]?.quantityDemanded || 0}</td>
                                         <td className="goal_info_item">{goals.tables[key]?.pendingTasksNum || 0}</td>
                                         <td className="goal_info_item">{goals.tables[key]?.rejectedTasksNum || 0}</td>
                                         <td className="goal_info_item">{goals.tables[key]?.acceptedTasksNum || 0}</td>
                                         <td className="goal_info_item">{goals.tables[key]?.resubmitedTasksNum || 0}</td>
                                         <td className="goal_info_item">
-                                            {goals.tables[key]?.quantityDemanded ===
-                                            goals.tables[key]?.acceptedTasksNum ? (
-                                                <span className="goal_info_status goal_info_success_status">
-                                                    Hoàn Thành
-                                                </span>
+                                            {goals.tables[key]?.acceptedTasksNum >=
+                                                goals.tables[key]?.quantityDemanded &&
+                                            goals.tables[key]?.currentTotalScore >= goals.tables[key]?.totalScore ? (
+                                                <span className="goal_info_status goal_info_success_status">Đạt</span>
                                             ) : (
                                                 <span className="goal_info_status goal_info_dangerous_status">
-                                                    Chưa Hoàn Thành
+                                                    Chưa Đạt
                                                 </span>
                                             )}
                                         </td>

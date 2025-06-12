@@ -3,10 +3,10 @@ const { userColumn, addUserData, progressStatisticsColumn } = require("../config
 const AccessService = require("../services/access.service");
 const createHttpError = require("http-errors");
 const { capitalizeFirstLetter } = require("../utils/handleString");
-const conn = require("../dbs/init.mongodb");
 const User = require("../models/user.model");
 
-const { TALENT_ENGINEER_CODE } = process.env;
+const { TEMPORARY_TALENT_ENGINEER_CODE, TALENT_ENGINEER_CODE } = process.env;
+const PENDING_STATUS = "pending";
 
 class ExcelService {
     static exportQualifiedUsersExcel = async (qualifiedUsersData) => {
@@ -45,10 +45,38 @@ class ExcelService {
         }
     };
 
-    static exportProgressStatisticsExcel = async (progressStatisticsData) => {
+    static exportProgressStatisticsExcel = async ({ progressStatisticsData, groupCode, levelYear, cohortData }) => {
         try {
             const workbook = new ExcelJS.Workbook();
             const sheet = workbook.addWorksheet("My Sheet");
+
+            const getStatus = (userId) => {
+                if (groupCode === TEMPORARY_TALENT_ENGINEER_CODE) {
+                    const additionalRegisterInfo = cohortData.additionalRegisterInfo.find(
+                        (item) => item.levelYear === parseInt(levelYear)
+                    );
+
+                    if (!additionalRegisterInfo) return "Chưa Xét Duyệt";
+
+                    return additionalRegisterInfo.status === PENDING_STATUS
+                        ? "Chưa Xét Duyệt"
+                        : additionalRegisterInfo.approvedUsers.includes(userId)
+                        ? "Đã Đạt"
+                        : "Không Đạt";
+                } else {
+                    const levelYearInfo = cohortData.levelYearInfo.find(
+                        (item) => item.levelYear === parseInt(levelYear)
+                    );
+
+                    if (!levelYearInfo) return "Chưa Xét Duyệt";
+
+                    return levelYearInfo?.status === PENDING_STATUS
+                        ? "Chưa Xét Duyệt"
+                        : levelYearInfo.approvedUsers.includes(userId)
+                        ? "Đã Đạt"
+                        : "Không Đạt";
+                }
+            };
 
             sheet.columns = progressStatisticsColumn;
 
@@ -63,8 +91,9 @@ class ExcelService {
                     faculty: capitalizeFirstLetter(faculty.facultyName),
                     major: capitalizeFirstLetter(major.majorName),
                     cohort: cohort.cohortName,
-                    progressPercentage: progressData?.progressPercentage || 0,
-                    totalScore: progressData?.totalScore || 0
+                    progressPercentage: progressData?.progressPercentage.toFixed(2) || 0,
+                    totalScore: progressData?.totalScore || 0,
+                    status: getStatus(progressItem._id)
                 };
 
                 sheet.addRow(data);
@@ -76,6 +105,7 @@ class ExcelService {
 
             return workbook;
         } catch (error) {
+            console.log(error);
             throw createHttpError.BadRequest("Lỗi xuất dữ liệu excel");
         }
     };
@@ -133,8 +163,10 @@ class ExcelService {
                 )
             );
 
-            if (result.some((res) => res.status === "rejected"))
+            if (result.some((res) => res.status === "rejected")) {
+                console.log(result);
                 throw createHttpError.BadRequest("Thêm kỹ sư không thành công, kiểm tra lại dữ liệu.");
+            }
         } catch (error) {
             throw error;
         }

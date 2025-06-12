@@ -123,7 +123,10 @@ const ControlBoxAccount = ({ setState }) => {
                 width={700}
                 footer={false}
             >
-                Chưa cập nhật
+                <div className="contact_modal">
+                    <span>Ngô Hữu Dũng - Chủ nhiệm ngành HTTT - ngohuudung@iuh.edu.vn </span>
+                    <span>Nguyễn Thị Hạnh - Chủ nhiệm ngành KTPM - ngthihanh@iuh.edu.vn</span>
+                </div>
             </Modal>
 
             <Modal

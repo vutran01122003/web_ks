@@ -67,7 +67,7 @@ const PageSchema = Joi.object({
         }),
         totalScore: Joi.number().min(0).messages({
             "number.base": "Giá trị của tổng điểm tối thiểu là ký tự số",
-            "number.min": "Năm học tối thiểu là 0"
+            "number.min": "Giá trị tối thiểu là 0"
         }),
         tables: Joi.array()
             .items(
@@ -77,6 +77,7 @@ const PageSchema = Joi.object({
                         "string.max": "Tên chỉ tiêu có tối đa là 200 ký tự"
                     }),
                     quantityDemanded: Joi.number().min(1).messages({
+                        "number.base": "Giá trị của số lượng là ký tự số",
                         "any.required": "Vui lòng nhập số lượng hoạt động",
                         "number.min": "Số lượng cần làm cho chỉ tiêu tối thiểu là 1"
                     }),
@@ -110,6 +111,10 @@ const PageSchema = Joi.object({
                     ),
                     fixedScore: Joi.number().allow(null).optional().messages({
                         "number.base": "Điểm số cố định phải là ký tự số"
+                    }),
+                    totalScore: Joi.number().min(0).messages({
+                        "number.base": "Giá trị của tổng điểm tối thiểu là ký tự số",
+                        "number.min": "Giá trị tối thiểu là 0"
                     })
                 })
             )

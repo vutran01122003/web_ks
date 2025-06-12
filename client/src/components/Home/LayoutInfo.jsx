@@ -14,7 +14,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             break;
         }
         case '002': {
-            heading = 'Kỹ Sư Tài Năng';
+            heading = `Kỹ Sư Tài Năng ${!user.isActive ? '(Tài Khoản Đã Khóa)' : ''}`;
             break;
         }
         case '003': {
@@ -53,16 +53,6 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
             roles: [],
             isShow: isDetailedRow ? false : true
         },
-        // {
-        //     label: 'Khoa',
-        //     value: user?.faculty.facultyName ? capitalizeFirstLetter(user?.faculty.facultyName) : 'Chưa Cập Nhật',
-        //     roles: [
-        //         VITE_APP_MAJOR_MANAGER_CODE,
-        //         VITE_APP_TALENT_ENGINEER_CODE,
-        //         VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE
-        //     ],
-        //     isShow: true
-        // },
         {
             label: 'Ngành',
             value: user?.major.majorName ? capitalizeFirstLetter(user?.major.majorName) : 'Chưa Cập Nhật',
@@ -77,7 +67,7 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
         },
         {
             label: 'Năm',
-            value: user?.major.majorName ? user?.levelYear : 'Chưa Cập Nhật',
+            value: user?.major.majorName ? user?.cohort?.currentLevelYear : 'Chưa Cập Nhật',
             roles: [VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE],
             isShow: true
         }

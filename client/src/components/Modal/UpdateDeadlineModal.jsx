@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import Modal from './Modal';
+const COMPLETED = 'completed';
 
 function UpdateDeadlineModal({
     handleToggleDisplayUpdateDeadlineModal,
@@ -54,8 +55,19 @@ function UpdateDeadlineModal({
                         onClick={() => endDateRef.current.showPicker()}
                     />
                 </div>
-
-                <button onClick={updateDeadline}>Cập nhật Thời Hạn</button>
+                <div className="btn_group">
+                    <button onClick={handleToggleDisplayUpdateDeadlineModal} className="cancel_btn">
+                        Hủy
+                    </button>
+                    <div className="control_btn_group">
+                        <button onClick={() => updateDeadline(COMPLETED)} className="end_btn">
+                            Kết Thúc
+                        </button>
+                        <button onClick={() => updateDeadline()} className="update_btn">
+                            Cập Nhật
+                        </button>
+                    </div>
+                </div>
             </div>
         </Modal>
     );

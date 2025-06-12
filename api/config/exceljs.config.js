@@ -7,7 +7,7 @@ const userColumn = [
     { header: "Ngày sinh", key: "birthday", width: 15 },
     { header: "Khoa", key: "faculty", width: 25 },
     { header: "Chuyên ngành", key: "major", width: 25 },
-    { header: "Khoá", key: "cohort", width: 10 },
+    { header: "Khóa", key: "cohort", width: 10 },
     { header: "Email", key: "email", width: 30 },
     { header: "Điện thoại", key: "phone", width: 15 }
 ];
@@ -21,9 +21,10 @@ const progressStatisticsColumn = [
     { header: "Ngày sinh", key: "birthday", width: 15 },
     { header: "Khoa", key: "faculty", width: 25 },
     { header: "Chuyên ngành", key: "major", width: 25 },
-    { header: "Khoá", key: "cohort", width: 10 },
+    { header: "Khóa", key: "cohort", width: 10 },
     { header: "Tổng tiến độ (%)", key: "progressPercentage", width: 20 },
-    { header: "Tổng điểm", key: "totalScore", width: 15 }
+    { header: "Tổng điểm", key: "totalScore", width: 15 },
+    { header: "Tình trạng", key: "status", width: 20 }
 ];
 
 const addUserData = (cell, colName, data) => {

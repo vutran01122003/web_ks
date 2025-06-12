@@ -23,11 +23,21 @@
                     padding: 10px;
                     gap: 5px;
 
+                    .btn_revert,
+                    .btn_confirm {
+                        background: #1c7ae6;
+                    }
+
+                    .btn__end_progress {
+                        background-color: #f0635c;
+                    }
+
+                    .btn_revert,
+                    .btn_confirm,
                     .btn__end_progress {
                         height: 40px;
-                        background-color: #f0635c;
-                        font-size: 15px;
-                        padding: 8px;
+                        font-size: 14px;
+                        padding: 8px 12px;
                         border: none;
                         border-radius: 3px;
                         color: #fff;
@@ -36,11 +46,16 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        min-width: 200px;
+                        min-width: 100px;
+                        transition: all 0.1s linear;
 
                         svg {
                             font-size: 17px !important;
                             margin-right: 5px;
+                        }
+
+                        &:active {
+                            transform: scale(0.9);
                         }
                     }
                 }
@@ -99,6 +114,10 @@
                     tbody > tr {
                         border-top: 1px solid #dddddd;
                         height: 50px;
+                    }
+
+                    .details_btn {
+                        cursor: pointer;
                     }
 
                     tr:hover {

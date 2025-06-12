@@ -103,9 +103,8 @@ function FirstLogin() {
 
     useEffect(() => {
         if (data.cohort) {
-            const additionalRegisterInfo = cohortList.find(
-                (cohort) => cohort.cohortName === data.cohort
-            )?.additionalRegisterInfo;
+            const ariList = cohortList.find((cohort) => cohort.cohortName === data.cohort)?.additionalRegisterInfo;
+            const additionalRegisterInfo = ariList.length > 0 ? ariList[ariList.length - 1] : null;
 
             if (additionalRegisterInfo?.isActive) {
                 setData((prev) => ({ ...prev, levelYear: additionalRegisterInfo.levelYear }));
@@ -166,9 +165,9 @@ function FirstLogin() {
                                 value={data?.cohort || ''}
                                 options={
                                     cohortList
-                                        ? cohortList.map((cohort) => ({
-                                              labelOption: cohort.cohortName,
-                                              value: cohort.cohortName
+                                        ? cohortList.map((cohort, index) => ({
+                                              labelOption: cohortList[cohortList.length - index - 1].cohortName,
+                                              value: cohortList[cohortList.length - index - 1].cohortName
                                           }))
                                         : []
                                 }

@@ -21,8 +21,11 @@ function AddTableModal({ pageId, handleHideAddTableModal }) {
                         tableName: table.tableName,
                         description: table.description,
                         rowTitleList: table.rowTitleList,
-                        quantityDemanded: table.quantityDemanded,
-                        fixedScore: table.fixedScore
+                        quantityDemanded: +table.quantityDemanded,
+                        fixedScore: +table.fixedScore,
+                        totalScore: +table.totalScore,
+                        allowExceedQuantity: table.allowExceedQuantity,
+                        scoreType: false
                     }
                 ]
             })

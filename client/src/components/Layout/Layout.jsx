@@ -11,7 +11,7 @@ const {
 
 const defaultPathMapping = {
     [VITE_APP_MAJOR_MANAGER_CODE]: '/activity',
-    [VITE_APP_ADMIN_CODE]: '/faculty'
+    [VITE_APP_ADMIN_CODE]: '/details-faculty'
 };
 
 function Layout({ auth, pathName, groupCodeList }) {

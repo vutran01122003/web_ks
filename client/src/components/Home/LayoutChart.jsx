@@ -96,6 +96,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
     const dataCategory = chartData.map((item) => capitalizeFirstLetter(item.caterogy));
     const average = (totalProgress / totalQuantityDemanded).toFixed(2);
     const [yearList, setYearList] = useState([]);
+    const levelYear = auth.user?.cohort.currentLevelYear;
 
     const statistical = {
         dataValue,
@@ -105,9 +106,9 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
     };
 
     useEffect(() => {
-        if (auth.user?.levelYear) {
+        if (levelYear) {
             const yearsData = [];
-            for (let i = 1; i <= auth.user?.levelYear; i++) {
+            for (let i = 1; i <= levelYear; i++) {
                 yearsData.push({
                     value: i,
                     label: `Năm ${i}`
@@ -115,7 +116,7 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
             }
             setYearList(yearsData);
         }
-    }, [auth.user?.levelYear]);
+    }, [levelYear]);
 
     return (
         <div className="container__chart">
@@ -127,8 +128,8 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
                         setLevelYear(e.value);
                     }}
                     defaultValue={{
-                        value: auth.user?.levelYear,
-                        label: `Năm ${auth.user?.levelYear}`
+                        value: levelYear,
+                        label: `Năm ${levelYear}`
                     }}
                     style={{
                         width: '120px',

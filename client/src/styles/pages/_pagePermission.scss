@@ -6,10 +6,29 @@
             display: flex;
             gap: 4px;
             align-items: center;
+            justify-content: space-between;
             margin-bottom: 12px;
 
             button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                background-color: #1677ff;
+                border: none;
+                color: #fff;
+                font-size: 14px;
+                padding: 8px;
+                border-radius: 3px;
+                font-weight: 600;
+                cursor: pointer;
                 height: 40px;
+                min-width: 100px;
+                transition: 0.1s linear;
+
+                &:active {
+                    transform: scale(0.9);
+                }
             }
         }
 
@@ -47,9 +66,10 @@
             text-align: center;
         }
 
-        td {
+        .td_item {
             border: 1px solid rgb(171, 170, 170);
             padding: 10px;
+            font-size: 14px;
         }
     }
 
@@ -99,12 +119,9 @@
     }
 
     .user_form_container {
-        height: calc(100vh - 70px - 60px - 35px);
         max-width: 100%;
-        margin: auto;
         padding: 10px 30px;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
         h2 {
             color: #0153b1;
@@ -170,13 +187,13 @@
             }
 
             button {
-                margin-top: 30px;
+                margin-top: 15px;
                 margin-left: auto;
                 margin-right: auto;
                 font-weight: 600;
                 width: 400px;
                 max-width: 100%;
-                background: #0153b1;
+                background: #1677ff;
                 color: white;
                 padding: 10px;
                 border: none;

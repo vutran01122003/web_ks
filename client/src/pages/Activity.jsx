@@ -55,8 +55,8 @@ const ActivityUi = () => {
         resubmitedRows: 1
     });
 
-    const majorName = majorValue.majorName;
-    const cohortName = cohortValue.cohortName;
+    const majorName = majorValue?.majorName;
+    const cohortName = cohortValue?.cohortName;
 
     const onChangeUserId = (e) => {
         setUserId(e.target.value);

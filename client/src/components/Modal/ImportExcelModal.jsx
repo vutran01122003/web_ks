@@ -5,7 +5,7 @@ import Modal from './Modal';
 import { importUser } from '../../redux/actions/excelAction';
 import excelIcon from '../../assets/images/icon/excel.png';
 
-function ImportExcelModal({ headerTitle, columns, onCloseModal }) {
+function ImportExcelModal({ headerTitle, columns, onCloseModal, searchInput }) {
     const dispatch = useDispatch();
     const [file, setFile] = useState('');
 
@@ -29,7 +29,12 @@ function ImportExcelModal({ headerTitle, columns, onCloseModal }) {
         const formData = new FormData();
         formData.set('file', file);
 
-        dispatch(importUser(formData));
+        dispatch(
+            importUser({
+                formData,
+                searchInput
+            })
+        );
         onHiddenExcelModalDisplay();
     };
 

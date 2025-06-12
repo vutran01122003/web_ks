@@ -37,6 +37,8 @@ class ProgressControllers {
                         tableId: table._id,
                         quantityDemanded: table.quantityDemanded,
                         tableDescription: table?.description,
+                        totalScore: table?.totalScore || 0,
+                        currentTotalScore: 0,
                         acceptedTasksNum: 0,
                         rejectedTasksNum: 0,
                         resubmitedTasksNum: 0,
@@ -47,6 +49,7 @@ class ProgressControllers {
                         switch (content.status) {
                             case ACCEPTED_STATUS:
                                 tables[table.tableName].acceptedTasksNum += 1;
+                                tables[table.tableName].currentTotalScore += content.totalScore;
                                 completedTasksNum += 1;
                                 break;
                             case REJECTED_STATUS:
@@ -146,6 +149,60 @@ class ProgressControllers {
                     groupCode === TALENT_ENGINEER_CODE
                         ? `Kết thúc hoạt động nộp minh chứng`
                         : "Kết thúc hoạt động xét tuyển bổ sung"
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    confirmUpdateUserActivityStatusByMajor = async (req, res, next) => {
+        try {
+            const { major, cohort, levelYear, groupCode, updatedCohortData } = req.body;
+
+            const currentLevelYear = FacultyService.getCurrentLevelYearOfCohort({
+                majorName: major.toLowerCase(),
+                cohortName: cohort.toLowerCase()
+            });
+
+            if (levelYear < currentLevelYear)
+                throw createError.BadRequest(`Hoạt động nộp minh chứng năm ${levelYear} đã kết thúc`);
+
+            await UserService.confirmUpdateUserActivityStatusByMajor({
+                major,
+                cohort,
+                levelYear,
+                updatedCohortData,
+                groupData: {
+                    groupCode: groupCode
+                }
+            });
+
+            res.status(200).json({
+                status: 200,
+                msg:
+                    groupCode === TALENT_ENGINEER_CODE
+                        ? `Xác nhận kết thúc hoạt động nộp minh chứng`
+                        : "Xác nhận kết thúc hoạt động xét tuyển bổ sung"
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    revertProgress = async (req, res, next) => {
+        try {
+            const { majorName, cohortName, groupCode, levelYear } = req.body;
+
+            await ProgressService.revertProgress({
+                majorName,
+                cohortName,
+                groupCode,
+                levelYear
+            });
+
+            res.status(200).json({
+                status: 200,
+                msg: "Duyệt lại thành công"
             });
         } catch (error) {
             next(error);

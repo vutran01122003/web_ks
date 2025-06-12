@@ -14,7 +14,6 @@ import EmptyDataNotification from '../Notification/EmptyDataNotification';
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
 import MenuGoalModal from '../Modal/MenuGoalModal';
-import UpdateTotalScore from '../Modal/UpdateTotalScore';
 
 function GoalsManagement() {
     const dispatch = useDispatch();
@@ -30,8 +29,6 @@ function GoalsManagement() {
     const [tableInfo, setTableInfo] = useState(null);
 
     const [openAddTableModal, setOpenAddTableModal] = useState(false);
-    const [openUpdateTotalScoreModal, setOpenUpdateTotalScoreModal] = useState(false);
-    const [currentTotalScore, setCurrentTotalScore] = useState('');
     const [openRemovePageModal, setOpenRemovePageModal] = useState(false);
     const [isVisibleUpdateStatusPageModal, setIsVisibleUpdateStatusPageModal] = useState(false);
     const [isVisibleRemoveTableModal, setIsVisibleRemoveTableModal] = useState(false);
@@ -56,18 +53,6 @@ function GoalsManagement() {
         setOpenAddTableModal(true);
         setSubPageName(pageName);
         setPageId(pageId);
-    };
-
-    const handleOpenUpdateTotalScore = ({ pageId, currentTotalScore }) => {
-        setOpenUpdateTotalScoreModal(true);
-        setCurrentTotalScore(currentTotalScore);
-        setPageId(pageId);
-    };
-
-    const handleHideUpdateTotalScoreModal = () => {
-        setOpenUpdateTotalScoreModal(false);
-        setCurrentTotalScore('');
-        setPageId(null);
     };
 
     const handleHideAddTableModal = () => {
@@ -189,14 +174,6 @@ function GoalsManagement() {
                     </button>
                 </div>
 
-                {openUpdateTotalScoreModal && (
-                    <UpdateTotalScore
-                        pageId={pageId}
-                        currentTotalScore={currentTotalScore}
-                        handleHideUpdateTotalScoreModal={handleHideUpdateTotalScoreModal}
-                    />
-                )}
-
                 {openAddTableModal && (
                     <AddTableModal
                         handleHideAddTableModal={handleHideAddTableModal}
@@ -267,7 +244,7 @@ function GoalsManagement() {
                             <thead>
                                 <tr>
                                     <th>Nhóm Chỉ Tiêu</th>
-                                    <th>Tổng điểm phải đạt</th>
+                                    <th>Tổng điểm</th>
                                     <th>Trạng Thái</th>
                                     <th>Chỉ Tiêu</th>
                                     <th>Thao Tác Với Nhóm Chỉ Tiêu</th>
@@ -281,7 +258,11 @@ function GoalsManagement() {
                                                 {capitalizeFirstLetter(filteredPageItem.pageName)}
                                             </td>
 
-                                            <td className="page_score">{filteredPageItem?.totalScore || 0}</td>
+                                            <td className="page_score">
+                                                {filteredPageItem.tables.reduce((totalScore, table) => {
+                                                    return totalScore + table.totalScore || 0;
+                                                }, 0)}
+                                            </td>
 
                                             <td className="page_status">
                                                 {filteredPageItem.isActive ? (
@@ -292,7 +273,7 @@ function GoalsManagement() {
                                             </td>
 
                                             <td className="activity_wrapper">
-                                                {filteredPageItem.tables.length > 0 &&
+                                                {filteredPageItem.tables.length > 0 ? (
                                                     filteredPageItem.tables.map((table, index) => (
                                                         <div key={table._id} className="activity_name">
                                                             <span>{capitalizeFirstLetter(table.tableName)}</span>
@@ -327,7 +308,10 @@ function GoalsManagement() {
                                                                 />
                                                             )}
                                                         </div>
-                                                    ))}
+                                                    ))
+                                                ) : (
+                                                    <div className="empty_activity">Trống</div>
+                                                )}
                                             </td>
 
                                             <td className="btn_group">
@@ -341,18 +325,6 @@ function GoalsManagement() {
                                                     }}
                                                 >
                                                     <span>Thêm Chỉ Tiêu Mới</span>
-                                                </div>
-
-                                                <div
-                                                    className="add_goal_btn btn_item"
-                                                    onClick={() => {
-                                                        handleOpenUpdateTotalScore({
-                                                            currentTotalScore: filteredPageItem.totalScore,
-                                                            pageId: filteredPageItem._id
-                                                        });
-                                                    }}
-                                                >
-                                                    <span>Cập Nhật Tổng Điểm</span>
                                                 </div>
 
                                                 <div
