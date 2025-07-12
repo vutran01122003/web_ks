@@ -76,10 +76,9 @@ const PageSchema = Joi.object({
                         "any.required": "Vui lòng nhập tên chỉ tiêu",
                         "string.max": "Tên chỉ tiêu có tối đa là 200 ký tự"
                     }),
-                    quantityDemanded: Joi.number().min(1).messages({
+                    quantityDemanded: Joi.number().messages({
                         "number.base": "Giá trị của số lượng là ký tự số",
-                        "any.required": "Vui lòng nhập số lượng hoạt động",
-                        "number.min": "Số lượng cần làm cho chỉ tiêu tối thiểu là 1"
+                        "any.required": "Vui lòng nhập số lượng hoạt động"
                     }),
                     description: Joi.string().max(200).optional().allow("").messages({
                         "string.max": "Mô tả chỉ tiêu có tối đa là 200 ký tự"
@@ -102,7 +101,7 @@ const PageSchema = Joi.object({
                                             "string.max": "Giá trị cột chỉ tiêu có tối đa là 200 ký tự"
                                         }),
                                         score: Joi.number().optional().messages({
-                                            "number.base": "Điểm số của giá trị định sẵn phải là ký tự số"
+                                            "number.base": "Điểm tích lũy của giá trị định sẵn phải là ký tự số"
                                         })
                                     })
                                 )
@@ -110,7 +109,10 @@ const PageSchema = Joi.object({
                         })
                     ),
                     fixedScore: Joi.number().allow(null).optional().messages({
-                        "number.base": "Điểm số cố định phải là ký tự số"
+                        "number.base": "Điểm tích lũy cố định phải là ký tự số"
+                    }),
+                    scoreType: Joi.boolean().messages({
+                        "boolean.base": "Loại điểm tích lũy không hợp lệ"
                     }),
                     totalScore: Joi.number().min(0).messages({
                         "number.base": "Giá trị của tổng điểm tối thiểu là ký tự số",

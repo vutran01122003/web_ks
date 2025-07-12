@@ -9,7 +9,7 @@ import RemovePageModal from '../Modal/RemovePageModal';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 import SearchFilterComponent from '../Filter/SearchFilter';
 import TableDetailsModel from '../Modal/TableDetailsModal';
-import { capitalizeFirstLetter } from '../../utils/handleString';
+import { capitalizeString } from '../../utils/handleString';
 import EmptyDataNotification from '../Notification/EmptyDataNotification';
 import { getGoals, updateStatusPage } from '../../redux/actions/pageAction';
 import { getTable, removeTable, updateTable } from '../../redux/actions/tableAction';
@@ -203,7 +203,7 @@ function GoalsManagement() {
                     <ConfirmModal
                         headerContent={`Xóa Chỉ Tiêu`}
                         bodyContent={`Bạn chắc chắn muốn xóa chỉ tiêu ${tableInfo.tableName}`}
-                        noteContent={`Sau khi xóa chỉ tiêu ${tableInfo.tableName} thì tiến độ hoàn thành và điểm số của sinh viên cho chỉ tiêu này sẽ mất đi.`}
+                        noteContent={`Sau khi xóa chỉ tiêu ${tableInfo.tableName} thì tiến độ hoàn thành và điểm tích lũy của sinh viên cho chỉ tiêu này sẽ mất đi.`}
                         toggleConfirmModalDisplay={handleToggleRemoveTableModalDisplay}
                         onAccept={removeTableHandling}
                     />
@@ -230,7 +230,7 @@ function GoalsManagement() {
                         bodyContent={`Bạn chắc chắn muốn ${tableInfo.isActive ? 'ẩn' : 'hiện'} chỉ tiêu ${tableInfo.tableName}`}
                         noteContent={
                             tableInfo.isActive
-                                ? `Tiến độ và điểm số của sinh viên cho chỉ tiêu này sẽ không bị ảnh hưởng.`
+                                ? `Tiến độ và điểm tích lũy của sinh viên cho chỉ tiêu này sẽ không bị ảnh hưởng.`
                                 : `Các kỹ sư sẽ tương tác được chỉ tiêu ${tableInfo.tableName} sau khi hiển thị.`
                         }
                         toggleConfirmModalDisplay={handleToggleUpdateStatusTableModalDisplay}
@@ -254,9 +254,7 @@ function GoalsManagement() {
                                 <tbody>
                                     {goals.filteredPage.map((filteredPageItem) => (
                                         <tr key={filteredPageItem._id}>
-                                            <td className="page_name">
-                                                {capitalizeFirstLetter(filteredPageItem.pageName)}
-                                            </td>
+                                            <td className="page_name">{capitalizeString(filteredPageItem.pageName)}</td>
 
                                             <td className="page_score">
                                                 {filteredPageItem.tables.reduce((totalScore, table) => {
@@ -276,7 +274,7 @@ function GoalsManagement() {
                                                 {filteredPageItem.tables.length > 0 ? (
                                                     filteredPageItem.tables.map((table, index) => (
                                                         <div key={table._id} className="activity_name">
-                                                            <span>{capitalizeFirstLetter(table.tableName)}</span>
+                                                            <span>{capitalizeString(table.tableName)}</span>
                                                             <button
                                                                 className="btn_menu"
                                                                 onClick={() => handleToggleDisplayGoalModal(table._id)}
@@ -344,7 +342,7 @@ function GoalsManagement() {
                                                     </span>
                                                 </div>
 
-                                                <div
+                                                {/* <div
                                                     className="remove_page_goal_btn btn_item"
                                                     onClick={() => {
                                                         handleOpenRemovePageModal({
@@ -354,7 +352,7 @@ function GoalsManagement() {
                                                     }}
                                                 >
                                                     <span>{`Xóa Nhóm Chỉ Tiêu`}</span>
-                                                </div>
+                                                </div> */}
                                             </td>
                                         </tr>
                                     ))}

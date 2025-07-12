@@ -1,17 +1,15 @@
 module.exports = {
-    concatFirstNameAndLastName: ({ firstName, lastName }) => {
-        return `${this.capitalizeFirstLetter(lastName)} ${this.capitalizeFirstLetter(firstName)}`;
-    },
+    capitalizeFirstLetter: function (string) {
+        if (!string) return "";
 
-    capitalizeFirstLetter: (string) => {
         return string
             .trim()
-            .split(' ')
+            .split(" ")
             .map((string) => {
-                let parts = string.split('');
+                let parts = string.split("");
                 parts[0] = parts[0].toUpperCase();
-                return parts.join('');
+                return parts.join("");
             })
-            .join(' ');
+            .join(" ");
     }
 };

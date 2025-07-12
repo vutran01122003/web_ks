@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import search from '../../assets/images/other/search.png';
-import { capitalizeFirstLetter } from '../../utils/handleString';
-
+import { capitalizeString } from '../../utils/handleString';
 function GoalsInfo({ levelYear, goalsInfo }) {
     return (
         <div className="goals_info_container">
@@ -17,41 +16,58 @@ function GoalsInfo({ levelYear, goalsInfo }) {
                             <thead className="goal_info_header">
                                 <tr>
                                     <th>Tên Chỉ Tiêu</th>
-                                    <th>Tổng Điểm Yêu Cầu</th>
-                                    <th>Tổng Điểm Hiện Tại</th>
-                                    <th>Số Lượng</th>
+                                    <th>Số Lượng Yêu Cầu</th>
                                     <th>Chờ Duyệt</th>
                                     <th>Từ Chối</th>
-                                    <th>Hoàn Thành</th>
                                     <th>Phải Nộp Lại</th>
+                                    <th>Hoàn Thành</th>
+                                    <th>Tổng Điểm Yêu Cầu</th>
+                                    <th>Tổng Điểm Hiện Tại</th>
                                     <th>Trạng Thái</th>
                                 </tr>
                             </thead>
 
                             <tbody className="goal_info_body">
-                                {Object.keys(goals.tables).map((key, index) => (
-                                    <tr key={key + index} className="goal_info">
-                                        <td className="goal_info_item goal_name">{capitalizeFirstLetter(key)}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.totalScore || 0}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.currentTotalScore || 0}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.quantityDemanded || 0}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.pendingTasksNum || 0}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.rejectedTasksNum || 0}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.acceptedTasksNum || 0}</td>
-                                        <td className="goal_info_item">{goals.tables[key]?.resubmitedTasksNum || 0}</td>
-                                        <td className="goal_info_item">
-                                            {goals.tables[key]?.acceptedTasksNum >=
-                                                goals.tables[key]?.quantityDemanded &&
-                                            goals.tables[key]?.currentTotalScore >= goals.tables[key]?.totalScore ? (
-                                                <span className="goal_info_status goal_info_success_status">Đạt</span>
-                                            ) : (
-                                                <span className="goal_info_status goal_info_dangerous_status">
-                                                    Chưa Đạt
-                                                </span>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
+                                {Object.keys(goals.tables).map((key, index) => {
+                                    return (
+                                        <tr key={key + index} className="goal_info">
+                                            <td className="goal_info_item goal_name">{capitalizeString(key)}</td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.quantityDemanded || 0}
+                                            </td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.pendingTasksNum || 0}
+                                            </td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.rejectedTasksNum || 0}
+                                            </td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.resubmitedTasksNum || 0}
+                                            </td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.acceptedTasksNum || 0}
+                                            </td>
+                                            <td className="goal_info_item">{goals.tables[key]?.totalScore || 0}</td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.currentTotalScore || 0}
+                                            </td>
+                                            <td className="goal_info_item">
+                                                {goals.tables[key]?.currentTotalScore >=
+                                                    goals.tables[key]?.totalScore &&
+                                                goals.tables[key]?.acceptedTasksNum >=
+                                                    goals.tables[key]?.quantityDemanded ? (
+                                                    <span className="goal_info_status goal_info_success_status">
+                                                        Đạt
+                                                    </span>
+                                                ) : (
+                                                    <span className="goal_info_status goal_info_dangerous_status">
+                                                        Chưa Đạt
+                                                    </span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

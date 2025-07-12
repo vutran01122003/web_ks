@@ -12,7 +12,6 @@ import EmptyDataNotification from '../components/Notification/EmptyDataNotificat
 import { authSelector, facultySelector, progressSelector } from '../redux/selector';
 import { exportProgressStatisticsExcel } from '../redux/actions/excelAction';
 import ConfirmModal from '../components/Modal/ConfirmModal';
-import StudentDetailsModal from '../components/Modal/StudentDetailsModal';
 import GoalDetailsModal from '../components/Modal/GoalDetailsModal';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE } = import.meta.env;
@@ -276,7 +275,7 @@ function ProgressUI() {
                 type: GLOBALTYPES.PROGRESS.RESET_ANNUAL_TASK_PROGRESS
             });
         }
-    }, [major, cohort, talentEngineerType, levelYear]);
+    }, []);
 
     return auth?.user ? (
         <div className="completion_shedule_container">

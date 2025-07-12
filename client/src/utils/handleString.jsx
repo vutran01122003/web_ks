@@ -6,6 +6,14 @@ export function capitalizeFirstLetter(str) {
     });
 }
 
+export function capitalizeString(str) {
+    const convertedString = str + '';
+    if (!str) return null;
+    const parts = convertedString.split('');
+    parts[0] = parts[0].toUpperCase();
+    return parts.join('');
+}
+
 export function toFullName({ firstName, lastName }) {
     if (!firstName && !lastName) return 'Chưa Cập Nhật';
     return `${lastName ? capitalizeFirstLetter(lastName) : ''} ${firstName ? capitalizeFirstLetter(firstName) : ''}`;

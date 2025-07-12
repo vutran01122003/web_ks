@@ -2,6 +2,7 @@ import GLOBALTYPES from './globalTypes';
 import { getDataApi, postDataApi } from '../../utils/fetchData';
 import notifyError from '../../utils/notifyError';
 import { getMajors } from './facultyAction';
+import axios from 'axios';
 
 export const getProgressByYear =
     ({ userId, studentMajor, studentCohort, studentLevelYear }) =>
@@ -22,10 +23,54 @@ export const getProgressByYear =
             notifyError({
                 dispatch,
                 error,
-                defaultMessage: 'Lấy Dữ Liệu Tiến Trình Hoàn Thành Chỉ Tiêu Theo Năm Thất Bại'
+                defaultMessage: 'Lấy dữ liệu tiến trình hoàn thành chỉ tiêu theo năm thất bại'
             });
         }
     };
+
+export const exportRegisterForm = () => async (dispatch) => {
+    try {
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                loading: true
+            }
+        });
+
+        await postDataApi(
+            '/progress/register-form',
+            {},
+            {
+                responseType: 'arraybuffer'
+            }
+        ).then((res) => {
+            const blob = new Blob([res.data], {
+                type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PhieuDangKy.docx';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        });
+
+        dispatch({
+            type: GLOBALTYPES.ALERT,
+            payload: {
+                success: 'Xuất phiếu đăng ký thành công'
+            }
+        });
+    } catch (error) {
+        notifyError({
+            dispatch,
+            error,
+            defaultMessage: 'Xuất phiếu đăng ký thất bại'
+        });
+    }
+};
 
 export const getAnnualTaskProgress =
     ({ major, levelYear, faculty, cohort, groupCode, userId, sortProgressPercentage, page, limit }) =>
@@ -61,7 +106,7 @@ export const getAnnualTaskProgress =
             notifyError({
                 dispatch,
                 error,
-                defaultMessage: 'Lấy Dữ Liệu Tiến Độ Hoàn Thành Thất Bại'
+                defaultMessage: 'Lấy dữ liệu tiến độ hoàn thành thất bại'
             });
         } finally {
             dispatch({
@@ -127,7 +172,7 @@ export const stopSubmittingProof =
             notifyError({
                 dispatch,
                 error,
-                defaultMessage: 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
+                defaultMessage: 'Kết thúc hoạt động nộp minh chứng thất bại'
             });
         }
     };
@@ -184,7 +229,7 @@ export const confirmProgress =
             notifyError({
                 dispatch,
                 error,
-                defaultMessage: 'Kết Thúc Hoạt Động Nộp Minh Chứng Thất Bại'
+                defaultMessage: 'Kết thúc hoạt động nộp minh chứng thất bại'
             });
         }
     };

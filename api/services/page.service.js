@@ -3,7 +3,7 @@ const Page = require("../models/page.model");
 const UserService = require("./user.service");
 const convertToObjectId = require("../utils/convertToObjectId");
 const FacultyService = require("./faculty.service");
-
+const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = ["fixed", "dynamic"];
 const { TEMPORARY_TALENT_ENGINEER_PAGE_TYPE, TALENT_ENGINEER_PAGE_TYPE, GOAL_PAGE } = process.env;
 
 class PageService {
@@ -48,7 +48,7 @@ class PageService {
                     });
                 } else {
                     if (pageStudentLevelYear === 1)
-                        throw createError.BadRequest("Không thể tạo nhóm chỉ tiêu cho năm 1");
+                        throw createError.BadRequest("Không thể thêm nhóm chỉ tiêu cho năm 1");
 
                     const currentLevelYear = await FacultyService.getCurrentLevelYearOfCohort({
                         majorName: pageStudentMajor,
@@ -56,7 +56,7 @@ class PageService {
                     });
 
                     if (currentLevelYear > pageStudentLevelYear) {
-                        throw createError.BadRequest("Không thể tạo nhóm chỉ tiêu cho năm học đã kết thúc");
+                        throw createError.BadRequest("Không thể thêm nhóm chỉ tiêu cho năm học đã kết thúc");
                     } else if (currentLevelYear < pageStudentLevelYear) {
                         throw createError.BadRequest(`Năm học chưa kết thúc (Năm ${levelYear})`);
                     }
@@ -69,7 +69,10 @@ class PageService {
                     pageStudentMajor,
                     pageTalentEngineerType,
                     pageStudentLevelYear,
-                    tables,
+                    tables: tables.map((table) => ({
+                        ...table,
+                        scoreType: table.scoreType ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
+                    })),
                     pageType,
                     totalScore
                 });

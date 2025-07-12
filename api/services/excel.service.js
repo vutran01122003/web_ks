@@ -105,7 +105,6 @@ class ExcelService {
 
             return workbook;
         } catch (error) {
-            console.log(error);
             throw createHttpError.BadRequest("Lỗi xuất dữ liệu excel");
         }
     };
@@ -164,7 +163,6 @@ class ExcelService {
             );
 
             if (result.some((res) => res.status === "rejected")) {
-                console.log(result);
                 throw createHttpError.BadRequest("Thêm kỹ sư không thành công, kiểm tra lại dữ liệu.");
             }
         } catch (error) {

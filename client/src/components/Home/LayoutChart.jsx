@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import search from '../../assets/images/other/search.png';
 import { Select } from 'antd';
-import { capitalizeFirstLetter } from '../../utils/handleString';
+import { capitalizeString } from '../../utils/handleString';
 
 const RadialBarChart = ({ children }) => {
     const state = {
@@ -24,7 +24,7 @@ const RadialBarChart = ({ children }) => {
                         },
                         total: {
                             show: true,
-                            label: 'Tiến độ',
+                            label: 'Tổng tiến độ',
                             formatter: function () {
                                 return children.average + '%';
                             }
@@ -41,8 +41,8 @@ const RadialBarChart = ({ children }) => {
                 options={state.options}
                 series={state.series}
                 type="radialBar"
-                height="250px"
-                width="220px"
+                height="280px"
+                width="250px"
             />
         </>
     );
@@ -89,12 +89,14 @@ const LayoutChart = ({ chartData, auth, setLevelYear }) => {
     let totalProgress = 0;
 
     const dataValue = chartData.map((item) => {
+        const value = item.quantityDemanded == 0 ? 100 : item.value;
         totalQuantityDemanded += item.quantityDemanded;
-        totalProgress += item.value * item.quantityDemanded;
-        return parseFloat(item.value.toFixed(2));
+        totalProgress += value * item.quantityDemanded;
+        return parseFloat(value.toFixed(2));
     });
-    const dataCategory = chartData.map((item) => capitalizeFirstLetter(item.caterogy));
-    const average = (totalProgress / totalQuantityDemanded).toFixed(2);
+
+    const dataCategory = chartData.map((item) => capitalizeString(item.caterogy));
+    const average = totalQuantityDemanded > 0 ? (totalProgress / totalQuantityDemanded).toFixed(2) : 0;
     const [yearList, setYearList] = useState([]);
     const levelYear = auth.user?.cohort.currentLevelYear;
 

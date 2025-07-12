@@ -61,7 +61,7 @@ function UpdateDeadlineModal({
                     </button>
                     <div className="control_btn_group">
                         <button onClick={() => updateDeadline(COMPLETED)} className="end_btn">
-                            Kết Thúc
+                            Kết Thúc Thời Hạn
                         </button>
                         <button onClick={() => updateDeadline()} className="update_btn">
                             Cập Nhật

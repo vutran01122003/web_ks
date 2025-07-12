@@ -39,7 +39,7 @@ export const ARRAY_LIST_MENU = [
     },
     {
         roles: [VITE_APP_MAJOR_MANAGER_CODE],
-        name_menu: 'Tạo Nhóm Chỉ Tiêu',
+        name_menu: 'Thêm Nhóm Chỉ Tiêu',
         icon_before: <TbTargetArrow />,
         to_link: '/goal-creation',
         submenu: false

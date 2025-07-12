@@ -7,6 +7,13 @@ export const createPage =
     ({ pageData, resetAllData, isGoals }) =>
     async (dispatch) => {
         try {
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    loading: true
+                }
+            });
+
             const res = await postDataApi('/page', pageData);
 
             if (isGoals) dispatch(getMajors());
@@ -23,7 +30,7 @@ export const createPage =
             notifyError({
                 dispatch,
                 error,
-                defaultMessage: isGoals ? 'Tạo nhóm chỉ tiêu thất bại' : 'Tạo bài viết thất bại'
+                defaultMessage: isGoals ? 'Thêm nhóm chỉ tiêu thất bại' : 'Tạo bài viết thất bại'
             });
         }
     };

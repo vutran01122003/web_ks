@@ -30,7 +30,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
     const [indexTableValue, setIndexTableValue] = useState(null);
     const [indexRowValue, setIndexRowValue] = useState(null);
     const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = [true, false];
-
     const [tables, setTables] = useState([
         {
             tableName: '',
@@ -257,7 +256,8 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                         rowTitleList: table.rowTitleList,
                         fixedScore: +table.fixedScore,
                         totalScore: +table.totalScore,
-                        allowExceedQuantity: table.allowExceedQuantity
+                        allowExceedQuantity: table.allowExceedQuantity,
+                        scoreType: table.scoreType
                     };
 
                     if (!table.fixedScore) delete table.fixedScore;
@@ -286,7 +286,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
             setTables([
                 {
                     ...tableData,
-                    scoreType: tableData.fixedScore ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
+                    scoreType: tableData.scoreType === 'fixed' ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
                 }
             ]);
         };
@@ -368,6 +368,52 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                 </div>
 
                                 <div className="flex__line_lable">
+                                    <label>Loại Điểm Tích Lũy:</label>
+                                    {!tableDetailsData ? (
+                                        <select
+                                            value={tables[tableIndex].scoreType}
+                                            onChange={(e) => {
+                                                updateTable(tableIndex, 'scoreType', e.target.value);
+                                            }}
+                                        >
+                                            <option value={FIXED_SCORE_TYPE}>Điểm tích lũy cố định</option>
+                                            <option value={DYNAMIC_SCORE_TYPE}>Điểm tích lũy không cố định</option>
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            value={
+                                                tables[tableIndex].scoreType === FIXED_SCORE_TYPE
+                                                    ? 'Điểm tích lũy cố định'
+                                                    : 'Điểm tích lũy không cố định'
+                                            }
+                                            readOnly={true}
+                                        />
+                                    )}
+                                </div>
+
+                                {table.scoreType === FIXED_SCORE_TYPE && (
+                                    <div className="flex__line_lable">
+                                        <label htmlFor="score_input">Điểm Tích Lũy</label>
+                                        <input
+                                            className={`score_input`}
+                                            type="text"
+                                            value={table.fixedScore}
+                                            readOnly={tableDetailsData ? true : false}
+                                            placeholder="Nhập điểm tích lũy sẽ đạt khi hoàn thành hoạt động"
+                                            id="score_input"
+                                            onChange={(e) =>
+                                                updateTable(
+                                                    tableIndex,
+                                                    'fixedScore',
+                                                    /^\d*\.?\d*$/.test(e.target.value) ? e.target.value : ''
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="flex__line_lable">
                                     <label htmlFor="mo_ta_chi_tieu">Tổng Điểm Yêu Cầu:</label>
 
                                     <input
@@ -379,7 +425,9 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                             updateTable(
                                                 tableIndex,
                                                 'totalScore',
-                                                Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : ''
+                                                !isNaN(Number.parseInt(e.target.value))
+                                                    ? Number.parseInt(e.target.value)
+                                                    : ''
                                             );
                                         }}
                                         id="mo_ta_chi_tieu"
@@ -398,7 +446,9 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                             updateTable(
                                                 tableIndex,
                                                 'quantityDemanded',
-                                                Number.parseInt(e.target.value) ? Number.parseInt(e.target.value) : ''
+                                                !isNaN(Number.parseInt(e.target.value))
+                                                    ? Number.parseInt(e.target.value)
+                                                    : ''
                                             );
                                         }}
                                         id="mo_ta_chi_tieu"
@@ -423,29 +473,6 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
                                     />
                                     <label htmlFor="allow_item">Không cho phép nộp vượt quá số lượng</label>
                                 </div>
-
-                                {table.scoreType === FIXED_SCORE_TYPE && (
-                                    <div className="flex__line_lable">
-                                        <label htmlFor="score_input">
-                                            {!tableDetailsData ? 'Điểm Tích Lũy:' : 'Điểm Số:'}
-                                        </label>
-                                        <input
-                                            className={`score_input`}
-                                            type="text"
-                                            value={table.fixedScore}
-                                            readOnly={tableDetailsData ? true : false}
-                                            placeholder="Nhập điểm tích lũy sẽ đạt khi hoàn thành hoạt động"
-                                            id="score_input"
-                                            onChange={(e) =>
-                                                updateTable(
-                                                    tableIndex,
-                                                    'fixedScore',
-                                                    /^\d*\.?\d*$/.test(e.target.value) ? e.target.value : ''
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                )}
 
                                 <div className={`table__col--target ${tableDetailsData ? 'mt_40' : ''}`}>
                                     {!tableDetailsData && (
@@ -647,7 +674,7 @@ const GoalsCreation = ({ handleAddTable, handleUpdateTable, prevUpdatedTableData
 
                             {!handleAddTable && !handleUpdateTable && (
                                 <ComponentButton
-                                    textButton="Tạo Nhóm Chỉ Tiêu"
+                                    textButton="Thêm Nhóm Chỉ Tiêu"
                                     onClick={handleCreatePage}
                                     type="button"
                                     className="btn__create--page"

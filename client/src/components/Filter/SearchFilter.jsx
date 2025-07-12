@@ -2,7 +2,7 @@ import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { facultySelector, activitiesSelector, authSelector } from '../../redux/selector';
 import { getActivities } from '../../redux/actions/activitiesAction';
-import { capitalizeFirstLetter } from '../../utils/handleString';
+import { capitalizeFirstLetter, capitalizeString } from '../../utils/handleString';
 import GLOBALTYPES from '../../redux/actions/globalTypes';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE } = import.meta.env;
@@ -135,7 +135,6 @@ function SearchFilterComponent({
     useEffect(() => {
         if (Object.keys(majorValue).length > 0 && Object.keys(cohortValue).length > 0) {
             const major = majorValueList.find((major) => major._id === majorValue._id);
-            console.log(major);
             setMajorValue(major);
             setCohortValue(major.cohorts.find((cohort) => cohort._id === cohortValue._id));
         }
@@ -191,8 +190,8 @@ function SearchFilterComponent({
                         <option value="">Chọn Đối Tượng</option>
                         {Object.keys(cohortValue).length > 0 && (
                             <Fragment>
-                                <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ Sư Tài Năng</option>
-                                <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>Xét Tuyển Bổ Sung</option>
+                                <option value={VITE_APP_TALENT_ENGINEER_CODE}>Kỹ sư tài năng</option>
+                                <option value={VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE}>Xét tuyển bổ sung</option>
                             </Fragment>
                         )}
                     </select>
@@ -228,7 +227,9 @@ function SearchFilterComponent({
                             activities.length > 0 &&
                             activities.map((activity, index) => (
                                 <option key={index} value={activity}>
-                                    {capitalizeFirstLetter(activity)}
+                                    {activity.length > 50
+                                        ? capitalizeString(`${activity.slice(0, 50)}...`)
+                                        : capitalizeString(activity)}
                                 </option>
                             ))}
                     </select>

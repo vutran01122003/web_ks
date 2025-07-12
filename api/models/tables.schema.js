@@ -43,14 +43,10 @@ const TableSchema = new Schema({
         type: [{ type: Schema.Types.ObjectId, ref: "row" }],
         default: []
     },
-
-    /**
-     * fixedScore là thuộc tính quy định số điểm sẽ nhận được của sinh khi hoàn thành hoạt động.
-     * fixedScore chỉ tồn tại khi và chỉ khi người tạo nhóm chỉ tiêu quy định các tính điểm của chỉ tiêu này là điểm số cố định.
-     * Lấy một ví dụ trực quan: Cùng là "Học Lại Các Môn" nhưng có sinh viên học lại môn 4 tín, có sinh viên học lại môn 2 tín
-     * Nhưng suy cho cùng thì học lại vẫn là học lại nên sinh viên học lại 4 tín cũng giống sinh viên học lại 2 tín
-     * Nên điểm số khi hoàn thành hoạt động của chỉ tiêu "Học Lại Các Môn" sẽ là như nhau.
-     */
+    scoreType: {
+        type: String,
+        enum: ["fixed", "dynamic"]
+    },
     fixedScore: Number,
     isActive: {
         type: Schema.Types.Boolean,

@@ -10,7 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     async function (config) {
-        const isPublicRequest = publicEndpoints.some((endpoint) => config.url.includes(endpoint));
+        const isPublicRequest = publicEndpoints.some((endpoint) => config.url === endpoint);
 
         if (!isPublicRequest) {
             const accessToken = getAccessToken();

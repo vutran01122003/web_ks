@@ -23,7 +23,18 @@ module.exports = {
 
             const user = await UserService.getUserAndPopulateGroupById({
                 id: data.userId,
-                selectedFieldArr: ["_id", "userId", "firstName", "lastName", "groups"]
+                selectedFieldArr: [
+                    "_id",
+                    "userId",
+                    "firstName",
+                    "lastName",
+                    "groups",
+                    "email",
+                    "phone",
+                    "faculty",
+                    "major",
+                    "cohort"
+                ]
             });
 
             res.locals.userData = user;

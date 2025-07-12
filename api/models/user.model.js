@@ -9,7 +9,7 @@ const UserSchema = new Schema(
     {
         avatar: {
             type: String,
-            default: process.env.S3_DEFAULT_AVATAR
+            default: ""
         },
         userId: {
             type: String,

@@ -4,16 +4,17 @@ import TableModal from '../Modal/TableModal';
 import PreviewFilesModal from '../Modal/PreviewFilesModal';
 import { authSelector } from '../../redux/selector';
 import TableContent from './TableContent';
-import { capitalizeFirstLetter } from '../../utils/handleString';
+import { capitalizeString } from '../../utils/handleString';
 
 const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentEngineerType, currentDeadline }) => {
     const auth = useSelector(authSelector);
-    const levelYear = auth.user.cohort.currentLevelYear;
+    const user = auth?.user;
+    const levelYear = user?.cohort?.currentLevelYear;
     const [useStateModal, setUseStateModal] = useState(false);
     const [visiblePreviewFileModal, setVisiblePreviewFileModal] = useState(false);
     const [proofFileDataList, setProofFileDataList] = useState(null);
     const [rowInfo, setRowInfo] = useState(null);
-
+    const submitConds = page?.pageStudentLevelYear === levelYear && user.isActive;
     const handleOpenPreviewFilesModal = ({ proofData }) => {
         setProofFileDataList(proofData);
         setVisiblePreviewFileModal(true);
@@ -36,10 +37,8 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                     <div className="modal">
                         {!isDynamicRows && !isDetailedRow && (
                             <button
-                                className={`modal_btn_open ${
-                                    page.pageStudentLevelYear === levelYear ? 'active' : 'inactive'
-                                }`}
-                                onClick={page.pageStudentLevelYear === levelYear ? handleOpenModal : null}
+                                className={`modal_btn_open ${submitConds ? 'active' : 'inactive'}`}
+                                onClick={submitConds ? handleOpenModal : null}
                             >
                                 Thêm hoạt động
                             </button>
@@ -69,7 +68,7 @@ const LayoutTable = ({ index, table, page, isDynamicRows, isDetailedRow, talentE
                         <span>Mô Tả Chỉ Tiêu: </span>
                         <span>
                             {table.description
-                                ? capitalizeFirstLetter(table.description)
+                                ? capitalizeString(table.description)
                                 : 'Không có mô tả cụ thể cho chỉ tiêu này'}
                         </span>
                     </h5>

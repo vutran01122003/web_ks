@@ -2,6 +2,7 @@ const Row = require("../models/row.model");
 const createError = require("http-errors");
 const PageService = require("./page.service");
 const convertToObjectId = require("../utils/convertToObjectId");
+const Page = require("../models/page.model");
 
 class RowService {
     static calculateTotalScoreOfRow = async ({ pageId, content, tableId }) => {
@@ -258,7 +259,42 @@ class RowService {
         }
 
         try {
-            const dynamicRows = await Row.aggregate([
+            const tableList = (
+                await Page.find({
+                    pageStudentMajor: pageStudentMajor,
+                    pageStudentCohort: pageStudentCohort,
+                    pageStudentLevelYear: parseInt(pageStudentLevelYear),
+                    pageTalentEngineerType: pageTalentEngineerType
+                })
+            )
+                .map((page) => page.tables)
+                .flat();
+
+            const matchedTable = tableList.find((table) => table.tableName === activity);
+
+            const rows = await Row.aggregate([
+                {
+                    $match: {
+                        table: matchedTable._id
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$content",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $match: {
+                        "content.status": rowStatus
+                    }
+                },
+                {
+                    $skip: skip * 1
+                },
+                {
+                    $limit: limit * 1
+                },
                 {
                     $lookup: {
                         from: "users",
@@ -266,9 +302,6 @@ class RowService {
                         foreignField: "_id",
                         as: "user"
                     }
-                },
-                {
-                    $match: userFilterConditions
                 },
                 {
                     $lookup: {
@@ -285,50 +318,10 @@ class RowService {
                     }
                 },
                 {
-                    $match: {
-                        "page.pageStudentMajor": pageStudentMajor,
-                        "page.pageStudentCohort": pageStudentCohort,
-                        "page.pageStudentLevelYear": parseInt(pageStudentLevelYear),
-                        "page.pageTalentEngineerType": pageTalentEngineerType
-                    }
-                },
-                {
-                    $skip: skip * 1
-                },
-                {
-                    $limit: limit * 1
-                },
-                {
-                    $unwind: {
-                        path: "$content",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $match: {
-                        "content.status": rowStatus
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$page.tables",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $match: {
-                        "page.tables.tableName": activity,
-
-                        $expr: {
-                            $eq: ["$table", "$page.tables._id"]
-                        }
-                    }
-                },
-                {
                     $project: {
                         _id: 1,
                         user: 1,
-                        page: 1,
+                        "page.tables": { $literal: matchedTable },
                         content: ["$content"]
                     }
                 }
@@ -337,7 +330,7 @@ class RowService {
             return {
                 status: 200,
                 msg: `Lấy dữ liệu chỉ tiêu ${rowStatus.toLowerCase()} thành công`,
-                data: dynamicRows
+                data: rows
             };
         } catch (error) {
             throw error;

@@ -5,7 +5,7 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21078101",
+    "userId": "21000696",
     "password": "1111"
 }
 
@@ -26,4 +26,8 @@ Content-Type: application/json
     "minimunPercentage": 25
 }
 
+### Export register form
 
+POST {{url}}/api/progress/register-form
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODY4ZWE2NGNjYWQ3NTllYTU5ZjE2NzEiLCJpYXQiOjE3NTE4NzAyMzIsImV4cCI6MTc1MTg4ODIzMn0.EJ8Bm7E_Yv5Brs83_sYCdcoxgN4SGJrfBVG6DZOkO7Q

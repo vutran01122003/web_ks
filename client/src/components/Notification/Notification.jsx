@@ -15,6 +15,7 @@ import {
     deleteAllNotification,
     getNotifications
 } from '../../redux/actions/notifyAction';
+import avatarDefault from '../../assets/images/other/avatar_default.jpg';
 
 function Notification({ notification, auth, handleToggleVisibleNotificationModal }) {
     const user = auth?.user;
@@ -193,7 +194,7 @@ function Notification({ notification, auth, handleToggleVisibleNotificationModal
                                         }}
                                     >
                                         <div className="notification_item_img_wrapper">
-                                            <img src={notificationItem.sender?.avatar} alt="avatar" />
+                                            <img src={avatarDefault} alt="avatar" />
                                         </div>
                                         <div className="notification_item_content">
                                             <div className="notification_item_title">{notificationItem.title}</div>

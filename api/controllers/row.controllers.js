@@ -102,6 +102,7 @@ class RowControllers {
                     rowItemId
                 }),
                 UserService.updateAnnualActivityProgress({
+                    table: rowData.table,
                     userId: user,
                     levelYear: levelYear,
                     prevStatus: null,
@@ -170,6 +171,7 @@ class RowControllers {
                     rowItemId: contentId
                 }),
                 UserService.updateAnnualActivityProgress({
+                    table: updatedRow.table,
                     userId: user,
                     levelYear: levelYear,
                     prevStatus: RESUBMITED_STATUS,

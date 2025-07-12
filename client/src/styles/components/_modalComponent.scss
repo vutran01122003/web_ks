@@ -1425,6 +1425,7 @@
             position: absolute;
             right: 20px;
             top: 0;
+            cursor: pointer;
         }
     }
 
@@ -1443,14 +1444,15 @@
 
         .end_btn,
         .cancel_btn {
-            background: #f0635c;
+            background: #f14a42;
         }
 
         button {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100px;
+            min-width: 100px;
+            padding: 0 10px;
             height: 40px;
             background: #1677ff;
             border-radius: 3px;

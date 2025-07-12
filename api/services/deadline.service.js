@@ -67,8 +67,6 @@ class DeadlineService {
                 else updatedData.status = NOT_UPDATED;
             }
 
-            console.log(updatedData);
-
             const updatedDeadline = await Deadline.findByIdAndUpdate(deadlineId, updatedData, {
                 new: true
             });

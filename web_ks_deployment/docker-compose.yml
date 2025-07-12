@@ -10,7 +10,7 @@ services:
             - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf
             - ../client/dist/:/usr/share/nginx/html/
         ports:
-            - 44380:44380
+            - 2087:2087
         command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     mongo:
         image: mongo:6.0

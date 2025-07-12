@@ -6,11 +6,19 @@ const User = require("../models/user.model");
 const PermissionService = require("./permission.service");
 const FacultyService = require("./faculty.service");
 const { TALENT_ENGINEER_CODE } = process.env;
+const [FIXED_SCORE_TYPE, DYNAMIC_SCORE_TYPE] = ["fixed", "dynamic"];
 
 class TableService {
     static addTable = async ({ pageId, tables }) => {
         try {
-            const tableNameList = tables.map((table) => table.tableName);
+            const tableNameList = [];
+            const newTables = tables.map((table) => {
+                tableNameList.push(table.tableName);
+                return {
+                    ...table,
+                    scoreType: table.scoreType ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
+                };
+            });
 
             const page = await Page.findById(pageId).lean();
 
@@ -27,7 +35,7 @@ class TableService {
                 pageId,
                 {
                     $push: {
-                        tables: { $each: tables }
+                        tables: { $each: newTables }
                     }
                 },
                 {
@@ -99,16 +107,12 @@ class TableService {
             const originalTable = await page.tables.id(table._id);
             const isDiffQuantity = originalTable.quantityDemanded !== newQuantityDemanded;
 
-            if (isDiffQuantity) {
-                const newLargestIndex = newQuantityDemanded - 1;
-
-                const row = await Row.findOne({
-                    table: table._id,
-                    [`content.${newLargestIndex + 1}`]: { $exists: true }
-                });
-            }
-
             const updatedData = Object.keys(table).reduce((obj, key) => {
+                if (key === "scoreType")
+                    return {
+                        ...obj,
+                        "tables.$.scoreType": table.scoreType ? FIXED_SCORE_TYPE : DYNAMIC_SCORE_TYPE
+                    };
                 return {
                     ...obj,
                     ["tables.$." + key]: table[key]

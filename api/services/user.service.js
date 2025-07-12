@@ -139,8 +139,6 @@ class UserService {
                 birthday: new Date(userData.birthday)
             });
 
-            console.log(updatedUser);
-
             if (!updatedUser) throw createError.NotFound("Người dùng không tồn tại");
 
             const populatedUser = await this.getUserAndPopulateGroupById({ id: userId });
@@ -197,7 +195,9 @@ class UserService {
                 const roles = groups[i].method[method];
 
                 for (let j = 0; j < roles.length; j++) {
-                    if (roles[j].url === path) return true;
+                    if (roles[j].url === path) {
+                        return true;
+                    }
                 }
             }
 
@@ -260,11 +260,11 @@ class UserService {
                                         $exists: false
                                     }
                                 },
-                                {
-                                    [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
-                                        $lt: table?.quantityDemanded || 0
-                                    }
-                                },
+                                // {
+                                //     [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
+                                //         $lt: table?.quantityDemanded || 0
+                                //     }
+                                // },
                                 {
                                     [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
                                         $exists: false
@@ -280,10 +280,10 @@ class UserService {
                                 ...obj,
                                 [`${annualActivitiesField}.${index}.detailsTotalScore.${table._id}`]: {
                                     $gte: table?.totalScore || 0
-                                },
-                                [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
-                                    $gte: table?.quantityDemanded || 0
                                 }
+                                // [`${annualActivitiesField}.${index}.detailsApprovedGoals.${table._id}`]: {
+                                //     $gte: table?.quantityDemanded || 0
+                                // }
                             };
                         }, {})
                     }
@@ -475,8 +475,6 @@ class UserService {
                     majorName: major
                 });
 
-                console.log(additionalRegisterData);
-
                 const { levelYear: additionalRegisterLevelYear, approvedUsers, rejectedUsers } = additionalRegisterData;
 
                 const [talentEngineerGroup] = await Promise.all([
@@ -665,6 +663,10 @@ class UserService {
 
     static updateAnnualActivityProgress = async ({ userId, levelYear, prevStatus, status, totalScore, table }) => {
         try {
+            const matchedTable = await Page.findOne({
+                "tables._id": table
+            }).then((data) => data.tables.find((tableItem) => tableItem._id.toString() === table.toString()));
+
             let user = await this.getUserAndPopulateGroupById({ id: userId });
 
             if (!user) throw createError.NotFound("Người dùng không tồn tại");
@@ -677,7 +679,8 @@ class UserService {
             const ACCEPTED_STATUS = "đã duyệt";
             const fieldOfStatus = {
                 "chờ duyệt": "numberOfPendingActivity",
-                "đã duyệt": "numberOfAcceptedActivity",
+                "đã duyệt":
+                    matchedTable.quantityDemanded === 0 ? "numberOfAcceptedSubActivity" : "numberOfAcceptedActivity",
                 "từ chối": "numberOfRejectedActivity",
                 "phải nộp lại": "numberOfResubmitedActivity"
             };

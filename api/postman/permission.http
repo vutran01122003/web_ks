@@ -5,13 +5,14 @@ POST {{url}}/api/login
 Content-Type: application/json
 
 {
-    "userId": "21078101",
+    "userId": "00000000",
     "password": "1111"
 }
 
 ### Create group
 POST {{url}}/api/groups
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzM2QwYjRkNjRlZDA5YWRjNzU4ZDYiLCJpYXQiOjE3NDk3Mzc5MTQsImV4cCI6MTc0OTc1NTkxNH0.X5hjrDT0AzXKoB9Es_OGMGxle5BvC5V0cy4X9NqJOVo
 
 {
     "name": "Kỹ sư tài năng bị loại",
@@ -21,6 +22,7 @@ Content-Type: application/json
 
 ### Get all group
 GET {{url}}/api/groups
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzM2QwYjRkNjRlZDA5YWRjNzU4ZDYiLCJpYXQiOjE3NDk3Mzc5MTQsImV4cCI6MTc0OTc1NTkxNH0.X5hjrDT0AzXKoB9Es_OGMGxle5BvC5V0cy4X9NqJOVo
 
 ### Update group by id
 PATCH {{url}}/api/groups/65d9fbf433cfcd55b534007f
@@ -35,10 +37,11 @@ Delete {{url}}/api/groups/65d9f95033cfcd55b5340077
 ### Create role
 POST {{url}}/api/roles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzM2QwYjRkNjRlZDA5YWRjNzU4ZDYiLCJpYXQiOjE3NTA4NDIzODEsImV4cCI6MTc1MDg2MDM4MX0.EXFywaFMaf4qDl0qCmtXVTU6of_XqbIIe2qJIgmnsrE
 
 {
-    "method": "get",
-    "url": "/users/groups",
+    "method": "patch",
+    "url": "/faculties/:facultyId/majors",
     "description": ""
 }
 
@@ -46,8 +49,9 @@ Content-Type: application/json
 DELETE {{url}}/api/roles/67fb2854d490a4bfabfe2529
 
 ### Add roles to the talent engineer's group
-POST {{url}}/api/groups/670cc61358c8cef6bf3f0dec/roles
+POST {{url}}/api/groups/670e339505a1b1f420d29986/roles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzM2QwYjRkNjRlZDA5YWRjNzU4ZDYiLCJpYXQiOjE3NDk3Mzc5MTQsImV4cCI6MTc0OTc1NTkxNH0.X5hjrDT0AzXKoB9Es_OGMGxle5BvC5V0cy4X9NqJOVo
 
 {
     "roleIdList": [
@@ -70,13 +74,17 @@ Content-Type: application/json
         "670cc56458c8cef6bf3f0dc1",
         "670cc56458c8cef6bf3f0de1",
         "670cc56458c8cef6bf3f0de3",
-        "670cc56458c8cef6bf3f0de5"
+        "670cc56458c8cef6bf3f0de5",
+        "684ae248e220a7fc6fd82d58",
+        "670cc56458c8cef6bf3f0d9b",
+        "684aeae95acca4c57c1cedf8"
     ]
 }
 
-### Add roles to the talent engineer manager's group
+### Add roles to the major manger group
 POST {{url}}/api/groups/670cca0858c8cef6bf3f0df2/roles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzM2QwYjRkNjRlZDA5YWRjNzU4ZDYiLCJpYXQiOjE3NDk3Mzc5MTQsImV4cCI6MTc0OTc1NTkxNH0.X5hjrDT0AzXKoB9Es_OGMGxle5BvC5V0cy4X9NqJOVo
 
 {
     "roleIdList": [
@@ -120,17 +128,49 @@ Content-Type: application/json
         "670cc56458c8cef6bf3f0de7",
         "670cc56458c8cef6bf3f0de9",
         "670cc56458c8cef6bf3f0dc1",
-        "670cc56458c8cef6bf3f0d77"
+        "670cc56458c8cef6bf3f0d77",
+        "684ae30de220a7fc6fd82d6c",
+        "684ae318e220a7fc6fd82d71",
+        "684ae2efe220a7fc6fd82d67",
+        "684ae273e220a7fc6fd82d5d",
+        "684ae27de220a7fc6fd82d62",
+        "684ae248e220a7fc6fd82d58",
+        "670cc56458c8cef6bf3f0de5",
+        "684ae9d45acca4c57c1ced73",
+        "684ae9e55acca4c57c1ced7b",
+        "684ae9ee5acca4c57c1ced83",
+        "684aeae95acca4c57c1cedf8",
+        "684aeb8e5acca4c57c1cee66"
     ]
 }
 
 ### Add roles to the admin's group
 POST {{url}}/api/groups/670cdd2e58c8cef6bf3f0df8/roles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODAzM2QwYjRkNjRlZDA5YWRjNzU4ZDYiLCJpYXQiOjE3NTA4NDIzODEsImV4cCI6MTc1MDg2MDM4MX0.EXFywaFMaf4qDl0qCmtXVTU6of_XqbIIe2qJIgmnsrE
 
 {
     "roleIdList": [
-     "67fb5d2b9440a441a053facb"
+        "685bc4e4d9e581730920a9e5",
+        "685bc4f6d9e581730920a9ed",
+        "670cc56458c8cef6bf3f0da7",
+        "67fb5d2b9440a441a053facb",
+        "670cc56458c8cef6bf3f0ddd",
+        "670cc56458c8cef6bf3f0ddb",
+        "670cc56458c8cef6bf3f0dd9",
+        "670cc56458c8cef6bf3f0dd7",
+        "670cc56458c8cef6bf3f0dd3",
+        "670cc56458c8cef6bf3f0dd5",
+        "670cc56458c8cef6bf3f0dcf",
+        "670cc56458c8cef6bf3f0dd1",
+        "684ae9d45acca4c57c1ced73",
+        "684ae9e55acca4c57c1ced7b",
+        "684ae9ee5acca4c57c1ced83",
+        "670cc56458c8cef6bf3f0daf",
+        "670cc56458c8cef6bf3f0db1",
+        "670cc56458c8cef6bf3f0db3",
+        "670cc56458c8cef6bf3f0db5",
+        "670cc56458c8cef6bf3f0de5"
     ]
 }
 

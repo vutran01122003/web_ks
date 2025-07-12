@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const excelController = require("../../controllers/excel.controllers");
 const multer = require("multer");
+const { auth } = require("../../middleware/auth");
 
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -16,9 +17,8 @@ const upload = multer({
     }
 });
 
-router.get("/qualified-users/export", excelController.exportQualifiedUsersExcel);
-router.get("/progress-statistics/export", excelController.exportProgressStatisticsExcel);
-
-router.post("/users-excel/import", upload.single("file"), excelController.importUsers);
+router.get("/qualified-users/export", auth, excelController.exportQualifiedUsersExcel);
+router.get("/progress-statistics/export", auth, excelController.exportProgressStatisticsExcel);
+router.post("/users-excel/import", auth, upload.single("file"), excelController.importUsers);
 
 module.exports = router;

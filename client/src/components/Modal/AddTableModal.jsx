@@ -25,7 +25,7 @@ function AddTableModal({ pageId, handleHideAddTableModal }) {
                         fixedScore: +table.fixedScore,
                         totalScore: +table.totalScore,
                         allowExceedQuantity: table.allowExceedQuantity,
-                        scoreType: false
+                        scoreType: table.scoreType
                     }
                 ]
             })

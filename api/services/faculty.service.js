@@ -310,11 +310,6 @@ class FacultyService {
             if (userId) cohort.additionalRegisterInfo[length - 1].users.push(userId);
 
             if (rejectedUsers && approvedUsers) {
-                console.log("ok");
-                console.log({
-                    rejectedUsers,
-                    approvedUsers
-                });
                 cohort.additionalRegisterInfo[length - 1].approvedUsers = approvedUsers;
                 cohort.additionalRegisterInfo[length - 1].rejectedUsers = rejectedUsers;
             }

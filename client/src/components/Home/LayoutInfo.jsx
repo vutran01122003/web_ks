@@ -1,12 +1,20 @@
+import { TbFileExport } from 'react-icons/tb';
+import { useDispatch } from 'react-redux';
 import Avatar from '../Account/ComponentAvatar';
 import { capitalizeFirstLetter, toFullName } from '../../utils/handleString';
+import { exportRegisterForm } from '../../redux/actions/progressAction';
 
 const { VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE, VITE_APP_TALENT_ENGINEER_CODE, VITE_APP_MAJOR_MANAGER_CODE } =
     import.meta.env;
 
 const LayoutInfo = ({ user, isDetailedRow }) => {
+    const dispatch = useDispatch();
     const groupCodeList = user?.groups.map((group) => group.groupCode);
     let heading = 'Thông Tin Cá Nhân';
+
+    const exportForm = () => {
+        dispatch(exportRegisterForm());
+    };
 
     switch (groupCodeList[0]) {
         case '001': {
@@ -75,7 +83,15 @@ const LayoutInfo = ({ user, isDetailedRow }) => {
 
     return (
         <div className={`container__info ${isDetailedRow ? 'inside_detailed_row_modal' : ''}`}>
-            <header className="heading-4">{heading}</header>
+            <header className="heading-4">
+                <span>{heading}</span>
+                {groupCodeList.includes(VITE_APP_TEMPORARY_TALENT_ENGINEER_CODE) && (
+                    <div className="export_register_btn" onClick={exportForm}>
+                        <TbFileExport size={16} />
+                        <span>Xuất Phiếu Đăng Ký</span>
+                    </div>
+                )}
+            </header>
             <div className="content">
                 <div className="info__avatar">
                     <Avatar size={`large ${isDetailedRow ? 'medium' : ''}`} />

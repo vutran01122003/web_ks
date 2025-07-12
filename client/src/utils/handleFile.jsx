@@ -2,7 +2,6 @@ import slugify from 'slugify';
 import instance from '../config/axios.config';
 import { s3Client } from '../config/aws.config';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getDataApi } from './fetchData';
 import axios from 'axios';
 import { getAccessToken } from './handleCredentials';
 

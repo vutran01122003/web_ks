@@ -5,7 +5,7 @@ export const getDataApi = async (uri, params) => {
 };
 
 export const postDataApi = async (uri, data, headers) => {
-    const res = await instance.post(uri, data, { headers });
+    const res = await instance.post(uri, data, headers);
     return res;
 };
 
